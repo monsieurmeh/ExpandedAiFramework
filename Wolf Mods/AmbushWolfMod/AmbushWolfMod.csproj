@@ -1,0 +1,102 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <RootNamespace>ExpandedAiFramework</RootNamespace>
+    <LangVersion>default</LangVersion>
+    <IsPackable>false</IsPackable>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <AssemblyName>ExpandedAiFramework.AmbushWolfMod</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
+    <GameLocPath>C:\Program Files (x86)\Steam\steamapps\common\TheLongDark</GameLocPath>
+    <MelonLoaderPath>$(GameLocPath)/MelonLoader/net6</MelonLoaderPath>
+    <ManagedPath>$(GameLocPath)/MelonLoader/Managed</ManagedPath>
+    <Il2CppPath>$(GameLocPath)/MelonLoader/Il2CppAssemblies</Il2CppPath>
+    <ModsPath>$(GameLocPath)/Mods</ModsPath>
+    <AssemblySearchPaths>$(AssemblySearchPaths);$(MelonLoaderPath);$(ManagedPath);$(Il2CppPath);$(ModsPath);</AssemblySearchPaths>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);</DefineConstants>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <Reference>
+      <Private>False</Private>
+    </Reference>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <Reference Include="Il2CppInterop.Common">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\MelonLoader\net6\Il2CppInterop.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="MelonLoader" />
+    <Reference Include="0Harmony" />
+    <Reference Include="Assembly-CSharp" />
+    <Reference Include="Assembly-CSharp-firstpass" />
+    <Reference Include="Il2CppHOTween" />
+    <Reference Include="Il2Cppmscorlib" />
+    <Reference Include="Il2CppNewtonsoft.Json" />
+    <Reference Include="Il2CppSystem.Configuration" />
+    <Reference Include="Il2CppSystem" />
+    <Reference Include="Il2CppSystem.Core" />
+    <Reference Include="Il2CppRewired_Core" />
+    <Reference Include="Il2CppSystem.Runtime.Serialization" />
+    <Reference Include="Il2CppAK.Wwise.Unity.API.WwiseTypes" />
+    <Reference Include="Il2CppTLD.Addressables" />
+    <Reference Include="Il2CppTLD.Encryption" />
+    <Reference Include="Il2CppTLD.Game.Events.Runtime" />
+    <Reference Include="Il2CppTLD.GameplayTag" />
+    <Reference Include="Il2CppTLD.IO" />
+    <Reference Include="Il2CppTLD.Logging" />
+    <Reference Include="Il2CppTLD.OptionalContent" />
+    <Reference Include="Il2CppTLD.PDID" />
+    <Reference Include="Il2CppTLD.Platform" />
+    <Reference Include="Il2CppTLD.Profiling" />
+    <Reference Include="Il2CppTLD.RuntimeTest" />
+    <Reference Include="Il2CppTLD.SaveState" />
+    <Reference Include="Il2CppTLD.Serialization" />
+    <Reference Include="Il2CppTLD.Stats" />
+    <Reference Include="Il2CppSuperSplines.Core" />
+    <Reference Include="Il2CppTLD.TimeLib" />
+    <Reference Include="Il2CppTLD.Trial" />
+    <Reference Include="Il2CppTLD.UserGeneratedContent" />
+    <Reference Include="Unity.Mathematics" />
+    <Reference Include="Unity.TextMeshPro" />
+    <Reference Include="UnityEngine.AssetBundleModule" />
+    <Reference Include="UnityEngine.CoreModule" />
+    <Reference Include="UnityEngine" />
+    <Reference Include="UnityEngine.AIModule" />
+    <Reference Include="UnityEngine.AnimationModule" />
+    <Reference Include="UnityEngine.PhysicsModule" />
+    <Reference Include="UnityEngine.InputLegacyModule" />
+    <Reference Include="UnityEngine.InputModule" />
+    <Reference Include="UnityEngine.Il2CppAssetBundleManager" />
+    <Reference Include="UnityEngine.Il2CppImageConversionManager" />
+    <Reference Include="ModSettings">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
+    </Reference>
+    <Reference Include="ComplexLogger">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ComplexLogger.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpandedAiFramework">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ExpandedAiFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\TheLongDark\Mods&quot;" />
+  </Target>
+</Project>
