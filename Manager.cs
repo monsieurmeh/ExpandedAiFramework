@@ -5,9 +5,6 @@ using MelonLoader.Utils;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
 using ComplexLogger;
-using Il2Cpp;
-using Il2CppRewired.Config;
-using static Il2CppParadoxNotion.Services.Logger;
 
 
 namespace ExpandedAiFramework

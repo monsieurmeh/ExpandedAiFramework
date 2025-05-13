@@ -1,4 +1,6 @@
-﻿namespace ExpandedAiFramework
+﻿
+
+namespace ExpandedAiFramework
 {
     public class WeightedTypePicker<T>
     {

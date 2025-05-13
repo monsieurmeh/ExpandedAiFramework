@@ -1,6 +1,4 @@
-﻿
-
-using ComplexLogger;
+﻿using ComplexLogger;
 using UnityEngine;
 
 

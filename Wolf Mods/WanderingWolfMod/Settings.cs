@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-
+﻿
 
 namespace ExpandedAiFramework.WanderingWolfMod
 {
@@ -22,17 +20,6 @@ namespace ExpandedAiFramework.WanderingWolfMod
         [Slider(0, 100)]
         [Description("Number of days before wandering wolves begin to spawn if enabled.")]
         public int SpawnDelay = 10;
-
-
-        public void ShowWanderingWolfSettings(FieldInfo fieldInfo)
-        {
-            if (fieldInfo.Name == nameof(Enable))
-            {
-                bool visible = IsFieldVisible(fieldInfo);
-                SetFieldVisible(nameof(SpawnWeight), visible);
-                SetFieldVisible(nameof(SpawnDelay), visible);
-            }
-        }
 
 
         public override bool CanSpawn(BaseAi ai)

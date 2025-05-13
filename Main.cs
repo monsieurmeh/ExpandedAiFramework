@@ -3,6 +3,7 @@ global using MelonLoader;
 global using ModSettings;
 global using static Il2Cpp.BaseAi;
 
+
 [assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.8.0", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
