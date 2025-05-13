@@ -111,33 +111,9 @@ namespace ExpandedAiFramework
         [HarmonyPatch(typeof(ConsoleManager), "Initialize")]
         public class ConsoleManagerPatches_Initialize
         {
-            public const string CommandString_Help =                    "EAF_help";
-            public const string CommandString_FollowWanderingWolf =     "EAF_followWanderer";
-            public const string CommandString_SaveMapData =             "EAF_save";
-            public const string CommandString_LoadMapData =             "EAF_load";
-            public const string CommandString_CreateHidingSpot =        "EAF_createHidingSpot";
-            public const string CommandString_CreateWanderPath =        "EAF_createWanderPath";
-            public const string CommandString_AddToWanderPath =         "EAF_addToWanderPath";
-            public const string CommandString_FinishCurrentWanderPath = "EAF_finishCurrentWanderPath";
-            public const string CommandString_DeleteWanderPath =        "EAF_deleteWanderPath";
-            public const string CommandString_ShowWanderPaths =         "EAF_showWanderPaths";
-            public const string CommandString_HideWanderPaths =         "EAF_hideWanderPaths";
-            public const string CommandString_ShowHidingSpots =         "EAF_showHidingSpots";
-            public const string CommandString_HideHidingSpots =         "EAF_hideHidingSpots";
-
             public static void Postfix()
             {
-                uConsole.RegisterCommand(CommandString_SaveMapData,             new Action(Utility.Manager.SaveMapData));
-                uConsole.RegisterCommand(CommandString_LoadMapData,             new Action(Utility.Manager.LoadMapData));
-                uConsole.RegisterCommand(CommandString_CreateHidingSpot,        new Action(Utility.Manager.CreateHidingSpot));
-                uConsole.RegisterCommand(CommandString_CreateWanderPath,        new Action(Utility.Manager.StartWanderPath));
-                uConsole.RegisterCommand(CommandString_AddToWanderPath,         new Action(Utility.Manager.AddWanderPathPos));
-                uConsole.RegisterCommand(CommandString_FinishCurrentWanderPath, new Action(Utility.Manager.CompleteWanderingPath));
-                uConsole.RegisterCommand(CommandString_DeleteWanderPath,        new Action(Utility.Manager.DeleteWanderingPath));
-                uConsole.RegisterCommand(CommandString_ShowWanderPaths,         new Action(Utility.Manager.ShowWanderPaths));
-                uConsole.RegisterCommand(CommandString_HideWanderPaths,         new Action(Utility.Manager.HideWanderPaths));
-                uConsole.RegisterCommand(CommandString_ShowHidingSpots,         new Action(Utility.Manager.ShowHidingSpots));
-                uConsole.RegisterCommand(CommandString_HideHidingSpots,         new Action(Utility.Manager.HideHidingSpots));
+                uConsole.RegisterCommand(Manager.CommandString, new Action(Manager.Instance.Console_OnCommand));
             }
         }
 #endif

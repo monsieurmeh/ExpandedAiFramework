@@ -25,13 +25,10 @@ namespace ExpandedAiFramework
         private void OnAugmentDebug()
         {
 #if DEV_BUILD_STATELABEL
-            GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            marker.transform.localScale = new Vector3(1.0f, 250.0F, 1.0f);
-            marker.GetComponent<Collider>().enabled = false;
-            GameObject.Destroy(marker.GetComponent<Collider>());
+
+            GameObject marker = Manager.Instance.CreateMarker(mBaseAi.transform.position, Color.clear, $"Debug Ai Marker for {mBaseAi.name}", 100, 0.5f);
             mMarkerTransform = marker.transform;
             mMarkerTransform.SetParent(mBaseAi.transform);
-            mMarkerTransform.position = mBaseAi.transform.position;
             mMarkerRenderer = marker.GetComponent<Renderer>();
             SetMarkerColor();
 #endif

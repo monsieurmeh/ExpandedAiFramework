@@ -19,5 +19,14 @@ namespace ExpandedAiFramework
             Scene = scene;
             PathPoints = pathPoints;
         }
+
+
+        public static implicit operator Vector3(WanderPath path) => path.PathPoints[0];
+
+
+        public override string ToString()
+        {
+            return $"WanderPath {Name} starting at {PathPoints[0]} with {PathPoints.Length} path points";
+        }
     }
 }

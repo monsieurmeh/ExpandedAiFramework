@@ -1,4 +1,5 @@
 using UnityEngine;
+using static MelonLoader.bHaptics;
 
 
 namespace ExpandedAiFramework
@@ -28,6 +29,15 @@ namespace ExpandedAiFramework
             Scene = scene;
             Position = new Vector3(x, y, z);
             Rotation = new Vector2(rx, ry);
+        }
+
+
+        public static implicit operator Vector3(HidingSpot spot) => spot.Position;
+
+
+        public override string ToString()
+        {
+            return $"HidingSpot {Name} at {Position}";
         }
     }
 }

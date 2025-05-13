@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 
 namespace ExpandedAiFramework.AmbushWolfMod
@@ -14,12 +15,12 @@ namespace ExpandedAiFramework.AmbushWolfMod
 
         public override void Initialize(BaseAi ai, TimeOfDay timeOfDay)
         {
-            base.Initialize(ai, timeOfDay);
-            mHidingSpot = Manager.Instance.GetNearestHidingSpot(this, 3);
+            base.Initialize(ai, timeOfDay); 
+            mHidingSpot = Manager.Instance.GetNearestHidingSpot(this);
+            mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 10.0f, false, NavMesh.AllAreas);
+            mBaseAi.transform.position = mHidingSpot.Position;
             //mBaseAi.transform.position = mHidingSpot.Position + new Vector3(0, 2, 0);
             //mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 5.0f, true, -1);
-            EnterHiding();
-            LogVerbose("Initialize: Initialized, entering hiding.");
         }
 
 
@@ -134,7 +135,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             mBaseAi.MoveAgentStop();
             mBaseAi.ClearTarget();
-            mBaseAi.m_MoveAgent.PointTowardsDirection(mHidingSpot.Rotation);
+            mBaseAi.m_MoveAgent?.PointTowardsDirection(mHidingSpot.Rotation);
         }
 
 

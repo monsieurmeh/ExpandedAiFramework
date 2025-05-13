@@ -6,8 +6,6 @@ namespace ExpandedAiFramework.TrackingWolfMod
     [RegisterTypeInIl2Cpp]
     public class TrackingWolf : BaseWolf
     {
-        //todo: If wolf has player as smell target and is in attack range of player but not yet in attack state, it will just sit there.
-        // need an override to check proximity to player, although I don't actually expect it to happen frequently outside of debug circumstances.
         internal static TrackingWolfSettings Settings = new TrackingWolfSettings();
 
         protected float m_TimeSinceLastSmellCheck = 0.0f;
@@ -103,8 +101,14 @@ namespace ExpandedAiFramework.TrackingWolfMod
             {
                 m_TimeSinceLastSmellCheck = 0;
             }
-            if (CurrentMode.ToFlag().NoneOf(AiModeFlags.TypicalDontInterrupt | AiModeFlags.InvestigateSmell))
+            if (CurrentMode.ToFlag().NoneOf(AiModeFlags.TypicalDontInterrupt))
             {
+                if (mBaseAi.CanSeeTarget() && mBaseAi.m_CurrentTarget.IsPlayer())
+                {
+                    LogVerbose("PostProcessCustom: Player spotted, entering stalking state!");
+                    SetAiMode(AiMode.Stalking);
+                    return false;
+                }
                 if (mBaseAi.CanPathfindToPosition(GameManager.m_PlayerManager.m_LastPlayerPosition))
                 {
                     LogVerbose($"PostProcessCustom: Smell target reachable, moving to investigate.");

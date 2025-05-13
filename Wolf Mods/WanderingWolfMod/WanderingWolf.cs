@@ -16,7 +16,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         public override void Augment()
         {
-            mWanderPath = Manager.Instance.GetNearestWanderPath(this, 3);
+            mWanderPath = Manager.Instance.GetNearestWanderPath(this);
             mBaseAi.m_Waypoints = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3>(mWanderPath.PathPoints.Length);
             for (int i = 0, iMax = mBaseAi.m_Waypoints.Length; i < iMax; i++)
             {

@@ -32,6 +32,12 @@ namespace ExpandedAiFramework
         }
 
 
+        public override void OnUpdate()
+        {
+            mManager.Update();
+        }
+
+
         protected bool Shutdown()
         {
             mManager?.Shutdown();

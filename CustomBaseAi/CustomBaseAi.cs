@@ -109,11 +109,6 @@ namespace ExpandedAiFramework
 
         #region Helpers/Internal Accessors
 
-        public static float SquaredDistance(Vector3 a, Vector3 b)
-        {
-            return ((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y)) + ((a.z - b.z) * (a.z - b.z));
-        }
-
 
         protected AiTarget CurrentTarget { get { return mBaseAi.m_CurrentTarget; } }
         protected AiMode CurrentMode { get { return mBaseAi.m_CurrentMode; } set { mBaseAi.m_CurrentMode = value; } }
