@@ -132,7 +132,8 @@ namespace ExpandedAiFramework
             Il2CppSystem.Type spawnType = Il2CppType.From(mTypePicker.PickType(baseAi));
             if (spawnType == Il2CppType.From(typeof(void)))
             {
-                LogError($"Unable to resolve a custom spawn type from weighted type picker!", FlaggedLoggingLevel.Critical);                return false;
+                LogError($"Unable to resolve a custom spawn type from weighted type picker!", FlaggedLoggingLevel.Critical);                
+                return false;
             }
             AugmentAi(baseAi, spawnType);
             return true;
@@ -153,17 +154,6 @@ namespace ExpandedAiFramework
             return true;
         }
 
-        /*
-        public bool TryUpdate(BaseAi baseAi)
-        {
-            if (!AiAugments.TryGetValue(baseAi.GetHashCode(), out ICustomAi ai))
-            {
-                return false;
-            }
-            ai.Update();
-            return true;
-        }
-        */
 
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode)
         {
@@ -217,20 +207,6 @@ namespace ExpandedAiFramework
                 UnityEngine.Object.Destroy(customAi.Self.gameObject); //if I'm converting back from the interface to destroy it, is there really any point to the interface? We should be demanding people use CustomBaseAi instead...
                 mAiAugments.Remove(hashCode);
             }
-        }
-
-
-        private void Teleport(Vector3 pos)
-        {
-            PlayerManager playerManager = GameManager.m_PlayerManager;
-            Teleport(pos, GameManager.m_PlayerManager.m_RotationInCameraSpace);
-        }
-
-
-        private void Teleport(Vector3 pos, Vector3 rot)
-        {
-            PlayerManager playerManager = GameManager.m_PlayerManager;
-            Teleport(pos, Quaternion.LookRotation(rot));
         }
 
 

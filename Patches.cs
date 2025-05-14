@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExpandedAiFramework
 {
-    public partial class Patches
+    public class Patches
     {
 
         #region General
@@ -106,8 +106,6 @@ namespace ExpandedAiFramework
 
         #region Console/Debug
 
-#if DEV_BUILD
-
         [HarmonyPatch(typeof(ConsoleManager), "Initialize")]
         public class ConsoleManagerPatches_Initialize
         {
@@ -116,7 +114,6 @@ namespace ExpandedAiFramework
                 uConsole.RegisterCommand(Manager.CommandString, new Action(Manager.Instance.Console_OnCommand));
             }
         }
-#endif
 
         #endregion
     }

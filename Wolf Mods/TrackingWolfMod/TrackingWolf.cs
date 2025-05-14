@@ -9,6 +9,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
         internal static TrackingWolfSettings Settings = new TrackingWolfSettings();
 
         protected float m_TimeSinceLastSmellCheck = 0.0f;
+        protected float m_TimeSinceLastStruggle = 0.0f;
 
         public TrackingWolf(IntPtr ptr) : base(ptr) { }
 
@@ -24,6 +25,16 @@ namespace ExpandedAiFramework.TrackingWolfMod
                     LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
                     return true;
             }
+        }
+
+
+        protected override bool ExitAiModeCustom(AiMode mode)
+        {
+            if (mode == AiMode.Struggle)
+            {
+                m_TimeSinceLastStruggle = Time.time;
+            }
+            return true;
         }
 
 
@@ -82,6 +93,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
                 mBaseAi.m_HasInvestigateSmellPath = false;
                 mBaseAi.MoveAgentStop();
             }
+            ScanForNewTarget();
             if (mBaseAi.CanSeeTarget())
             {
                 LogVerbose($"ProcessInvestigateSmellCustom: Can see target, attacking!");
@@ -92,10 +104,15 @@ namespace ExpandedAiFramework.TrackingWolfMod
 
         protected override bool PostProcessCustom()
         {
+            if (Time.time - m_TimeSinceLastSmellCheck <= Settings.PostStruggleFleePeriodSeconds && CurrentMode != AiMode.Flee)
+            {
+                SetAiMode(AiMode.Flee);
+                return true;
+            }
             if (m_TimeSinceLastSmellCheck <= 2.0f)
             {
                 m_TimeSinceLastSmellCheck += Time.deltaTime;
-                return false;
+                return true;
             }
             else
             {
@@ -107,7 +124,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
                 {
                     LogVerbose("PostProcessCustom: Player spotted, entering stalking state!");
                     SetAiMode(AiMode.Stalking);
-                    return false;
+                    return true;
                 }
                 if (mBaseAi.CanPathfindToPosition(GameManager.m_PlayerManager.m_LastPlayerPosition))
                 {
@@ -122,19 +139,21 @@ namespace ExpandedAiFramework.TrackingWolfMod
                     SetAiMode(AiMode.Wander);
                 }
             }
-            return false;
+            return true;
         }
 
-        //Vanilla logic moves predators to stalking if player target is detected; I want ambush wolves to RUN at you!
+        /* Reimplement when it's actually called by CustomBaseAi
+        //Vanilla logic moves predators to stalking if player target is detected; I want tracking wolves to RUN at you!
         protected override bool ChangeModeWhenTargetDetectedCustom()
         {
-            if (CurrentTarget.IsBear() || CurrentTarget.IsCougar())
+            if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsMoose())
             {
-                LogVerbose($"Ambush wolves run from larger threats!");
+                LogVerbose($"Tracking wolves run from larger threats!");
                 SetAiMode(AiMode.Flee);
                 return false;
             }
             return true;
         }
+        /=*/
     }
 }

@@ -22,6 +22,12 @@ namespace ExpandedAiFramework.TrackingWolfMod
         public int SpawnDelay = 25;
 
 
+        [Name("Post-Struggle Minimum Flee Period")]
+        [Slider(0, 60)]
+        [Description("Number of seconds before Tracking wolves begin to track the target after a struggle if no damage was done to the wolf.")]
+        public float PostStruggleFleePeriodSeconds = 60.0f;
+
+
         public override bool CanSpawn(BaseAi ai)
         {
             return Enable

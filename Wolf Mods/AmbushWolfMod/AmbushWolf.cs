@@ -166,24 +166,25 @@ namespace ExpandedAiFramework.AmbushWolfMod
             mBaseAi.StartPath(mHidingSpot.Position, mBaseAi.m_AiGoalSpeed);
         }
 
-
+        /* Reimplement when it actually gets called by CustomBaseAi
         //Vanilla logic moves predators to stalking if player target is detected; I want ambush wolves to RUN at you!
         protected override bool ChangeModeWhenTargetDetectedCustom()
         {
-            if (!CurrentTarget.IsPlayer())
-            {
-                LogVerbose($"ChangeModeWhenTargetDetectedCustom: target is not player, IGNORING. Ambush wolves want YOU!");
-                return false;
-            }
-            if (CurrentTarget.IsBear() || CurrentTarget.IsCougar())
+            if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsMoose())
             {
                 LogVerbose($"Ambush wolves run from larger threats!");
                 SetAiMode(AiMode.Flee);
+                return false;
+            }
+            if (!CurrentTarget.IsPlayer())
+            {
+                LogVerbose($"ChangeModeWhenTargetDetectedCustom: target is not player, IGNORING. Ambush wolves want YOU!");
                 return false;
             }
             LogVerbose($"ChangeModeWhenTargetDetectedCustom: Attacking player target!");
             SetAiMode(AiMode.Attack);
             return false;
         }
+        */
     }
 }
