@@ -7,16 +7,25 @@ namespace ExpandedAiFramework.AmbushWolfMod
     [RegisterTypeInIl2Cpp]
     public class AmbushWolf : BaseWolf
     {
+        private enum AmbushWolfAiMode : int
+        {
+            Hide = (int)AiMode.Disabled + 1,
+            Return,
+            COUNT
+        }
+
         internal static AmbushWolfSettings Settings = new AmbushWolfSettings();
         protected HidingSpot mHidingSpot;
 
         public AmbushWolf(IntPtr ptr) : base(ptr) { }
 
 
-        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay)
+        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay)//, EAFManager manager)
         {
-            base.Initialize(ai, timeOfDay); 
-            mHidingSpot = Manager.Instance.GetNearestHidingSpot(this, 3, false);
+            base.Initialize(ai, timeOfDay);//, manager); 
+            mHidingSpot = mManager.GetNearestHidingSpot(this, 3, false); 
+            mBaseAi.m_DefaultMode = (AiMode)AmbushWolfAiMode.Hide;
+            mBaseAi.m_StartMode = (AiMode)AmbushWolfAiMode.Hide;
         }
 
 
@@ -24,16 +33,8 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             mBaseAi.m_MoveAgent.transform.position = mHidingSpot.Position;
             mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 2.0f, true, -1);
-            SetAiMode((AiMode)AiModeEAF.Hiding);
+            SetAiMode((AiMode)AmbushWolfAiMode.Hide);
             return true;
-        }
-
-
-        public override void Augment()
-        {
-            mBaseAi.m_DefaultMode = (AiMode)AiModeEAF.Hiding;
-            mBaseAi.m_StartMode = (AiMode)AiModeEAF.Hiding;
-            base.Augment();
         }
 
 
@@ -48,11 +49,11 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             switch (CurrentMode)
             {
-                case (AiMode)AiModeEAF.Hiding:
+                case (AiMode)AmbushWolfAiMode.Hide:
                     LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessHiding.");
                     ProcessHiding();
                     return false;
-                case (AiMode)AiModeEAF.Returning:
+                case (AiMode)AmbushWolfAiMode.Return:
                     LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessReturning.");
                     ProcessReturning();
                     return false;
@@ -67,11 +68,11 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             switch (mode)
             {
-                case (AiMode)AiModeEAF.Hiding:
+                case (AiMode)AmbushWolfAiMode.Hide:
                     LogVerbose($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Paused.");
                     overrideState = AiAnimationState.Paused;
                     return false;
-                case (AiMode)AiModeEAF.Returning:
+                case (AiMode)AmbushWolfAiMode.Return:
                     LogVerbose($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Wander.");
                     overrideState = AiAnimationState.Wander;
                     return false;
@@ -87,11 +88,11 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             switch (mode)
             {
-                case (AiMode)AiModeEAF.Hiding:
+                case (AiMode)AmbushWolfAiMode.Hide:
                     LogVerbose($"IsMoveStateCustom: mode is {mode}, setting isMoveState false.");
                     isMoveState = false;
                     return false;
-                case (AiMode)AiModeEAF.Returning:
+                case (AiMode)AmbushWolfAiMode.Return:
                     LogVerbose($"IsMoveStateCustom: mode is {mode}, setting isMoveState true.");
                     isMoveState = true;
                     return false;
@@ -107,11 +108,11 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             switch (mode)
             {
-                case (AiMode)AiModeEAF.Hiding:
+                case (AiMode)AmbushWolfAiMode.Hide:
                     LogVerbose($"EnterAiModeCustom: mode is {mode}, routing to EnterHiding");
                     EnterHiding();
                     return false;
-                case (AiMode)AiModeEAF.Returning:
+                case (AiMode)AmbushWolfAiMode.Return:
                     LogVerbose($"EnterAiModeCustom: mode is {mode}, routing to EnterReturning.");
                     EnterReturning();
                     return false;
@@ -128,7 +129,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
             if (hidingSpotDistance >= 2.0f)
             {
                 LogVerbose($"ProcessHiding: Far from hiding spot ({hidingSpotDistance}), moving to returning.");
-                SetAiMode((AiMode)AiModeEAF.Returning);
+                SetAiMode((AiMode)AmbushWolfAiMode.Return);
                 return;
             }
             LogVerbose($"ProcessHiding: Scanning for target...");
@@ -154,7 +155,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
                 return;
             }
             LogVerbose($"ProcessReturning: Close enough to hiding spot, hiding.");
-            SetAiMode((AiMode)AiModeEAF.Hiding);
+            SetAiMode((AiMode)AmbushWolfAiMode.Hide);
         }
 
 

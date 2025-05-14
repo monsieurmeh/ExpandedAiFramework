@@ -12,12 +12,9 @@ namespace ExpandedAiFramework.BigWolfMod
         public BigWolf(IntPtr ptr) : base(ptr) { }
 
 
-        public override void Augment()
+        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay)//, EAFManager manager)
         {
-            if (mBaseAi.gameObject?.TryGetComponent(out SkinnedMeshRenderer renderer) ?? false)
-            {
-                renderer.sharedMaterial.color = Color.red;
-            }
+            base.Initialize(ai, timeOfDay);//, manager);
             mBaseAi.m_RunSpeed *= 8;
             mBaseAi.m_StalkSpeed *= 8;
             mBaseAi.m_WalkSpeed *= 8;
@@ -25,9 +22,7 @@ namespace ExpandedAiFramework.BigWolfMod
             mBaseAi.m_TurnSpeedDegreesPerSecond *= 8;
             mBaseAi.m_MaxHP *= 4;
             mBaseAi.m_CurrentHP *= 4;
-            Vector3 newScale = new Vector3(2, 2, 2);
-            mBaseAi.gameObject.transform.set_localScale_Injected(ref newScale);
-            base.Augment();
+            mBaseAi.transform.localScale = new Vector3(2, 2, 2);
         }
 
 

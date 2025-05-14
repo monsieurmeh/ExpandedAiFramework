@@ -4,6 +4,13 @@ namespace ExpandedAiFramework.CompanionWolfMod
 {
     internal class CompanionWolfSettings : TypeSpecificSettings
     {
+        private CompanionWolfManager mManager;
+
+        public CompanionWolfSettings(CompanionWolfManager manager)
+        {
+            mManager = manager;
+        }
+
         [Section("Companion Wolf Settings")]
         [Name("Enable Companion Wolf")]
         [Description("Companion wolves will initially run away regardless of player action. After several attempts to chase it down, it will hold ground and wait for food to be dropped. If given enough space to approach and eat, the wolf will follow the player and eventually stick around as a companion wolf.")]
@@ -11,7 +18,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         [Name("Spawn Weight")]
-        [Slider(0.0f, 100.0f)]
+        [Slider(0.0f, 100)]
         [Description("Adjust spawn weight for Companion wolves. Higher numbers increase relative spawn chance.")]
         public float SpawnWeight = 1.0f;
 
@@ -23,19 +30,19 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         [Name("Taming Affection per Calorie")]
-        [Slider(0.1f, 10.0f)]
-        [Description("Amount of taming affection gained per calorie fed.")]
+        [Slider(0.1f, 10)]
+        [Description("Amount of taming affection gained per calorie fed. Note that feeding an already tamed wolf does not provide affection; you will need to find other ways to provide enrichment!")]
         public float AffectionPerCalorie = 1.0f;
 
 
         [Name("Maximum Calorie Store")]
         [Slider(100, 8000)]
         [Description("Maximum number of calories wolf can store.")]
-        public int MaximumCalorieIntake = 4000;
+        public float MaximumCalorieIntake = 4000.0f;
 
 
         [Name("Taming Affection Required")]
-        [Slider(1000f, 50000f)]
+        [Slider(1000, 50000)]
         [Description("Amount of taming affection required to complete taming phase.")]
         public float AffectionRequirement = 10000.0f;
 
@@ -52,15 +59,46 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public int AffectionDecayDelayHours = 4;
 
 
+        [Name("Untamed Affection Decay Rate")]
+        [Slider(10, 1000)]
+        [Description("Affection decay rate per hour while wolf is untamed.")]
+        public float UntamedAffectionDecayRate = 100.0f;
+
+
+        [Name("Tamed Affection Decay Rate")]
+        [Slider(0, 10)]
+        [Description("Affection decay rate per hour while wolf is untamed.")]
+        public float TamedAffectionDecayRate = 1f;
+
+
         [Name("Linger Duration")]
         [Slider(4, 240)]
         [Description("Number of hours before an untamed wolf with no affection remaining will stop spawning in the same location after initial spawn.")]
         public int LingerDurationHours = 12;
-        
+
+
+        [Name("Calorie Burned per Day")]
+        [Slider(1200, 2000)]
+        [Description("Calories burned per day while tamed and outdoors. Companions are not able to come inside, so while you are indoors their affection will decrease but they will hunt for themselves preventing hunger decay.")]
+        public float CaloriesBurnedPerDay = 1500.0f;
+
+
+        [Name("Maximum Condition (HP)")]
+        [Slider(100, 1000)]
+        [Description("Maximum condition of the wolf. This is tied to the same value affected by in-game damage (HP).")]
+        public float MaximumCondition = 100.0f;
+
+
+        [Name("Starving Condition Decay Rate")]
+        [Slider(0, 10)]
+        [Description("Condition loss per hour when tamed wolf is starving. Untamed wolves will fend for themselves.")]
+        public float StarvingConditionDecayPerHour = 5.0f;
+
 
         public override bool CanSpawn(BaseAi ai)
         {
             return Enable
+                && !mManager.Tamed
                 && ai.m_AiSubType == AiSubType.Wolf
                 && ai.Timberwolf == null
                 && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay;

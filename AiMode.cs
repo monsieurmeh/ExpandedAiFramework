@@ -33,11 +33,6 @@ namespace ExpandedAiFramework
         PassingAttack = 1U << (int)AiMode.PassingAttack, //19 (25) 
         Howl = 1U << (int)AiMode.Howl, //1a (26)
         Disabled = 1U << (int)AiMode.Disabled, //1b (27)
-        Hiding = 1U << (int)AiModeEAF.Hiding,
-        Returning = 1U << (int)AiModeEAF.Returning,
-        BigCarry = 1U << (int)AiModeEAF.BigCarry,
-        FollowLeader = 1U << (int)AiModeEAF.FollowLeader,
-        Fetch = 1U << (int)AiModeEAF.Fetch,
 
         MovementAllowed =
               Attack
@@ -53,8 +48,7 @@ namespace ExpandedAiFramework
             | ScriptedSequence
             | PatrolPointsOfInterest
             | HideAndSeek
-            | PassingAttack
-            | Returning,
+            | PassingAttack,
 
         TypicalDontInterrupt =
               Dead
@@ -88,33 +82,8 @@ namespace ExpandedAiFramework
             | JoinPack
             | PassingAttack
             | Howl
-            | Disabled
-            | Hiding,
+            | Disabled,
 
-        UntamedCompanionWolfIgnoreModes =
-              Attack
-            | Stalking
-            | PassingAttack
-            | Struggle
-            | HoldGround,
-
-        AiModesEAF = 
-              Hiding
-            | Returning
-            | BigCarry
-            | Fetch
-            | FollowLeader,
-    }
-
-
-    public enum AiModeEAF : int
-    {
-        Hiding = (int)AiMode.Disabled + 1,
-        Returning,
-        BigCarry,
-        FollowLeader,
-        Fetch,
-        COUNT
     }
 
 

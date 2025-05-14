@@ -11,7 +11,7 @@ namespace ExpandedAiFramework
 {
     public class Main : MelonMod
     {
-        protected Manager mManager;
+        protected EAFManager mManager;
 
         public override void OnInitializeMelon()
         {
@@ -26,7 +26,7 @@ namespace ExpandedAiFramework
 
         protected bool Initialize()
         {
-            mManager = Manager.Instance;
+            mManager = EAFManager.Instance;
             mManager?.Initialize(new ExpandedAiFrameworkSettings());
             return mManager != null;
         }

@@ -18,7 +18,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
 
         protected bool Initialize()
         {
-            return Manager.Instance.RegisterSpawnableAi(typeof(AmbushWolf), AmbushWolf.Settings);
+            return EAFManager.Instance.RegisterSpawnableAi(typeof(AmbushWolf), AmbushWolf.Settings);
         }
     }
 }

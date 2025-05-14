@@ -6,13 +6,12 @@ using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
 using ComplexLogger;
 using UnityEngine.AI;
-using Il2CppNodeCanvas.Tasks.Actions;
-using static Il2Cpp.Utils;
+using ModData;
 
 
 namespace ExpandedAiFramework
 {
-    public class Manager
+    public class EAFManager
     {
         public const string ModName = "Expanded Ai Framework";
 
@@ -24,11 +23,11 @@ namespace ExpandedAiFramework
             {
             }
 
-            internal static readonly Manager instance = new Manager();
+            internal static readonly EAFManager instance = new EAFManager();
         }
 
-        private Manager() { }
-        public static Manager Instance { get { return Nested.instance; } }
+        private EAFManager() { }
+        public static EAFManager Instance { get { return Nested.instance; } }
 
         #endregion
 
@@ -38,15 +37,28 @@ namespace ExpandedAiFramework
         private FlaggedLoggingLevel mLoggerLevel = 0U; 
         private ComplexLogger<Main> mLogger;
         private ExpandedAiFrameworkSettings mSettings;
-        private Dictionary<int, ICustomAi> mAiAugments = new Dictionary<int, ICustomAi>();
+        private Dictionary<int, ICustomAi> mCustomAis = new Dictionary<int, ICustomAi>();
         private WeightedTypePicker<BaseAi> mTypePicker = new WeightedTypePicker<BaseAi>();
         private Dictionary<Type, TypeSpecificSettings> mModSettingsDict = new Dictionary<Type, TypeSpecificSettings>();
+        private float mLastPlayerStruggleTime = 0.0f;
+        private Dictionary<Type, ISubManager> mSubManagers = new Dictionary<Type, ISubManager>();
+        private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0];
 
+#if DEV_BUILD
+        protected ModDataManager mModData = new ModDataManager(ModName, true);
+#else
+        protected ModDataManager mModData = new ModDataManager(ModName, false);
+#endif
+
+        public ModDataManager ModData { get { return mModData; } }
         public ExpandedAiFrameworkSettings Settings { get { return mSettings; } }
-        public Dictionary<int, ICustomAi> AiAugments { get { return mAiAugments; } }
+        public Dictionary<int, ICustomAi> CustomAis { get { return mCustomAis; } }
         public WeightedTypePicker<BaseAi> TypePicker { get { return mTypePicker; } }
         public Dictionary<Type, TypeSpecificSettings> ModSettingsDict { get { return mModSettingsDict; } }
+        public Dictionary<Type, ISubManager> SubManagers { get { return mSubManagers; } }
         public FlaggedLoggingLevel LoggerLevel { get { return mLoggerLevel; } set { mLoggerLevel = value; } }
+        public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } }
+
 
         public void Initialize(ExpandedAiFrameworkSettings settings)
         {
@@ -59,15 +71,13 @@ namespace ExpandedAiFramework
 
         public void Shutdown()
         {
+            foreach (ISubManager subManager in mSubManagers.Values)
+            {
+                subManager.Shutdown();
+            }
             SaveMapData();
-            ClearAugments();
+            ClearCustomAis();
             ClearMapData();
-        }
-
-
-        public void Update()
-        {
-
         }
 
         #endregion
@@ -93,18 +103,58 @@ namespace ExpandedAiFramework
         }
 
 
-        public void ClearAugments()
+        public void RegisterSubmanager(Type type, ISubManager subManager)
         {
-            foreach (ICustomAi customAi in mAiAugments.Values)
+            if (mSubManagers.TryGetValue(type, out ISubManager _))
             {
-                TryUnaugment(customAi.BaseAi);
+                LogError($"Type {type} already registered in submanager dictionary!");
+                return;
             }
-            mAiAugments.Clear();
+            mSubManagers.Add(type, subManager);
+            Array.Resize(ref mSubManagerUpdateLoopArray, mSubManagerUpdateLoopArray.Length + 1);
+            mSubManagerUpdateLoopArray[^1] = subManager; 
+        }
+
+
+        public void Update()
+        {
+            for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
+            {
+                mSubManagerUpdateLoopArray[i].Update();
+            }
+        }
+
+
+        public void OnLoad()
+        {
+            for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
+            {
+                mSubManagerUpdateLoopArray[i].OnLoad();
+            }
+        }
+
+
+        public void OnSave()
+        {
+            for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
+            {
+                mSubManagerUpdateLoopArray[i].OnSave();
+            }
+        }
+
+
+        public void ClearCustomAis()
+        {
+            foreach (ICustomAi customAi in mCustomAis.Values)
+            {
+                TryRemoveCustomAi(customAi.BaseAi);
+            }
+            mCustomAis.Clear();
         }
 
 
 
-        public bool TryAugment(BaseAi baseAi)
+        public bool TryInjectCustomAi(BaseAi baseAi)
         {
             if (baseAi == null)
             {
@@ -116,7 +166,7 @@ namespace ExpandedAiFramework
                 LogDebug("BaseAi is not wolf, cannot augment.");//todo: add non wolf scripts... one day...
                 return false;
             }
-            if (mAiAugments.ContainsKey(baseAi.GetHashCode()))
+            if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
             {
                 LogDebug("BaseAi in dictionary, can't augment.");
                 return false;
@@ -135,29 +185,29 @@ namespace ExpandedAiFramework
                 LogError($"Unable to resolve a custom spawn type from weighted type picker!", FlaggedLoggingLevel.Critical);                
                 return false;
             }
-            AugmentAi(baseAi, spawnType);
+            InjectCustomAi(baseAi, spawnType);
             return true;
         }
 
 
-        public bool TryUnaugment(BaseAi baseAI)
+        public bool TryRemoveCustomAi(BaseAi baseAI)
         {
             if (baseAI == null)
             {
                 return false;
             }
-            if (!mAiAugments.ContainsKey(baseAI.GetHashCode()))
+            if (!mCustomAis.ContainsKey(baseAI.GetHashCode()))
             {
                 return false;
             }
-            UnaugmentAi(baseAI.GetHashCode());
+            RemoveCustomAi(baseAI.GetHashCode());
             return true;
         }
 
 
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode)
         {
-            if (!AiAugments.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
+            if (!CustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
             {
                 return false;
             }
@@ -168,7 +218,7 @@ namespace ExpandedAiFramework
 
         public bool TryApplyDamage(BaseAi baseAi, float damage, float bleedOutTime, DamageSource damageSource)
         {
-            if (!AiAugments.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
+            if (!CustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
             {
                 return false;
             }
@@ -182,30 +232,28 @@ namespace ExpandedAiFramework
 
         #region Internal Methods
 
-        private void AugmentAi(BaseAi baseAi, Il2CppSystem.Type spawnType)
+        private void InjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType)
         {
             LogDebug($"Spawning {spawnType.Name} at {baseAi.gameObject.transform.position}");
-            mAiAugments.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(spawnType));
-            if (!mAiAugments.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
+            mCustomAis.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(spawnType));
+            if (!mCustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
             {
                 LogError($"Critical error at ExpandedAiFramework.AugmentAi: newly created {spawnType} cannot be found in augment dictionary! Did its hash code change?", FlaggedLoggingLevel.Critical);
                 return;
             }
-            customAi.Initialize(baseAi, GameManager.m_TimeOfDay);
-            customAi.Augment();
+            customAi.Initialize(baseAi, GameManager.m_TimeOfDay);//, this);
 #if DEV_BUILD_SPAWNONE
                 mSpawnedOne = true;
 #endif
         }
 
 
-        private void UnaugmentAi(int hashCode)
+        private void RemoveCustomAi(int hashCode)
         {
-            if (mAiAugments.TryGetValue(hashCode, out ICustomAi customAi))
+            if (mCustomAis.TryGetValue(hashCode, out ICustomAi customAi))
             {
-                customAi.UnAugment();
                 UnityEngine.Object.Destroy(customAi.Self.gameObject); //if I'm converting back from the interface to destroy it, is there really any point to the interface? We should be demanding people use CustomBaseAi instead...
-                mAiAugments.Remove(hashCode);
+                mCustomAis.Remove(hashCode);
             }
         }
 
@@ -482,6 +530,12 @@ namespace ExpandedAiFramework
         }
 
         #endregion
+
+
+        #region Mod Data
+
+
+#endregion
 
 
         #region Debug

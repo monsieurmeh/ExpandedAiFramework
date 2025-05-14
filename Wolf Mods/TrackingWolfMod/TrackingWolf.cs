@@ -28,11 +28,11 @@ namespace ExpandedAiFramework.TrackingWolfMod
         }
 
 
-        protected override bool ExitAiModeCustom(AiMode mode)
+        protected override bool EnterAiModeCustom(AiMode mode)
         {
             if (mode == AiMode.Struggle)
             {
-                m_TimeSinceLastStruggle = Time.time;
+                mManager.LastPlayerStruggleTime = Time.time;
             }
             return true;
         }
@@ -104,7 +104,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
 
         protected override bool PostProcessCustom()
         {
-            if (Time.time - m_TimeSinceLastSmellCheck <= Settings.PostStruggleFleePeriodSeconds && CurrentMode != AiMode.Flee)
+            if (Time.time - mManager.LastPlayerStruggleTime <= Settings.PostStruggleFleePeriodSeconds && CurrentMode != AiMode.Flee)
             {
                 SetAiMode(AiMode.Flee);
                 return true;

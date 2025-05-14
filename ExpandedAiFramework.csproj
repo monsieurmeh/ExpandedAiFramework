@@ -25,7 +25,12 @@
   </PropertyGroup>
 
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);DEV_BUILD;DEV_BUILD_STATELABEL;DEV_BUILD_LOCATIONMARKER</DefineConstants>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" />
 
   <ItemDefinitionGroup>
     <Reference>
@@ -93,6 +98,9 @@
     <Reference Include="UnityEngine.Il2CppImageConversionManager" />
     <Reference Include="ModSettings">
       <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
+    </Reference>
+    <Reference Include="ModData">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModData.dll</HintPath>
     </Reference>
     <Reference Include="ComplexLogger">
       <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ComplexLogger.dll</HintPath>

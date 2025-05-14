@@ -10,27 +10,22 @@ namespace ExpandedAiFramework
     {
         public CustomAiBase(IntPtr intPtr) : base(intPtr) { }
 
-        public virtual void Initialize(BaseAi ai, TimeOfDay timeOfDay)
-        {
-            mBaseAi = ai;
-            mTimeOfDay = timeOfDay;
-        }
-
         protected BaseAi mBaseAi;
         protected TimeOfDay mTimeOfDay;
+        protected EAFManager mManager;
         protected float mTimeSinceCheckForTargetInPatrolWaypointsMode = 0.0f;
 
         public BaseAi BaseAi { get { return mBaseAi; } }
         public Component Self { get { return this; } }
 
-
-        public virtual void Augment()
+        //ML is fighting me on dependency injection, doesn't want to "support" injecting my manager class for whatever reason. Feh
+        public virtual void Initialize(BaseAi ai, TimeOfDay timeOfDay)//, EAFManager manager)
         {
+            mBaseAi = ai;
+            mTimeOfDay = timeOfDay;
+            mManager = Manager;// manager;
             OnAugmentDebug();
         }
-
-
-        public virtual void UnAugment() { }
 
 
         public virtual void Update()
@@ -1431,7 +1426,7 @@ namespace ExpandedAiFramework
         {
 #if DEV_BUILD_STATELABEL
 
-            GameObject marker = Manager.Instance.CreateMarker(mBaseAi.transform.position, Color.clear, $"Debug Ai Marker for {mBaseAi.name}", 100, 0.5f);
+            GameObject marker = EAFManager.Instance.CreateMarker(mBaseAi.transform.position, Color.clear, $"Debug Ai Marker for {mBaseAi.name}", 100, 0.5f);
             mMarkerTransform = marker.transform;
             mMarkerTransform.SetParent(mBaseAi.transform);
             mMarkerRenderer = marker.GetComponent<Renderer>();
@@ -1472,7 +1467,6 @@ namespace ExpandedAiFramework
                 case AiMode.Wander:
                 case AiMode.PatrolPointsOfInterest:
                 case AiMode.FollowWaypoints:
-                case (AiMode)AiModeEAF.Returning:
                 case AiMode.GoToPoint:
                     return Color.grey;
                 case AiMode.Attack:
@@ -1492,7 +1486,6 @@ namespace ExpandedAiFramework
                 case AiMode.Stalking:
                 case AiMode.HideAndSeek:
                     return new Color(255, 0, 255);
-                case (AiMode)AiModeEAF.Hiding:
                 case AiMode.ScratchingAntlers:
                 case AiMode.ScriptedSequence:
                 case AiMode.InteractWithProp:

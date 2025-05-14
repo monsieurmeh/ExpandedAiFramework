@@ -18,7 +18,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         protected bool Initialize()
         {
-            return Manager.Instance.RegisterSpawnableAi(typeof(WanderingWolf), WanderingWolf.Settings);
+            return EAFManager.Instance.RegisterSpawnableAi(typeof(WanderingWolf), WanderingWolf.Settings);
         }
     }
 }

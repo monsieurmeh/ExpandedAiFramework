@@ -88,6 +88,9 @@
     <Reference Include="ModSettings">
       <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
     </Reference>
+    <Reference Include="ModData">
+      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModData.dll</HintPath>
+    </Reference>
     <Reference Include="ComplexLogger">
       <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ComplexLogger.dll</HintPath>
     </Reference>

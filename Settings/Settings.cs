@@ -12,7 +12,7 @@ namespace ExpandedAiFramework
 
         protected void Initialize()
         {
-            AddToModSettings(Manager.ModName);
+            AddToModSettings(EAFManager.ModName);
             RefreshGUI();
         }
     }

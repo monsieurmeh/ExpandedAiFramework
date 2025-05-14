@@ -13,10 +13,12 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public WanderingWolf(IntPtr ptr) : base(ptr) { }
         protected override float m_MinWaypointDistance { get { return 100.0f; } }
         protected override float m_MaxWaypointDistance { get { return 1000.0f; } }
+        
 
-        public override void Augment()
+        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay)//, EAFManager manager)
         {
-            mWanderPath = Manager.Instance.GetNearestWanderPath(this, 3, false);
+            base.Initialize(ai, timeOfDay);//, manager);
+            mWanderPath = mManager.GetNearestWanderPath(this, 3, false); 
             mBaseAi.m_Waypoints = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3>(mWanderPath.PathPoints.Length);
             for (int i = 0, iMax = mBaseAi.m_Waypoints.Length; i < iMax; i++)
             {
@@ -26,9 +28,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             mBaseAi.m_StartMode = AiMode.FollowWaypoints;
             mBaseAi.m_CurrentMode = AiMode.FollowWaypoints;
             mBaseAi.m_WaypointCompletionBehaviour = BaseAi.WaypointCompletionBehaviouir.Restart;
-            mBaseAi.m_MoveAgent.Warp(mWanderPath, 5.0f, true, -1);
             mBaseAi.m_TargetWaypointIndex = 0;
-            base.Augment();
         }
 
 
@@ -109,6 +109,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             }
             if (mBaseAi.m_PickedWanderDestination == false)
             {
+                /*
                 if (mBaseAi.Moose != null && !mBaseAi.m_UseWanderAwayFromPos)
                 {
                     hasNewWanderPos = mBaseAi.Moose?.MaybeSelectScratchingStump(out wanderPos) ?? false;
@@ -117,6 +118,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
                         mBaseAi.m_CurrentWanderPos = wanderPos;
                     }
                 }
+                */
                 if (!mBaseAi.m_UseWanderAwayFromPos)
                 {
                     if (mBaseAi.m_UseWanderToPos)
@@ -217,11 +219,13 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
             mBaseAi.MaybeHoldGroundAuroraField();
             mBaseAi.MaybeEnterWanderPause();
+            //yknow... occurs to me I maybe could have tried using that magic "MaybeForceStalkPlayer" command for the tracking wolf... 
+            /*
             if (mBaseAi.Bear?.ShouldAlwaysStalkPlayer() ?? false)
             {
                 mBaseAi.MaybeForceStalkPlayer();
             }
-
+            */
             UniStormWeatherSystem uniStormWeatherSystem = mTimeOfDay.m_WeatherSystem;
             mBaseAi.m_ElapsedWanderHours += (24.0f / (uniStormWeatherSystem.m_DayLengthScale * uniStormWeatherSystem.m_DayLength)) * Time.deltaTime;
         }

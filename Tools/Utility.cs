@@ -8,7 +8,7 @@ namespace ExpandedAiFramework
 {
     public static class Utility
     {
-        public static Manager Manager { get { return Manager.Instance; } }
+        public static EAFManager Manager { get { return EAFManager.Instance; } }
         public static void Log(string message, FlaggedLoggingLevel logLevel, bool toUConsole) { Manager.Log(message, logLevel, toUConsole); }
         public static void LogTrace(string message) { Manager.LogTrace(message); }
         public static void LogDebug(string message) { Manager.LogDebug(message); }
