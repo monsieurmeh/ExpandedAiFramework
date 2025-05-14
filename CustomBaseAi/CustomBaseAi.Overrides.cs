@@ -235,6 +235,9 @@ namespace ExpandedAiFramework
 
         protected void ProcessFlee()
         {
+            mBaseAi.ProcessFlee();
+            //This one is not quite ready for release yet, a lot of testing is needed and the base method works just fine - I don't really have a use for changing  flee yet.
+            /*
             //Considering putting a timer on this one, it seems expensive to check all this each frame for what, a despawn check? could absolutely be done on a timed frequency without affecting gameplay substantially
             Vector3 position = mBaseAi.m_CachedTransform.position;
             if (Utils.PositionIsOnscreen(position, 0.02f))
@@ -343,6 +346,7 @@ namespace ExpandedAiFramework
                     mBaseAi.m_WarnOthersTimer = mBaseAi.m_GroupFleeRepeatDetectSeconds;
                 }
             }
+            */
         }
 
 
@@ -356,7 +360,7 @@ namespace ExpandedAiFramework
             if (mTimeSinceCheckForTargetInPatrolWaypointsMode >= 10.0f)
             {
                 mTimeSinceCheckForTargetInPatrolWaypointsMode = 0.0f;
-                mBaseAi.ScanForNewTarget();
+                ScanForNewTarget();
                 mBaseAi.ScanForSmells();
                 mBaseAi.MaybeEnterWanderPause();
                 return;
@@ -369,7 +373,7 @@ namespace ExpandedAiFramework
             if (mBaseAi.m_TargetWaypointIndex == -1 ||
                 mBaseAi.m_TargetWaypointIndex >= (mBaseAi.m_Waypoints?.Count ?? 0))
             {
-                mBaseAi.ScanForNewTarget();
+                ScanForNewTarget();
                 mBaseAi.ScanForSmells();
                 mBaseAi.MaybeEnterWanderPause();
                 return;
@@ -536,7 +540,7 @@ namespace ExpandedAiFramework
         protected void ProcessIdle()
         {
             mBaseAi.ClearTarget();
-            mBaseAi.ScanForNewTarget();
+            ScanForNewTarget();
             mBaseAi.ScanForSmells();
             if (CurrentMode != AiMode.Idle || mBaseAi.m_StartMode == AiMode.Idle)
                 return;
@@ -623,7 +627,7 @@ namespace ExpandedAiFramework
             mBaseAi.m_AiGoalSpeed = mBaseAi.m_WalkSpeed;
             if (mBaseAi.m_TimeInModeSeconds > 1.0f)
             {
-                mBaseAi.ScanForNewTarget();
+                ScanForNewTarget();
             }
             if ((mBaseAi.m_WanderingAroundPos == false) &&
                (mBaseAi.m_PickedWanderDestination != false))
@@ -779,7 +783,7 @@ namespace ExpandedAiFramework
                     return;
                 }
             }
-            mBaseAi.ScanForNewTarget();
+            ScanForNewTarget();
             mBaseAi.MaybeHoldGroundAuroraField();
         }
 
@@ -1463,8 +1467,8 @@ namespace ExpandedAiFramework
 
         protected void MaybeHoldGround()
         {
-            mBaseAi.MaybeHoldGround();
-            /*
+            //mBaseAi.MaybeHoldGround();
+            ///*
             if (mBaseAi.m_AiType != AiType.Predator)
             {
                 return;
@@ -1496,7 +1500,7 @@ namespace ExpandedAiFramework
             {
                 SetAiMode(AiMode.HoldGround);
             }
-            */
+            //*/
         }
 
 
@@ -1833,7 +1837,7 @@ namespace ExpandedAiFramework
             //nearestTarget should pretty much never be null, so this is an error in my opinion
             if (nearestTarget == null)
             {
-                LogError($"Potential error, found NO possible additional candidates during scan for new targets. This implies that neither the player nor any other ai scripts exist in scene.");
+                LogDebug($"Potential error, found NO possible additional candidates during scan for new targets. This implies that neither the player nor any other ai scripts exist in scene.");
                 return;
             }
 

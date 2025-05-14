@@ -16,11 +16,16 @@ namespace ExpandedAiFramework.AmbushWolfMod
         public override void Initialize(BaseAi ai, TimeOfDay timeOfDay)
         {
             base.Initialize(ai, timeOfDay); 
-            mHidingSpot = Manager.Instance.GetNearestHidingSpot(this);
-            mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 10.0f, false, NavMesh.AllAreas);
-            mBaseAi.transform.position = mHidingSpot.Position;
-            //mBaseAi.transform.position = mHidingSpot.Position + new Vector3(0, 2, 0);
-            //mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 5.0f, true, -1);
+            mHidingSpot = Manager.Instance.GetNearestHidingSpot(this, 3, false);
+        }
+
+
+        protected override bool FirstFrameCustom()
+        {
+            mBaseAi.m_MoveAgent.transform.position = mHidingSpot.Position;
+            mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 2.0f, true, -1);
+            SetAiMode((AiMode)AiModeEAF.Hiding);
+            return true;
         }
 
 
@@ -135,7 +140,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             mBaseAi.MoveAgentStop();
             mBaseAi.ClearTarget();
-            mBaseAi.m_MoveAgent?.PointTowardsDirection(mHidingSpot.Rotation);
+            mBaseAi.m_MoveAgent.transform.rotation = mHidingSpot.Rotation;
         }
 
 
@@ -167,8 +172,14 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             if (!CurrentTarget.IsPlayer())
             {
-                LogVerbose($"ChangeModeWhenTargetDetectedCustom: target is not player, deferring to base.");
-                return true;
+                LogVerbose($"ChangeModeWhenTargetDetectedCustom: target is not player, IGNORING. Ambush wolves want YOU!");
+                return false;
+            }
+            if (CurrentTarget.IsBear() || CurrentTarget.IsCougar())
+            {
+                LogVerbose($"Ambush wolves run from larger threats!");
+                SetAiMode(AiMode.Flee);
+                return false;
             }
             LogVerbose($"ChangeModeWhenTargetDetectedCustom: Attacking player target!");
             SetAiMode(AiMode.Attack);

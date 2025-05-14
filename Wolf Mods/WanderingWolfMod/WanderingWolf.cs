@@ -16,7 +16,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         public override void Augment()
         {
-            mWanderPath = Manager.Instance.GetNearestWanderPath(this);
+            mWanderPath = Manager.Instance.GetNearestWanderPath(this, 3, false);
             mBaseAi.m_Waypoints = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3>(mWanderPath.PathPoints.Length);
             for (int i = 0, iMax = mBaseAi.m_Waypoints.Length; i < iMax; i++)
             {
@@ -26,9 +26,18 @@ namespace ExpandedAiFramework.WanderingWolfMod
             mBaseAi.m_StartMode = AiMode.FollowWaypoints;
             mBaseAi.m_CurrentMode = AiMode.FollowWaypoints;
             mBaseAi.m_WaypointCompletionBehaviour = BaseAi.WaypointCompletionBehaviouir.Restart;
-            mBaseAi.m_MoveAgent.Warp(mWanderPath.PathPoints[0], 5.0f, true, -1);
+            mBaseAi.m_MoveAgent.Warp(mWanderPath, 5.0f, true, -1);
             mBaseAi.m_TargetWaypointIndex = 0;
             base.Augment();
+        }
+
+
+        protected override bool FirstFrameCustom()
+        {
+            mBaseAi.m_MoveAgent.transform.position = mWanderPath;
+            mBaseAi.m_MoveAgent.Warp(mWanderPath, 2.0f, true, -1);
+            SetDefaultAiMode();
+            return true;
         }
 
 
@@ -37,5 +46,18 @@ namespace ExpandedAiFramework.WanderingWolfMod
             isImposter = false;
             return false;
         }
+
+        //Vanilla logic moves predators to stalking if player target is detected; I want ambush wolves to RUN at you!
+        protected override bool ChangeModeWhenTargetDetectedCustom()
+        {
+            if (CurrentTarget.IsBear() || CurrentTarget.IsCougar())
+            {
+                LogVerbose($"Wandering wolves run from larger threats!");
+                SetAiMode(AiMode.Flee);
+                return false;
+            }
+            return true;
+        }
+
     }
 }
