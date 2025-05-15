@@ -26,7 +26,7 @@
 
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);DEV_BUILD;DEV_BUILD_STATELABEL;DEV_BUILD_LOCATIONMARKER</DefineConstants>
+    <DefineConstants>$(DefineConstants);DEV_BUILD;DEV_BUILD_STATELABEL;DEV_BUILD_LOCATIONMARKER;DEV_BUILD_VERBOSE;DEV_BUILD_DEBUG</DefineConstants>
   </PropertyGroup>
 
 

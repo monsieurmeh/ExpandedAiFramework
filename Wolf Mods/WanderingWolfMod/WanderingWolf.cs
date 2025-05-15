@@ -15,9 +15,9 @@ namespace ExpandedAiFramework.WanderingWolfMod
         protected override float m_MaxWaypointDistance { get { return 1000.0f; } }
         
 
-        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay)//, EAFManager manager)
+        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion)//, EAFManager manager)
         {
-            base.Initialize(ai, timeOfDay);//, manager);
+            base.Initialize(ai, timeOfDay, spawnRegion);//, manager);
             mWanderPath = mManager.GetNearestWanderPath(this, 3, false); 
             mBaseAi.m_Waypoints = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3>(mWanderPath.PathPoints.Length);
             for (int i = 0, iMax = mBaseAi.m_Waypoints.Length; i < iMax; i++)

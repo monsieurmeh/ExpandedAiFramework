@@ -12,9 +12,9 @@ namespace ExpandedAiFramework.BigWolfMod
         public BigWolf(IntPtr ptr) : base(ptr) { }
 
 
-        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay)//, EAFManager manager)
+        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion)//, EAFManager manager)
         {
-            base.Initialize(ai, timeOfDay);//, manager);
+            base.Initialize(ai, timeOfDay, spawnRegion);//, manager);
             mBaseAi.m_RunSpeed *= 8;
             mBaseAi.m_StalkSpeed *= 8;
             mBaseAi.m_WalkSpeed *= 8;

@@ -13,8 +13,6 @@ namespace ExpandedAiFramework
 {
     public class EAFManager
     {
-        public const string ModName = "Expanded Ai Framework";
-
         #region Lazy Singleton
 
         private class Nested
@@ -34,15 +32,13 @@ namespace ExpandedAiFramework
 
         #region Internal stuff
 
-        private FlaggedLoggingLevel mLoggerLevel = 0U; 
-        private ComplexLogger<Main> mLogger;
         private ExpandedAiFrameworkSettings mSettings;
         private Dictionary<int, ICustomAi> mCustomAis = new Dictionary<int, ICustomAi>();
         private WeightedTypePicker<BaseAi> mTypePicker = new WeightedTypePicker<BaseAi>();
         private Dictionary<Type, TypeSpecificSettings> mModSettingsDict = new Dictionary<Type, TypeSpecificSettings>();
-        private float mLastPlayerStruggleTime = 0.0f;
         private Dictionary<Type, ISubManager> mSubManagers = new Dictionary<Type, ISubManager>();
-        private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0];
+        private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0]; 
+        private float mLastPlayerStruggleTime = 0.0f;
 
 #if DEV_BUILD
         protected ModDataManager mModData = new ModDataManager(ModName, true);
@@ -56,7 +52,6 @@ namespace ExpandedAiFramework
         public WeightedTypePicker<BaseAi> TypePicker { get { return mTypePicker; } }
         public Dictionary<Type, TypeSpecificSettings> ModSettingsDict { get { return mModSettingsDict; } }
         public Dictionary<Type, ISubManager> SubManagers { get { return mSubManagers; } }
-        public FlaggedLoggingLevel LoggerLevel { get { return mLoggerLevel; } set { mLoggerLevel = value; } }
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } }
 
 
@@ -65,6 +60,8 @@ namespace ExpandedAiFramework
             mSettings = settings;
             InitializeLogger();
             RegisterSpawnableAi(typeof(BaseWolf), BaseWolf.Settings);
+            //RegisterSpawnableAi(typeof(BaseBear), BaseBear.Settings);
+            //RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.Settings);
             LoadMapData();
         }
 
@@ -93,7 +90,7 @@ namespace ExpandedAiFramework
                 LogError($"Can't register {type} as it is already registered!", FlaggedLoggingLevel.Critical);
                 return false;
             }
-            LogAlways ($"Registering type {type}:");
+            LogAlways ($"Registering type {type}");
             modSettings.AddToModSettings(ModName);
             modSettings.ShowSettingsIfEnabled();
             modSettings.RefreshGUI();
@@ -110,6 +107,7 @@ namespace ExpandedAiFramework
                 LogError($"Type {type} already registered in submanager dictionary!");
                 return;
             }
+            LogAlways($"Registering SubManager for type {type}");
             mSubManagers.Add(type, subManager);
             Array.Resize(ref mSubManagerUpdateLoopArray, mSubManagerUpdateLoopArray.Length + 1);
             mSubManagerUpdateLoopArray[^1] = subManager; 
@@ -154,7 +152,7 @@ namespace ExpandedAiFramework
 
 
 
-        public bool TryInjectCustomAi(BaseAi baseAi)
+        public bool TryInjectCustomAi(BaseAi baseAi, SpawnRegion region)
         {
             if (baseAi == null)
             {
@@ -172,20 +170,32 @@ namespace ExpandedAiFramework
                 return false;
             }
 
-
 #if DEV_BUILD_SPAWNONE
             if (mSpawnedOne)
             {
                 return false;
             }
 #endif
-            Il2CppSystem.Type spawnType = Il2CppType.From(mTypePicker.PickType(baseAi));
+
+            Il2CppSystem.Type spawnType = Il2CppType.From(typeof(void));
+            for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
+            {
+                if (mSubManagerUpdateLoopArray[i].ShouldInterceptSpawn(baseAi, region))
+                {
+                    spawnType = Il2CppType.From(mSubManagerUpdateLoopArray[i].SpawnType);
+                    break;
+                }
+            }
             if (spawnType == Il2CppType.From(typeof(void)))
             {
-                LogError($"Unable to resolve a custom spawn type from weighted type picker!", FlaggedLoggingLevel.Critical);                
+                spawnType = Il2CppType.From(mTypePicker.PickType(baseAi));
+            }
+            if (spawnType == Il2CppType.From(typeof(void)))
+            {
+                LogError($"Unable to resolve a custom spawn type from weighted type picker or submanager interceptions!", FlaggedLoggingLevel.Critical);                
                 return false;
             }
-            InjectCustomAi(baseAi, spawnType);
+            InjectCustomAi(baseAi, spawnType, region);
             return true;
         }
 
@@ -232,19 +242,26 @@ namespace ExpandedAiFramework
 
         #region Internal Methods
 
-        private void InjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType)
+        private void InjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion spawnRegion)
         {
             LogDebug($"Spawning {spawnType.Name} at {baseAi.gameObject.transform.position}");
-            mCustomAis.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(spawnType));
-            if (!mCustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
+            try
             {
-                LogError($"Critical error at ExpandedAiFramework.AugmentAi: newly created {spawnType} cannot be found in augment dictionary! Did its hash code change?", FlaggedLoggingLevel.Critical);
-                return;
-            }
-            customAi.Initialize(baseAi, GameManager.m_TimeOfDay);//, this);
+                mCustomAis.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(spawnType));
+                if (!mCustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
+                {
+                    LogError($"Critical error at ExpandedAiFramework.AugmentAi: newly created {spawnType} cannot be found in augment dictionary! Did its hash code change?", FlaggedLoggingLevel.Critical);
+                    return;
+                }
+                customAi.Initialize(baseAi, GameManager.m_TimeOfDay, spawnRegion);//, this);
 #if DEV_BUILD_SPAWNONE
                 mSpawnedOne = true;
 #endif
+            }
+            catch (Exception e)
+            {
+                LogError($"Error during EAFManager.InjectCustomAi: {e}");
+            }
         }
 
 
@@ -252,6 +269,7 @@ namespace ExpandedAiFramework
         {
             if (mCustomAis.TryGetValue(hashCode, out ICustomAi customAi))
             {
+                customAi.Despawn(GetCurrentTimelinePoint());
                 UnityEngine.Object.Destroy(customAi.Self.gameObject); //if I'm converting back from the interface to destroy it, is there really any point to the interface? We should be demanding people use CustomBaseAi instead...
                 mCustomAis.Remove(hashCode);
             }
@@ -270,14 +288,18 @@ namespace ExpandedAiFramework
 
 
         #region Path & Location Management
+        //todo: break into subregions? this is getting crowded
 
         private Dictionary<string, List<HidingSpot>> mHidingSpots = new Dictionary<string, List<HidingSpot>>();
-        private Dictionary<string, List<WanderPath>> mWanderPaths = new Dictionary<string, List<WanderPath>>(); 
+        private Dictionary<string, List<WanderPath>> mWanderPaths = new Dictionary<string, List<WanderPath>>();
+        private Dictionary<string, List<SpawnRegionModDataProxy>> mSpawnRegionModDataProxies = new Dictionary<string, List<SpawnRegionModDataProxy>>();
+
         private List<HidingSpot> mAvailableHidingSpots = new List<HidingSpot>();
         private List<WanderPath> mAvailableWanderPaths = new List<WanderPath>();
 
         public Dictionary<string, List<HidingSpot>> HidingSpots { get { return mHidingSpots; } }
         public Dictionary<string, List<WanderPath>> WanderPaths { get { return mWanderPaths; } }
+        public Dictionary<string, List<SpawnRegionModDataProxy>> SpawnRegionModDataProxies { get { return mSpawnRegionModDataProxies; } }
 
 
         public void SaveMapData()
@@ -294,6 +316,13 @@ namespace ExpandedAiFramework
                 allPaths.AddRange(mWanderPaths[key]);
             }
             File.WriteAllText(Path.Combine(MelonEnvironment.ModsDirectory, "ExpandedAiFramework.WanderPaths.json"), JSON.Dump(allPaths, EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints), Encoding.UTF8);
+            List<SpawnRegionModDataProxy> allSpawnRegionModDataProxies = new List<SpawnRegionModDataProxy>();
+            foreach (string key in mSpawnRegionModDataProxies.Keys)
+            {
+                allSpawnRegionModDataProxies.AddRange(mSpawnRegionModDataProxies[key]);
+            }
+            string json = JSON.Dump(allPaths, EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
+            ModData.Save(json, "SpawnRegionModDataProxies");
         }
 
 
@@ -317,7 +346,7 @@ namespace ExpandedAiFramework
                     }
                     for (int i = 0, iMax = sceneSpots.Count; i < iMax; i++)
                     {
-                        if (sceneSpots[i].Name == newSpot.Name)
+                        if (sceneSpots[i] == newSpot)
                         {
                             LogWarning($"Can't add hiding spot {newSpot.Name} at {newSpot.Position} because another hiding spot with the same name is already defined!");
                             canAdd = false;
@@ -347,7 +376,7 @@ namespace ExpandedAiFramework
                     }
                     for (int i = 0, iMax = scenePaths.Count; i < iMax; i++)
                     {
-                        if (scenePaths[i].Name == newPath.Name)
+                        if (scenePaths[i] == newPath)
                         {
                             LogWarning($"Can't add hiding spot {newPath} because another hiding spot with the same name is already defined!");
                             canAdd = false;
@@ -356,6 +385,36 @@ namespace ExpandedAiFramework
                     if (canAdd)
                     {
                         scenePaths.Add(newPath);
+                    }
+                }
+            }
+
+            mSpawnRegionModDataProxies.Clear();
+            string proxiesString = ModData.Load("SpawnRegionModDataProxies");
+            if (proxiesString != null)
+            {
+                Variant proxiesVariant = JSON.Load(proxiesString);
+                foreach (var pathJSON in proxiesVariant as ProxyArray)
+                {
+                    canAdd = true;
+                    SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy();
+                    JSON.Populate(pathJSON, newProxy);
+                    if (!mSpawnRegionModDataProxies.TryGetValue(newProxy.Scene, out List<SpawnRegionModDataProxy> proxies))
+                    {
+                        proxies = new List<SpawnRegionModDataProxy>();
+                        mSpawnRegionModDataProxies.Add(newProxy.Scene, proxies);
+                    }
+                    for (int i = 0, iMax = proxies.Count; i < iMax; i++)
+                    {
+                        if (proxies[i] == newProxy)
+                        {
+                            LogWarning($"Can't add new proxy {newProxy} because it already exists!");
+                            canAdd = false;
+                        }
+                    }
+                    if (canAdd)
+                    {
+                        proxies.Add(newProxy);
                     }
                 }
             }
@@ -532,16 +591,12 @@ namespace ExpandedAiFramework
         #endregion
 
 
-        #region Mod Data
-
-
-#endregion
-
-
         #region Debug
 
         //Stay outa here if you value your sanity, ugly debug-only code ahead
 
+        private FlaggedLoggingLevel mLoggerLevel = 0U;
+        private ComplexLogger<Main> mLogger;
         private bool mRecordingWanderPath = false;
         private string mCurrentWanderPathName = string.Empty;
         private List<Vector3> mCurrentWanderPathPoints = new List<Vector3>();
@@ -551,6 +606,8 @@ namespace ExpandedAiFramework
 #if DEV_BUILD_SPAWNONE
         private bool mSpawnedOne = false;
 #endif
+
+        public FlaggedLoggingLevel LoggerLevel { get { return mLoggerLevel; } set { mLoggerLevel = value; } }
 
         #region Logging
 
@@ -572,7 +629,7 @@ namespace ExpandedAiFramework
         public void LogVerbose(string message) { Log(message, FlaggedLoggingLevel.Verbose, false); }
         public void LogWarning(string message, bool toUConsole = true) { Log(message, FlaggedLoggingLevel.Warning, toUConsole); }
         public void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U) { Log(message, FlaggedLoggingLevel.Error | additionalFlags); }
-        public void LogAlways(string message) { Log(message, FlaggedLoggingLevel.Always, true); }
+        public void LogAlways(string message) { Log(message, FlaggedLoggingLevel.Always, true); Debug.LogError(message); }
 
 
         private void InitializeLogger()
@@ -632,39 +689,6 @@ namespace ExpandedAiFramework
         #region Console Commands
 
         #region General
-
-        //todo: load from localization? Then again these are meant to be DEBUG. Then again, framework, not just for me... 
-        public const string CommandString = "eaf";
-        private const string CommandString_Help = "help";
-        private const string CommandString_Create = "create";
-        private const string CommandString_Delete = "delete";
-        private const string CommandString_Save = "save";
-        private const string CommandString_Load = "load";
-        private const string CommandString_AddTo = "add";
-        private const string CommandString_GoTo = "goto";
-        private const string CommandString_Finish = "finish";
-        private const string CommandString_Show = "show";
-        private const string CommandString_Hide = "hide";
-        private const string CommandString_List = "list";
-
-        private const string CommandString_NavMesh = "navmesh";
-        private const string CommandString_WanderPath = "wanderpath";
-        private const string CommandString_HidingSpot = "hidingspot";
-        private const string CommandString_MapData = "mapdata";
-
-
-        private const string CommandString_OnCommandSupportedTypes =
-            $"{CommandString_Help}" +
-            $"{CommandString_Create} " +
-            $"{CommandString_Delete} " +
-            $"{CommandString_Save} " +
-            $"{CommandString_Load} " +
-            $"{CommandString_AddTo} " +
-            $"{CommandString_GoTo} " +
-            $"{CommandString_Finish} " +
-            $"{CommandString_Show} " +
-            $"{CommandString_Hide} " +
-            $"{CommandString_List} ";
 
         public void Console_OnCommand()
         {
@@ -754,17 +778,7 @@ namespace ExpandedAiFramework
 
         #region Help
 
-        private const string CommandString_HelpSupportedCommands =
-            $"{CommandString_Create} " +
-            $"{CommandString_Delete} " +
-            $"{CommandString_Save} " +
-            $"{CommandString_Load} " +
-            $"{CommandString_AddTo} " +
-            $"{CommandString_GoTo} " +
-            $"{CommandString_Finish} " +
-            $"{CommandString_Show} " +
-            $"{CommandString_Hide} " +
-            $"{CommandString_List} ";
+
 
 
         private void Console_Help()
@@ -815,7 +829,7 @@ namespace ExpandedAiFramework
 
         #region Create
 
-        private const string CommandString_CreateSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
+
 
 
         private void Console_Create()
@@ -908,7 +922,6 @@ namespace ExpandedAiFramework
 
         #region Delete
 
-        private const string CommandString_DeleteSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
 
 
         private void Console_Delete()
@@ -984,7 +997,6 @@ namespace ExpandedAiFramework
 
         #region Save
 
-        private const string CommandString_SaveSupportedTypes = $"{CommandString_MapData}";
 
 
         public void Console_Save()
@@ -1007,9 +1019,6 @@ namespace ExpandedAiFramework
 
         #region Load
 
-        private const string CommandString_LoadSupportedTypes = $"{CommandString_MapData}";
-
-
         public void Console_Load()
         {
             string type = uConsole.GetString();
@@ -1029,9 +1038,6 @@ namespace ExpandedAiFramework
 
 
         #region AddTo
-
-        private const string CommandString_AddToSupportedTypes = $"{CommandString_WanderPath}";
-
 
         private void Console_AddTo()
         {
@@ -1088,9 +1094,6 @@ namespace ExpandedAiFramework
 
         #region Finish
 
-        private const string CommandString_FinishSupportedTypes = $"{CommandString_WanderPath}";
-
-
         private void Console_Finish()
         {
             string type = uConsole.GetString();
@@ -1127,9 +1130,6 @@ namespace ExpandedAiFramework
 
 
         #region GoTo
-
-        private const string CommandString_GoToSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
-
 
         public void Console_GoTo()
         {
@@ -1231,9 +1231,6 @@ namespace ExpandedAiFramework
 
 
         #region Show
-
-        private const string CommandString_ShowSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh}";
-
 
         public void Console_Show()
         {
@@ -1346,10 +1343,7 @@ namespace ExpandedAiFramework
 
 
         #region Hide
-
-        private const string CommandString_HideSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh}";
-
-
+       
         public void Console_Hide()
         {
             string type = uConsole.GetString();
@@ -1442,9 +1436,6 @@ namespace ExpandedAiFramework
 
 
         #region List
-
-        private const string CommandString_ListSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
-
 
         public void Console_List()
         {
@@ -1630,7 +1621,6 @@ namespace ExpandedAiFramework
 
 
         #endregion
-
 
         #endregion
 

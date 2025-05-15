@@ -97,8 +97,10 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public override bool CanSpawn(BaseAi ai)
         {
+            Utility.LogDebug($"Enabled: {Enable} | Connected: {mManager.Data.Connected} | Tamed: {mManager.Data.Tamed} |  Type/Sub: {ai.m_AiType}.{ai.m_AiSubType}");
             return Enable
-                && !mManager.Tamed
+                && !mManager.Data.Tamed
+                && !mManager.Data.Connected
                 && ai.m_AiSubType == AiSubType.Wolf
                 && ai.Timberwolf == null
                 && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay;

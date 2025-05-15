@@ -13,5 +13,7 @@ namespace ExpandedAiFramework
         void OnSave();
         void OnLoad();
         void Update();
+        bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region);
+        Type SpawnType { get; }
     }
 }

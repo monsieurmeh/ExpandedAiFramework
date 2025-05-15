@@ -19,13 +19,17 @@ namespace ExpandedAiFramework
         public Component Self { get { return this; } }
 
         //ML is fighting me on dependency injection, doesn't want to "support" injecting my manager class for whatever reason. Feh
-        public virtual void Initialize(BaseAi ai, TimeOfDay timeOfDay)//, EAFManager manager)
+        // Occasionally the spawn region is needed during initial setup, and it doesn't always seem to set itself until after the spawn process, so it's being passed here just in case
+        public virtual void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion)//, EAFManager manager)
         {
             mBaseAi = ai;
             mTimeOfDay = timeOfDay;
             mManager = Manager;// manager;
             OnAugmentDebug();
         }
+
+
+        public virtual void Despawn(float despawnTime) { } //Override this if you need to handle any kind of longer term tracking
 
 
         public virtual void Update()
@@ -1406,13 +1410,13 @@ namespace ExpandedAiFramework
 
         #region ***DEBUG***
 
-        protected void LogTrace(string message) { Utility.LogTrace($"[{this}]: message"); }
-        protected void LogDebug(string message) { Utility.LogDebug($"[{this}]: message"); ; }
-        protected void LogVerbose(string message) { Utility.LogVerbose($"[{this}]: message"); ; }
-        protected void LogWarning(string message) { Utility.LogWarning($"[{this}]: message"); ; }
-        protected void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U) { Utility.LogError($"[{this}]: message", additionalFlags); }
-        protected void LogCriticalError(string message) { LogError($"[{this}]: message", FlaggedLoggingLevel.Critical); }
-        protected void LogException(string message) { LogError($"[{this}]: message", FlaggedLoggingLevel.Exception); }
+        protected void LogTrace(string message) { Utility.LogTrace($"[{this}]: {message}"); }
+        protected void LogDebug(string message) { Utility.LogDebug($"[{this}]: {message}"); ; }
+        protected void LogVerbose(string message) { Utility.LogVerbose($"[{this}]: {message}"); ; }
+        protected void LogWarning(string message) { Utility.LogWarning($"[{this}]:  {message}"); ; }
+        protected void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U) { Utility.LogError($"[{this}]:  {message}", additionalFlags); }
+        protected void LogCriticalError(string message) { LogError($"[{this}]:  {message}", FlaggedLoggingLevel.Critical); }
+        protected void LogException(string message) { LogError($"[{this}]:  {message}", FlaggedLoggingLevel.Exception); }
 
 
 #if DEV_BUILD

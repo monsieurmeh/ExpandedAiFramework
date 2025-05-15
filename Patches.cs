@@ -12,20 +12,21 @@ namespace ExpandedAiFramework
         [HarmonyPatch(typeof(SpawnRegion), "InstantiateSpawnInternal", new Type[] { typeof(GameObject), typeof(WildlifeMode), typeof(Vector3), typeof(Quaternion) })]
         internal class SpawnRegionPatches_InstantiateSpawnInternal
         {
-            private static void Postfix(BaseAi __result)
+            private static void Postfix(BaseAi __result, SpawnRegion __instance)
             {
-                Manager.TryInjectCustomAi(__result);
+                Manager.TryInjectCustomAi(__result, __instance);
             }
         }
 
 
-        [HarmonyPatch(typeof(SaveGameSystem), "LoadSceneData", new Type[] { typeof(string), typeof(string) })]
-        internal class SaveGameSystemPatches_LoadSceneData
+        [HarmonyPatch(typeof(GameManager), "LoadScene", new Type[] { typeof(string), typeof(string) })]
+        internal class GameManagerPatches_LoadScene
         {
-            private static void Postfix(string name, string sceneSaveName)
+            private static void Postfix(string sceneName)
             {
-                Manager?.ClearCustomAis();
-                Manager?.RefreshAvailableMapData(sceneSaveName);
+                LogDebug("LoadScene post fix trigger");
+                Manager.ClearCustomAis();
+                Manager.RefreshAvailableMapData(sceneName);
             }
         }
 
@@ -33,22 +34,35 @@ namespace ExpandedAiFramework
 
 
         #region Save/Load/ModData
-
-        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(string), typeof(int) })]
+        /*
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(SaveSlotInfo) })]
         private static class GameManagerPatches_LoadSaveGameSlot
         {
             private static void Postfix()
             {
+                Utility.LogDebug("Loading!");
+                Manager.OnLoad();
+            }
+        }
+        */
+
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(string), typeof(int) })]
+        private static class GameManagerPatches_LoadSaveGameSlot2
+        {
+            private static void Postfix()
+            {
+                Utility.LogDebug("Triggering OnLoad");
                 Manager.OnLoad();
             }
         }
 
+        //[HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.WriteSlotToDisk), new Type[] { typeof(string) })]
         [HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.WriteSlotToDisk), new Type[] { typeof(SlotData), typeof(Timestamp) })]
         private static class ModData_SaveGameSlots_WriteSlotToDisk_Postfix
         {
             private static void Prefix()
             {
+                Utility.LogDebug("Triggering OnSave");
                 Manager.OnSave();
             }
         }
@@ -135,7 +149,7 @@ namespace ExpandedAiFramework
         {
             private static void Postfix()
             {
-                uConsole.RegisterCommand(EAFManager.CommandString, new Action(EAFManager.Instance.Console_OnCommand));
+                uConsole.RegisterCommand(CommandString, new Action(EAFManager.Instance.Console_OnCommand));
             }
         }
 

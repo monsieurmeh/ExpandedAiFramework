@@ -28,5 +28,35 @@ namespace ExpandedAiFramework
         {
             return $"WanderPath {Name} starting at {PathPoints[0]} with {PathPoints.Length} path points";
         }
+
+        public override int GetHashCode() => (Name, Scene).GetHashCode();
+        public override bool Equals(object obj) => this.Equals(obj as WanderPath);
+        public bool Equals(WanderPath spot)
+        {
+            if (spot is null)
+            {
+                return false;
+            }
+
+            if (GetType() != spot.GetType())
+            {
+                return false;
+            }
+
+            return (Name == spot.Name) && (Scene == spot.Scene);
+        }
+        public static bool operator ==(WanderPath lhs, WanderPath rhs)
+        {
+            if (lhs is null)
+            {
+                if (rhs is null)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return lhs.Equals(rhs);
+        }
+        public static bool operator !=(WanderPath lhs, WanderPath rhs) => !(lhs == rhs);
     }
 }
