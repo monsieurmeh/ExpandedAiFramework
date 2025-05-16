@@ -16,6 +16,13 @@ namespace ExpandedAiFramework
         public float SpawnWeight = 100.0f;
 
 
+
+        [Name("Stalking Timeout")]
+        [Slider(0.0f, 30.0f)]
+        [Description("Prevents indefinite stalking behavior by switching to attack state after this length of time.")]
+        public float StalkingTimeout = 3.0f;
+
+
         public override bool CanSpawn(BaseAi ai)
         {
             return Enable && ai.m_AiSubType == AiSubType.Wolf && ai.Timberwolf == null;

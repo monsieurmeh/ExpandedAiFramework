@@ -9,22 +9,23 @@ namespace ExpandedAiFramework
     {
         #region General
 
-        [HarmonyPatch(typeof(SpawnRegion), "InstantiateSpawnInternal", new Type[] { typeof(GameObject), typeof(WildlifeMode), typeof(Vector3), typeof(Quaternion) })]
+        [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.InstantiateSpawnInternal), new Type[] { typeof(GameObject), typeof(WildlifeMode), typeof(Vector3), typeof(Quaternion) })]
         internal class SpawnRegionPatches_InstantiateSpawnInternal
         {
             private static void Postfix(BaseAi __result, SpawnRegion __instance)
             {
+                LogDebug($"SpawnRegion.InstantiateSpawnInternal at {__instance?.transform?.position ?? Vector3.zero}");
                 Manager.TryInjectCustomAi(__result, __instance);
             }
         }
 
 
-        [HarmonyPatch(typeof(GameManager), "LoadScene", new Type[] { typeof(string), typeof(string) })]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadScene), new Type[] { typeof(string), typeof(string) })]
         internal class GameManagerPatches_LoadScene
         {
             private static void Postfix(string sceneName)
             {
-                LogDebug("LoadScene post fix trigger");
+                //LogDebug("LoadScene post fix trigger");
                 Manager.ClearCustomAis();
                 Manager.RefreshAvailableMapData(sceneName);
             }
@@ -34,24 +35,25 @@ namespace ExpandedAiFramework
 
 
         #region Save/Load/ModData
-        /*
-        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(SaveSlotInfo) })]
+
+
+        [HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.CreateSlot), new Type[] { typeof(string), typeof(SaveSlotType), typeof(uint), typeof(Episode) })]
+        private static class SaveGameSlotsPatches_CreateSlow
+        {
+            private static void Postfix()
+            {
+                Utility.LogDebug("OnStartNewGame");
+                Manager.OnStartNewGame();
+            }
+        }
+
+
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(string), typeof(int) })]
         private static class GameManagerPatches_LoadSaveGameSlot
         {
             private static void Postfix()
             {
-                Utility.LogDebug("Loading!");
-                Manager.OnLoad();
-            }
-        }
-        */
-
-        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(string), typeof(int) })]
-        private static class GameManagerPatches_LoadSaveGameSlot2
-        {
-            private static void Postfix()
-            {
-                Utility.LogDebug("Triggering OnLoad");
+                //Utility.LogDebug("Triggering OnLoad");
                 Manager.OnLoad();
             }
         }
@@ -62,7 +64,7 @@ namespace ExpandedAiFramework
         {
             private static void Prefix()
             {
-                Utility.LogDebug("Triggering OnSave");
+                //Utility.LogDebug("Triggering OnSave");
                 Manager.OnSave();
             }
         }
@@ -72,7 +74,7 @@ namespace ExpandedAiFramework
 
         #region BaseAi
 
-        [HarmonyPatch(typeof(BaseAi), "Update")]
+        [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.Update))]
         internal class BaseAiPatches_Update
         {
             private static bool Prefix(BaseAi __instance)
@@ -82,7 +84,7 @@ namespace ExpandedAiFramework
         }
 
 
-        [HarmonyPatch(typeof(BaseAi), "SetAiMode", new Type[] { typeof(AiMode) })]
+        [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.SetAiMode), new Type[] { typeof(AiMode) })]
         internal class BaseAiPatches_SetAiMode
         {
             private static bool Prefix(BaseAi __instance, AiMode mode)
@@ -92,7 +94,7 @@ namespace ExpandedAiFramework
         }
 
 
-        [HarmonyPatch(typeof(BaseAi), "ApplyDamage", new Type[] { typeof(float), typeof(DamageSource), typeof(string) })]
+        [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.ApplyDamage), new Type[] { typeof(float), typeof(DamageSource), typeof(string) })]
         internal class BaseAiPatches_ApplyDamage
         {
             private static bool Prefix(BaseAi __instance, float damage, DamageSource damageSource, string collider)
@@ -102,7 +104,7 @@ namespace ExpandedAiFramework
         }
 
 
-        [HarmonyPatch(typeof(BaseAi), "ApplyDamage", new Type[] { typeof(float), typeof(float), typeof(DamageSource), typeof(string) })]
+        [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.ApplyDamage), new Type[] { typeof(float), typeof(float), typeof(DamageSource), typeof(string) })]
         internal class BaseAiPatches_ApplyDamageWithBleedout
         {
             private static bool Prefix(BaseAi __instance, float damage, float bleedOutMintues, DamageSource damageSource, string collider)
@@ -112,7 +114,7 @@ namespace ExpandedAiFramework
         }
 
 
-        [HarmonyPatch(typeof(BaseAi), "DeserializeUsingBaseAiDataProxy", new Type[] { typeof(BaseAiDataProxy) })]
+        [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.DeserializeUsingBaseAiDataProxy), new Type[] { typeof(BaseAiDataProxy) })]
         internal class BaseAiPatches_DeserializeUsingBaseAiDataProxy
         {
             private static void Prefix(BaseAi __instance, BaseAiDataProxy proxy)
@@ -144,7 +146,7 @@ namespace ExpandedAiFramework
 
         #region Console/Debug
 
-        [HarmonyPatch(typeof(ConsoleManager), "Initialize")]
+        [HarmonyPatch(typeof(ConsoleManager), nameof(ConsoleManager.Initialize))]
         internal class ConsoleManagerPatches_Initialize
         {
             private static void Postfix()

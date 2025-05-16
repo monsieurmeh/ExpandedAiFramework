@@ -30,6 +30,8 @@ namespace ExpandedAiFramework
         public const string CommandString_WanderPath = "wanderpath";
         public const string CommandString_HidingSpot = "hidingspot";
         public const string CommandString_MapData = "mapdata";
+        public const string CommandString_SpawnRegion = "spawnregion";
+
 
         public const string CommandString_OnCommandSupportedTypes =
             $"{CommandString_Help}" +
@@ -62,8 +64,8 @@ namespace ExpandedAiFramework
         public const string CommandString_AddToSupportedTypes = $"{CommandString_WanderPath}";
         public const string CommandString_FinishSupportedTypes = $"{CommandString_WanderPath}";
         public const string CommandString_GoToSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
-        public const string CommandString_ShowSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh}";
-        public const string CommandString_HideSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh}";
+        public const string CommandString_ShowSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion}";
+        public const string CommandString_HideSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion}";
         public const string CommandString_ListSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_LoadSupportedTypes = $"{CommandString_MapData}";
 

@@ -1,4 +1,5 @@
 ﻿using ComplexLogger;
+using Il2CppRewired;
 using UnityEngine;
 
 
@@ -12,14 +13,14 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public bool Connected = false;
         public bool Indoors = false;
         public bool Tamed = false;
-        public float CurrentAffection = 100f;
-        public float CurrentCalories = CompanionWolf.Settings.MaximumCalorieIntake;
+        public float CurrentAffection = 0.0f;
+        public float CurrentCalories = 0.0f;
         public float CurrentCondition = CompanionWolf.Settings.MaximumCondition;
         public float MaxCondition = CompanionWolf.Settings.MaximumCondition;
         public float SpawnDate;
         public float UntamedTimeoutTime;
         public float AffectionDecayTime;
-        public float TamingAllowedTime;
+        public float AbleToBeTamedTime;
         public float LastDespawnTime;
         public float Scale = 0.6f;
 
@@ -30,15 +31,22 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (!Connected)
             {
-                Utility.LogDebug($"Connecting!");
-                Connected = true;
-                SpawnDate = Utility.GetCurrentTimelinePoint();
-                UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.LingerDurationHours * Utility.HoursToSeconds;
-                AffectionDecayTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.AffectionDecayDelayHours * Utility.HoursToSeconds;
-                TamingAllowedTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.AffectionDaysRequirement * Utility.DaysToSeconds;
-                LastDespawnTime = Utility.GetCurrentTimelinePoint();
-                SpawnRegionModDataProxy = new SpawnRegionModDataProxy(scene, ai, spawnRegion);
+                Initialize(new SpawnRegionModDataProxy(scene, ai, spawnRegion));
             }
+        }
+
+
+        public void Initialize(SpawnRegionModDataProxy proxy)
+        {
+            Utility.LogDebug($"Connecting!");
+            Connected = true;
+            SpawnDate = Utility.GetCurrentTimelinePoint();
+            UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.LingerDurationHours;
+            AffectionDecayTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.AffectionDecayDelayHours;
+            AbleToBeTamedTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.AffectionDaysRequirement * 24;
+            LastDespawnTime = Utility.GetCurrentTimelinePoint();
+            SpawnRegionModDataProxy = proxy;
+            
         }
 
 

@@ -60,6 +60,7 @@
     <Reference Include="Il2CppTLD.Game.Events.Runtime" />
     <Reference Include="Il2CppTLD.GameplayTag" />
     <Reference Include="Il2CppTLD.IO" />
+    <Reference Include="Il2CppTLD.IntBackedUnit" />
     <Reference Include="Il2CppTLD.Logging" />
     <Reference Include="Il2CppTLD.OptionalContent" />
     <Reference Include="Il2CppTLD.PDID" />
@@ -75,9 +76,14 @@
     <Reference Include="Il2CppTLD.UserGeneratedContent" />
     <Reference Include="Unity.Mathematics" />
     <Reference Include="Unity.TextMeshPro" />
+    <Reference Include="Unity.Addressables" />
+    <Reference Include="Unity.ResourceManager" />
     <Reference Include="UnityEngine.AssetBundleModule" />
     <Reference Include="UnityEngine.CoreModule" />
     <Reference Include="UnityEngine" />
+    <Reference Include="UnityEngine.UI" />
+    <Reference Include="UnityEngine.UIModule" />
+    <Reference Include="UnityEngine.TextRenderingModule" />
     <Reference Include="UnityEngine.AIModule" />
     <Reference Include="UnityEngine.AnimationModule" />
     <Reference Include="UnityEngine.PhysicsModule" />

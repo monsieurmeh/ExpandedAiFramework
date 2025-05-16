@@ -8,11 +8,14 @@ using ComplexLogger;
 using UnityEngine.AI;
 using ModData;
 using MelonLoader.TinyJSON;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ExpandedAiFramework.CompanionWolfMod
 {
     public class CompanionWolfManager : ISubManager
     {
+        private const string WolfPrefabString = "WILDLIFE_Wolf";
+
         protected GameObject mPrefab;
         protected EAFManager mManager;
         protected CompanionWolf mInstance;
@@ -20,6 +23,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         protected bool mInitialized = false;
 
         public CompanionWolfData Data { get { return mData; } set { mData = value; } }
+        public CompanionWolf Instance { get { return mInstance; } set { mInstance = value; } }
         public Type SpawnType { get { return typeof(CompanionWolf); } }
 
 
@@ -28,12 +32,37 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             mManager = manager;
             mInitialized = true;
-            Utility.LogVerbose("CompanionWolfManager initialized!");
+            Utility.LogDebug("CompanionWolfManager initialized!");
         }
 
 
         public bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region)
         {
+            if (mData == null)
+            {
+                Utility.LogDebug($"No data setup, will not intercept spawn. How the fuck did we get here before data loading anyways?");
+                return false;
+            }
+            if (!mData.Connected)
+            {
+                Utility.LogDebug($"No connected instance, will not intercept spawn");
+                return false;
+            }
+            if (mInstance != null)
+            {
+                Utility.LogDebug($"Active instance, will not intercept spawn");
+                return false;
+            }
+            if (baseAi == null)
+            {
+                Utility.LogDebug($"Null baseAi, will not intercept spawn");
+                return false;
+            }
+            if (region == null)
+            {
+                Utility.LogDebug($"Null SpawnRegion, will not intercept spawn");
+                return false;
+            }
             if (mData.SpawnRegionModDataProxy == null)
             {
                 Utility.LogDebug($"Null proxy, will not intercept spawn");
@@ -47,22 +76,23 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 Utility.LogDebug($"Proxy mismatch, will not intercept spawn");
                 return false;
             }
-            if (!mData.Connected)
-            {
-                Utility.LogDebug($"No connected instance, will not intercept spawn");
-                return false;
-            }
-            if (mInstance != null)
-            {
-                Utility.LogDebug($"Active instance, will not intercept spawn");
-                return false;
-            }
+
             Utility.LogDebug($"Proxy match to connected CompanionWolf data found, overriding WeightedTypePicker and spawning companionwolf where it first spawned {Utility.GetCurrentTimelinePoint() - Data.SpawnDate} hours ago!");
             return true;
         }
 
 
-        public void Shutdown() { }
+        public void Shutdown()
+        {
+            mData = null;
+        }
+
+
+        public void OnStartNewGame() 
+        {
+            mData = new CompanionWolfData();
+            OnSave();
+        }
 
 
         public void OnLoad()
@@ -71,23 +101,26 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 mData = new CompanionWolfData();
             }
-            Utility.LogDebug($"Before load at {Utility.GetCurrentTimelinePoint()} hrs, data is null: {Data == null}; Data.tamed = {Data?.Tamed ?? false}; Data.LastDespawnTime: {Data?.LastDespawnTime ?? 0.0f}");
+            
             string json = mManager.ModData.Load("CompanionWolfMod");
             if (json != null)
             {
-                JSON.Populate(JSON.Load(json), mData);
+                Variant variant = JSON.Load(json);
+                if (variant != null)
+                {
+                    Utility.LogDebug($"Successfully loaded previously saved CompanionWolfData!");
+                    JSON.Populate(variant, mData);
+                    return;
+                }
             }
-            Utility.LogDebug($"After load at {Utility.GetCurrentTimelinePoint()} hrs, data is null: {Data == null}; Data.tamed = {Data?.Tamed ?? false}; Data.LastSeen: {Data?.LastDespawnTime ?? 0.0f}");
         }
 
 
         public void OnSave()
         {
-            Utility.LogDebug($"Before save at {Utility.GetCurrentTimelinePoint()} hrs, data is null: {Data == null}; Data.tamed = {Data?.Tamed ?? false}; Data.LastDespawnTime: {Data?.LastDespawnTime ?? 0.0f}");
             string json = JSON.Dump(mData);
             if (json != null)
             {
-                Utility.LogDebug($"Successful convert to JSON, saving...");
                 mManager.ModData.Save(json, "CompanionWolfMod");
             }
         }
@@ -95,8 +128,45 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void Update()
         {
+            if (mInstance != null)
+            {
+                mInstance.UpdateStatusText();
+            }
+        }
 
 
+        public void SpawnCompanion()
+        {
+            if (Data == null)
+            {
+                Utility.LogDebug("No data found, cannot spawn companion!");
+                return;
+            }
+            if (!Data.Tamed)
+            {
+                Utility.LogDebug("Companion is not tamed, go find and tame one!");
+                return;
+            }
+            AsyncOperationHandle<GameObject> companionObjectTask = UnityEngine.AddressableAssets.Addressables.InstantiateAsync(WolfPrefabString);
+            Action<AsyncOperationHandle<GameObject>> onCompleted = new Action<AsyncOperationHandle<GameObject>>((handle) => 
+            {   
+                if (handle.IsDone)
+                {
+                    Utility.LogDebug($"Companion wolf loaded!");
+                    Vector3 playerPos = GameManager.m_PlayerManager.m_LastPlayerPosition;
+                    AiUtils.GetClosestNavmeshPos(out Vector3 validPos, playerPos, playerPos);
+                    BaseAi baseAi = handle.Result.GetComponentInChildren<BaseAi>();
+                    if (baseAi == null)
+                    {
+                        Utility.LogError("Coult not find BaseAi script attached to wolf prefab!");
+                        return;
+                    }
+                    mManager.TryInjectCustomAi(baseAi, null)
+
+
+                }
+            });
+            companionObjectTask.add_Completed(onCompleted);
         }
     }
 }

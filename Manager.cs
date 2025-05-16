@@ -7,6 +7,7 @@ using Il2CppInterop.Runtime.Attributes;
 using ComplexLogger;
 using UnityEngine.AI;
 using ModData;
+using Il2Cpp;
 
 
 namespace ExpandedAiFramework
@@ -37,7 +38,7 @@ namespace ExpandedAiFramework
         private WeightedTypePicker<BaseAi> mTypePicker = new WeightedTypePicker<BaseAi>();
         private Dictionary<Type, TypeSpecificSettings> mModSettingsDict = new Dictionary<Type, TypeSpecificSettings>();
         private Dictionary<Type, ISubManager> mSubManagers = new Dictionary<Type, ISubManager>();
-        private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0]; 
+        private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0];
         private float mLastPlayerStruggleTime = 0.0f;
 
 #if DEV_BUILD
@@ -90,7 +91,7 @@ namespace ExpandedAiFramework
                 LogError($"Can't register {type} as it is already registered!", FlaggedLoggingLevel.Critical);
                 return false;
             }
-            LogAlways ($"Registering type {type}");
+            LogAlways($"Registering type {type}");
             modSettings.AddToModSettings(ModName);
             modSettings.ShowSettingsIfEnabled();
             modSettings.RefreshGUI();
@@ -110,7 +111,7 @@ namespace ExpandedAiFramework
             LogAlways($"Registering SubManager for type {type}");
             mSubManagers.Add(type, subManager);
             Array.Resize(ref mSubManagerUpdateLoopArray, mSubManagerUpdateLoopArray.Length + 1);
-            mSubManagerUpdateLoopArray[^1] = subManager; 
+            mSubManagerUpdateLoopArray[^1] = subManager;
         }
 
 
@@ -121,6 +122,16 @@ namespace ExpandedAiFramework
                 mSubManagerUpdateLoopArray[i].Update();
             }
         }
+
+
+        public void OnStartNewGame()
+        {
+            for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
+            {
+                mSubManagerUpdateLoopArray[i].OnStartNewGame();
+            }
+        }
+
 
 
         public void OnLoad()
@@ -192,7 +203,7 @@ namespace ExpandedAiFramework
             }
             if (spawnType == Il2CppType.From(typeof(void)))
             {
-                LogError($"Unable to resolve a custom spawn type from weighted type picker or submanager interceptions!", FlaggedLoggingLevel.Critical);                
+                LogError($"Unable to resolve a custom spawn type from weighted type picker or submanager interceptions!", FlaggedLoggingLevel.Critical);
                 return false;
             }
             InjectCustomAi(baseAi, spawnType, region);
@@ -497,7 +508,7 @@ namespace ExpandedAiFramework
 #endif
                 }
             }
-            if(toReturn == null)
+            if (toReturn == null)
             {
                 LogWarning($"Could not resolve a valid hiding spot for ai at {ai.BaseAi.transform.position}, expect auto generated spot..");
                 while (toReturn == null)
@@ -603,6 +614,7 @@ namespace ExpandedAiFramework
         private List<GameObject> mCurrentWanderPathPointMarkers = new List<GameObject>();
         private List<GameObject> mDebugShownHidingSpots = new List<GameObject>();
         private List<GameObject> mDebugShownWanderPaths = new List<GameObject>();
+        private List<GameObject> mDebugShownSpawnRegions = new List<GameObject>();
 #if DEV_BUILD_SPAWNONE
         private bool mSpawnedOne = false;
 #endif
@@ -692,7 +704,7 @@ namespace ExpandedAiFramework
 
         public void Console_OnCommand()
         {
-            string command = uConsole.GetString(); 
+            string command = uConsole.GetString();
             if (command == null || command.Length == 0)
             {
                 LogAlways($"Supported commands: {CommandString_OnCommandSupportedTypes}");
@@ -778,9 +790,6 @@ namespace ExpandedAiFramework
 
         #region Help
 
-
-
-
         private void Console_Help()
         {
             string command = uConsole.GetString();
@@ -829,9 +838,6 @@ namespace ExpandedAiFramework
 
         #region Create
 
-
-
-
         private void Console_Create()
         {
             string type = uConsole.GetString();
@@ -856,7 +862,7 @@ namespace ExpandedAiFramework
                 LogWarning($"Can't start recording path because path {mCurrentWanderPathName} is still active! enter command '{CommandString} {CommandString_Finish} {CommandString_WanderPath}' to finish current wander path.");
                 return;
             }
-            string name = uConsole.GetString(); 
+            string name = uConsole.GetString();
             if (!IsNameProvided(name))
             {
                 return;
@@ -921,8 +927,6 @@ namespace ExpandedAiFramework
 
 
         #region Delete
-
-
 
         private void Console_Delete()
         {
@@ -996,8 +1000,6 @@ namespace ExpandedAiFramework
 
 
         #region Save
-
-
 
         public void Console_Save()
         {
@@ -1244,6 +1246,7 @@ namespace ExpandedAiFramework
                 case CommandString_WanderPath: Console_ShowWanderPath(); return;
                 case CommandString_HidingSpot: Console_ShowHidingSpot(); return;
                 case CommandString_NavMesh: Console_ShowNavMesh(); return;
+                case CommandString_SpawnRegion: Console_ShowNavMesh(); return;
                 default: LogAlways($"{type} is supported per debug constants, but not routed! Report this please."); return;
             }
         }
@@ -1318,7 +1321,7 @@ namespace ExpandedAiFramework
                 }
             }
         }
-        
+
 
         private void Console_ShowAllWanderPaths()
         {
@@ -1339,11 +1342,45 @@ namespace ExpandedAiFramework
             }
         }
 
+
+        private void Console_ShowSpawnRegion()
+        {
+            Console_ShowAllSpawnRegions();
+        }
+
+
+        private void Console_ShowAllSpawnRegions()
+        {
+            foreach (SpawnRegion spawnRegion in GameManager.m_SpawnRegionManager.m_SpawnRegions)
+            {
+                if (spawnRegion == null)
+                {
+                    continue;
+                }
+                mDebugShownSpawnRegions.Add(CreateMarker(spawnRegion.transform.position, GetSpawnRegionColor(spawnRegion), $"{spawnRegion.m_AiSubTypeSpawned} SpawnRegion Marker at {spawnRegion.transform.position}", 1000, 10));
+            }
+        }
+
+
+        private Color GetSpawnRegionColor(SpawnRegion spawnRegion)
+        {
+            switch (spawnRegion.m_AiSubTypeSpawned)
+            {
+                case AiSubType.Wolf: return Color.grey;
+                case AiSubType.Bear: return Color.red;
+                case AiSubType.Cougar: return Color.cyan;
+                case AiSubType.Rabbit: return Color.blue;
+                case AiSubType.Stag: return Color.yellow;
+                case AiSubType.Moose: return Color.green;
+                default: return Color.clear;
+            }
+        }
+
         #endregion
 
 
         #region Hide
-       
+
         public void Console_Hide()
         {
             string type = uConsole.GetString();
@@ -1356,6 +1393,7 @@ namespace ExpandedAiFramework
                 case CommandString_WanderPath: Console_HideWanderPath(); return;
                 case CommandString_HidingSpot: Console_HideHidingSpot(); return;
                 case CommandString_NavMesh: Console_HideNavMesh(); return;
+                case CommandString_SpawnRegion: Console_HideSpawnRegion(); return;
                 default: LogAlways($"{type} is supported per debug constants, but not routed! Report this please."); return;
             }
         }
@@ -1430,6 +1468,22 @@ namespace ExpandedAiFramework
                 UnityEngine.Object.Destroy(obj);
             }
             mDebugShownWanderPaths.Clear();
+        }
+
+
+        private void Console_HideSpawnRegion()
+        {
+            Console_HideAllSpawnRegions();
+        }
+
+
+        private void Console_HideAllSpawnRegions()
+        {
+            foreach (GameObject obj in mDebugShownSpawnRegions)
+            {
+                UnityEngine.Object.Destroy(obj);
+            }
+            mDebugShownSpawnRegions.Clear();
         }
 
         #endregion
@@ -1519,6 +1573,9 @@ namespace ExpandedAiFramework
                     return new Color(100, 200, 70);
             }
         }
+
+
+
 
 
         private void Console_ShowNavMesh()

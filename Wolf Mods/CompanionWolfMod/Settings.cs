@@ -95,6 +95,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public float StarvingConditionDecayPerHour = 5.0f;
 
 
+        [Name("Eating Speed")]
+        [Slider(1.0f, 100.0f)]
+        [Description("Eating speed in calories per second.")]
+        public float CaloriesConsumedPersecond = 25.0f;
+
+
         public override bool CanSpawn(BaseAi ai)
         {
             Utility.LogDebug($"Enabled: {Enable} | Connected: {mManager.Data.Connected} | Tamed: {mManager.Data.Tamed} |  Type/Sub: {ai.m_AiType}.{ai.m_AiSubType}");

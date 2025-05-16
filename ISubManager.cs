@@ -10,6 +10,7 @@ namespace ExpandedAiFramework
     {
         void Initialize(EAFManager manager);
         void Shutdown();
+        void OnStartNewGame();
         void OnSave();
         void OnLoad();
         void Update();
