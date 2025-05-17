@@ -26,7 +26,7 @@
 
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);DEV_BUILD;DEV_BUILD_DEBUG</DefineConstants>
+    <DefineConstants>$(DefineConstants);DEV_BUILD;DEV_BUILD_DEBUG;DEV_BUILD_VERBOSE</DefineConstants>
   </PropertyGroup>
 
 

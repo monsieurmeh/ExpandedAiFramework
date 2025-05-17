@@ -10,6 +10,7 @@ namespace ExpandedAiFramework
         void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion);//, EAFManager manager);
         void Despawn(float despawnTime);
         void SetAiMode(AiMode mode);
+        void OverrideStart();
         void Update();
         void ApplyDamage(float damage, float bleedOutTime, DamageSource damageSource);
     }

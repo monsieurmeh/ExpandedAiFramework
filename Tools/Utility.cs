@@ -1,5 +1,6 @@
 ﻿global using static ExpandedAiFramework.Utility;
 using ComplexLogger;
+using Il2Cpp;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 

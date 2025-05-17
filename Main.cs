@@ -25,8 +25,8 @@ namespace ExpandedAiFramework
 
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
-        {     
-            LogDebug("LoadScene post fix trigger");
+        {
+            LogDebug("OnInitializedScene");
             Manager.OnInitializedScene();
         }
        

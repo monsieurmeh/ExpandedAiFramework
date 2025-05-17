@@ -18,7 +18,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         [Name("Spawn Weight")]
-        [Slider(0.0f, 100)]
+        [Slider(0, 100)]
         [Description("Adjust spawn weight for Companion wolves. Higher numbers increase relative spawn chance.")]
         public float SpawnWeight = 1.0f;
 
@@ -96,9 +96,15 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         [Name("Eating Speed")]
-        [Slider(1.0f, 100.0f)]
-        [Description("Eating speed in calories per second.")]
-        public float CaloriesConsumedPersecond = 25.0f;
+        [Slider(500, 5000)]
+        [Description("Eating speed in calories per game hour.")]
+        public float CaloriesConsumedPerGameHour = 1000f;
+
+
+        [Name("Maximum Affection from Feeding")]
+        [Slider(1000, 50000)]
+        [Description("Maximum affection level achievable with feeding alone for tamed companions. Does not apply during taming phase to prevent lock-up against taming affection requirement.")]
+        public int MaximumAffectionFromFeeding = 10000;
 
 
         public override bool CanSpawn(BaseAi ai)

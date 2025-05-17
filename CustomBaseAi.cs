@@ -31,6 +31,45 @@ namespace ExpandedAiFramework
 
         public virtual void Despawn(float despawnTime) { } //Override this if you need to handle any kind of longer term tracking
 
+        
+        public void OverrideStart() //Manager is triggering this so we don't want to use "start" itself unfortunately
+        {
+            if (!OverrideStartCustom())
+            {
+                return;
+            }
+            if (mBaseAi.m_StartHasBeenCalled)
+            {
+                return;
+            }
+            mBaseAi.m_StartHasBeenCalled = true;
+            if (mBaseAi.m_NavMeshAgent == null)
+            {
+                mBaseAi.CreateMoveAgent(mBaseAi.transform.parent);
+            }
+            mBaseAi.Start_Pathfinding();
+            if (ShouldAddToBaseAiManager())
+            {
+                BaseAiManager.Add(mBaseAi);
+            }
+            mBaseAi.m_FirstFrame = true;
+            mBaseAi._OrientOnDead_k__BackingField = true;
+            foreach (LocalizedDamage localizedDamage in mBaseAi.GetComponentsInChildren<LocalizedDamage>())
+            {
+                if (localizedDamage.m_BodyPart == BodyPart.torso)
+                {
+                    CapsuleCollider componentInChildren = localizedDamage.transform.parent.GetComponentInChildren<CapsuleCollider>();
+                    if (componentInChildren)
+                    {
+                        mBaseAi.m_TorsoHalfWidth = componentInChildren.radius;
+                        break;
+                    }
+                    break;
+                }
+            }
+            mBaseAi.SetCollisionMode(BaseAiManager.s_EnableContinuousCollision ? CollisionDetectionMode.ContinuousSpeculative : CollisionDetectionMode.Discrete);
+        }
+        
 
         public virtual void Update()
         {
@@ -249,20 +288,20 @@ namespace ExpandedAiFramework
         {
             if (!PreprocesSetAiModeCustom(mode, out mode))
             {
-                //LogDebug($"ProcessSetAiModeCustom injection, routing mode to {mode}");
+                //LogVerbose($"ProcessSetAiModeCustom injection, routing mode to {mode}");
                 return mode;
             }
             if (mode > AiMode.Disabled)
             {
                 //Vanilla logic does not know how to pre-process new ai modes, return early here with current mode
-                //LogDebug($"Custom AI mode {mode} not handled by custom implementation, deferring to current mode as a fallback");
+                //LogVerbose($"Custom AI mode {mode} not handled by custom implementation, deferring to current mode as a fallback");
                 return mode;
             }
             if (mode == AiMode.Flee)
             {
                 if (CurrentMode == AiMode.Flee && mBaseAi.m_FleeReason == AiFleeReason.AfterPassingAttack)
                 {
-                    //LogDebug($"Ai is fleeign after passing attack, preventing change mode to {mode}");
+                    //LogVerbose($"Ai is fleeign after passing attack, preventing change mode to {mode}");
                     return AiMode.None;
                 }
             }
@@ -270,7 +309,7 @@ namespace ExpandedAiFramework
             {
                 if (mBaseAi.IsTooScaredToAttack())
                 {
-                    //LogDebug($"Ai is too scared to attack, preventing change mode to {mode}");
+                    //LogVerbose($"Ai is too scared to attack, preventing change mode to {mode}");
                     return AiMode.None;
                 }
                 bool skip = false;
@@ -280,20 +319,20 @@ namespace ExpandedAiFramework
                     {
                         if (CurrentMode == AiMode.Attack)
                         {
-                            //LogDebug($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}");
+                            //LogVerbose($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}");
                             return AiMode.None;
                         }
                         if (PackManager.InPack(mBaseAi.m_PackAnimal))
                         {
                             if (!GameManager.m_PackManager.CanAttack(mBaseAi.m_PackAnimal, false))
                             {
-                                //LogDebug($"Ai is timberwolf that can't attack due to pack mechanics, changing {mode} to HoldGround");
+                                //LogVerbose($"Ai is timberwolf that can't attack due to pack mechanics, changing {mode} to HoldGround");
                                 mode = AiMode.HoldGround;
                             }
                         }
                         else
                         {
-                            //LogDebug($"AI is timberwolf without a pack, routing {mode} to Flee");
+                            //LogVerbose($"AI is timberwolf without a pack, routing {mode} to Flee");
                             mode = AiMode.Flee;
                         }
                         skip = true;
@@ -303,12 +342,12 @@ namespace ExpandedAiFramework
                 {
                     if (MaybeHoldGround())
                     {
-                        //LogDebug($"MaybeHoldGround returned true and set aimode itself, preventing mode change to {mode}");
+                        //LogVerbose($"MaybeHoldGround returned true and set aimode itself, preventing mode change to {mode}");
                         return AiMode.None;
                     }
                     if (!mBaseAi.CanPathfindToPosition(mBaseAi.m_CurrentTarget?.transform?.position ?? Vector3.positiveInfinity, MoveAgent.PathRequirement.FullPath))
                     {
-                        //LogDebug($"Can't reach target, changing {mode} to {mBaseAi.m_DefaultMode}");
+                        //LogVerbose($"Can't reach target, changing {mode} to {mBaseAi.m_DefaultMode}");
                         mBaseAi.CantReachTarget();
                         return mBaseAi.m_DefaultMode;
                     }
@@ -316,7 +355,7 @@ namespace ExpandedAiFramework
             }
             else if (mode == AiMode.Wander && mBaseAi.Timberwolf != null && PackManager.InPack(mBaseAi.m_PackAnimal) && GameManager.m_PackManager.IsPackCombatRestricted(mBaseAi.m_PackAnimal))
             {
-                //LogDebug($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}");
+                //LogVerbose($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}");
                 mode = AiMode.HoldGround;
             }
             if (mode == AiMode.Wander || mode == AiMode.Flee)
@@ -328,7 +367,7 @@ namespace ExpandedAiFramework
             }
             else if (mode == AiMode.None)
             {
-                //LogDebug($"Mode change of AiMode.None not caught during preprocessing, changing to idle");
+                //LogVerbose($"Mode change of AiMode.None not caught during preprocessing, changing to idle");
                 mode = AiMode.Idle;
             }
             /* weird HL bug catch?
@@ -345,22 +384,22 @@ namespace ExpandedAiFramework
             {
                 if (CurrentMode != AiMode.Flee)
                 {
-                    //LogDebug($"Trying to set AiMode to current mode {mode} which is not AiMode.Flee, triggering early out");
+                    //LogVerbose($"Trying to set AiMode to current mode {mode} which is not AiMode.Flee, triggering early out");
                     return AiMode.None;
                 }
                 if (mBaseAi.m_UseRetreatSpeedInFlee == false)
                 {
-                    //LogDebug($"Trying to set AiMode to current mode {mode} and m_UseRetreatSpeedInFlee is false, triggering early out");
+                    //LogVerbose($"Trying to set AiMode to current mode {mode} and m_UseRetreatSpeedInFlee is false, triggering early out");
                     return AiMode.None;
                 }
                 mBaseAi.m_UseRetreatSpeedInFlee = false;
                 mBaseAi.m_AiGoalSpeed = mBaseAi.GetFleeSpeed();
-                //LogDebug($"Trying to set AiMode to current mode {mode}, triggering early out after ajusting flee speed");
+                //LogVerbose($"Trying to set AiMode to current mode {mode}, triggering early out after ajusting flee speed");
                 return AiMode.None;
             }
             if (CurrentMode == AiMode.Stunned && mBaseAi.IsStunTimerActive() && mode != AiMode.Dead && mode != AiMode.ScriptedSequence)
             {
-                //LogDebug($"Trying to set AiMode to mode {mode} while stunned and stun timer is active, triggering early out");
+                //LogVerbose($"Trying to set AiMode to mode {mode} while stunned and stun timer is active, triggering early out");
                 return AiMode.None;
             }
             return mode;
@@ -372,7 +411,7 @@ namespace ExpandedAiFramework
             mode = PreprocessNewAiMode(mode);
             if (mode == AiMode.None)
             {
-                //LogDebug($"ProcessNewAiMode returned AiMode.None, early-outting setAiMode");
+                //LogVerbose($"ProcessNewAiMode returned AiMode.None, early-outting setAiMode");
                 return;
             }
             ExitAiMode(CurrentMode);
@@ -473,22 +512,22 @@ namespace ExpandedAiFramework
             }
             if (mBaseAi.m_AiType != AiType.Predator)
             {
-                //LogDebug($"Not predator, cannot hold ground");
+                //LogVerbose($"Not predator, cannot hold ground");
                 return false;
             }
             if (!mBaseAi.CanHoldGround())
             {
-                //LogDebug($"BaseAi.CanHoldGround false, cannot hold ground");
+                //LogVerbose($"BaseAi.CanHoldGround false, cannot hold ground");
                 return false;
             }
             if (((1U << (int)CurrentMode) & (uint)AiModeFlags.EarlyOutMaybeHoldGround) != 0U)
             {
-                //LogDebug($"Current mode is {CurrentMode} which precludes holding ground, cannot hold ground");
+                //LogVerbose($"Current mode is {CurrentMode} which precludes holding ground, cannot hold ground");
                 return false;
             }
             else if (CurrentMode == AiMode.Attack && mBaseAi.m_IgnoreFlaresAndFireWhenAttacking)
             {
-                //LogDebug($"Attacking and ignoring stimulus, cannot hold ground");
+                //LogVerbose($"Attacking and ignoring stimulus, cannot hold ground");
                 return false;
             }
 
@@ -604,7 +643,7 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            mBaseAi.m_ElapsedWoundedMinutes += (1440.0f / (mTimeOfDay.m_WeatherSystem.m_DayLength * mTimeOfDay.m_WeatherSystem.m_DayLengthScale)) * deltaTime;
+            mBaseAi.m_ElapsedWoundedMinutes += ((24.0f * 60.0f) / (mTimeOfDay.m_WeatherSystem.m_DayLength * mTimeOfDay.m_WeatherSystem.m_DayLengthScale)) * deltaTime;
         }
 
 
@@ -722,7 +761,7 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            //LogDebug($"Scanning for new target...");
+            //LogVerbose($"Scanning for new target...");
             mBaseAi.m_TimeForNextTargetScan = Time.time + UnityEngine.Random.Range(0.1f, 0.5f); //todo: yoink out the hard coded values
             Vector3 eyePosition = mBaseAi.GetEyePos();
             float distanceToNearestTarget = float.MaxValue;
@@ -759,16 +798,20 @@ namespace ExpandedAiFramework
                 }
             }
 
-            //nearestTarget should pretty much never be null, so this is an error in my opinion
-            // Edit: after better understanding "ComputeDistanceForTarget" and how it precludes a lot of targets internally, this check makes much more sense and is no longer an error.
             if (nearestTarget == null)
             {
-                //LogDebug($"Potential error, found NO possible additional candidates during scan for new targets. This implies that neither the player nor any other ai scripts exist in scene.");
+                LogDebug($"No possible additional candidates during scan for new targets");
                 return;
             }
-            //LogDebug($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
+
+            LogDebug($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
             AiTarget previousTarget = mBaseAi.m_CurrentTarget;
             mBaseAi.m_CurrentTarget = nearestTarget;
+
+            if (previousTarget == CurrentTarget)
+            {
+                return; //same target, ignore!
+            }
 
             if (mBaseAi.m_CurrentMode == AiMode.PatrolPointsOfInterest)
             {
@@ -776,31 +819,25 @@ namespace ExpandedAiFramework
                 {
                     if (!mBaseAi.CanPlayerBeReached(mBaseAi.m_CurrentTarget.transform.position, MoveAgent.PathRequirement.FullPath) || !CanSeeTarget(false))
                     {
-                        //LogDebug($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
+                        LogDebug($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
                         mBaseAi.m_CurrentTarget = null;
                         return;
                     }
                 }
             }
 
-            if (previousTarget == null || nearestTarget == previousTarget)
-            {
-                //LogDebug($"previousTarget is null or nearestTarget is same as previousTarget");
-                return;
-            }
-
-            bool targetDetected = false;
+            bool packForming = false;
             if (mBaseAi.m_PackAnimal == null || mBaseAi.m_PackAnimal.m_GroupLeader == null)
             {
                 if (nearestTarget.IsPlayer() || nearestTarget.IsNpcSurvivor())
                 {
-                    targetDetected = GameManager.m_PackManager.MaybeFormGroup(mBaseAi.m_PackAnimal);
+                    packForming = GameManager.m_PackManager.MaybeFormGroup(mBaseAi.m_PackAnimal);
                 }
             }
             GameManager.m_PackManager.MaybeAlertMembers(mBaseAi.m_PackAnimal);
-            if (!targetDetected)
+            if (!packForming)
             {
-                //LogDebug($"Target detected, running ChangeModeWhenTargetDetected");
+                LogDebug($"Target detected, running ChangeModeWhenTargetDetected");
                 ChangeModeWhenTargetDetected(); 
             }
 
@@ -808,7 +845,6 @@ namespace ExpandedAiFramework
             {
                 StatsManager.IncrementValue(Il2CppTLD.Stats.StatID.WolfCloseEncounters, 1.0f);
             }
-            return;
         }
 
 
@@ -816,17 +852,17 @@ namespace ExpandedAiFramework
         {
             if (!CanSeeTargetCustom(out bool canSeeTarget))
             {
-                //LogDebug($"Custom override, cannot see");
+                LogVerbose($"Custom override, cannot see");
                 return canSeeTarget;
             }
             if (Vector3.Angle(mBaseAi.transform.forward, CurrentTarget.transform.position - mBaseAi.transform.position) >= mBaseAi.m_DetectionFOV / 2f)
             {
-                //LogDebug($"Target out of field of view, cannot see");
+                LogVerbose($"{mBaseAi.gameObject.name}'s CurrentTarget {CurrentTarget} is out of field of view, cannot see");
                 return false;
             }
             if (!skipDistCheck && ComputeDistanceForTarget(mBaseAi.GetEyePos(), CurrentTarget) == float.PositiveInfinity)
             {
-                //LogDebug($"Target distance too great, cannot see");
+                LogVerbose($"{mBaseAi.gameObject.name}'s CurrentTarget {CurrentTarget} distance too great, cannot see");
                 return false;
             }
             return true;
@@ -837,12 +873,12 @@ namespace ExpandedAiFramework
         {
             if (TargetCanBeIgnored(potentialTarget))
             {
-                //LogDebug($"Target can be ignored, infinite distance");
+                LogVerbose($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} can be ignored, infinite distance");
                 return float.PositiveInfinity;
             }
             Vector3 targetEyePos = potentialTarget.GetEyePos();
 
-            float detectionFOV = 0.0f;
+            float crouchDetectionRangeScalar = 0.0f;
             float detectionRange = mBaseAi.m_DetectionRange;
 
             if (potentialTarget.IsPlayer())
@@ -852,18 +888,18 @@ namespace ExpandedAiFramework
                 if (GameManager.m_PlayerManager.PlayerIsCrouched())
                 {
                     playerMovement.m_LastCrouchedTime = Time.time;
-                    detectionFOV = playerMovement.m_DetectionRangeScaleWhenCrouched;
+                    crouchDetectionRangeScalar = playerMovement.m_DetectionRangeScaleWhenCrouched;
                 }
                 else
                 { 
-                    detectionFOV = Time.time;
-                    if (detectionFOV - playerMovement.m_LastCrouchedTime < playerMovement.m_CrouchToStandPerceptionDelaySeconds)
+                    crouchDetectionRangeScalar = Time.time;
+                    if (crouchDetectionRangeScalar - playerMovement.m_LastCrouchedTime < playerMovement.m_CrouchToStandPerceptionDelaySeconds)
                     {
-                        detectionFOV = playerMovement.m_DetectionRangeScaleWhenCrouched;
+                        crouchDetectionRangeScalar = playerMovement.m_DetectionRangeScaleWhenCrouched;
                     }
                     else
                     {
-                        detectionFOV = 1.0f;
+                        crouchDetectionRangeScalar = 1.0f;
                     }
                 }
                 float auroraScalar = auroraManager.AuroraIsActive() ? auroraManager.m_WildlifeDetectionRangeScale : 1.0f;
@@ -871,33 +907,33 @@ namespace ExpandedAiFramework
                 Feat_MasterHunter bigCatKillerFeat = FeatsManager.m_Feat_MasterHunter;
                 if (bigCatKillerFeat.IsUnlockedAndEnabled())
                 {
-                    //LogDebug($"Master hunter feat enabled! AiSightRangeScale is {bigCatKillerFeat.m_AiSightRangeScale} and SightScale is {bigCatKillerFeat.m_SightScale}");
+                    //LogVerbose($"Master hunter feat enabled! AiSightRangeScale is {bigCatKillerFeat.m_AiSightRangeScale} and SightScale is {bigCatKillerFeat.m_SightScale}");
                     bigCatKillerScalar = bigCatKillerFeat.m_AiSightRangeScale;
                 }
                 else
                 {
                     bigCatKillerScalar = 1.0f;
                 }
-                detectionRange = auroraScalar * bigCatKillerScalar * detectionFOV * detectionRange;
+                detectionRange = auroraScalar * bigCatKillerScalar * crouchDetectionRangeScalar * detectionRange;
                 
                 //Todo: This section is suspect, double check it with a clearer brain some time
                 if (GameManager.m_TimeOfDay.IsTimeLapseActive())
                 {
                     if (CurrentTarget != potentialTarget)
                     {
-                        //LogDebug($"Current Target {CurrentTarget} != potential target {potentialTarget}, infinite distance");
+                        LogVerbose($"{mBaseAi.gameObject.name}'s Current Target {CurrentTarget} != potential target {potentialTarget.gameObject.name}, infinite distance");
                         return float.PositiveInfinity;
                     }
                 }
             }
-
-            if (!AiUtils.PositionVisible(eyePos, mBaseAi.transform.forward, targetEyePos, detectionRange, detectionFOV, 0.0f, 0x100c1b41)) 
+            
+            if (!AiUtils.PositionVisible(eyePos, mBaseAi.transform.forward, targetEyePos, detectionRange, mBaseAi.m_DetectionFOV, 0.0f, Utils.m_PhysicalCollisionLayerMask)) 
             {
-                //LogDebug($"target position not visible, infinite distance");
+                LogVerbose($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} position not visible using eyePos {eyePos}, forward {mBaseAi.transform.forward}, targetEyePos {targetEyePos}, detectionRange {mBaseAi.m_DetectionFOV}, detectionFOV {crouchDetectionRangeScalar}, infinite distance");
                 return float.PositiveInfinity;
             }
             float dist = Vector3.Distance(BaseAi.transform.position, potentialTarget.transform.position);
-            //LogDebug($"Distance from ai {mBaseAi.gameObject.name} to target {potentialTarget}: {dist}");
+            LogVerbose($"Distance from ai {mBaseAi.gameObject.name} to target {potentialTarget.gameObject.name}: {dist}");
             return dist;
         }
 
@@ -906,24 +942,24 @@ namespace ExpandedAiFramework
         {
             if (!TargetCanBeIgnoredCustom(target, out bool canBeIgnored))
             {
-                //LogDebug("TargetCanBeIgnoredCustom");
+                LogVerbose("TargetCanBeIgnoredCustom");
                 return canBeIgnored;
             }
             if (target == null)
             {
-                //LogDebug("Null Target, ignoring");
+                LogVerbose("Null Target, ignoring");
                 return true;
             }
             /* pretty sure this one precludes the player? Might have interpreted it wrong.
             if (target.m_BaseAi == null)
             {
-                LogDebug("Target is not baseAi, ignoring");
+                LogVerbose("Target is not baseAi, ignoring");
                 return true;
             }
             */
             if (target.m_BaseAi == this)
             {
-                //LogDebug("Target is self, ignoring");
+                LogVerbose("Target is self, ignoring");
                 return true;
             }
             /* Not sure we need this, i dont really care if BaseAI is active or not.
@@ -935,70 +971,70 @@ namespace ExpandedAiFramework
             bool isPlayer = target.IsPlayer();
             if (isPlayer && GameManager.m_PlayerManager.PlayerIsInvisibleToAi())
             {
-                //LogDebug("Target is invisible player, ignoring");
+                LogVerbose("Target is invisible player, ignoring");
                 return true;
             }
             if (isPlayer && CurrentMode == AiMode.Feeding)
             {
-                //LogDebug("Target is player and am feeding, ignoring");
+                LogVerbose("Target is player and am feeding, ignoring");
                 return true;
             }
             if (target.IsDead())
             {
-                //LogDebug("Target is dead, ignoring (should we make this overridable for zombie wolves...?)");
+                LogVerbose("Target is dead, ignoring (should we make this overridable for zombie wolves...?)");
                 return true;
             }
             // NPC survivor code that I'm not going to bother adding
             if (target.IsMoose())
             {
-                //LogDebug($"Target is moosing, returning ignore value of {MooseCanBeIgnored()}");
+                LogVerbose($"Target is moosing, returning ignore value of {MooseCanBeIgnored()}");
                 return MooseCanBeIgnored();
             }
             if (PackManager.InPack(mBaseAi.m_PackAnimal) && !PackManager.IsValidPackTarget(target))
             {
-                //LogDebug($"In pack and target is not valid pack target, ignoring");
+                LogVerbose($"In pack and target is not valid pack target, ignoring");
                 return true;
             }
             if (!target.IsHostileTowards(mBaseAi))
             {
-                //LogDebug($"Target is not hostile toward me, ignoring");
+                LogVerbose($"Target is not hostile toward me, ignoring");
                 return true;
             }
             if (isPlayer)
             {
                 if (InterfaceManager.IsMainMenuEnabled())
                 {
-                    //LogDebug($"Target is player while in main menu, ignoring");
+                    LogVerbose($"Target is player while in main menu, ignoring");
                     return true;
                 }
                 if (GameManager.m_PlayerStruggle.m_Active)
                 {
-                    //LogDebug($"Target is player in active struggle, ignoring");
+                    LogVerbose($"Target is player in active struggle, ignoring");
                     return true;
                 }
-                //LogDebug($"Target is player, NOT ignoring");
+                LogVerbose($"Target is player, NOT ignoring");
                 return false;
             }
 
             if (mBaseAi.WillOnlyTargetPlayer())
             {
-                //LogDebug($"Target is not player and will target player, ignoring");
+                LogVerbose($"Target is not player and will target player, ignoring");
                 return true;
             }
 
             if (mBaseAi.m_WildlifeMode != WildlifeMode.Aurora)
             {
-                //LogDebug($"Target is not player and non-aurora wildlife, NOT ignoring");
+                LogVerbose($"Target is not player and non-aurora wildlife, NOT ignoring");
                 return false;
             }
 
             if (AuroraManager.m_AuroraFieldsSceneManager.GetFieldContaining(target.transform.position) != null)
             {
-                //LogDebug($"Target is not player and aurora wildlife and target is not in aurora field, NOT ignoring");
+                LogVerbose($"Target is not player and aurora wildlife and target is not in aurora field, NOT ignoring");
                 return false;
             }
 
-            //LogWarning($"CustomBaseAi.TargetCanBeIgnored reached end of method with no cases returning a valid condition. Falling through to 'can ignore target' condition");
+            LogWarning($"CustomBaseAi.TargetCanBeIgnored reached end of method with no cases returning a valid condition. Falling through to 'can ignore target' condition");
             return true;
         }
 
@@ -1007,13 +1043,13 @@ namespace ExpandedAiFramework
         {
             if (!ChangeModeWhenTargetDetectedCustom())
             {
-                //LogDebug($"ChangeModeWhenTargetDetectedCustom");
+                LogVerbose($"ChangeModeWhenTargetDetectedCustom");
                 return;
             }
 
             if (mBaseAi.m_AiType == AiType.Human)
             {
-                //LogDebug($"Astrid and mackenzie aren't ai... yet...");
+                LogVerbose($"Astrid and mackenzie aren't ai... yet...");
                 return;
             }
 
@@ -1023,7 +1059,7 @@ namespace ExpandedAiFramework
             //todo: move to moose-specific ai script
             if (mBaseAi.Moose != null && mBaseAi.m_CurrentTarget.IsPlayer())
             {
-                //LogDebug($"Moose specific hold ground catch");
+                LogVerbose($"Moose specific hold ground catch");
                 SetAiMode(AiMode.HoldGround);
                 return;
             }
@@ -1034,7 +1070,7 @@ namespace ExpandedAiFramework
             {
                 if (!BaseAi.ShouldAlwaysFleeFromCurrentTarget())
                 {
-                    //LogDebug($"Feeding and should always flee from current target, fleeing");
+                    LogVerbose($"Feeding and should always flee from current target, fleeing");
                     SetAiMode(AiMode.Flee);
                 }
                 return;
@@ -1042,14 +1078,14 @@ namespace ExpandedAiFramework
 
             if (mBaseAi.Timberwolf?.CanEnterHideAndSeek() ?? false)
             {
-                //LogDebug($"Target found, timberwolf entering hide and seek");
+                LogVerbose($"Target found, timberwolf entering hide and seek");
                 SetAiMode(AiMode.HideAndSeek);
             }
 
             float fleeChance = mBaseAi.m_FleeChanceWhenTargetDetected;
             if (!mBaseAi.m_CurrentTarget.IsHostileTowards(mBaseAi) || mBaseAi.m_CurrentTarget.IsAmbient())
             {
-                //LogDebug($"Target found, target is not hostile or ai is ambient, no flee chance");
+                LogVerbose($"Target found, target is not hostile or ai is ambient, no flee chance");
                 fleeChance = 0.0f;
             }
 
@@ -1081,7 +1117,7 @@ namespace ExpandedAiFramework
             {
                 if (mBaseAi.m_CurrentTarget.IsVulnerable() || (CurrentMode != AiMode.Wander))
                 {
-                    //LogDebug($"Target found, am predator and target is vulnerable OR currentmode {CurrentMode} is not wander, zero flee chance");
+                    LogVerbose($"Target found, am predator and target is vulnerable OR currentmode {CurrentMode} is not wander, zero flee chance");
                     fleeChance = 0.0f;
                 }
             }
@@ -1097,44 +1133,44 @@ namespace ExpandedAiFramework
             if (mBaseAi.m_CurrentTarget.IsPlayer() && mBaseAi.BaseWolf != null)
             {
                 fleeChance += GameManager.m_PlayerManager.m_IncreaseWolfFleePercentagePoints; 
-                //LogDebug($"Playertarget found, am wolf, flee chance increased to {fleeChance}");
+                LogVerbose($"Playertarget found, am wolf, flee chance increased to {fleeChance}");
             }
 
             if (mBaseAi.m_AiType == AiType.Predator)
             {
                 AuroraManager auroraManager = GameManager.m_AuroraManager;
                 fleeChance *= auroraManager.AuroraIsActive() ? auroraManager.m_PredatorFleeChanceScale : 1.0f;
-                //LogDebug($"Playertarget found, am aurora wolf: {auroraManager.AuroraIsActive()}, flee chance multiplied to {fleeChance}");
+                LogVerbose($"Playertarget found, am aurora wolf: {auroraManager.AuroraIsActive()}, flee chance multiplied to {fleeChance}");
             }
 
             if (CurrentMode == AiMode.Wander && mBaseAi.m_WanderingAroundPos)
             {
-                //LogDebug($"CurrentMode is wander and wandering around pos, flee chance is zero");
+                LogVerbose($"CurrentMode is wander and wandering around pos, flee chance is zero");
                 fleeChance = 0.0f;
             }
 
             if (PackManager.InPack(mBaseAi.m_PackAnimal) && !GameManager.m_PackManager.ShouldAnimalFlee(mBaseAi.m_PackAnimal))
             {
-                //LogDebug($"In pack and packmanager says no flee, flee chance is zero");
+                LogVerbose($"In pack and packmanager says no flee, flee chance is zero");
                 fleeChance = 0.0f;
             }
 
             //move to cougar AI
             if (mBaseAi.m_CurrentTarget.IsPlayer() && mBaseAi.Cougar != null)
             {
-                //LogDebug($"Cougar is not scared of you, flee chance is zero");
+                LogVerbose($"Cougar is not scared of you, flee chance is zero");
                 fleeChance = 0.0f;
             }
 
             if (mBaseAi.ShouldAlwaysFleeFromCurrentTarget())
             {
-                //LogDebug($"Should always flee from current target, flee chance is 100%");
+                LogVerbose($"Should always flee from current target, flee chance is 100%");
                 fleeChance = 100.0f;
             }
 
             if (Utils.RollChance(fleeChance))
             {
-                //LogDebug($"Random roll with fleeChance {fleeChance} triggered fleeing");
+                LogVerbose($"Random roll with fleeChance {fleeChance} triggered fleeing");
                 SetAiMode(AiMode.Flee);
                 return;
             }
@@ -1303,8 +1339,15 @@ namespace ExpandedAiFramework
 
         protected void SetDefaultAiMode()
         {
+            //LogDebug($"For whatever reason, ai mode is being set to default by the mod!");
             SetAiMode(mBaseAi.m_DefaultMode);
         }
+
+        protected float RealTimeToGameTime(float realDeltaTime)
+        {
+            return realDeltaTime * (86400.0f / (mTimeOfDay.m_WeatherSystem.m_DayLength * mTimeOfDay.m_WeatherSystem.m_DayLengthScale));
+        }
+
 
         #endregion
 
@@ -1340,6 +1383,22 @@ namespace ExpandedAiFramework
 
 
         #region Setup
+
+        /// <summary>
+        /// Intercept or inject logic into parent start method.
+        /// Vanilla logic performs pathfinding, collider setup and adds to base AI manager.
+        /// </summary>
+        /// <returns>True to defer to parent logic, false to halt in favor of your own.</returns>
+        public virtual bool OverrideStartCustom() => true;
+
+
+        /// <summary>
+        /// Controls whether base start method adds ai to baseaimanager.
+        /// </summary>
+        /// <returns>True to allow, false to prevent. </returns>
+        public virtual bool ShouldAddToBaseAiManager() => true;
+
+
 
         /// <summary>
         /// Intercept or inject logic into parent first frame setup. 
@@ -1524,7 +1583,7 @@ namespace ExpandedAiFramework
         /// 
         /// </summary>
         /// <returns></returns>
-        protected virtual bool ChangeModeWhenTargetDetectedCustom() => false;
+        protected virtual bool ChangeModeWhenTargetDetectedCustom() => true;
 
 
         #endregion

@@ -261,6 +261,17 @@ namespace ExpandedAiFramework
         }
 
 
+        public bool TryStart(BaseAi baseAi)
+        {
+            if (!CustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
+            {
+                return false;
+            }
+            customAi.OverrideStart();
+            return true;
+        }
+
+
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode)
         {
             if (!CustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
@@ -641,7 +652,6 @@ namespace ExpandedAiFramework
 
         //Stay outa here if you value your sanity, ugly debug-only code ahead
 
-        private FlaggedLoggingLevel mLoggerLevel = 0U;
         private ComplexLogger<Main> mLogger;
         private bool mRecordingWanderPath = false;
         private string mCurrentWanderPathName = string.Empty;
@@ -654,16 +664,10 @@ namespace ExpandedAiFramework
         private bool mSpawnedOne = false;
 #endif
 
-        public FlaggedLoggingLevel LoggerLevel { get { return mLoggerLevel; } set { mLoggerLevel = value; } }
-
         #region Logging
 
         public void Log(string message, FlaggedLoggingLevel logLevel, bool toUConsole)
         {
-            if (!mLoggerLevel.AnyOf(logLevel) && logLevel != FlaggedLoggingLevel.Always)
-            {
-                return;
-            }
             mLogger.Log(message, logLevel);
             if (toUConsole)
             {
@@ -676,26 +680,12 @@ namespace ExpandedAiFramework
         public void LogVerbose(string message) { Log(message, FlaggedLoggingLevel.Verbose, false); }
         public void LogWarning(string message, bool toUConsole = true) { Log(message, FlaggedLoggingLevel.Warning, toUConsole); }
         public void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U) { Log(message, FlaggedLoggingLevel.Error | additionalFlags); }
-        public void LogAlways(string message) { Log(message, FlaggedLoggingLevel.Always, true); Debug.LogError(message); }
+        public void LogAlways(string message) { Log(message, FlaggedLoggingLevel.Always, true); }
 
 
         private void InitializeLogger()
         {
             mLogger = new ComplexLogger<Main>();
-#if DEV_BUILD_TRACE
-            mLoggerLevel |= FlaggedLoggingLevel.Trace;
-#endif
-#if DEV_BUILD_DEBUG
-            mLoggerLevel |= FlaggedLoggingLevel.Debug;
-#endif
-#if DEV_BUILD_VERBOSE
-            mLoggerLevel |= FlaggedLoggingLevel.Verbose;
-#endif
-            mLoggerLevel |= FlaggedLoggingLevel.Warning;
-            mLoggerLevel |= FlaggedLoggingLevel.Error;
-            mLoggerLevel |= FlaggedLoggingLevel.Critical;
-            mLoggerLevel |= FlaggedLoggingLevel.Exception;
-
         }
 
 

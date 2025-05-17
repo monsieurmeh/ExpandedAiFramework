@@ -26,6 +26,8 @@ namespace ExpandedAiFramework.CompanionWolfMod
         protected CompanionWolf mInstance;
         protected CompanionWolfData mData;
         protected bool mInitialized = false;
+        protected bool mShouldCheckForSpawnTamedCompanion = false;
+        protected float mLastTriggeredCheckForSpawnTamedCompanionTime = 0.0f;
 
         public CompanionWolfData Data { get { return mData; } set { mData = value; } }
         public CompanionWolf Instance { get { return mInstance; } set { mInstance = value; } }
@@ -121,18 +123,24 @@ namespace ExpandedAiFramework.CompanionWolfMod
             }
 
             Utility.LogDebug($"Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
-            OnLoadScene();
         }
 
 
-        public void OnLoadScene() { }
+        public void OnLoadScene() 
+        { 
+            if (mInstance != null) //this is too late, by now system has serialized the wolf for later. gotta stop it there
+            {
+                GameObject.Destroy(mInstance.gameObject.transform.parent.gameObject); //destroy the whole thing
+            }
+        }
 
 
         public void OnInitializedScene()
         {
-            if (GameManager.m_ActiveSceneSet.m_IsOutdoors && mData.Tamed)
+            if (GameManager.m_ActiveSceneSet != null && GameManager.m_ActiveSceneSet.m_IsOutdoors && mData != null && mData.Tamed && mInstance == null)
             {
-                SpawnCompanion();
+                mShouldCheckForSpawnTamedCompanion = true;
+                mLastTriggeredCheckForSpawnTamedCompanionTime = Time.time;
             }
         }
 
@@ -149,6 +157,11 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void Update()
         {
+            if (mShouldCheckForSpawnTamedCompanion && Time.time - mLastTriggeredCheckForSpawnTamedCompanionTime > 2.0f)
+            {
+                mShouldCheckForSpawnTamedCompanion = false;
+                SpawnCompanion();
+            }
             if (mInstance != null)
             {
                 mInstance.UpdateStatusText();
@@ -176,8 +189,9 @@ namespace ExpandedAiFramework.CompanionWolfMod
             GameObject wolfContainer = new GameObject("CompanionWolfContainer");
             Vector3 playerPos = GameManager.m_PlayerManager.m_LastPlayerPosition;
             AiUtils.GetClosestNavmeshPos(out Vector3 validPos, playerPos, playerPos);
-            GameObject newWolfAsset = AssetHelper.SafeInstantiateAssetAsync(WolfPrefabString).WaitForCompletion();
-            GameObject newWolf = GameObject.Instantiate(newWolfAsset, validPos, Quaternion.identity);
+            GameObject newWolf = AssetHelper.SafeInstantiateAssetAsync(WolfPrefabString).WaitForCompletion();
+            newWolf.transform.position = validPos;
+            //GameObject newWolf = GameObject.Instantiate(newWolfAsset, validPos, Quaternion.identity);
             Utility.LogDebug("Successfully instantiated: " + newWolf.name);
             if (newWolf == null)
             {
@@ -195,8 +209,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             baseAi.CreateMoveAgent(wolfContainer.transform);
             Utility.LogDebug($"Reparenting...");
             baseAi.ReparentBaseAi(wolfContainer.transform);
-            var guid = PdidTable.GenerateNewID();
-            ObjectGuid.MaybeAttachObjectGuidAndRegister(newWolf, PdidTable.GenerateNewID());
+            //ObjectGuid.MaybeAttachObjectGuidAndRegister(newWolf, PdidTable.GenerateNewID());
             Utility.LogDebug($"Wrapping...");
             if (!mManager.TryInjectCustomAi(baseAi, Il2CppType.From(typeof(CompanionWolf)), null))
             {
@@ -217,6 +230,8 @@ namespace ExpandedAiFramework.CompanionWolfMod
             }
             wrapper.BaseAi.m_MoveAgent.transform.position = validPos;
             wrapper.BaseAi.m_MoveAgent.Warp(validPos, 5.0f, true, -1);
+            mShouldCheckForSpawnTamedCompanion = false;
+            BaseAiManager.Remove(wrapper.BaseAi);
             Utility.LogDebug($"Companion wolf loaded!");
         }
     }         

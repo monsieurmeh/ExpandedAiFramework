@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
         {
             private static void Postfix(BaseAi __result, SpawnRegion __instance)
             {
-                LogDebug($"SpawnRegion.InstantiateSpawnInternal at {__instance?.transform?.position ?? Vector3.zero}");
+                LogDebug($"SpawnRegion.InstantiateSpawnInternal on {__result.gameObject.name} at {__result?.transform?.position ?? Vector3.zero}");
                 Manager.TryInjectRandomCustomAi(__result, __instance);
             }
         }
@@ -27,7 +27,7 @@ namespace ExpandedAiFramework
         {
             private static void Postfix()
             {
-                LogDebug("LoadScene post fix trigger");
+                LogDebug("OnLoadScene");
                 Manager.OnLoadScene();
             }
         }
@@ -73,6 +73,18 @@ namespace ExpandedAiFramework
 
 
         #region BaseAi
+
+        [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.Start))]
+        internal class BaseAiPatches_Start
+        {
+            private static bool Prefix(BaseAi __instance)
+            {
+                //Utility.LogDebug($"Start on {__instance.gameObject.name} at {__instance.transform.position}!");
+                return !Manager.TryStart(__instance);
+                //return __instance.m_AiSubType != AiSubType.Wolf || __instance.Timberwolf;
+            }
+        }
+
 
         [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.Update))]
         internal class BaseAiPatches_Update
@@ -129,7 +141,7 @@ namespace ExpandedAiFramework
                     {
                         proxy.m_DefaultMode = __instance.m_DefaultMode;
                     }
-                    if (__instance.m_CurrentMode != AiMode.None)
+                    if (__instance.m_CurrentMode != AiMode.None && proxy.m_CurrentMode != AiMode.Dead)
                     {
                         proxy.m_CurrentMode = __instance.m_CurrentMode;
                     }
