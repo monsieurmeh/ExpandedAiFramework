@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 using static Il2Cpp.SaveGameSlots;
+using System.Collections;
 
 
 namespace ExpandedAiFramework
@@ -8,6 +9,7 @@ namespace ExpandedAiFramework
     internal class Patches
     {
         #region General
+
 
         [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.InstantiateSpawnInternal), new Type[] { typeof(GameObject), typeof(WildlifeMode), typeof(Vector3), typeof(Quaternion) })]
         internal class SpawnRegionPatches_InstantiateSpawnInternal
@@ -19,7 +21,7 @@ namespace ExpandedAiFramework
             }
         }
 
-
+        
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadScene), new Type[] { typeof(string), typeof(string) })]
         internal class GameManagerPatches_LoadScene
         {
@@ -29,13 +31,11 @@ namespace ExpandedAiFramework
                 Manager.OnLoadScene();
             }
         }
-
+        
         #endregion
 
 
         #region Save/Load/ModData
-
-        /* This one seems to be triggering even when a load an "existing" save?? weird
 
         [HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.CreateSlot), new Type[] { typeof(string), typeof(SaveSlotType), typeof(uint), typeof(Episode) })]
         private static class SaveGameSlotsPatches_CreateSlow
@@ -46,7 +46,7 @@ namespace ExpandedAiFramework
                 Manager.OnStartNewGame();
             }
         }
-        */
+        
 
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(string), typeof(int) })]
         private static class GameManagerPatches_LoadSaveGameSlot

@@ -41,6 +41,7 @@ namespace ExpandedAiFramework
         private Dictionary<Type, ISubManager> mSubManagers = new Dictionary<Type, ISubManager>();
         private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0];
         private float mLastPlayerStruggleTime = 0.0f;
+        private bool mSceneInitialized = false;
 
 #if DEV_BUILD
         protected ModDataManager mModData = new ModDataManager(ModName, true);
@@ -157,11 +158,25 @@ namespace ExpandedAiFramework
 
         public void OnLoadScene()
         {
+            mSceneInitialized = false;
             Manager.ClearCustomAis();
             Manager.RefreshAvailableMapData(GameManager.m_ActiveScene);
             for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
             {
                 mSubManagerUpdateLoopArray[i].OnLoadScene();
+            }
+        }
+
+
+        public void OnInitializedScene()
+        {
+            if (!mSceneInitialized)
+            {
+                mSceneInitialized = true;
+                for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
+                {
+                    mSubManagerUpdateLoopArray[i].OnInitializedScene();
+                }
             }
         }
 

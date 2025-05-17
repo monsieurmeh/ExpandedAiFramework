@@ -55,7 +55,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         private const float MaxWolfDistanceFromDecoy = 50.0f;
         private const float MinPlayerDistanceFromWolf = 5.0f;
         private const float FollowCheckInterval = 1.0f;
-        private const float FollowDist = 5.0f;
+        private const float FollowDist = 10.0f;
 
 
         internal static CompanionWolfSettings Settings;
@@ -64,7 +64,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         protected GearItem mCurrentFoodTargetGearItem;
         protected Text mStatusText;
 
-
+        protected Vector3 mLastFollowDestination = Vector3.zero;
         protected float mCheckForDecoyMeatTime = 0.0f;
         protected float mCheckForFollowTime = 0.0f;
         protected bool mFollowing = false;
@@ -142,7 +142,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 mStatusText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
                 mStatusText.alignment = TextAnchor.MiddleLeft;
                 mStatusText.color = Color.white;
-                mStatusText.fontSize = 14;
+                mStatusText.fontSize = 8;
                 mStatusText.horizontalOverflow = HorizontalWrapMode.Overflow;
                 mStatusText.verticalOverflow = VerticalWrapMode.Overflow;
                 UpdateStatusText();
@@ -213,6 +213,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         //runs in seconds!
         protected void ProcessTimePassing(float deltaTime)
         {
+            //LogDebug($"Calories: {mSubManager.Data.CurrentCalories} will be reduced by {deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays} to {mSubManager.Data.CurrentCalories - deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays}\nAffection: {mSubManager.Data.CurrentCalories} will be reduced by {deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays} to {mSubManager.Data.CurrentCalories - deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays}");
             mSubManager.Data.CurrentCalories -= deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays;
             mSubManager.Data.CurrentAffection -= deltaTime * (mSubManager.Data.Tamed ? Settings.TamedAffectionDecayRate : Settings.UntamedAffectionDecayRate) * Utility.SecondsToHours;
 
@@ -650,20 +651,20 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 CurrentTarget = GameManager.m_PlayerManager.m_AiTarget;
             }
             mCheckForFollowTime = Time.time; 
-            Vector3 playerPos = GameManager.m_PlayerManager.m_LastPlayerPosition;
-            float dist = Vector3.Distance(mBaseAi.transform.position, playerPos);
+            float dist = Vector3.Distance(GameManager.m_PlayerManager.m_LastPlayerPosition, mLastFollowDestination);
 
             if (dist > FollowDist)
             {
+                mLastFollowDestination = GameManager.m_PlayerManager.m_LastPlayerPosition + new Vector2(UnityEngine.Random.Range(3.0f, 6.0f))
                 if (!mBaseAi.CanPlayerBeReached(playerPos))
                 {
                     LogDebug("Can't reach player, warping...");
                     mBaseAi.m_MoveAgent.transform.position = playerPos;
-                    mBaseAi.m_MoveAgent.Warp(playerPos, 2.0f, true, -1);
+                    mBaseAi.m_MoveAgent.Warp(playerPos, 10.0f, true, -1);
                 }
                 else
                 {
-                    mBaseAi.StartPath(playerPos, mBaseAi.m_RunSpeed);
+                    mBaseAi.StartPath(playerPos + new Vector2(UnityEngine.R), mBaseAi.m_RunSpeed);
                     mFollowing = true;
                 }
             }
@@ -704,7 +705,6 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        //Vanilla logic moves predators to stalking if player target is detected; I want tracking wolves to RUN at you!
         protected override bool ChangeModeWhenTargetDetectedCustom()
         {
             if (mSubManager.Data.Tamed && CurrentTarget.IsPlayer())

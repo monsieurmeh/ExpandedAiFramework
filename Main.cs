@@ -24,6 +24,13 @@ namespace ExpandedAiFramework
         }
 
 
+        public override void OnSceneWasInitialized(int buildIndex, string sceneName)
+        {     
+            LogDebug("LoadScene post fix trigger");
+            Manager.OnInitializedScene();
+        }
+       
+
         protected bool Initialize()
         {
             mManager = EAFManager.Instance;

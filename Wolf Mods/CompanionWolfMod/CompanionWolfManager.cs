@@ -6,6 +6,12 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static Il2Cpp.Panel_Debug;
+using HarmonyLib;
+using Il2Cpp;
+using static Il2Cpp.UITweener;
+using Il2CppTLD.PDID;
+using Il2CppNewtonsoft.Json.Utilities;
+using Il2CppNodeCanvas.Tasks.Actions;
 
 
 namespace ExpandedAiFramework.CompanionWolfMod
@@ -38,6 +44,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region)
         {
+            SpawnCompanion();
             if (mData == null)
             {
                 Utility.LogDebug($"No data setup, will not intercept spawn. How the fuck did we get here before data loading anyways?");
@@ -118,7 +125,10 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        public void OnLoadScene()
+        public void OnLoadScene() { }
+
+
+        public void OnInitializedScene()
         {
             if (GameManager.m_ActiveSceneSet.m_IsOutdoors && mData.Tamed)
             {
@@ -146,19 +156,6 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        private void ReadObjectInfoDebugDELETETHISALREADY(GameObject gameObject, string prefix = "")
-        {
-            foreach (Component component in gameObject.GetComponents<Component>())
-            {
-                Utility.LogDebug($"{prefix}{gameObject.name}:{component.GetType()}");
-            }
-            for (int i = 0, iMax = gameObject.transform.childCount; i < iMax; i++)
-            {
-                ReadObjectInfoDebugDELETETHISALREADY(gameObject.transform.GetChild(i).gameObject, $"{gameObject.name}.");
-            }
-        }
-
-
         public void SpawnCompanion()
         {
             if (Data == null)
@@ -171,28 +168,38 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 Utility.LogDebug("Companion is not tamed, go find and tame one!");
                 return;
             }
+            if (mInstance != null)
+            {
+                Utility.LogDebug("Companion is already here!");
+                return;
+            }
             GameObject wolfContainer = new GameObject("CompanionWolfContainer");
-            wolfContainer.transform.SetParent(GameManager.GetPlayerObject().transform.parent);
-            GameObject newWolf = AssetHelper.SafeInstantiateAssetAsync(WolfPrefabString, wolfContainer.transform, true, false).WaitForCompletion();
-
-            Debug.Log("Successfully instantiated: " + newWolf.name);
+            Vector3 playerPos = GameManager.m_PlayerManager.m_LastPlayerPosition;
+            AiUtils.GetClosestNavmeshPos(out Vector3 validPos, playerPos, playerPos);
+            GameObject newWolfAsset = AssetHelper.SafeInstantiateAssetAsync(WolfPrefabString).WaitForCompletion();
+            GameObject newWolf = GameObject.Instantiate(newWolfAsset, validPos, Quaternion.identity);
+            Utility.LogDebug("Successfully instantiated: " + newWolf.name);
             if (newWolf == null)
             {
                 Utility.LogWarning("Couldn't instantiate new wolf prefab!");
                 return;
             }
-
-            Utility.LogDebug($"Companion wolf loaded!");
+            newWolf.transform.position = validPos;
             BaseAi baseAi = newWolf.GetComponentInChildren<BaseAi>();
             if (baseAi == null)
             {
                 Utility.LogError("Coult not find BaseAi script attached to wolf prefab!");
                 return;
             }
+            Utility.LogDebug($"Creating move agent...");
+            baseAi.CreateMoveAgent(wolfContainer.transform);
+            Utility.LogDebug($"Reparenting...");
+            baseAi.ReparentBaseAi(wolfContainer.transform);
+            var guid = PdidTable.GenerateNewID();
+            ObjectGuid.MaybeAttachObjectGuidAndRegister(newWolf, PdidTable.GenerateNewID());
             Utility.LogDebug($"Wrapping...");
             if (!mManager.TryInjectCustomAi(baseAi, Il2CppType.From(typeof(CompanionWolf)), null))
             {
-                Utility.LogError("Unhandled error in Manager.TryInjectCustomAi with target and type and no spawn region!");
                 return;
             }
             Utility.LogDebug($"re-grabbing wrapper..");
@@ -208,14 +215,11 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 Utility.LogError("Instantiated companion wolf but script is not correct!");
                 return;
             }
-            Utility.LogDebug($"Creating move agent...");
-            wrapper.BaseAi.CreateMoveAgent(wolfContainer.transform);
-            Vector3 playerPos = GameManager.m_PlayerManager.m_LastPlayerPosition;
-            AiUtils.GetClosestNavmeshPos(out Vector3 validPos, playerPos, playerPos);
             wrapper.BaseAi.m_MoveAgent.transform.position = validPos;
             wrapper.BaseAi.m_MoveAgent.Warp(validPos, 5.0f, true, -1);
+            Utility.LogDebug($"Companion wolf loaded!");
         }
-    }
+    }         
 }
 
 
