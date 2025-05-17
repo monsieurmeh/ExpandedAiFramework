@@ -11,7 +11,6 @@ namespace ExpandedAiFramework.CompanionWolfMod
     {
         public SpawnRegionModDataProxy SpawnRegionModDataProxy;
         public bool Connected = false;
-        public bool Indoors = false;
         public bool Tamed = false;
         public float CurrentAffection = 0.0f;
         public float CurrentCalories = 0.0f;
@@ -31,7 +30,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (!Connected)
             {
-                Initialize(new SpawnRegionModDataProxy(scene, ai, spawnRegion));
+                Initialize(spawnRegion != null ? new SpawnRegionModDataProxy(scene, ai, spawnRegion) : null);
             }
         }
 

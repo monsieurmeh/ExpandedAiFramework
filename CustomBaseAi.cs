@@ -1296,7 +1296,7 @@ namespace ExpandedAiFramework
 
         #region Helpers/Internal Accessors
 
-        protected AiTarget CurrentTarget { get { return mBaseAi.m_CurrentTarget; } }
+        protected AiTarget CurrentTarget { get { return mBaseAi.m_CurrentTarget; } set { mBaseAi.m_CurrentTarget = value; } }
         protected AiMode CurrentMode { get { return mBaseAi.m_CurrentMode; } set { mBaseAi.m_CurrentMode = value; } }
         protected AiMode PreviousMode { get { return mBaseAi.m_PreviousMode; } set { mBaseAi.m_PreviousMode = value; } }
         protected string Name { get { return mBaseAi.gameObject?.name ?? "NULL"; } }

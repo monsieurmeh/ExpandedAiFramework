@@ -15,7 +15,7 @@ namespace ExpandedAiFramework
             private static void Postfix(BaseAi __result, SpawnRegion __instance)
             {
                 LogDebug($"SpawnRegion.InstantiateSpawnInternal at {__instance?.transform?.position ?? Vector3.zero}");
-                Manager.TryInjectCustomAi(__result, __instance);
+                Manager.TryInjectRandomCustomAi(__result, __instance);
             }
         }
 
@@ -23,11 +23,10 @@ namespace ExpandedAiFramework
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadScene), new Type[] { typeof(string), typeof(string) })]
         internal class GameManagerPatches_LoadScene
         {
-            private static void Postfix(string sceneName)
+            private static void Postfix()
             {
-                //LogDebug("LoadScene post fix trigger");
-                Manager.ClearCustomAis();
-                Manager.RefreshAvailableMapData(sceneName);
+                LogDebug("LoadScene post fix trigger");
+                Manager.OnLoadScene();
             }
         }
 
@@ -36,6 +35,7 @@ namespace ExpandedAiFramework
 
         #region Save/Load/ModData
 
+        /* This one seems to be triggering even when a load an "existing" save?? weird
 
         [HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.CreateSlot), new Type[] { typeof(string), typeof(SaveSlotType), typeof(uint), typeof(Episode) })]
         private static class SaveGameSlotsPatches_CreateSlow
@@ -46,15 +46,15 @@ namespace ExpandedAiFramework
                 Manager.OnStartNewGame();
             }
         }
-
+        */
 
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(string), typeof(int) })]
         private static class GameManagerPatches_LoadSaveGameSlot
         {
             private static void Postfix()
             {
-                //Utility.LogDebug("Triggering OnLoad");
-                Manager.OnLoad();
+                Utility.LogDebug("OnLoadGame");
+                Manager.OnLoadGame();
             }
         }
 
@@ -64,8 +64,8 @@ namespace ExpandedAiFramework
         {
             private static void Prefix()
             {
-                //Utility.LogDebug("Triggering OnSave");
-                Manager.OnSave();
+                Utility.LogDebug("OnSaveGame");
+                Manager.OnSaveGame();
             }
         }
 

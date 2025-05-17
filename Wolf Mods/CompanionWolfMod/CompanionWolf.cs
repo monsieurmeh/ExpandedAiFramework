@@ -3,6 +3,7 @@ using Il2CppInterop.Common.Attributes;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppInterop.Runtime.Runtime;
+using Il2CppRewired.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -59,7 +60,6 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         internal static CompanionWolfSettings Settings;
 
-        protected GameObject mPlayerGameObject;
         protected CompanionWolfManager mSubManager;
         protected GearItem mCurrentFoodTargetGearItem;
         protected Text mStatusText;
@@ -155,7 +155,6 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 LogError($"Error while trying out some text stuff: {e}");
             }
-            mPlayerGameObject = GameManager.GetPlayerObject();
             ProcessTimePassing(timePassed);
             LogDebug($"Initialized CompanionWolf with {mBaseAi.m_MaxHP}/{mBaseAi.m_MaxHP} condition and scale {mBaseAi.transform.localScale}; Tamed: {mSubManager.Data.Tamed}; Time passed since last load: {timePassed} seconds or {timePassed * Utility.SecondsToHours} hrs; CurrentTime: {currentTime} hrs; Listed timeout time: {mSubManager.Data.UntamedTimeoutTime} which is {mSubManager.Data.UntamedTimeoutTime - currentTime} hrs away");
         }
@@ -267,6 +266,10 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 switch (mode)
                 {
                     case (AiMode)CompanionWolfAiMode.Follow:
+                        if (mBaseAi.m_PathTargetTransform == null || mBaseAi.m_PathTargetTransform.IsNullOrDestroyed())
+                        {
+                            mBaseAi.m_PathTargetTransform = new GameObject();
+                        }
                         mFollowing = false;
                         return false;
                 }
@@ -641,9 +644,14 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 return false;
             }
+            ScanForNewTarget();
+            if (CurrentTarget == null)
+            {
+                CurrentTarget = GameManager.m_PlayerManager.m_AiTarget;
+            }
             mCheckForFollowTime = Time.time; 
             Vector3 playerPos = GameManager.m_PlayerManager.m_LastPlayerPosition;
-            float dist = Vector3.Distance(mBaseAi.m_CachedTransform.position, playerPos);
+            float dist = Vector3.Distance(mBaseAi.transform.position, playerPos);
 
             if (dist > FollowDist)
             {

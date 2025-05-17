@@ -8,6 +8,7 @@ using ComplexLogger;
 using UnityEngine.AI;
 using ModData;
 using Il2Cpp;
+using static Il2Cpp.PlayerVoice;
 
 
 namespace ExpandedAiFramework
@@ -60,6 +61,7 @@ namespace ExpandedAiFramework
         {
             mSettings = settings;
             InitializeLogger();
+            LogError("Test error log!"); 
             RegisterSpawnableAi(typeof(BaseWolf), BaseWolf.Settings);
             //RegisterSpawnableAi(typeof(BaseBear), BaseBear.Settings);
             //RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.Settings);
@@ -134,20 +136,32 @@ namespace ExpandedAiFramework
 
 
 
-        public void OnLoad()
+        public void OnLoadGame()
         {
             for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
             {
-                mSubManagerUpdateLoopArray[i].OnLoad();
+                mSubManagerUpdateLoopArray[i].OnLoadGame();
             }
         }
 
 
-        public void OnSave()
+        public void OnSaveGame()
         {
             for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
             {
-                mSubManagerUpdateLoopArray[i].OnSave();
+                mSubManagerUpdateLoopArray[i].OnSaveGame();
+            }
+        }
+
+
+
+        public void OnLoadScene()
+        {
+            Manager.ClearCustomAis();
+            Manager.RefreshAvailableMapData(GameManager.m_ActiveScene);
+            for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
+            {
+                mSubManagerUpdateLoopArray[i].OnLoadScene();
             }
         }
 
@@ -163,7 +177,7 @@ namespace ExpandedAiFramework
 
 
 
-        public bool TryInjectCustomAi(BaseAi baseAi, SpawnRegion region)
+        public bool TryInjectRandomCustomAi(BaseAi baseAi, SpawnRegion region)
         {
             if (baseAi == null)
             {
@@ -201,6 +215,12 @@ namespace ExpandedAiFramework
             {
                 spawnType = Il2CppType.From(mTypePicker.PickType(baseAi));
             }
+            return TryInjectCustomAi(baseAi, spawnType, region);
+        }
+
+
+        public bool TryInjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion region)
+        {
             if (spawnType == Il2CppType.From(typeof(void)))
             {
                 LogError($"Unable to resolve a custom spawn type from weighted type picker or submanager interceptions!", FlaggedLoggingLevel.Critical);

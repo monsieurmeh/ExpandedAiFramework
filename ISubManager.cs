@@ -11,8 +11,9 @@ namespace ExpandedAiFramework
         void Initialize(EAFManager manager);
         void Shutdown();
         void OnStartNewGame();
-        void OnSave();
-        void OnLoad();
+        void OnLoadScene();
+        void OnSaveGame();
+        void OnLoadGame();
         void Update();
         bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region);
         Type SpawnType { get; }
