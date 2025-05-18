@@ -3,6 +3,7 @@ using ComplexLogger;
 using Il2Cpp;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 
 
 namespace ExpandedAiFramework

@@ -3,7 +3,7 @@ global using MelonLoader;
 global using ModSettings;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.TrackingWolfMod.Main), "ExpandedAiFramework.TrackingWolf", "0.8.0", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.TrackingWolfMod.Main), "ExpandedAiFramework.TrackingWolf", "1.0.0", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 

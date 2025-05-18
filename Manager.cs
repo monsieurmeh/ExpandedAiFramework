@@ -43,6 +43,7 @@ namespace ExpandedAiFramework
         private float mLastPlayerStruggleTime = 0.0f;
         private float mCheckForMissingScriptsTime = 0.0f;
         private bool mSceneInitialized = false;
+        private bool mMapDataRefreshed = false;
         private bool mNeedToCheckForMissingScripts = false;
 
 
@@ -144,7 +145,6 @@ namespace ExpandedAiFramework
 
         public void OnStartNewGame()
         {
-            Manager.RefreshAvailableMapData(GameManager.m_ActiveScene);
             for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
             {
                 mSubManagerUpdateLoopArray[i].OnStartNewGame();
@@ -175,8 +175,8 @@ namespace ExpandedAiFramework
         public void OnLoadScene()
         {
             mSceneInitialized = false;
+            mMapDataRefreshed = false;
             Manager.ClearCustomAis();
-            Manager.RefreshAvailableMapData(GameManager.m_ActiveScene);
             for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
             {
                 mSubManagerUpdateLoopArray[i].OnLoadScene();
@@ -193,6 +193,10 @@ namespace ExpandedAiFramework
                 {
                     mSubManagerUpdateLoopArray[i].OnInitializedScene();
                 }
+            }
+            if (!mMapDataRefreshed)
+            {
+                RefreshAvailableMapData(SceneUtilities.GetActiveSceneName());
             }
             mCheckForMissingScriptsTime = Time.time;
             mNeedToCheckForMissingScripts = true;
@@ -574,10 +578,11 @@ namespace ExpandedAiFramework
 
         public void RefreshAvailableMapData(string sceneName)
         {
-            if (sceneName == null)
+            if (sceneName == null || !SceneUtilities.IsScenePlayable(sceneName))
             {
                 return;
             }
+            mMapDataRefreshed = true;
             LogDebug($"Loading EAF map data for scene {sceneName}");
             if (sceneName.Contains("_SANDBOX"))
             {
@@ -752,7 +757,7 @@ namespace ExpandedAiFramework
 
         #region Debug
 
-        //Stay outa here if you value your sanity, ugly debug-only code ahead
+        //Stay outa here if you value your sanity, ugly debug-only code ahead. Aside from the logger, it is unlikely to stick around beyond
 
         private ComplexLogger<Main> mLogger;
         private bool mRecordingWanderPath = false;
@@ -850,6 +855,9 @@ namespace ExpandedAiFramework
                 case CommandString_Show: Console_Show(); return;
                 case CommandString_Hide: Console_Hide(); return;
                 case CommandString_List: Console_List(); return;
+                case "unlock":
+                    GameManager.GetFeatMasterHunter().Unlock();
+                    return;
             }
         }
 

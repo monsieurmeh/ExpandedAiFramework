@@ -7,6 +7,16 @@ namespace ExpandedAiFramework.CompanionWolfMod
     [RegisterTypeInIl2Cpp]
     public class CompanionWolf : BaseWolf
     {
+        //1.0.0 todo's
+        //1. Set up handling system for animal carcasses, wolves can get the available food item calories, plus the remaining corpse weight multiplied by that animal's meat cal/kg
+        //2. Set up hunger buffer of at least 500 calories where the wolf will eat until full, but won't eat again until that many calories are burned. Prevents looping back repeatedly for food one calorie at a time
+        //3. Prevent eating corpses until player has interacted with them!
+        //   - Small carcasses need to be picked up and dropped similar to how they wont be considered gear items until then
+        //   - Large carcasses need to be at least examined once by the player before floofs is allowed to eat, and then only if the player is nearby - if more than 25f or so away, move back to follow
+        //4. Set up 5kg multiplied by current scale carry capacity container on floofy. He is GOOD BOY
+
+
+
         // A lot of things here are referencing the submanager for data; we are intentionally not storing blackboard/long term data on this script,
         // as it disappears during scene load and I never really know if i might lose it at any time.
         // Anything that doesnt need to persist between scenes like short term behavioral timers can live here.
@@ -47,6 +57,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                                                                 |   AiModeFlags.HideAndSeek
                                                                 |   AiModeFlags.HoldGround
                                                                 |   AiModeFlags.Idle
+                                                                |   AiModeFlags.Feeding
                                                                 | CompanionWolfAiModes;
 
 
@@ -232,6 +243,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
             }
             if (mSubManager.Data.Tamed && mode.ToFlag().AnyOf(TamedCompanionWolfOverrideModes))
             {
+                if (mode == AiMode.Attack || mode == AiMode.Stalking)
+                {
+                    LogDebug($"Temporary catch to prevent tamed wolf from attacking *anything* right now. Floofs is just not ready for combat yet. Soon, I promise!");
+                    newMode = AiMode.None;
+                    return false;
+                }
                 if (mode == AiMode.HoldGround)
                 {
                     LogDebug($"Temporary catch to prevent tamed wolf from holding ground against friendly things like fire. Eventually we'll program in proper behavior. For right now i just want him to sit with me by the fire <3");
@@ -242,6 +259,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 {
                     LogDebug($"Temporary catch to route tamed wander to follow. good boy!");
                     newMode = (AiMode)CompanionWolfAiMode.Follow;
+                    return false;
+                }
+                if ((mode == AiMode.InvestigateFood || mode == AiMode.Feeding) && (mCurrentFoodTargetGearItem == null || mCurrentFoodTargetGearItem.m_FoodItem == null))
+                {
+                    LogDebug($"Temporary catch to prevent tamed wolf trying to eat something that doesn't exist. This keeps happening when prey dies and I think something vanilla is triggering wolf to approach and eat, which wont work with tamed behavior.");
+                    newMode = AiMode.None;
                     return false;
                 }
                 if (CurrentTarget != null && CurrentTarget.IsPlayer() && mode.ToFlag().AnyOf(AiModeFlags.Stalking | AiModeFlags.Attack | AiModeFlags.Struggle))
@@ -267,7 +290,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        //run using actual time passed in seconds
+        //run using INGAME TIME in SECONDS!
         protected void UpdateStats(float deltaTime)
         {
             //LogDebug($"Calories: {mSubManager.Data.CurrentCalories} will be reduced by {deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays} to {mSubManager.Data.CurrentCalories - deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays}\nAffection: {mSubManager.Data.CurrentAffection} will be reduced by {deltaTime * Settings.AffectionDecayDelayHours * Utility.SecondsToHours} to {mSubManager.Data.CurrentAffection - deltaTime * Settings.AffectionDecayDelayHours * Utility.SecondsToHours}");
@@ -582,7 +605,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 return false;
             }
-            LogDebug("Decoy meat check");
+            //LogDebug("Decoy meat check");
             mCheckForDecoyMeatTime = Time.time;
             Il2CppSystem.Collections.Generic.List<GearItem> droppedDecoys = GearManager.m_DroppedDecoys;
             for (int i = 0, iMax = droppedDecoys.Count; i < iMax; i++)
@@ -681,6 +704,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 LogDebug($"Audio queue");
                 mBaseAi.m_FeedingAudioID = GameAudioManager.Play3DSound(mBaseAi.m_FeedingAudio, mBaseAi.gameObject);
+                mBaseAi.m_DidStopAudio = true;
             }
             if (!mSubManager.Data.Tamed && CurrentTarget != null && CurrentTarget.IsPlayer() && CurrentTarget.Distance(mBaseAi.transform.position) <= MinPlayerDistanceFromWolf)
             {

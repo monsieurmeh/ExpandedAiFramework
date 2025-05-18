@@ -141,6 +141,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void OnSaveGame()
         {
+            mData.LastDespawnTime = GetCurrentTimelinePoint();
             string json = JSON.Dump(mData);
             if (json != null)
             {
