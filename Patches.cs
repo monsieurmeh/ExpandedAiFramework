@@ -79,7 +79,7 @@ namespace ExpandedAiFramework
         {
             private static bool Prefix(BaseAi __instance)
             {
-                //Utility.LogDebug($"Start on {__instance.gameObject.name} at {__instance.transform.position}!");
+                Utility.LogDebug($"Start on {__instance.gameObject.name} with ai subtype {__instance.m_AiSubType} at {__instance.transform.position}!");
                 return !Manager.TryStart(__instance);
                 //return __instance.m_AiSubType != AiSubType.Wolf || __instance.Timberwolf;
             }

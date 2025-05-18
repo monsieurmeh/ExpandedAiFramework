@@ -11,9 +11,9 @@ namespace ExpandedAiFramework.TrackingWolfMod
 
 
         [Name("Spawn Weight")]
-        [Slider(0.0f, 100.0f)]
+        [Slider(0, 100)]
         [Description("Adjust spawn weight for tracking wolves. Higher numbers increase relative spawn chance.")]
-        public float SpawnWeight = 10.0f;
+        public int SpawnWeight = 10;
 
 
         [Name("Spawn Delay")]
@@ -37,7 +37,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
         }
 
 
-        public override float GetSpawnWeight()
+        public override int GetSpawnWeight()
         {
             return SpawnWeight;
         }

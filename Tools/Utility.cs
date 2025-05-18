@@ -26,6 +26,8 @@ namespace ExpandedAiFramework
         public const string CommandString_Show = "show";
         public const string CommandString_Hide = "hide";
         public const string CommandString_List = "list";
+        public const string CommandString_Spawn = "spawn";
+        public const string CommandString_Info = "info";
 
         public const string CommandString_NavMesh = "navmesh";
         public const string CommandString_WanderPath = "wanderpath";
@@ -77,6 +79,7 @@ namespace ExpandedAiFramework
         public static void LogVerbose(string message) { Manager.LogVerbose(message); }
         public static void LogWarning(string message, bool toUConsole = true) { Manager.LogWarning(message, toUConsole); }
         public static void LogError(string message, FlaggedLoggingLevel additionalLevelFlags = 0U) { Manager.LogError(message, additionalLevelFlags); }
+        public static void LogAlways(string message) { Manager.LogAlways(message); }
         public static TEnum ToEnum<TEnum>(this uint uval) where TEnum : Enum { return UnsafeUtility.As<uint, TEnum>(ref uval); }
         public static TEnum ToEnumL<TEnum>(this ulong uval) where TEnum : Enum { return UnsafeUtility.As<ulong, TEnum>(ref uval); }
         public static uint ToUInt<TEnum>(this TEnum val) where TEnum : Enum { return UnsafeUtility.As<TEnum, uint>(ref val); }
@@ -113,5 +116,70 @@ namespace ExpandedAiFramework
         {
             return GameManager.m_TimeOfDay.m_WeatherSystem.m_ElapsedHoursAccumulator + GameManager.m_TimeOfDay.m_WeatherSystem.m_ElapsedHours;
         }
+
+
+        #region Console Command Helpers
+
+
+        public static bool IsTypeSupported(string type, string supportedTypeString, bool shouldWarn = true)
+        {
+            if (!IsTypeProvided(type, supportedTypeString, shouldWarn))
+            {
+                return false;
+            }
+            string[] supportedTypes = supportedTypeString.Split(' ');
+            for (int i = 0, iMax = supportedTypes.Length; i < iMax; i++)
+            {
+                if (supportedTypes[i] == type)
+                {
+                    return true;
+                }
+            }
+            if (shouldWarn)
+            {
+                LogWarning($"{type} is not supported by this command! Supported types: {supportedTypeString}");
+            }
+            return false;
+        }
+
+
+        public static bool IsTypeProvided(string type, string supportedTypeString, bool shouldWarn = true)
+        {
+            if (!IsStringProvided(type))
+            {
+                if (shouldWarn)
+                {
+                    LogWarning($"Provide a type to use this command! Supported types: {supportedTypeString}");
+                }
+                return false;
+            }
+            return true;
+        }
+
+
+        public static bool IsNameProvided(string name, bool shouldWarn = true)
+        {
+            if (!IsStringProvided(name))
+            {
+                if (shouldWarn)
+                {
+                    LogWarning($"Provide a name!");
+                }
+                return false;
+            }
+            return true;
+        }
+
+
+        public static bool IsStringProvided(string str)
+        {
+            if (str == null || str.Length == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }

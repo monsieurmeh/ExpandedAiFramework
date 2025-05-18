@@ -13,7 +13,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
         [Name("Spawn Weight")]
         [Slider(0.0f, 100.0f)]
         [Description("Adjust spawn weight for wandering wolves. Higher numbers increase relative spawn chance.")]
-        public float SpawnWeight = 10.0f;
+        public int SpawnWeight = 10;
 
 
         [Name("Spawn Delay")]
@@ -31,7 +31,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
         }
 
 
-        public override float GetSpawnWeight()
+        public override int GetSpawnWeight()
         {
             return SpawnWeight;
         }

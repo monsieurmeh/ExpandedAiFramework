@@ -41,7 +41,10 @@ namespace ExpandedAiFramework
         private Dictionary<Type, ISubManager> mSubManagers = new Dictionary<Type, ISubManager>();
         private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0];
         private float mLastPlayerStruggleTime = 0.0f;
+        private float mCheckForMissingScriptsTime = 0.0f;
         private bool mSceneInitialized = false;
+        private bool mNeedToCheckForMissingScripts = false;
+
 
 #if DEV_BUILD
         protected ModDataManager mModData = new ModDataManager(ModName, true);
@@ -58,11 +61,12 @@ namespace ExpandedAiFramework
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } }
 
 
+
         public void Initialize(ExpandedAiFrameworkSettings settings)
         {
             mSettings = settings;
             InitializeLogger();
-            LogError("Test error log!"); 
+            LogError("Test error log!");
             RegisterSpawnableAi(typeof(BaseWolf), BaseWolf.Settings);
             //RegisterSpawnableAi(typeof(BaseBear), BaseBear.Settings);
             //RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.Settings);
@@ -124,11 +128,23 @@ namespace ExpandedAiFramework
             {
                 mSubManagerUpdateLoopArray[i].Update();
             }
+            if (mNeedToCheckForMissingScripts && Time.time - mCheckForMissingScriptsTime >= 1.0f)
+            {
+                mNeedToCheckForMissingScripts = false;
+                foreach (BaseAi baseAi in GameObject.FindObjectsOfType<BaseAi>())
+                {
+                    if (baseAi != null/* && baseAi.m_CurrentMode == AiMode.Dead*/ && baseAi.gameObject != null && !baseAi.gameObject.TryGetComponent(out CustomAiBase customAi))
+                    {
+                        TryInjectCustomBaseAi(baseAi);
+                    }
+                }
+            }
         }
 
 
         public void OnStartNewGame()
         {
+            Manager.RefreshAvailableMapData(GameManager.m_ActiveScene);
             for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
             {
                 mSubManagerUpdateLoopArray[i].OnStartNewGame();
@@ -178,6 +194,8 @@ namespace ExpandedAiFramework
                     mSubManagerUpdateLoopArray[i].OnInitializedScene();
                 }
             }
+            mCheckForMissingScriptsTime = Time.time;
+            mNeedToCheckForMissingScripts = true;
         }
 
 
@@ -189,7 +207,6 @@ namespace ExpandedAiFramework
             }
             mCustomAis.Clear();
         }
-
 
 
         public bool TryInjectRandomCustomAi(BaseAi baseAi, SpawnRegion region)
@@ -231,6 +248,16 @@ namespace ExpandedAiFramework
                 spawnType = Il2CppType.From(mTypePicker.PickType(baseAi));
             }
             return TryInjectCustomAi(baseAi, spawnType, region);
+        }
+
+
+        public bool TryInjectCustomBaseAi(BaseAi baseAi)
+        {
+            if (baseAi.m_AiSubType == AiSubType.Wolf && baseAi.Timberwolf == null)
+            {
+                return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseWolf)), baseAi.m_SpawnRegionParent);
+            }
+            return false;
         }
 
 
@@ -297,6 +324,66 @@ namespace ExpandedAiFramework
         #endregion
 
 
+        #region Event Registers
+
+        #region OnUpdateWounds
+
+        private static event Func<BaseAi, float, bool> OnUpdateWounds;
+        
+
+        public bool InvokeUpdateWounds(BaseAi baseAi, float timePassed)
+        {
+            if (OnUpdateWounds == null)
+                return true; 
+
+            foreach (Func<BaseAi, float, bool> handler in OnUpdateWounds.GetInvocationList())
+            {
+                if (!handler(baseAi, timePassed))
+                    return false;
+            }
+
+            return true;
+        }
+
+        
+        public static void RegisterUpdateWounds(Func<BaseAi, float, bool> handler)
+        {
+            OnUpdateWounds += handler;
+        }
+
+        #endregion
+
+
+        #region OnUpdateBleeding
+
+        private static event Func<BaseAi, float, bool> OnUpdateBleeding;
+
+
+        public bool InvokeUpdateBleeding(BaseAi baseAi, float timePassed)
+        {
+            if (OnUpdateBleeding == null)
+                return true;
+
+            foreach (Func<BaseAi, float, bool> handler in OnUpdateBleeding.GetInvocationList())
+            {
+                if (!handler(baseAi, timePassed))
+                    return false;
+            }
+
+            return true;
+        }
+
+
+        public static void RegisterUpdateBleeding(Func<BaseAi, float, bool> handler)
+        {
+            OnUpdateBleeding += handler;
+        }
+
+        #endregion
+
+        #endregion
+
+
         #region Internal Methods
 
         private void InjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion spawnRegion)
@@ -333,7 +420,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private void Teleport(Vector3 pos, Quaternion rot)
+        public void Teleport(Vector3 pos, Quaternion rot)
         {
             PlayerManager playerManager = GameManager.m_PlayerManager;
             playerManager.TeleportPlayer(pos, rot);
@@ -487,6 +574,21 @@ namespace ExpandedAiFramework
 
         public void RefreshAvailableMapData(string sceneName)
         {
+            if (sceneName == null)
+            {
+                return;
+            }
+            LogDebug($"Loading EAF map data for scene {sceneName}");
+            if (sceneName.Contains("_SANDBOX"))
+            {
+                sceneName = sceneName.Substring(0, sceneName.IndexOf("_SANDBOX"));
+                LogDebug($"Modifying scene name to {sceneName}");
+            }
+            if (sceneName.Contains("_DLC"))
+            {
+                sceneName = sceneName.Substring(0, sceneName.IndexOf("_DLC"));
+                LogDebug($"Modifying scene name to {sceneName}");
+            }
             mAvailableHidingSpots.Clear();
             mAvailableWanderPaths.Clear();
             if (HidingSpots.TryGetValue(sceneName, out List<HidingSpot> hidingSpots))
@@ -751,64 +853,7 @@ namespace ExpandedAiFramework
             }
         }
 
-        private bool IsTypeSupported(string type, string supportedTypeString, bool shouldWarn = true)
-        {
-            if (!IsTypeProvided(type, supportedTypeString, shouldWarn))
-            {
-                return false;
-            }
-            string[] supportedTypes = supportedTypeString.Split(' ');
-            for (int i = 0, iMax = supportedTypes.Length; i < iMax; i++)
-            {
-                if (supportedTypes[i] == type)
-                {
-                    return true;
-                }
-            }
-            if (shouldWarn)
-            {
-                LogWarning($"{type} is not supported by this command! Supported types: {supportedTypeString}");
-            }
-            return false;
-        }
 
-
-        private bool IsTypeProvided(string type, string supportedTypeString, bool shouldWarn = true)
-        {
-            if (!IsStringProvided(type))
-            {
-                if (shouldWarn)
-                {
-                    LogWarning($"Provide a type to use this command! Supported types: {supportedTypeString}");
-                }
-                return false;
-            }
-            return true;
-        }
-
-
-        private bool IsNameProvided(string name, bool shouldWarn = true)
-        {
-            if (!IsStringProvided(name))
-            {
-                if (shouldWarn)
-                {
-                    LogWarning($"Provide a name!");
-                }
-                return false;
-            }
-            return true;
-        }
-
-
-        private bool IsStringProvided(string str)
-        {
-            if (str == null || str.Length == 0)
-            {
-                return false;
-            }
-            return true;
-        }
 
         #endregion
 

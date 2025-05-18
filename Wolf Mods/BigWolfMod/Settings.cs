@@ -11,9 +11,9 @@ namespace ExpandedAiFramework.BigWolfMod
 
     
         [Name("Spawn Weight")]
-        [Slider(0.0f, 100.0f)]
+        [Slider(0, 100)]
         [Description("Adjust spawn weight for big wolves. Higher numbers increase relative spawn chance.")]
-        public float SpawnWeight = 2.0f;
+        public int SpawnWeight = 2;
 
 
         [Name("Spawn Delay")]
@@ -36,7 +36,7 @@ namespace ExpandedAiFramework.BigWolfMod
         }
 
 
-        public override float GetSpawnWeight()
+        public override int GetSpawnWeight()
         {
             return SpawnWeight;
         }

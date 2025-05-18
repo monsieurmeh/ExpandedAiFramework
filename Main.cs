@@ -2,6 +2,7 @@
 global using MelonLoader;
 global using ModSettings;
 global using static Il2Cpp.BaseAi;
+using System.Reflection;
 
 
 [assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.8.0", "MonsieurMeh", null)]
@@ -17,6 +18,7 @@ namespace ExpandedAiFramework
         {
             LoggerInstance.Msg(Initialize() ? "Initialized Successfully!" : "Initialization Errors!");
         }
+
 
         public override void OnDeinitializeMelon()
         {

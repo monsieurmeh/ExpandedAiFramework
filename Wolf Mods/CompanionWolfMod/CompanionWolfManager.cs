@@ -2,16 +2,8 @@
 using Il2CppInterop.Runtime;
 using MelonLoader.TinyJSON;
 using Il2CppTLD.AddressableAssets;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.ResourceLocations;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using static Il2Cpp.Panel_Debug;
-using HarmonyLib;
-using Il2Cpp;
-using static Il2Cpp.UITweener;
-using Il2CppTLD.PDID;
-using Il2CppNewtonsoft.Json.Utilities;
-using Il2CppNodeCanvas.Tasks.Actions;
+using static ExpandedAiFramework.Utility;
+
 
 
 namespace ExpandedAiFramework.CompanionWolfMod
@@ -28,11 +20,13 @@ namespace ExpandedAiFramework.CompanionWolfMod
         protected bool mInitialized = false;
         protected bool mShouldCheckForSpawnTamedCompanion = false;
         protected float mLastTriggeredCheckForSpawnTamedCompanionTime = 0.0f;
+        protected bool mShouldShowInfoScreen = false;
 
         public CompanionWolfData Data { get { return mData; } set { mData = value; } }
         public CompanionWolf Instance { get { return mInstance; } set { mInstance = value; } }
         public Type SpawnType { get { return typeof(CompanionWolf); } }
         public GameObject WolfPrefab { get { return mWolfPrefab; } set { mWolfPrefab = value; } }
+        public bool ShouldShowInfoScreen { get { return mShouldShowInfoScreen; } }
 
 
 
@@ -40,7 +34,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             mManager = manager;
             mInitialized = true;
-            Utility.LogDebug("CompanionWolfManager initialized!");
+            LogDebug("CompanionWolfManager initialized!");
         }
 
 
@@ -49,32 +43,32 @@ namespace ExpandedAiFramework.CompanionWolfMod
             SpawnCompanion();
             if (mData == null)
             {
-                Utility.LogDebug($"No data setup, will not intercept spawn. How the fuck did we get here before data loading anyways?");
+                LogDebug($"No data setup, will not intercept spawn. How the fuck did we get here before data loading anyways?");
                 return false;
             }
             if (!mData.Connected)
             {
-                Utility.LogDebug($"No connected instance, will not intercept spawn");
+                LogDebug($"No connected instance, will not intercept spawn");
                 return false;
             }
             if (mInstance != null)
             {
-                Utility.LogDebug($"Active instance, will not intercept spawn");
+                LogDebug($"Active instance, will not intercept spawn");
                 return false;
             }
             if (baseAi == null)
             {
-                Utility.LogDebug($"Null baseAi, will not intercept spawn");
+                LogDebug($"Null baseAi, will not intercept spawn");
                 return false;
             }
             if (region == null)
             {
-                Utility.LogDebug($"Null SpawnRegion, will not intercept spawn");
+                LogDebug($"Null SpawnRegion, will not intercept spawn");
                 return false;
             }
             if (mData.SpawnRegionModDataProxy == null)
             {
-                Utility.LogDebug($"Null proxy, will not intercept spawn");
+                LogDebug($"Null proxy, will not intercept spawn");
                 return false;
             }
             if (mData.SpawnRegionModDataProxy.Scene != GameManager.m_ActiveScene
@@ -82,11 +76,11 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 || mData.SpawnRegionModDataProxy.AiType != baseAi.m_AiType
                 || mData.SpawnRegionModDataProxy.AiSubType != baseAi.m_AiSubType)
             {
-                Utility.LogDebug($"Proxy mismatch, will not intercept spawn");
+                LogDebug($"Proxy mismatch, will not intercept spawn");
                 return false;
             }
 
-            Utility.LogDebug($"Proxy match to connected CompanionWolf data found, overriding WeightedTypePicker and spawning companionwolf where it first spawned {Utility.GetCurrentTimelinePoint() - Data.SpawnDate} hours ago!");
+            LogDebug($"Proxy match to connected CompanionWolf data found, overriding WeightedTypePicker and spawning companionwolf where it first spawned {GetCurrentTimelinePoint() - Data.SpawnDate} hours ago!");
             return true;
         }
 
@@ -117,17 +111,17 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 Variant variant = JSON.Load(json);
                 if (variant != null)
                 {
-                    Utility.LogDebug($"Successfully loaded previously saved CompanionWolfData!");
+                    LogDebug($"Successfully loaded previously saved CompanionWolfData!");
                     JSON.Populate(variant, mData);
                 }
             }
 
-            Utility.LogDebug($"Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
+            LogDebug($"Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
         }
 
 
-        public void OnLoadScene() 
-        { 
+        public void OnLoadScene()
+        {
             if (mInstance != null) //this is too late, by now system has serialized the wolf for later. gotta stop it there
             {
                 GameObject.Destroy(mInstance.gameObject.transform.parent.gameObject); //destroy the whole thing
@@ -173,17 +167,17 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (Data == null)
             {
-                Utility.LogDebug("No data found, cannot spawn companion!");
+                LogDebug("No data found, cannot spawn companion!");
                 return;
             }
             if (!Data.Tamed)
             {
-                Utility.LogDebug("Companion is not tamed, go find and tame one!");
+                LogDebug("Companion is not tamed, go find and tame one!");
                 return;
             }
             if (mInstance != null)
             {
-                Utility.LogDebug("Companion is already here!");
+                LogDebug("Companion is already here!");
                 return;
             }
             GameObject wolfContainer = new GameObject("CompanionWolfContainer");
@@ -191,50 +185,279 @@ namespace ExpandedAiFramework.CompanionWolfMod
             AiUtils.GetClosestNavmeshPos(out Vector3 validPos, playerPos, playerPos);
             GameObject newWolf = AssetHelper.SafeInstantiateAssetAsync(WolfPrefabString).WaitForCompletion();
             newWolf.transform.position = validPos;
-            //GameObject newWolf = GameObject.Instantiate(newWolfAsset, validPos, Quaternion.identity);
-            Utility.LogDebug("Successfully instantiated: " + newWolf.name);
+            LogDebug("Successfully instantiated: " + newWolf.name);
             if (newWolf == null)
             {
-                Utility.LogWarning("Couldn't instantiate new wolf prefab!");
+                LogWarning("Couldn't instantiate new wolf prefab!");
                 return;
             }
             newWolf.transform.position = validPos;
             BaseAi baseAi = newWolf.GetComponentInChildren<BaseAi>();
             if (baseAi == null)
             {
-                Utility.LogError("Coult not find BaseAi script attached to wolf prefab!");
+                LogError("Coult not find BaseAi script attached to wolf prefab!");
                 return;
             }
-            Utility.LogDebug($"Creating move agent...");
+            LogDebug($"Creating move agent...");
             baseAi.CreateMoveAgent(wolfContainer.transform);
-            Utility.LogDebug($"Reparenting...");
+            LogDebug($"Reparenting...");
             baseAi.ReparentBaseAi(wolfContainer.transform);
-            //ObjectGuid.MaybeAttachObjectGuidAndRegister(newWolf, PdidTable.GenerateNewID());
-            Utility.LogDebug($"Wrapping...");
+            LogDebug($"Wrapping...");
             if (!mManager.TryInjectCustomAi(baseAi, Il2CppType.From(typeof(CompanionWolf)), null))
             {
                 return;
             }
-            Utility.LogDebug($"re-grabbing wrapper..");
+            LogDebug($"re-grabbing wrapper..");
             if (!mManager.CustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi wrapper))
             {
-                Utility.LogError("Did not find new wrapper for new base ai!");
+                LogError("Did not find new wrapper for new base ai!");
                 return;
             }
-            Utility.LogDebug($"Grabbing Instance..");
+            LogDebug($"Grabbing Instance..");
             mInstance = wrapper as CompanionWolf;
             if (mInstance == null)
             {
-                Utility.LogError("Instantiated companion wolf but script is not correct!");
+                LogError("Instantiated companion wolf but script is not correct!");
                 return;
             }
             wrapper.BaseAi.m_MoveAgent.transform.position = validPos;
             wrapper.BaseAi.m_MoveAgent.Warp(validPos, 5.0f, true, -1);
             mShouldCheckForSpawnTamedCompanion = false;
             BaseAiManager.Remove(wrapper.BaseAi);
-            Utility.LogDebug($"Companion wolf loaded!");
+            LogDebug($"Companion wolf loaded!");
         }
-    }         
+
+
+
+        #region console commands
+
+        public const string CWolfCommandString = "cwolf";
+        public const string CWolfCommandString_Tamed = "tamed";
+        public const string CWolfCommandString_Untamed = "untamed";
+
+        public const string CWoldCommandString_OnCommandSupportedTypes =
+                                                $"{CommandString_Help}" +
+                                                $"{CommandString_Create} " +
+                                                $"{CommandString_Delete} " +
+                                                $"{CommandString_GoTo} " +
+                                                $"{CommandString_Spawn}" + 
+                                                $"{CommandString_Info} ";
+
+
+        public const string CWoldCommandString_HelpSupportedTypes =
+                                         $"{CommandString_Create} " +
+                                         $"{CommandString_Delete} " +
+                                         $"{CommandString_GoTo} " +
+                                         $"{CommandString_Spawn}" +
+                                         $"{CommandString_Info} ";
+
+
+        public const string CWoldCommandString_CreateTypes =
+                         $"{CWolfCommandString_Tamed} " +
+                         $"{CWolfCommandString_Untamed} ";
+
+
+
+
+
+        internal static void Console_OnCommand()
+        {
+            if (!Manager.SubManagers.TryGetValue(typeof(CompanionWolf), out ISubManager subManager))
+            {
+                LogError("Could not fetch CompanionWolfManager instance!");
+                return;
+            }
+
+            if (subManager is not CompanionWolfManager instance)
+            {
+                LogError("Could not fetch CompanionWolfManager instance!");
+                return;
+            }
+
+            string command = uConsole.GetString().ToLowerInvariant();
+            if (command == null)
+            {
+                LogAlways($"Available commands: {CWoldCommandString_OnCommandSupportedTypes}");
+            }
+            switch (command)
+            {
+                case CommandString_Help: instance.Console_Help(); break;
+                case CommandString_Create: instance.Console_Create(); break;
+                case CommandString_Delete: instance.Console_Delete(); break;
+                case CommandString_GoTo: instance.Console_GoTo(); break;
+                case CommandString_Spawn: instance.Console_Spawn(); break;
+                case CommandString_Info: instance.Console_Info(); break;
+                default: LogWarning($"Unknown command: {command}"); break;
+            }
+        }
+
+
+        private void Console_Help()
+        {
+            string command = uConsole.GetString();
+            if (command == null || command.Length == 0)
+            {
+                LogAlways($"Supported commands: {CWoldCommandString_HelpSupportedTypes}");
+                return;
+            }
+            switch (command.ToLower())
+            {
+                case CommandString_Create:
+                    LogAlways($"Attempts to create an tamed or untambed companion. Syntax: '{CWolfCommandString} {CommandString_Create} <type>'. Supported types: {CWoldCommandString_CreateTypes}");
+                    return;
+                case CommandString_Delete:
+                    LogAlways($"Attempts to disconnect current tamed or untamed companion. Syntax: '{CWolfCommandString} {CommandString_Delete}'");
+                    return;
+                case CommandString_GoTo:
+                    LogAlways($"Attempts to teleport current tamed or untamed companion. Syntax: '{CommandString} {CommandString_GoTo}'");
+                    return;
+                case CommandString_Spawn:
+                    LogAlways($"Attempts to spawn current tamed or untamed companion. Syntax: '{CommandString} {CommandString_Spawn}'");
+                    return;
+                case CommandString_Info:
+                    LogAlways($"Attempts to readout info on current tamed or untamed companion. Syntax: '{CommandString} {CommandString_Info}'");
+                    return;
+                default:
+                    LogAlways($"Unknown comand '{command.ToLower()}'!");
+                    return;
+            }
+        }
+
+
+
+        public void Console_Create()
+        {
+            if (mData == null)
+            {
+                LogAlways($"No data to {CommandString_Create}!");
+                return;
+            }
+            if (mData.Connected)
+            {
+                LogAlways($"Companion wolf already created! To force switch state, delete current and re-create in preferred state.");
+                return;
+            }
+
+            string type = uConsole.GetString();
+            if (!IsTypeSupported(type, CommandString_CreateSupportedTypes)) return;
+
+            switch (type)
+            {
+                case CWolfCommandString_Untamed:
+                    ForceCreateUntamedCompanionWolf();
+                    return;
+                case CWolfCommandString_Tamed:
+                    ForceCreateTamedCompanionWolf();
+                    return;
+                default:
+                    LogAlways($"Unknown type '{type}'!");
+                    return;
+            }
+        }
+
+
+        public void Console_Delete()
+        {
+            if (mData == null)
+            {
+                LogAlways($"No data to {CommandString_Delete}!");
+                return;
+            }
+            if (!mData.Connected)
+            {
+                LogAlways($"No connected companion wolf to {CommandString_Delete}!");
+                return;
+            }
+            if (mInstance != null)
+            {
+                GameObject.Destroy(mInstance);
+            }
+            mData.Disconnect();
+            LogAlways($"{CommandString_Delete} companion wolf successful!");
+        }
+
+
+        public void Console_GoTo()
+        {
+            if (mData == null)
+            {
+                LogAlways($"No data to {CommandString_GoTo}!");
+                return;
+            }
+            if (!mData.Connected)
+            {
+                LogAlways($"No connected companion wolf to {CommandString_GoTo}!");
+                return;
+            }
+            if (mInstance == null)
+            {
+                LogAlways($"No spawned companion wolf to {CommandString_GoTo}!");
+                return;
+            }
+            Manager.Teleport(mInstance.transform.position, mInstance.transform.rotation);
+            LogAlways($"{CommandString_GoTo} companion wolf successful!");
+        }
+
+
+        public void Console_Spawn()
+        {
+            if (mData == null)
+            {
+                LogAlways($"No data to {CommandString_Spawn}!");
+                return;
+            }
+            if (!mData.Connected)
+            {
+                LogAlways($"No connected companion wolf to {CommandString_Spawn}!");
+                return;
+            }
+            if (mInstance != null)
+            {
+                LogAlways($"Companion wolf is already in scene, cannot {CommandString_Spawn}!");
+                return;
+            }
+            SpawnCompanion();
+            LogAlways($"{CommandString_Spawn} companion wolf successful!");
+        }
+
+
+
+        public void Console_Info()
+        {
+            if (mData == null)
+            {
+                LogAlways($"No data to {CommandString_Info}!");
+                return;
+            }
+            if (!mData.Connected)
+            {
+                LogAlways($"No connected companion wolf to {CommandString_Info}!");
+                return;
+            }
+            mShouldShowInfoScreen = !mShouldShowInfoScreen;
+            LogAlways($"{CommandString_Info} companion wolf successful!");
+        }
+
+
+        private void ForceCreateUntamedCompanionWolf()
+        {
+            LogAlways($"Havent created this yet, set the spawn weight high and fly around. Eventually when I support custom spawn region creation this command will create one next to the player to respawn it until it disappears after settings timer.");
+            return;
+        }
+
+
+        private void ForceCreateTamedCompanionWolf()
+        {
+            mData.Connected = true;
+            mData.Tamed = true;
+            mData.Initialize(null);
+            mData.CurrentAffection = CompanionWolf.Settings.AffectionRequirement;
+            mData.CurrentCalories = CompanionWolf.Settings.MaximumCalorieIntake * 0.5f;
+            SpawnCompanion();
+        }
+
+        #endregion
+    }
 }
 
 

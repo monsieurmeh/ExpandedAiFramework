@@ -16,4 +16,14 @@ namespace ExpandedAiFramework.CompanionWolfMod
             return true;
         }
     }
+
+
+    [HarmonyPatch(typeof(ConsoleManager), nameof(ConsoleManager.Initialize))]
+    internal class ConsoleManagerPatches_Initialize
+    {
+        private static void Postfix()
+        {
+            uConsole.RegisterCommand(CompanionWolfManager.CWolfCommandString, new Action(CompanionWolfManager.Console_OnCommand));
+        }
+    }
 }

@@ -198,8 +198,8 @@ namespace ExpandedAiFramework
                 mBaseAi.MaybeRestoreTargetAfterSpear();
                 MaybeHoldGround();
                 mBaseAi.MaybeAttemptDodge();
-                ProcessWounds(deltaTime);
-                ProcessBleeding(deltaTime);
+                UpdateWounds(deltaTime);
+                UpdateBleeding(deltaTime);
                 mBaseAi.m_SuppressFootStepDetectionAndSmellSecondsRemaining -= deltaTime;
                 GameAudioManager.SetAudioSourceTransform(mBaseAi.m_EmitterProxy, mBaseAi.m_CachedTransform);
             }
@@ -633,9 +633,13 @@ namespace ExpandedAiFramework
         }
 
 
-        protected virtual void ProcessWounds(float deltaTime)
+        protected virtual void UpdateWounds(float deltaTime)
         {
-            if (!ProcessWoundsCustom(deltaTime))
+            if (!UpdateWoundsCustom(deltaTime))
+            {
+                return;
+            }
+            if (!mManager.InvokeUpdateWounds(mBaseAi, deltaTime))
             {
                 return;
             }
@@ -647,9 +651,13 @@ namespace ExpandedAiFramework
         }
 
 
-        protected void ProcessBleeding(float deltaTime)
+        protected void UpdateBleeding(float deltaTime)
         {
-            if (!ProcessBleedingCustom(deltaTime))
+            if (!UpdateBleedingCustom(deltaTime))
+            {
+                return;
+            }
+            if (!mManager.InvokeUpdateBleeding(mBaseAi, deltaTime))
             {
                 return;
             }
@@ -800,11 +808,11 @@ namespace ExpandedAiFramework
 
             if (nearestTarget == null)
             {
-                LogDebug($"No possible additional candidates during scan for new targets");
+                //LogDebug($"No possible additional candidates during scan for new targets");
                 return;
             }
 
-            LogDebug($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
+            //LogDebug($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
             AiTarget previousTarget = mBaseAi.m_CurrentTarget;
             mBaseAi.m_CurrentTarget = nearestTarget;
 
@@ -819,7 +827,7 @@ namespace ExpandedAiFramework
                 {
                     if (!mBaseAi.CanPlayerBeReached(mBaseAi.m_CurrentTarget.transform.position, MoveAgent.PathRequirement.FullPath) || !CanSeeTarget(false))
                     {
-                        LogDebug($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
+                        //LogDebug($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
                         mBaseAi.m_CurrentTarget = null;
                         return;
                     }
@@ -837,7 +845,7 @@ namespace ExpandedAiFramework
             GameManager.m_PackManager.MaybeAlertMembers(mBaseAi.m_PackAnimal);
             if (!packForming)
             {
-                LogDebug($"Target detected, running ChangeModeWhenTargetDetected");
+                //LogDebug($"Target detected, running ChangeModeWhenTargetDetected");
                 ChangeModeWhenTargetDetected(); 
             }
 
@@ -1654,7 +1662,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="deltaTime">frame time</param>
         /// <returns>return false to halt parent wound processing. Return true to allow parent wound processing.</returns>
-        protected bool ProcessWoundsCustom(float deltaTime) => true;
+        protected bool UpdateWoundsCustom(float deltaTime) => true;
 
 
         /// <summary>
@@ -1663,7 +1671,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="deltaTime">frame time</param>
         /// <returns>return false to halt parent bleeding processing. Return true to allow parent bleeding processing.</returns>
-        protected bool ProcessBleedingCustom(float deltaTime) => true;
+        protected bool UpdateBleedingCustom(float deltaTime) => true;
 
 
         /// <summary>

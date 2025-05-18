@@ -20,7 +20,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         [Name("Spawn Weight")]
         [Slider(0, 100)]
         [Description("Adjust spawn weight for Companion wolves. Higher numbers increase relative spawn chance.")]
-        public float SpawnWeight = 1.0f;
+        public int SpawnWeight = 1;
 
 
         [Name("Spawn Delay")]
@@ -36,15 +36,15 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         [Name("Maximum Calorie Store")]
-        [Slider(100, 8000)]
+        [Slider(1000, 8000, 15)]
         [Description("Maximum number of calories wolf can store.")]
-        public float MaximumCalorieIntake = 4000.0f;
+        public int MaximumCalorieIntake = 4000;
 
-
+         
         [Name("Taming Affection Required")]
-        [Slider(1000, 50000)]
+        [Slider(1000, 50000, 50)]
         [Description("Amount of taming affection required to complete taming phase.")]
-        public float AffectionRequirement = 10000.0f;
+        public int AffectionRequirement = 10000;
 
 
         [Name("Minimum Days to Tame")]
@@ -60,15 +60,15 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         [Name("Untamed Affection Decay Rate")]
-        [Slider(10, 1000)]
+        [Slider(10, 1000, 100)]
         [Description("Affection decay rate per hour while wolf is untamed.")]
-        public float UntamedAffectionDecayRate = 100.0f;
+        public int UntamedAffectionDecayRate = 100;
 
 
         [Name("Tamed Affection Decay Rate")]
-        [Slider(0, 10)]
+        [Slider(1, 10, 10)]
         [Description("Affection decay rate per hour while wolf is untamed.")]
-        public float TamedAffectionDecayRate = 1f;
+        public int TamedAffectionDecayRate = 1;
 
 
         [Name("Linger Duration")]
@@ -78,15 +78,15 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         [Name("Calorie Burned per Day")]
-        [Slider(1200, 2000)]
+        [Slider(1200, 2000, 17)]
         [Description("Calories burned per day while tamed and outdoors. Companions are not able to come inside, so while you are indoors their affection will decrease but they will hunt for themselves preventing hunger decay.")]
-        public float CaloriesBurnedPerDay = 1500.0f;
+        public int CaloriesBurnedPerDay = 1500;
 
 
         [Name("Maximum Condition (HP)")]
-        [Slider(100, 1000)]
+        [Slider(100, 1000, 19)]
         [Description("Maximum condition of the wolf. This is tied to the same value affected by in-game damage (HP).")]
-        public float MaximumCondition = 100.0f;
+        public int MaximumCondition = 100;
 
 
         [Name("Starving Condition Decay Rate")]
@@ -96,13 +96,13 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         [Name("Eating Speed")]
-        [Slider(500, 5000)]
+        [Slider(500, 5000, 46)]
         [Description("Eating speed in calories per game hour.")]
-        public float CaloriesConsumedPerGameHour = 1000f;
+        public int CaloriesConsumedPerGameHour = 1000;
 
 
         [Name("Maximum Affection from Feeding")]
-        [Slider(1000, 50000)]
+        [Slider(1000, 50000, 50)]
         [Description("Maximum affection level achievable with feeding alone for tamed companions. Does not apply during taming phase to prevent lock-up against taming affection requirement.")]
         public int MaximumAffectionFromFeeding = 10000;
 
@@ -119,7 +119,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        public override float GetSpawnWeight()
+        public override int GetSpawnWeight()
         {
             return SpawnWeight;
         }

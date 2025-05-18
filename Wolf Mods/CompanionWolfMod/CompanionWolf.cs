@@ -1,10 +1,4 @@
-﻿using Il2Cpp;
-using Il2CppInterop.Common.Attributes;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.InteropTypes;
-using Il2CppInterop.Runtime.Runtime;
-using Il2CppRewired.Utils;
-using Il2CppSuperSplines;
+﻿using Il2CppRewired.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -184,9 +178,17 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public void UpdateStatusText()
         {
 #if DEV_BUILD
-            if (!mSubManager.Data.Tamed)
+            if (!mSubManager.ShouldShowInfoScreen && !mSubManager.Data.Tamed)
             {
-                return; //no window to update
+                if (!mStatusText.IsNullOrDestroyed())
+                {
+                    GameObject.Destroy(mStatusText.transform.parent.parent.gameObject);
+                }
+                return;
+            }
+            if (mSubManager.ShouldShowInfoScreen && mStatusText.IsNullOrDestroyed())
+            {
+                SetupInfoWindow();
             }
             string targetName = "null";
             if (CurrentTarget != null)
@@ -282,8 +284,9 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 }
             }
 
-            if (mSubManager.Data.CurrentAffection < 0.0f)
-            {
+            bool affectionDecaying = mSubManager.Data.AffectionDecayTime <= Utility.GetCurrentTimelinePoint();
+            if (mSubManager.Data.CurrentAffection < 0.0f && affectionDecaying)
+            { 
                 mSubManager.Data.CurrentAffection = 0.0f;
                 if (mSubManager.Data.Tamed) //Tamed wolves will run away at this point :(
                 {
@@ -295,7 +298,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 }
             }
 
-            if (mSubManager.Data.Scale <= MaxScale)
+            if (mSubManager.Data.Scale <= MaxScale && !affectionDecaying)
             {
                 mSubManager.Data.Scale += deltaTime * GrowthPerDay * Utility.SecondsToDays;
                 mBaseAi.transform.localScale = new Vector3(mSubManager.Data.Scale, mSubManager.Data.Scale, mSubManager.Data.Scale);
@@ -608,7 +611,11 @@ namespace ExpandedAiFramework.CompanionWolfMod
                     LogDebug($"No gear item on target!");
                     continue;
                 }
-
+                if (mCurrentFoodTargetGearItem.m_FoodItem == null)
+                {
+                    LogDebug($"Gear item is not food, ignoring!");
+                    continue;
+                }
                 LogDebug($"Food found, investigating!");
                 SetAiMode(AiMode.InvestigateFood);
                 return true;
@@ -717,6 +724,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                     SetDefaultAiMode();
                 }
             }
+            mSubManager.Data.AffectionDecayTime = Utility.GetCurrentTimelinePoint() + Settings.AffectionDecayDelayHours;
             return false;
         }
 
@@ -738,13 +746,15 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 CurrentTarget = GameManager.m_PlayerManager.m_AiTarget;
             }
             mCheckForFollowTime = Time.time;
+            mBaseAi.StickCharacterControllerToGround();
             Vector3 playerPosition = GameManager.m_PlayerManager.m_LastPlayerPosition;
-            Vector3 currentPosition = new Vector3(mBaseAi.transform.position.x, playerPosition.y, mBaseAi.transform.position.z); //prevent vertical following of player. oops! lmao
+            Vector3 currentPosition = mBaseAi.transform.position;// new Vector3(mBaseAi.transform.position.x, playerPosition.y, mBaseAi.transform.position.z); //prevent vertical following of player. oops! lmao
             float currentDistance = Vector3.Distance(currentPosition, GameManager.m_PlayerManager.m_LastPlayerPosition);
             if (currentDistance >= FollowDist)
             {
                 Vector3 followDirection = (currentPosition - playerPosition).normalized;
-                Vector3 followPosition = playerPosition + followDirection * (FollowDist * 0.80f); // Agent needs to get a LITTLE closer otherwise it moves a bunch while mackenzie shifts around
+                Vector3 rawFollowPosition = playerPosition + followDirection * (FollowDist * 0.80f);
+                AiUtils.GetClosestNavmeshPos(out Vector3 followPosition, rawFollowPosition, rawFollowPosition); // Agent needs to get a LITTLE closer otherwise it moves a bunch while mackenzie shifts around
                 if (!mBaseAi.CanPlayerBeReached(followPosition))
                 {
                     LogVerbose("Can't reach player, warping...");
@@ -840,6 +850,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 if (CurrentTarget.IsPlayer() && CurrentMode == AiMode.Wander)
                 {
                     LogDebug($"Untamed wolf sees player in wander mode, hold ground!");
+                    mSubManager.Data.UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + Settings.LingerDurationHours;
                     SetAiMode(AiMode.HoldGround);
                     return false;
                 }

@@ -13,14 +13,14 @@ namespace ExpandedAiFramework
         [Name("Spawn Weight")]
         [Slider(0.0f, 100.0f)]
         [Description("Adjust spawn weight for base wolves. Higher numbers increase relative spawn chance.")]
-        public float SpawnWeight = 100.0f;
+        public int SpawnWeight = 100;
 
 
 
         [Name("Stalking Timeout")]
         [Slider(0.0f, 30.0f)]
         [Description("Prevents indefinite stalking behavior by switching to attack state after this length of time.")]
-        public float StalkingTimeout = 3.0f;
+        public float StalkingTimeout = 10.0f;
 
 
         public override bool CanSpawn(BaseAi ai)
@@ -29,7 +29,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public override float GetSpawnWeight() 
+        public override int GetSpawnWeight() 
         { 
             return SpawnWeight; 
         }

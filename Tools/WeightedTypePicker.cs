@@ -7,10 +7,10 @@ namespace ExpandedAiFramework
         private class Entry
         {
             public Type Type { get; }
-            public Func<float> WeightProvider { get; }
+            public Func<int> WeightProvider { get; }
             public Func<T, bool> Condition { get; }
 
-            public Entry(Type type, Func<float> weightProvider, Func<T, bool> condition)
+            public Entry(Type type, Func<int> weightProvider, Func<T, bool> condition)
             {
                 Type = type;
                 WeightProvider = weightProvider;
@@ -21,11 +21,11 @@ namespace ExpandedAiFramework
         private readonly List<Entry> allEntries = new();
         private readonly Random random = new();
 
-        private List<(Type Type, float Weight)> validEntries = new();
+        private List<(Type Type, int Weight)> validEntries = new();
         private float totalValidWeight = 0;
 
 
-        public void AddWeight(Type type, Func<float> weightProvider, Func<T, bool> condition)
+        public void AddWeight(Type type, Func<int> weightProvider, Func<T, bool> condition)
         {
             if (weightProvider == null)
                 throw new ArgumentNullException(nameof(weightProvider));
@@ -44,7 +44,7 @@ namespace ExpandedAiFramework
                 //Log($"Checking {entry.Type} in WeightedTypePicker. Condition is {entry.Condition(t)}, weight is {entry.WeightProvider()}");
                 if (entry.Condition(t))
                 {
-                    float weight = entry.WeightProvider();
+                    int weight = entry.WeightProvider();
                     if (weight > 0)
                     {
                         validEntries.Add((entry.Type, weight));
@@ -59,7 +59,7 @@ namespace ExpandedAiFramework
                 return typeof(void);
             }
 
-            float roll = (float)(random.NextDouble() * totalValidWeight);
+            int roll = (int)(random.NextDouble() * totalValidWeight);
             float cumulative = 0;
 
             foreach (var (type, weight) in validEntries)
