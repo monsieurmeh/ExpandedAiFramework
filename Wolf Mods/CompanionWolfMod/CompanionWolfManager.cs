@@ -94,7 +94,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public void OnStartNewGame()
         {
             mData = new CompanionWolfData();
-            OnSaveGame();
+            //OnSaveGame();
         }
 
 

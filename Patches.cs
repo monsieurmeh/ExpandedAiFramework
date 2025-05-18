@@ -36,7 +36,7 @@ namespace ExpandedAiFramework
 
 
         #region Save/Load/ModData
-        /* This one was meant to fire on new save file creation but seems to be firing when starting up a game from an existnig save too. weird...
+        
 
         [HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.CreateSlot), new Type[] { typeof(string), typeof(SaveSlotType), typeof(uint), typeof(Episode) })]
         private static class SaveGameSlotsPatches_CreateSlow
@@ -47,7 +47,7 @@ namespace ExpandedAiFramework
                 Manager.OnStartNewGame();
             }
         }
-        */
+        
         
 
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(string), typeof(int) })]
