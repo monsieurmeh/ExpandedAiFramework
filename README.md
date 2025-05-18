@@ -5,7 +5,7 @@ Expanded Ai Framework (EAF): Framework mod intended to provide more options for 
 
 This readme works best split into two sections: the first for PLAYERS and the second for MODDERS.
 
-PLAYERS:
+****PLAYERS****:
 
 By itself, this framework provides some small additional in-game features:
 1) Fixes known wildlife bugs that I have had time to fix
@@ -13,7 +13,7 @@ By itself, this framework provides some small additional in-game features:
 3) Support for other mods that change wildlife behavior
 
 
-MODDERS:
+****MODDERS****:
 
 This mod works by wrapping instances of the game's AI class with its own construct (ICustomAi/CustomAiBase) if the spawn type matches. 
 
