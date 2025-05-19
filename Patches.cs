@@ -93,7 +93,7 @@ namespace ExpandedAiFramework
         {
             private static bool Prefix(BaseAi __instance)
             {
-                return __instance.m_AiSubType != AiSubType.Wolf || __instance.Timberwolf;
+                return false;// __instance.m_AiSubType != AiSubType.Wolf || __instance.Timberwolf;
             }
         }
 

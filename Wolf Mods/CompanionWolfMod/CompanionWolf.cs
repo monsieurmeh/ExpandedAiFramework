@@ -128,7 +128,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             LogDebug($"Initialized CompanionWolf with {mBaseAi.m_MaxHP}/{mBaseAi.m_MaxHP} condition and scale {mBaseAi.transform.localScale}; Tamed: {mSubManager.Data.Tamed}; Time passed since last load: {timePassed} seconds or {timePassed * Utility.SecondsToHours} hrs; CurrentTime: {currentTime} hrs; Listed timeout time: {mSubManager.Data.UntamedTimeoutTime} which is {mSubManager.Data.UntamedTimeoutTime - currentTime} hrs away");
         }
 
-        public override bool ShouldAddToBaseAiManager() => false;
+        protected override bool ShouldAddToBaseAiManager() => false;
 
 
         private void SetupInfoWindow()
