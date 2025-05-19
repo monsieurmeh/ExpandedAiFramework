@@ -23,7 +23,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
                     return false;
                 default:
                     LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
-                    return true;
+                    return base.ProcessCustom();
             }
         }
 

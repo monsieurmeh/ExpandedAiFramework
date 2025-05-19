@@ -9,6 +9,7 @@ using UnityEngine.AI;
 using ModData;
 using Il2Cpp;
 using static Il2Cpp.PlayerVoice;
+using ExpandedAiFramework.Enums;
 
 
 namespace ExpandedAiFramework
@@ -69,8 +70,12 @@ namespace ExpandedAiFramework
             InitializeLogger();
             LogError("Test error log!");
             RegisterSpawnableAi(typeof(BaseWolf), BaseWolf.Settings);
-            //RegisterSpawnableAi(typeof(BaseBear), BaseBear.Settings);
-            //RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.Settings);
+            RegisterSpawnableAi(typeof(BaseTimberwolf), BaseTimberwolf.Settings);
+            RegisterSpawnableAi(typeof(BaseBear), BaseBear.Settings);
+            RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.Settings);
+            RegisterSpawnableAi(typeof(BaseMoose), BaseMoose.Settings);
+            RegisterSpawnableAi(typeof(BaseRabbit), BaseRabbit.Settings);
+            RegisterSpawnableAi(typeof(BasePtarmigan), BasePtarmigan.Settings);
             LoadMapData();
         }
 
@@ -90,6 +95,7 @@ namespace ExpandedAiFramework
 
 
         #region API
+
 
         [HideFromIl2Cpp]
         public bool RegisterSpawnableAi(Type type, TypeSpecificSettings modSettings)
@@ -220,11 +226,6 @@ namespace ExpandedAiFramework
                 LogDebug("Null base ai, can't augment.");
                 return false;
             }
-            if (baseAi.m_AiSubType != AiSubType.Wolf)
-            {
-                LogDebug("BaseAi is not wolf, cannot augment.");//todo: add non wolf scripts... one day...
-                return false;
-            }
             if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
             {
                 LogDebug("BaseAi in dictionary, can't augment.");
@@ -251,27 +252,35 @@ namespace ExpandedAiFramework
             {
                 spawnType = Il2CppType.From(mTypePicker.PickType(baseAi));
             }
+            if (spawnType == Il2CppType.From(typeof(void)))
+            {
+                LogDebug($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
+                return TryInjectCustomBaseAi(baseAi);
+            }
             return TryInjectCustomAi(baseAi, spawnType, region);
         }
 
 
         public bool TryInjectCustomBaseAi(BaseAi baseAi)
         {
-            if (baseAi.m_AiSubType == AiSubType.Wolf && baseAi.Timberwolf == null)
+            switch (baseAi.m_AiSubType)
             {
-                return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseWolf)), baseAi.m_SpawnRegionParent);
+                case AiSubType.Wolf: return TryInjectCustomAi(baseAi, baseAi.Timberwolf == null ? Il2CppType.From(typeof(BaseWolf)) : Il2CppType.From(typeof(BaseTimberwolf)), baseAi.m_SpawnRegionParent);
+                case AiSubType.Rabbit: return TryInjectCustomAi(baseAi, baseAi.Ptarmigan == null ? Il2CppType.From(typeof(BaseRabbit)) : Il2CppType.From(typeof(BasePtarmigan)), baseAi.m_SpawnRegionParent);
+                case AiSubType.Bear: return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseBear)), baseAi.m_SpawnRegionParent);
+                case AiSubType.Moose: return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseMoose)), baseAi.m_SpawnRegionParent);
+                case AiSubType.Stag: return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseDeer)), baseAi.m_SpawnRegionParent);
+                case AiSubType.Cougar: return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseCougar)), baseAi.m_SpawnRegionParent);
+                default:
+                    LogError($"Can't find fallback custom base ai for baseAi {baseAi.gameObject.name}!");
+                    return false;
             }
-            return false;
         }
 
 
         public bool TryInjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion region)
         {
-            if (spawnType == Il2CppType.From(typeof(void)))
-            {
-                LogError($"Unable to resolve a custom spawn type from weighted type picker or submanager interceptions!", FlaggedLoggingLevel.Critical);
-                return false;
-            }
+
             InjectCustomAi(baseAi, spawnType, region);
             return true;
         }

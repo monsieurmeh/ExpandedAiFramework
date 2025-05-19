@@ -407,7 +407,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                     case AiMode.Feeding: return ProcessFeedingCustom();
                 }
             }
-            return true;
+            return base.ProcessCustom();
         }
 
 
