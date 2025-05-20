@@ -6,7 +6,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
     [RegisterTypeInIl2Cpp]
     public class TrackingWolf : BaseWolf
     {
-        internal static TrackingWolfSettings Settings = new TrackingWolfSettings();
+        internal static TrackingWolfSettings TrackingWolfSettings = new TrackingWolfSettings();
 
         protected float m_TimeSinceLastSmellCheck = 0.0f;
         protected float m_TimeSinceLastStruggle = 0.0f;
@@ -104,7 +104,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
 
         protected override bool PostProcessCustom()
         {
-            if (Time.time - mManager.LastPlayerStruggleTime <= Settings.PostStruggleFleePeriodSeconds && CurrentMode != AiMode.Flee)
+            if (Time.time - mManager.LastPlayerStruggleTime <= TrackingWolfSettings.PostStruggleFleePeriodSeconds && CurrentMode != AiMode.Flee)
             {
                 SetAiMode(AiMode.Flee);
                 return true;

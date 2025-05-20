@@ -14,8 +14,8 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public bool Tamed = false;
         public float CurrentAffection = 0.0f;
         public float CurrentCalories = 0.0f;
-        public float CurrentCondition = CompanionWolf.Settings.MaximumCondition;
-        public float MaxCondition = CompanionWolf.Settings.MaximumCondition;
+        public float CurrentCondition = CompanionWolf.CompanionWolfSettings.MaximumCondition;
+        public float MaxCondition = CompanionWolf.CompanionWolfSettings.MaximumCondition;
         public float SpawnDate;
         public float UntamedTimeoutTime;
         public float AffectionDecayTime;
@@ -40,9 +40,9 @@ namespace ExpandedAiFramework.CompanionWolfMod
             Utility.LogDebug($"Connecting!");
             Connected = true;
             SpawnDate = Utility.GetCurrentTimelinePoint();
-            UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.LingerDurationHours;
-            AffectionDecayTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.AffectionDecayDelayHours;
-            AbleToBeTamedTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.Settings.AffectionDaysRequirement * 24;
+            UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.LingerDurationHours;
+            AffectionDecayTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.AffectionDecayDelayHours;
+            AbleToBeTamedTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.AffectionDaysRequirement * 24;
             LastDespawnTime = Utility.GetCurrentTimelinePoint();
             SpawnRegionModDataProxy = proxy;
             

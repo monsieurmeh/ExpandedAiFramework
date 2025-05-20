@@ -6,7 +6,7 @@ namespace ExpandedAiFramework.BigWolfMod
     [RegisterTypeInIl2Cpp]
     public class BigWolf : BaseWolf
     {
-        internal static BigWolfSettings Settings = new BigWolfSettings();
+        internal static BigWolfSettings BigWolfSettings = new BigWolfSettings();
 
 
         public BigWolf(IntPtr ptr) : base(ptr) { }
@@ -28,7 +28,7 @@ namespace ExpandedAiFramework.BigWolfMod
 
         protected override bool CanBleedOutCustom(out bool canBleedOut)
         {
-            canBleedOut = Settings.CanBleedOut;
+            canBleedOut = BigWolfSettings.CanBleedOut;
             return false;
         }
     }

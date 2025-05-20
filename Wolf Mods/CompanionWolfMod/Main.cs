@@ -3,7 +3,7 @@ global using MelonLoader;
 global using ModSettings;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.CompanionWolfMod.Main), "ExpandedAiFramework.CompanionWolfMod", "0.10.0", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.CompanionWolfMod.Main), "ExpandedAiFramework.CompanionWolfMod", "0.10.1", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 
@@ -21,9 +21,9 @@ namespace ExpandedAiFramework.CompanionWolfMod
             EAFManager.Instance.ModData.Load("CompanionWolfMod");
             CompanionWolfManager manager = new CompanionWolfManager();
             manager.Initialize(EAFManager.Instance);
-            CompanionWolf.Settings = new CompanionWolfSettings(manager);
+            CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager);
             EAFManager.Instance.RegisterSubmanager(typeof(CompanionWolf), manager);
-            return EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.Settings, Utility.ModName);
+            return EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.CompanionWolfSettings, Utility.ModName);
         }
     }
 }

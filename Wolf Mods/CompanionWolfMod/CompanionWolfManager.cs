@@ -452,8 +452,8 @@ namespace ExpandedAiFramework.CompanionWolfMod
             mData.Connected = true;
             mData.Tamed = true;
             mData.Initialize(null);
-            mData.CurrentAffection = CompanionWolf.Settings.AffectionRequirement;
-            mData.CurrentCalories = CompanionWolf.Settings.MaximumCalorieIntake * 0.5f;
+            mData.CurrentAffection = CompanionWolf.CompanionWolfSettings.AffectionRequirement;
+            mData.CurrentCalories = CompanionWolf.CompanionWolfSettings.MaximumCalorieIntake * 0.5f;
             SpawnCompanion();
         }
 

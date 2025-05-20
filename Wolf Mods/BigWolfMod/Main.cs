@@ -3,7 +3,7 @@ global using MelonLoader;
 global using ModSettings;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.BigWolfMod.Main), "ExpandedAiFramework.BigWolfMod", "1.0.0", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.BigWolfMod.Main), "ExpandedAiFramework.BigWolfMod", "1.0.1", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 
@@ -18,7 +18,7 @@ namespace ExpandedAiFramework.BigWolfMod
 
         protected bool Initialize()
         {
-            return EAFManager.Instance.RegisterSpawnableAi(typeof(BigWolf), BigWolf.Settings, Utility.ModName);
+            return EAFManager.Instance.RegisterSpawnableAi(typeof(BigWolf), BigWolf.BigWolfSettings, Utility.ModName);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         private const float GrowthPerDay = 0.1f;
         private const float CheckTamedStateDebugFrequency = 5.0f;
 
-        internal static CompanionWolfSettings Settings;
+        internal static CompanionWolfSettings CompanionWolfSettings;
 
         protected CompanionWolfManager mSubManager;
         protected GearItem mCurrentFoodTargetGearItem;
@@ -208,8 +208,8 @@ namespace ExpandedAiFramework.CompanionWolfMod
             }
 
             mStatusText.text = $"Name:      Floofy\n" +
-                               $"Condition: {(int)mSubManager.Data.CurrentCondition}/{(int)Settings.MaximumCondition}\n" +
-                               $"Hunger:    {(int)mSubManager.Data.CurrentCalories}/{(int)Settings.MaximumCalorieIntake}\n" +
+                               $"Condition: {(int)mSubManager.Data.CurrentCondition}/{(int)CompanionWolfSettings.MaximumCondition}\n" +
+                               $"Hunger:    {(int)mSubManager.Data.CurrentCalories}/{(int)CompanionWolfSettings.MaximumCalorieIntake}\n" +
                                $"Affection: {(int)mSubManager.Data.CurrentAffection}\n" +
                                $"State:     {CurrentMode}\n";
                                //$"AnimationState:    {(AiAnimationState)mBaseAi.m_MoveAgent.m_CurrentAnimState}\n" +
@@ -294,15 +294,15 @@ namespace ExpandedAiFramework.CompanionWolfMod
         protected void UpdateStats(float deltaTime)
         {
             //LogDebug($"Calories: {mSubManager.Data.CurrentCalories} will be reduced by {deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays} to {mSubManager.Data.CurrentCalories - deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays}\nAffection: {mSubManager.Data.CurrentAffection} will be reduced by {deltaTime * Settings.AffectionDecayDelayHours * Utility.SecondsToHours} to {mSubManager.Data.CurrentAffection - deltaTime * Settings.AffectionDecayDelayHours * Utility.SecondsToHours}");
-            mSubManager.Data.CurrentCalories -= deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays;
-            mSubManager.Data.CurrentAffection -= deltaTime * (mSubManager.Data.Tamed ? Settings.TamedAffectionDecayRate : Settings.UntamedAffectionDecayRate) * Utility.SecondsToHours;
+            mSubManager.Data.CurrentCalories -= deltaTime * CompanionWolfSettings.CaloriesBurnedPerDay * Utility.SecondsToDays;
+            mSubManager.Data.CurrentAffection -= deltaTime * (mSubManager.Data.Tamed ? CompanionWolfSettings.TamedAffectionDecayRate : CompanionWolfSettings.UntamedAffectionDecayRate) * Utility.SecondsToHours;
 
             if (mSubManager.Data.CurrentCalories < 0.0f)
             {
                 mSubManager.Data.CurrentCalories = 0.0f;
                 if (mSubManager.Data.Tamed) //untamed wolves don't deteriorate from calorie loss
                 {
-                    mSubManager.Data.CurrentCondition -= deltaTime * Settings.StarvingConditionDecayPerHour * Utility.SecondsToHours;
+                    mSubManager.Data.CurrentCondition -= deltaTime * CompanionWolfSettings.StarvingConditionDecayPerHour * Utility.SecondsToHours;
                     mBaseAi.m_CurrentHP = mSubManager.Data.CurrentCondition;
                 }
             }
@@ -715,13 +715,13 @@ namespace ExpandedAiFramework.CompanionWolfMod
             if (CurrentMode == AiMode.Feeding)
             {
                 float deltaTime = RealTimeToGameTime(Time.deltaTime); //We'll need to adjust settings to reflect that the eating rate is per in game hour, not real time second
-                mCurrentFoodTargetGearItem.m_FoodItem.m_CaloriesRemaining -= Settings.CaloriesConsumedPerGameHour * Utility.SecondsToHours * deltaTime;
-                mSubManager.Data.CurrentCalories += Settings.CaloriesConsumedPerGameHour * Utility.SecondsToHours * deltaTime;
-                if (!mSubManager.Data.Tamed || mSubManager.Data.CurrentAffection <= Settings.MaximumAffectionFromFeeding)
+                mCurrentFoodTargetGearItem.m_FoodItem.m_CaloriesRemaining -= CompanionWolfSettings.CaloriesConsumedPerGameHour * Utility.SecondsToHours * deltaTime;
+                mSubManager.Data.CurrentCalories += CompanionWolfSettings.CaloriesConsumedPerGameHour * Utility.SecondsToHours * deltaTime;
+                if (!mSubManager.Data.Tamed || mSubManager.Data.CurrentAffection <= CompanionWolfSettings.MaximumAffectionFromFeeding)
                 {
-                    mSubManager.Data.CurrentAffection += Settings.CaloriesConsumedPerGameHour * Settings.AffectionPerCalorie * Utility.SecondsToHours * deltaTime;
+                    mSubManager.Data.CurrentAffection += CompanionWolfSettings.CaloriesConsumedPerGameHour * CompanionWolfSettings.AffectionPerCalorie * Utility.SecondsToHours * deltaTime;
                 }
-                if (!mSubManager.Data.Tamed && mSubManager.Data.CurrentAffection >= Settings.AffectionRequirement && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= Settings.AffectionDaysRequirement)
+                if (!mSubManager.Data.Tamed && mSubManager.Data.CurrentAffection >= CompanionWolfSettings.AffectionRequirement && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= CompanionWolfSettings.AffectionDaysRequirement)
                 {
                     LogDebug($"You tamed it! YOU DID IT! WOO!!");
                     mSubManager.Data.Tamed = true;
@@ -730,10 +730,10 @@ namespace ExpandedAiFramework.CompanionWolfMod
                     SetupInfoWindow();
                 }
                 bool finishedEating = false;
-                if (mSubManager.Data.CurrentCalories >= Settings.MaximumCalorieIntake)
+                if (mSubManager.Data.CurrentCalories >= CompanionWolfSettings.MaximumCalorieIntake)
                 {
                     LogDebug($"Full!");
-                    mSubManager.Data.CurrentCalories = Settings.MaximumCalorieIntake;
+                    mSubManager.Data.CurrentCalories = CompanionWolfSettings.MaximumCalorieIntake;
                     finishedEating = true;
                 }
                 if (mCurrentFoodTargetGearItem.m_FoodItem.m_CaloriesRemaining <= 0)
@@ -748,7 +748,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                     SetDefaultAiMode();
                 }
             }
-            mSubManager.Data.AffectionDecayTime = Utility.GetCurrentTimelinePoint() + Settings.AffectionDecayDelayHours;
+            mSubManager.Data.AffectionDecayTime = Utility.GetCurrentTimelinePoint() + CompanionWolfSettings.AffectionDecayDelayHours;
             return false;
         }
 
@@ -874,7 +874,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 if (CurrentTarget.IsPlayer() && CurrentMode == AiMode.Wander)
                 {
                     LogDebug($"Untamed wolf sees player in wander mode, hold ground!");
-                    mSubManager.Data.UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + Settings.LingerDurationHours;
+                    mSubManager.Data.UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolfSettings.LingerDurationHours;
                     SetAiMode(AiMode.HoldGround);
                     return false;
                 }

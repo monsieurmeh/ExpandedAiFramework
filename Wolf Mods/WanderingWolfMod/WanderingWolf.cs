@@ -6,7 +6,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
     [RegisterTypeInIl2Cpp]
     public class WanderingWolf : BaseWolf
     {
-        internal static WanderingWolfSettings Settings = new WanderingWolfSettings();
+        internal static WanderingWolfSettings WanderingWolfSettings = new WanderingWolfSettings();
 
         protected WanderPath mWanderPath;
 
