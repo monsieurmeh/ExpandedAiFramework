@@ -3,7 +3,7 @@ global using MelonLoader;
 global using ModSettings;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.WanderingWolfMod.Main), "ExpandedAiFramework.WanderingWolfMod", "1.0.1", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.WanderingWolfMod.Main), "ExpandedAiFramework.WanderingWolfMod", "1.0.2", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 
@@ -18,7 +18,13 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         protected bool Initialize()
         {
-            return EAFManager.Instance.RegisterSpawnableAi(typeof(WanderingWolf), WanderingWolf.WanderingWolfSettings, Utility.ModName);
+            if (!EAFManager.Instance.RegisterSpawnableAi(typeof(WanderingWolf), WanderingWolf.WanderingWolfSettings))
+            {
+                Utility.LogError("Could not register WanderingWolf spawning!");
+                return false;
+            }
+            WanderingWolf.WanderingWolfSettings.AddToModSettings(Utility.ModName);
+            return true;
         }
     }
 }

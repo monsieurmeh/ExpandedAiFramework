@@ -18,7 +18,13 @@ namespace ExpandedAiFramework.BigWolfMod
 
         protected bool Initialize()
         {
-            return EAFManager.Instance.RegisterSpawnableAi(typeof(BigWolf), BigWolf.BigWolfSettings, Utility.ModName);
+            if (!EAFManager.Instance.RegisterSpawnableAi(typeof(BigWolf), BigWolf.BigWolfSettings))
+            {
+                Utility.LogError("Could not register BigWolf spawning!");
+                return false;
+            }
+            BigWolf.BigWolfSettings.AddToModSettings(Utility.ModName);
+            return true;
         }
     }
 }

@@ -33,7 +33,6 @@ namespace ExpandedAiFramework
         }
 
 
-        JsonModSettings ISpawnTypePickerCandidate.Settings { get { return this; } }
         bool ISpawnTypePickerCandidate.CanSpawn(BaseAi baseAi) => CanSpawn(baseAi);
         int ISpawnTypePickerCandidate.SpawnWeight() => GetSpawnWeight();
     }

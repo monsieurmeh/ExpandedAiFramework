@@ -18,7 +18,13 @@ namespace ExpandedAiFramework.TrackingWolfMod
 
         protected bool Initialize()
         {
-            return EAFManager.Instance.RegisterSpawnableAi(typeof(TrackingWolf), TrackingWolf.TrackingWolfSettings, Utility.ModName);
+            if (!EAFManager.Instance.RegisterSpawnableAi(typeof(TrackingWolf), TrackingWolf.TrackingWolfSettings))
+            {
+                Utility.LogError("Could not register TrackingWolf spawning!");
+                return false;
+            }
+            TrackingWolf.TrackingWolfSettings.AddToModSettings(Utility.ModName);
+            return true;
         }
     }
 }
