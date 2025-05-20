@@ -2,7 +2,7 @@
 
 namespace ExpandedAiFramework
 {
-    internal class BaseCougarSettings : TypeSpecificSettings
+    public class BaseCougarSettings : TypeSpecificSettings
     {
         [Section("Base Cougar Settings")]
         [Name("Enable Base Cougars")]

@@ -2,7 +2,7 @@
 
 namespace ExpandedAiFramework
 {
-    internal class BaseWolfSettings : TypeSpecificSettings
+    public class BaseWolfSettings : TypeSpecificSettings
     {
         [Section("Base Wolf Settings")]
         [Name("Enable Base Wolves")]

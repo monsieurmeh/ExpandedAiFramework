@@ -10,7 +10,7 @@ namespace ExpandedAiFramework
     [RegisterTypeInIl2Cpp]
     public class BaseWolf : CustomAiBase
     {
-        internal static BaseWolfSettings Settings = new BaseWolfSettings();
+        public static BaseWolfSettings Settings = new BaseWolfSettings();
         public BaseWolf(IntPtr ptr) : base(ptr) { }
 
         protected override bool ProcessCustom() 

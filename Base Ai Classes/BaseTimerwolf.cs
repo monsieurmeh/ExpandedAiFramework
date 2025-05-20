@@ -7,7 +7,7 @@ namespace ExpandedAiFramework
     [RegisterTypeInIl2Cpp]
     public class BaseTimberwolf : BaseWolf
     {
-        new internal static BaseTimberwolfSettings Settings = new BaseTimberwolfSettings();
+        public static BaseTimberwolfSettings TimberwolfSettings = new BaseTimberwolfSettings();
         public BaseTimberwolf(IntPtr ptr) : base(ptr) { }
     }
 }

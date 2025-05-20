@@ -23,7 +23,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             manager.Initialize(EAFManager.Instance);
             CompanionWolf.Settings = new CompanionWolfSettings(manager);
             EAFManager.Instance.RegisterSubmanager(typeof(CompanionWolf), manager);
-            return EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.Settings);
+            return EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.Settings, Utility.ModName);
         }
     }
 }

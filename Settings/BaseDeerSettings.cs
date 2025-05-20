@@ -2,7 +2,7 @@
 
 namespace ExpandedAiFramework
 {
-    internal class BaseDeerSettings : TypeSpecificSettings
+    public class BaseDeerSettings : TypeSpecificSettings
     {
         [Section("Base Deer Settings")]
         [Name("Enable Base Deer")]

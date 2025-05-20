@@ -38,7 +38,7 @@ namespace ExpandedAiFramework
         private ExpandedAiFrameworkSettings mSettings;
         private Dictionary<int, ICustomAi> mCustomAis = new Dictionary<int, ICustomAi>();
         private WeightedTypePicker<BaseAi> mTypePicker = new WeightedTypePicker<BaseAi>();
-        private Dictionary<Type, TypeSpecificSettings> mModSettingsDict = new Dictionary<Type, TypeSpecificSettings>();
+        private Dictionary<Type, ISpawnTypePickerCandidate> mModSettingsDict = new Dictionary<Type, ISpawnTypePickerCandidate>();
         private Dictionary<Type, ISubManager> mSubManagers = new Dictionary<Type, ISubManager>();
         private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0];
         private float mLastPlayerStruggleTime = 0.0f;
@@ -58,7 +58,7 @@ namespace ExpandedAiFramework
         public ExpandedAiFrameworkSettings Settings { get { return mSettings; } }
         public Dictionary<int, ICustomAi> CustomAis { get { return mCustomAis; } }
         public WeightedTypePicker<BaseAi> TypePicker { get { return mTypePicker; } }
-        public Dictionary<Type, TypeSpecificSettings> ModSettingsDict { get { return mModSettingsDict; } }
+        public Dictionary<Type, ISpawnTypePickerCandidate> ModSettingsDict { get { return mModSettingsDict; } }
         public Dictionary<Type, ISubManager> SubManagers { get { return mSubManagers; } }
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } }
 
@@ -69,13 +69,13 @@ namespace ExpandedAiFramework
             mSettings = settings;
             InitializeLogger();
             LogError("Test error log!");
-            RegisterSpawnableAi(typeof(BaseWolf), BaseWolf.Settings);
-            RegisterSpawnableAi(typeof(BaseTimberwolf), BaseTimberwolf.Settings);
-            RegisterSpawnableAi(typeof(BaseBear), BaseBear.Settings);
-            RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.Settings);
-            RegisterSpawnableAi(typeof(BaseMoose), BaseMoose.Settings);
-            RegisterSpawnableAi(typeof(BaseRabbit), BaseRabbit.Settings);
-            RegisterSpawnableAi(typeof(BasePtarmigan), BasePtarmigan.Settings);
+            RegisterSpawnableAi(typeof(BaseWolf), BaseWolf.Settings, ModName);
+            RegisterSpawnableAi(typeof(BaseTimberwolf), BaseTimberwolf.Settings, ModName);
+            RegisterSpawnableAi(typeof(BaseBear), BaseBear.Settings, ModName);
+            RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.Settings, ModName);
+            RegisterSpawnableAi(typeof(BaseMoose), BaseMoose.Settings, ModName);
+            RegisterSpawnableAi(typeof(BaseRabbit), BaseRabbit.Settings, ModName);
+            RegisterSpawnableAi(typeof(BasePtarmigan), BasePtarmigan.Settings, ModName);
             LoadMapData();
         }
 
@@ -98,7 +98,7 @@ namespace ExpandedAiFramework
 
 
         [HideFromIl2Cpp]
-        public bool RegisterSpawnableAi(Type type, TypeSpecificSettings modSettings)
+        public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate modSettings, string settingsPageName)
         {
             if (mModSettingsDict.TryGetValue(type, out _))
             {
@@ -106,11 +106,11 @@ namespace ExpandedAiFramework
                 return false;
             }
             LogAlways($"Registering type {type}");
-            modSettings.AddToModSettings(ModName);
-            modSettings.ShowSettingsIfEnabled();
-            modSettings.RefreshGUI();
+            modSettings.Settings.AddToModSettings(settingsPageName);
+            modSettings.Settings.RefreshGUI();
+
             mModSettingsDict.Add(type, modSettings);
-            mTypePicker.AddWeight(type, modSettings.GetSpawnWeight, modSettings.CanSpawn);
+            mTypePicker.AddWeight(type, modSettings.SpawnWeight, modSettings.CanSpawn);
             return true;
         }
 

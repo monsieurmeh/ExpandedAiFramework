@@ -4,7 +4,7 @@ using ExpandedAiFramework.Enums;
 
 namespace ExpandedAiFramework
 {
-    internal class BasePtarmiganSettings : TypeSpecificSettings
+    public class BasePtarmiganSettings : TypeSpecificSettings
     {
         [Section("Base Ptarmigan Settings")]
         [Name("Enable Base Ptarmigan")]

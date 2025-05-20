@@ -4,7 +4,7 @@ using ExpandedAiFramework.Enums;
 
 namespace ExpandedAiFramework
 {
-    internal class BaseTimberwolfSettings : TypeSpecificSettings
+    public class BaseTimberwolfSettings : TypeSpecificSettings
     {
         [Section("Base Timberwolf Settings")]
         [Name("Enable Base Timberwolves")]

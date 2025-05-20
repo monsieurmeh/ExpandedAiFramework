@@ -2,7 +2,7 @@
 
 namespace ExpandedAiFramework
 {
-    internal class BaseMooseSettings : TypeSpecificSettings
+    public class BaseMooseSettings : TypeSpecificSettings
     {
         [Section("Base Moose Settings")]
         [Name("Enable Base Moose")]

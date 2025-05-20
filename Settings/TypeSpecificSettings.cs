@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ExpandedAiFramework
 {
-    public abstract class TypeSpecificSettings : JsonModSettings
+    public abstract class TypeSpecificSettings : JsonModSettings, ISpawnTypePickerCandidate
     {
         //Include a field name named "Enable"!
         public abstract bool CanSpawn(BaseAi baseAi);
@@ -31,5 +31,10 @@ namespace ExpandedAiFramework
                 }
             }
         }
+
+
+        JsonModSettings ISpawnTypePickerCandidate.Settings { get { return this; } }
+        bool ISpawnTypePickerCandidate.CanSpawn(BaseAi baseAi) => CanSpawn(baseAi);
+        int ISpawnTypePickerCandidate.SpawnWeight() => GetSpawnWeight();
     }
 }

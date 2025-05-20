@@ -4,7 +4,7 @@ using ExpandedAiFramework.Enums;
 
 namespace ExpandedAiFramework
 {
-    internal class BaseRabbitSettings : TypeSpecificSettings
+    public class BaseRabbitSettings : TypeSpecificSettings
     {
         [Section("Base Rabbit Settings")]
         [Name("Enable Base Rabbit")]

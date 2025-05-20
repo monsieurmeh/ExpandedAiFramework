@@ -2,7 +2,7 @@
 
 namespace ExpandedAiFramework
 {
-    internal class BaseBearSettings : TypeSpecificSettings
+    public class BaseBearSettings : TypeSpecificSettings
     {
         [Section("Base Bear Settings")]
         [Name("Enable Base Bears")]
