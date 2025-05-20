@@ -5,7 +5,7 @@ global using static Il2Cpp.BaseAi;
 using System.Reflection;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.10.3", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.10.4", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 namespace ExpandedAiFramework
@@ -28,7 +28,7 @@ namespace ExpandedAiFramework
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
-            LogDebug("OnInitializedScene");
+            LogVerbose("OnInitializedScene");
             Manager.OnInitializedScene();
         }
        

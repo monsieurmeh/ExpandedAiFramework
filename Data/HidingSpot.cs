@@ -25,7 +25,7 @@ namespace ExpandedAiFramework
 
         public override string ToString()
         {
-            return $"HidingSpot {Name} at {Position}";
+            return $"HidingSpot {Name} at {Position} in scene {Scene}";
         }
 
         public override int GetHashCode() => (Name, Scene).GetHashCode();

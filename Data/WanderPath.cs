@@ -26,7 +26,7 @@ namespace ExpandedAiFramework
 
         public override string ToString()
         {
-            return $"WanderPath {Name} starting at {PathPoints[0]} with {PathPoints.Length} path points";
+            return $"WanderPath {Name} starting at {PathPoints[0]} with {PathPoints.Length} path points in scene {Scene}";
         }
 
         public override int GetHashCode() => (Name, Scene).GetHashCode();

@@ -3,7 +3,7 @@
     [RegisterTypeInIl2Cpp]
     public class BaseRabbit : CustomAiBase
     {
-        public static BaseRabbitSettings Settings = new BaseRabbitSettings();
+        public static BaseRabbitSettings BaseRabbitSettings = new BaseRabbitSettings();
         public BaseRabbit(IntPtr ptr) : base(ptr) { }
     }
 }

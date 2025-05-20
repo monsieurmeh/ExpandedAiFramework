@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ExpandedAiFramework
 {
+    //todo: need to add originating mod type to construtor and use it in equals
     [Serializable]
     public class SpawnRegionModDataProxy
     {

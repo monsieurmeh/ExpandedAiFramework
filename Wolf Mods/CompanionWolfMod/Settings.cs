@@ -109,7 +109,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public override bool CanSpawn(BaseAi ai)
         {
-            //Utility.LogDebug($"Enabled: {Enable} | Connected: {mManager.Data.Connected} | Tamed: {mManager.Data.Tamed} |  Type/Sub: {ai.m_AiType}.{ai.m_AiSubType}");
+            //Utility.LogVerbose($"Enabled: {Enable} | Connected: {mManager.Data.Connected} | Tamed: {mManager.Data.Tamed} |  Type/Sub: {ai.m_AiType}.{ai.m_AiSubType}");
             return Enable
                 && mManager != null
                 && mManager.Data != null

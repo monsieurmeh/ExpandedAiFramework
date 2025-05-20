@@ -10,12 +10,12 @@ namespace ExpandedAiFramework
     [RegisterTypeInIl2Cpp]
     public class BaseWolf : CustomAiBase
     {
-        public static BaseWolfSettings Settings = new BaseWolfSettings();
+        public static BaseWolfSettings BaseWolfSettings = new BaseWolfSettings();
         public BaseWolf(IntPtr ptr) : base(ptr) { }
 
         protected override bool ProcessCustom() 
         {
-            if (CurrentMode == AiMode.Stalking && mBaseAi.m_TimeInModeSeconds >= Settings.StalkingTimeout)
+            if (CurrentMode == AiMode.Stalking && mBaseAi.m_TimeInModeSeconds >= BaseWolfSettings.StalkingTimeout)
             {
                 SetAiMode(AiMode.Attack);
                 return false;

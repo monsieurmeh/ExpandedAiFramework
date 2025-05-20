@@ -37,7 +37,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void Initialize(SpawnRegionModDataProxy proxy)
         {
-            Utility.LogDebug($"Connecting!");
+            Utility.LogVerbose($"Connecting!");
             Connected = true;
             SpawnDate = Utility.GetCurrentTimelinePoint();
             UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.LingerDurationHours;
@@ -51,7 +51,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void Disconnect()
         {
-            Utility.LogDebug($"Disconnecting!!");
+            Utility.LogVerbose($"Disconnecting!!");
             SpawnRegionModDataProxy = null;
             Connected = false;
         }

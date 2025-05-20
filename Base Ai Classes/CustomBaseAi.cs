@@ -804,11 +804,11 @@ namespace ExpandedAiFramework
 
             if (nearestTarget == null)
             {
-                //LogDebug($"No possible additional candidates during scan for new targets");
+                //LogVerbose($"No possible additional candidates during scan for new targets");
                 return;
             }
 
-            //LogDebug($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
+            //LogVerbose($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
             AiTarget previousTarget = mBaseAi.m_CurrentTarget;
             mBaseAi.m_CurrentTarget = nearestTarget;
 
@@ -823,7 +823,7 @@ namespace ExpandedAiFramework
                 {
                     if (!mBaseAi.CanPlayerBeReached(mBaseAi.m_CurrentTarget.transform.position, MoveAgent.PathRequirement.FullPath) || !CanSeeTarget(false))
                     {
-                        //LogDebug($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
+                        //LogVerbose($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
                         mBaseAi.m_CurrentTarget = null;
                         return;
                     }
@@ -841,7 +841,7 @@ namespace ExpandedAiFramework
             GameManager.m_PackManager.MaybeAlertMembers(mBaseAi.m_PackAnimal);
             if (!packForming)
             {
-                //LogDebug($"Target detected, running ChangeModeWhenTargetDetected");
+                //LogVerbose($"Target detected, running ChangeModeWhenTargetDetected");
                 ChangeModeWhenTargetDetected(); 
             }
 
@@ -1343,7 +1343,7 @@ namespace ExpandedAiFramework
 
         protected void SetDefaultAiMode()
         {
-            //LogDebug($"For whatever reason, ai mode is being set to default by the mod!");
+            //LogVerbose($"For whatever reason, ai mode is being set to default by the mod!");
             SetAiMode(mBaseAi.m_DefaultMode);
         }
 

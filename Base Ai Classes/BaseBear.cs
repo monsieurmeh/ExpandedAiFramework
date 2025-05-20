@@ -5,7 +5,7 @@ namespace ExpandedAiFramework
     [RegisterTypeInIl2Cpp]
     public class BaseBear : CustomAiBase
     {
-        public static BaseBearSettings Settings = new BaseBearSettings();
+        public static BaseBearSettings BaseBearSettings = new BaseBearSettings();
         public BaseBear(IntPtr ptr) : base(ptr) { }
     }
 }

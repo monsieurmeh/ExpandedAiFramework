@@ -43,9 +43,8 @@ namespace ExpandedAiFramework
         private ISubManager[] mSubManagerUpdateLoopArray = new ISubManager[0];
         private float mLastPlayerStruggleTime = 0.0f;
         private float mCheckForMissingScriptsTime = 0.0f;
-        private bool mSceneInitialized = false;
-        private bool mMapDataRefreshed = false;
         private bool mNeedToCheckForMissingScripts = false;
+        private string mCurrentScene = string.Empty;
 
 
 #if DEV_BUILD
@@ -61,6 +60,7 @@ namespace ExpandedAiFramework
         public Dictionary<Type, ISpawnTypePickerCandidate> ModSettingsDict { get { return mModSettingsDict; } }
         public Dictionary<Type, ISubManager> SubManagers { get { return mSubManagers; } }
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } }
+        public string CurrentScene { get { return mCurrentScene; } }
 
 
 
@@ -68,14 +68,13 @@ namespace ExpandedAiFramework
         {
             mSettings = settings;
             InitializeLogger();
-            LogError("Test error log!");
-            RegisterSpawnableAi(typeof(BaseWolf), BaseWolf.Settings, ModName);
-            RegisterSpawnableAi(typeof(BaseTimberwolf), BaseTimberwolf.Settings, ModName);
-            RegisterSpawnableAi(typeof(BaseBear), BaseBear.Settings, ModName);
-            RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.Settings, ModName);
-            RegisterSpawnableAi(typeof(BaseMoose), BaseMoose.Settings, ModName);
-            RegisterSpawnableAi(typeof(BaseRabbit), BaseRabbit.Settings, ModName);
-            RegisterSpawnableAi(typeof(BasePtarmigan), BasePtarmigan.Settings, ModName);
+            RegisterSpawnableAi(typeof(BaseWolf), BaseWolf.BaseWolfSettings, ModName);
+            RegisterSpawnableAi(typeof(BaseTimberwolf), BaseTimberwolf.BaseTimberwolfSettings, ModName);
+            RegisterSpawnableAi(typeof(BaseBear), BaseBear.BaseBearSettings, ModName);
+            RegisterSpawnableAi(typeof(BaseCougar), BaseCougar.BaseCougarSettings, ModName);
+            RegisterSpawnableAi(typeof(BaseMoose), BaseMoose.BaseMooseSettings, ModName);
+            RegisterSpawnableAi(typeof(BaseRabbit), BaseRabbit.BaseRabbitSettings, ModName);
+            RegisterSpawnableAi(typeof(BasePtarmigan), BasePtarmigan.BasePtarmiganSettings, ModName);
             LoadMapData();
         }
 
@@ -86,7 +85,7 @@ namespace ExpandedAiFramework
             {
                 subManager.Shutdown();
             }
-            SaveMapData();
+            //SaveMapData(); If the map data fails to load in for some reason but is still actually there, this will wipe it. Long term the data will be in dll
             ClearCustomAis();
             ClearMapData();
         }
@@ -177,11 +176,9 @@ namespace ExpandedAiFramework
         }
 
 
-
         public void OnLoadScene()
         {
-            mSceneInitialized = false;
-            mMapDataRefreshed = false;
+            mCurrentScene = string.Empty;
             Manager.ClearCustomAis();
             for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
             {
@@ -192,20 +189,21 @@ namespace ExpandedAiFramework
 
         public void OnInitializedScene()
         {
-            if (!mSceneInitialized)
+            if (GameManager.m_ActiveScene == null)
             {
-                mSceneInitialized = true;
+                return;
+            }
+            if (mCurrentScene == string.Empty && IsValidGameplayScene(GameManager.m_ActiveScene, out mCurrentScene))
+            {
+                LogDebug($"Scene match found for {mCurrentScene}. Loading...");
+                RefreshAvailableMapData(mCurrentScene);
+                mCheckForMissingScriptsTime = Time.time;
+                mNeedToCheckForMissingScripts = true;
                 for (int i = 0, iMax = mSubManagerUpdateLoopArray.Length; i < iMax; i++)
                 {
                     mSubManagerUpdateLoopArray[i].OnInitializedScene();
                 }
             }
-            if (!mMapDataRefreshed)
-            {
-                RefreshAvailableMapData(SceneUtilities.GetActiveSceneName());
-            }
-            mCheckForMissingScriptsTime = Time.time;
-            mNeedToCheckForMissingScripts = true;
         }
 
 
@@ -223,12 +221,12 @@ namespace ExpandedAiFramework
         {
             if (baseAi == null)
             {
-                LogDebug("Null base ai, can't augment.");
+                LogVerbose("Null base ai, can't augment.");
                 return false;
             }
             if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
             {
-                LogDebug("BaseAi in dictionary, can't augment.");
+                LogVerbose("BaseAi in dictionary, can't augment.");
                 return false;
             }
 
@@ -254,7 +252,7 @@ namespace ExpandedAiFramework
             }
             if (spawnType == Il2CppType.From(typeof(void)))
             {
-                LogDebug($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
+                LogVerbose($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
                 return TryInjectCustomBaseAi(baseAi);
             }
             return TryInjectCustomAi(baseAi, spawnType, region);
@@ -401,7 +399,7 @@ namespace ExpandedAiFramework
 
         private void InjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion spawnRegion)
         {
-            LogDebug($"Spawning {spawnType.Name} at {baseAi.gameObject.transform.position}");
+            LogVerbose($"Spawning {spawnType.Name} at {baseAi.gameObject.transform.position}");
             try
             {
                 mCustomAis.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(spawnType));
@@ -511,6 +509,7 @@ namespace ExpandedAiFramework
                     }
                     if (canAdd)
                     {
+                        LogDebug($"Found {newSpot}, adding...");
                         sceneSpots.Add(newSpot);
                     }
                 }
@@ -587,22 +586,7 @@ namespace ExpandedAiFramework
 
         public void RefreshAvailableMapData(string sceneName)
         {
-            if (sceneName == null || !SceneUtilities.IsScenePlayable(sceneName))
-            {
-                return;
-            }
-            mMapDataRefreshed = true;
             LogDebug($"Loading EAF map data for scene {sceneName}");
-            if (sceneName.Contains("_SANDBOX"))
-            {
-                sceneName = sceneName.Substring(0, sceneName.IndexOf("_SANDBOX"));
-                LogDebug($"Modifying scene name to {sceneName}");
-            }
-            if (sceneName.Contains("_DLC"))
-            {
-                sceneName = sceneName.Substring(0, sceneName.IndexOf("_DLC"));
-                LogDebug($"Modifying scene name to {sceneName}");
-            }
             mAvailableHidingSpots.Clear();
             mAvailableWanderPaths.Clear();
             if (HidingSpots.TryGetValue(sceneName, out List<HidingSpot> hidingSpots))
@@ -663,7 +647,7 @@ namespace ExpandedAiFramework
                 }
                 if (toReturn != null)
                 {
-                    LogDebug($"{ai} picked {toReturn}.");
+                    LogVerbose($"{ai} picked {toReturn}.");
                     mAvailableHidingSpots.Remove(toReturn);
 #if DEV_BUILD_LOCATIONMARKERS
                     mDebugShownHidingSpots.Add(CreateMarker(toReturn.Position, Color.yellow, $"Hiding spot for ai at {ai.BaseAi.transform.position}", 100));
@@ -718,7 +702,7 @@ namespace ExpandedAiFramework
                 if (toReturn != null)
                 {
                     mAvailableWanderPaths.Remove(toReturn);
-                    LogDebug($"{ai} picked {toReturn}.");
+                    LogVerbose($"{ai} picked {toReturn}.");
 #if DEV_BUILD_LOCATIONMARKERS
                     for (int i = 0, iMax = toReturn.PathPoints.Length; i < iMax; i++)
                     {
@@ -784,12 +768,9 @@ namespace ExpandedAiFramework
 
         public void Log(string message, FlaggedLoggingLevel logLevel, bool toUConsole)
         {
-            mLogger.Log(message, logLevel);
-            if (toUConsole)
-            {
-                uConsole.Log($"[{logLevel}] {message}");
-            }
+            mLogger.Log(message, logLevel, toUConsole ? LoggingSubType.uConsole : LoggingSubType.Normal);
         }
+
         public void Log(string message, FlaggedLoggingLevel logLevel) { Log(message, logLevel, false); }
         public void LogTrace(string message) { Log(message, FlaggedLoggingLevel.Trace, false); }
         public void LogDebug(string message) { Log(message, FlaggedLoggingLevel.Debug, false); }
@@ -818,6 +799,13 @@ namespace ExpandedAiFramework
             waypointMarker.transform.position = position;
             waypointMarker.GetComponent<Renderer>().material.color = color;
             waypointMarker.name = name;
+            GameObject waypointTopMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            UnityEngine.Object.Destroy(waypointTopMarker.GetComponent<Collider>());
+            waypointTopMarker.transform.localScale = new Vector3(diameter * 3f, diameter * 3f, diameter * 3f);
+            waypointTopMarker.transform.position = position + new Vector3(0, height, 0);
+            waypointTopMarker.GetComponent<Renderer>().material.color = color;
+            waypointTopMarker.name = name + "Top";
+            waypointTopMarker.transform.SetParent(waypointMarker.transform);
             return waypointMarker;
         }
 
@@ -1002,9 +990,7 @@ namespace ExpandedAiFramework
 
             AiUtils.GetClosestNavmeshPos(out Vector3 actualPos, pos, pos);
             HidingSpots[scene].Add(new HidingSpot(name, actualPos, rot, GameManager.m_ActiveScene));
-#if DEV_BUILD_LOCATIONMARKERS
             mDebugShownHidingSpots.Add(CreateMarker(actualPos, Color.yellow, $"Hiding spot: {name}", 100.0f));
-#endif
             LogAlways($"Generated hiding spot {name} at {actualPos} with rotation {rot} in scene {scene}!");
             SaveMapData();
         }
@@ -1131,7 +1117,7 @@ namespace ExpandedAiFramework
         private void Console_AddTo()
         {
             string type = uConsole.GetString();
-            if (!IsTypeSupported(type, CommandString_SaveSupportedTypes))
+            if (!IsTypeSupported(type, CommandString_AddToSupportedTypes))
             {
                 return;
             }
@@ -1168,13 +1154,11 @@ namespace ExpandedAiFramework
             }
             AiUtils.GetClosestNavmeshPos(out Vector3 actualPos, pos, pos);
             mCurrentWanderPathPoints.Add(actualPos);
-#if DEV_BUILD_LOCATIONMARKERS
             mCurrentWanderPathPointMarkers.Add(CreateMarker(actualPos, Color.blue, $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker", 100));
             if (mCurrentWanderPathPoints.Count > 1)
             {
                 mCurrentWanderPathPointMarkers.Add(ConnectMarkers(actualPos, mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], Color.blue, $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 100));
             }
-#endif
             LogAlways($"Added wanderpath point at {actualPos} to wanderpath {mCurrentWanderPathName}");
         }
 
@@ -1186,7 +1170,7 @@ namespace ExpandedAiFramework
         private void Console_Finish()
         {
             string type = uConsole.GetString();
-            if (!IsTypeSupported(type, CommandString_SaveSupportedTypes))
+            if (!IsTypeSupported(type, CommandString_FinishSupportedTypes))
             {
                 return;
             }
@@ -1208,6 +1192,7 @@ namespace ExpandedAiFramework
             mRecordingWanderPath = false;
             WanderPaths[GameManager.m_ActiveScene].Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), GameManager.m_ActiveScene));
             LogAlways($"Generated wander path {mCurrentWanderPathName} starting at {mCurrentWanderPathPoints[0]}.");
+            mCurrentWanderPathPointMarkers.Add(ConnectMarkers(mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], mCurrentWanderPathPoints[0], Color.blue, $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 100));
             mCurrentWanderPathPoints.Clear();
             mCurrentWanderPathName = string.Empty;
             mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);

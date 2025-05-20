@@ -34,7 +34,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             mManager = manager;
             mInitialized = true;
-            LogDebug("CompanionWolfManager initialized!");
+            LogVerbose("CompanionWolfManager initialized!");
         }
 
 
@@ -43,32 +43,32 @@ namespace ExpandedAiFramework.CompanionWolfMod
             SpawnCompanion();
             if (mData == null)
             {
-                LogDebug($"No data setup, will not intercept spawn. How the fuck did we get here before data loading anyways?");
+                LogVerbose($"No data setup, will not intercept spawn. How the fuck did we get here before data loading anyways?");
                 return false;
             }
             if (!mData.Connected)
             {
-                LogDebug($"No connected instance, will not intercept spawn");
+                LogVerbose($"No connected instance, will not intercept spawn");
                 return false;
             }
             if (mInstance != null)
             {
-                LogDebug($"Active instance, will not intercept spawn");
+                LogVerbose($"Active instance, will not intercept spawn");
                 return false;
             }
             if (baseAi == null)
             {
-                LogDebug($"Null baseAi, will not intercept spawn");
+                LogVerbose($"Null baseAi, will not intercept spawn");
                 return false;
             }
             if (region == null)
             {
-                LogDebug($"Null SpawnRegion, will not intercept spawn");
+                LogVerbose($"Null SpawnRegion, will not intercept spawn");
                 return false;
             }
             if (mData.SpawnRegionModDataProxy == null)
             {
-                LogDebug($"Null proxy, will not intercept spawn");
+                LogVerbose($"Null proxy, will not intercept spawn");
                 return false;
             }
             if (mData.SpawnRegionModDataProxy.Scene != GameManager.m_ActiveScene
@@ -76,11 +76,11 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 || mData.SpawnRegionModDataProxy.AiType != baseAi.m_AiType
                 || mData.SpawnRegionModDataProxy.AiSubType != baseAi.m_AiSubType)
             {
-                LogDebug($"Proxy mismatch, will not intercept spawn");
+                LogVerbose($"Proxy mismatch, will not intercept spawn");
                 return false;
             }
 
-            LogDebug($"Proxy match to connected CompanionWolf data found, overriding WeightedTypePicker and spawning companionwolf where it first spawned {GetCurrentTimelinePoint() - Data.SpawnDate} hours ago!");
+            LogVerbose($"Proxy match to connected CompanionWolf data found, overriding WeightedTypePicker and spawning companionwolf where it first spawned {GetCurrentTimelinePoint() - Data.SpawnDate} hours ago!");
             return true;
         }
 
@@ -111,12 +111,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 Variant variant = JSON.Load(json);
                 if (variant != null)
                 {
-                    LogDebug($"Successfully loaded previously saved CompanionWolfData!");
+                    LogVerbose($"Successfully loaded previously saved CompanionWolfData!");
                     JSON.Populate(variant, mData);
                 }
             }
 
-            LogDebug($"Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
+            LogVerbose($"Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
         }
 
 
@@ -168,17 +168,17 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (Data == null)
             {
-                LogDebug("No data found, cannot spawn companion!");
+                LogVerbose("No data found, cannot spawn companion!");
                 return;
             }
             if (!Data.Tamed)
             {
-                LogDebug("Companion is not tamed, go find and tame one!");
+                LogVerbose("Companion is not tamed, go find and tame one!");
                 return;
             }
             if (mInstance != null)
             {
-                LogDebug("Companion is already here!");
+                LogVerbose("Companion is already here!");
                 return;
             }
             GameObject wolfContainer = new GameObject("CompanionWolfContainer");
@@ -186,7 +186,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             AiUtils.GetClosestNavmeshPos(out Vector3 validPos, playerPos, playerPos);
             GameObject newWolf = AssetHelper.SafeInstantiateAssetAsync(WolfPrefabString).WaitForCompletion();
             newWolf.transform.position = validPos;
-            LogDebug("Successfully instantiated: " + newWolf.name);
+            LogVerbose("Successfully instantiated: " + newWolf.name);
             if (newWolf == null)
             {
                 LogWarning("Couldn't instantiate new wolf prefab!");
@@ -199,22 +199,22 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 LogError("Coult not find BaseAi script attached to wolf prefab!");
                 return;
             }
-            LogDebug($"Creating move agent...");
+            LogVerbose($"Creating move agent...");
             baseAi.CreateMoveAgent(wolfContainer.transform);
-            LogDebug($"Reparenting...");
+            LogVerbose($"Reparenting...");
             baseAi.ReparentBaseAi(wolfContainer.transform);
-            LogDebug($"Wrapping...");
+            LogVerbose($"Wrapping...");
             if (!mManager.TryInjectCustomAi(baseAi, Il2CppType.From(typeof(CompanionWolf)), null))
             {
                 return;
             }
-            LogDebug($"re-grabbing wrapper..");
+            LogVerbose($"re-grabbing wrapper..");
             if (!mManager.CustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi wrapper))
             {
                 LogError("Did not find new wrapper for new base ai!");
                 return;
             }
-            LogDebug($"Grabbing Instance..");
+            LogVerbose($"Grabbing Instance..");
             mInstance = wrapper as CompanionWolf;
             if (mInstance == null)
             {
@@ -225,7 +225,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             wrapper.BaseAi.m_MoveAgent.Warp(validPos, 5.0f, true, -1);
             mShouldCheckForSpawnTamedCompanion = false;
             BaseAiManager.Remove(wrapper.BaseAi);
-            LogDebug($"Companion wolf loaded!");
+            LogVerbose($"Companion wolf loaded!");
         }
 
 
