@@ -1,9 +1,7 @@
 ﻿global using static ExpandedAiFramework.Utility;
 using ComplexLogger;
-using Il2Cpp;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
-using static Il2CppSystem.Runtime.Remoting.RemotingServices;
 
 
 namespace ExpandedAiFramework
@@ -29,6 +27,7 @@ namespace ExpandedAiFramework
         public const string CommandString_List = "list";
         public const string CommandString_Spawn = "spawn";
         public const string CommandString_Info = "info";
+        public const string CommandString_Paint = "paint";
 
         public const string CommandString_NavMesh = "navmesh";
         public const string CommandString_WanderPath = "wanderpath";
@@ -48,7 +47,8 @@ namespace ExpandedAiFramework
             $"{CommandString_Finish} " +
             $"{CommandString_Show} " +
             $"{CommandString_Hide} " +
-            $"{CommandString_List} ";
+            $"{CommandString_List} " +
+            $"{CommandString_Paint}";
 
         public const string CommandString_HelpSupportedCommands =
             $"{CommandString_Create} " +
@@ -60,7 +60,8 @@ namespace ExpandedAiFramework
             $"{CommandString_Finish} " +
             $"{CommandString_Show} " +
             $"{CommandString_Hide} " +
-            $"{CommandString_List} ";
+            $"{CommandString_List} "+
+            $"{CommandString_Paint}";
 
         public const string CommandString_CreateSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_DeleteSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
@@ -72,6 +73,7 @@ namespace ExpandedAiFramework
         public const string CommandString_HideSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion}";
         public const string CommandString_ListSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_LoadSupportedTypes = $"{CommandString_MapData}";
+        public const string CommandString_PaintSupportedTypes = $"{CommandString_HidingSpot} {CommandString_WanderPath}"; //{CommandString_NavMesh}
 
         public static readonly string[] SceneNames = new string[]
         {
@@ -282,6 +284,14 @@ namespace ExpandedAiFramework
                 }
             }
             return false;
+        }
+
+
+        public static void Teleport(Vector3 pos, Quaternion rot)
+        {
+            PlayerManager playerManager = GameManager.m_PlayerManager;
+            playerManager.TeleportPlayer(pos, rot);
+            playerManager.StickPlayerToGround();
         }
 
 

@@ -17,7 +17,7 @@ namespace ExpandedAiFramework
             private static void Postfix(BaseAi __result, SpawnRegion __instance)
             {
                 LogVerbose($"SpawnRegion.InstantiateSpawnInternal on {__result.gameObject.name} at {__result?.transform?.position ?? Vector3.zero}");
-                Manager.TryInjectRandomCustomAi(__result, __instance);
+                Manager.AiManager.TryInjectRandomCustomAi(__result, __instance);
             }
         }
 
@@ -43,7 +43,7 @@ namespace ExpandedAiFramework
         {
             private static void Postfix()
             {
-                Utility.LogVerbose("OnStartNewGame");
+                LogVerbose("OnStartNewGame");
                 Manager.OnStartNewGame();
             }
         }
@@ -55,7 +55,7 @@ namespace ExpandedAiFramework
         {
             private static void Postfix()
             {
-                Utility.LogVerbose("OnLoadGame");
+                LogVerbose("OnLoadGame");
                 Manager.OnLoadGame();
             }
         }
@@ -66,7 +66,7 @@ namespace ExpandedAiFramework
         {
             private static void Prefix()
             {
-                Utility.LogVerbose("OnSaveGame");
+                LogVerbose("OnSaveGame");
                 Manager.OnSaveGame();
             }
         }
@@ -81,8 +81,8 @@ namespace ExpandedAiFramework
         {
             private static bool Prefix(BaseAi __instance)
             {
-                Utility.LogVerbose($"Start on {__instance.gameObject.name} with ai subtype {__instance.m_AiSubType} at {__instance.transform.position}!");
-                return !Manager.TryStart(__instance);
+                LogVerbose($"Start on {__instance.gameObject.name} with ai subtype {__instance.m_AiSubType} at {__instance.transform.position}!");
+                return !Manager.AiManager.TryStart(__instance);
                 //return __instance.m_AiSubType != AiSubType.Wolf || __instance.Timberwolf;
             }
         }
@@ -103,7 +103,7 @@ namespace ExpandedAiFramework
         {
             private static bool Prefix(BaseAi __instance, AiMode mode)
             {
-                return !Manager.TrySetAiMode(__instance, mode);
+                return !Manager.AiManager.TrySetAiMode(__instance, mode);
             }
         }
 
@@ -113,7 +113,7 @@ namespace ExpandedAiFramework
         {
             private static bool Prefix(BaseAi __instance, float damage, DamageSource damageSource, string collider)
             {
-                return !Manager.TryApplyDamage(__instance, damage, 0.0f, damageSource);
+                return !Manager.AiManager.TryApplyDamage(__instance, damage, 0.0f, damageSource);
             }
         }
 
@@ -123,7 +123,7 @@ namespace ExpandedAiFramework
         {
             private static bool Prefix(BaseAi __instance, float damage, float bleedOutMintues, DamageSource damageSource, string collider)
             {
-                return !Manager.TryApplyDamage(__instance, damage, bleedOutMintues, damageSource);
+                return !Manager.AiManager.TryApplyDamage(__instance, damage, bleedOutMintues, damageSource);
             }
         }
 

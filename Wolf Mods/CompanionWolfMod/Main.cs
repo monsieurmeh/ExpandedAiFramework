@@ -18,7 +18,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         protected bool Initialize()
         {
-            EAFManager.Instance.ModData.Load("CompanionWolfMod");
+            EAFManager.Instance.LoadData("CompanionWolfMod");
             CompanionWolfManager manager = new CompanionWolfManager();
             manager.Initialize(EAFManager.Instance);
             CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager);

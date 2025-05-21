@@ -53,7 +53,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
                 SetDefaultAiMode();
                 return;
             }
-            if (!mBaseAi.m_SmellTarget?.IsPlayer() ?? true)
+            if (mBaseAi.m_SmellTarget == null || !mBaseAi.m_SmellTarget.IsPlayer())
             {
                 mBaseAi.m_SmellTarget = GameManager.m_PlayerManager.m_AiTarget;
             }

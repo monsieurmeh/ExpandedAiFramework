@@ -635,10 +635,10 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            if (!mManager.InvokeUpdateWounds(mBaseAi, deltaTime))
-            {
-                return;
-            }
+            //if (!mManager.InvokeUpdateWounds(mBaseAi, deltaTime)) Add this back in when it's ready
+            //{
+                //return;
+            //}
             if (!mBaseAi.m_Wounded)
             {
                 return;
@@ -653,10 +653,10 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            if (!mManager.InvokeUpdateBleeding(mBaseAi, deltaTime))
-            {
-                return;
-            }
+            //if (!mManager.InvokeUpdateBleeding(mBaseAi, deltaTime)) Add back in as a larger to-do when the framework is more complete internally. Dont want these hooks laying around usable in the meantime causing havoc
+            //{
+                //return;
+            //}
             if (!mBaseAi.m_BleedingOut)
             {
                 return;

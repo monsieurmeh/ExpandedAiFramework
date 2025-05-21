@@ -40,8 +40,11 @@
 
   <ItemGroup>
     <Compile Remove="Wolf Mods\**" />
+    <Compile Remove="DLLs\**" />
     <EmbeddedResource Remove="Wolf Mods\**" />
+    <EmbeddedResource Remove="DLLs\**" />
     <None Remove="Wolf Mods\**" />
+    <None Remove="DLLs\**" />
   </ItemGroup>
   
 
@@ -109,8 +112,6 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\TheLongDark\Mods&quot;" />
-  </Target>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\TheLongDark\Mods&quot;" />
+    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;DLLs&quot;" />
   </Target>
 </Project> 

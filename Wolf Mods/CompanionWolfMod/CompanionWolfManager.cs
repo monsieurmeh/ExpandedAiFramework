@@ -105,7 +105,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 mData = new CompanionWolfData();
             }
 
-            string json = mManager.ModData.Load("CompanionWolfMod");
+            string json = mManager.LoadData("CompanionWolfMod");
             if (json != null)
             {
                 Variant variant = JSON.Load(json);
@@ -145,7 +145,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             string json = JSON.Dump(mData);
             if (json != null)
             {
-                mManager.ModData.Save(json, "CompanionWolfMod");
+                mManager.SaveData(json, "CompanionWolfMod");
             }
         }
 
@@ -395,7 +395,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 LogAlways($"No spawned companion wolf to {CommandString_GoTo}!");
                 return;
             }
-            Manager.Teleport(mInstance.transform.position, mInstance.transform.rotation);
+            Teleport(mInstance.transform.position, mInstance.transform.rotation);
             LogAlways($"{CommandString_GoTo} companion wolf successful!");
         }
 

@@ -3,9 +3,10 @@ global using MelonLoader;
 global using ModSettings;
 global using static Il2Cpp.BaseAi;
 using System.Reflection;
+using UnityEngine;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.10.4", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.10.5", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 namespace ExpandedAiFramework
@@ -31,7 +32,7 @@ namespace ExpandedAiFramework
             LogVerbose("OnInitializedScene");
             Manager.OnInitializedScene();
         }
-       
+
 
         protected bool Initialize()
         {
