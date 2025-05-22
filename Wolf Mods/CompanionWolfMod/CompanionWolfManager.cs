@@ -29,94 +29,49 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public bool ShouldShowInfoScreen { get { return mShouldShowInfoScreen; } }
 
 
-
         public void Initialize(EAFManager manager)
         {
             mManager = manager;
             mInitialized = true;
             LogVerbose("CompanionWolfManager initialized!");
         }
+        
+
+        public bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region) => false;
 
 
-        public bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region)
-        {
-            SpawnCompanion();
-            if (mData == null)
-            {
-                LogVerbose($"No data setup, will not intercept spawn. How the fuck did we get here before data loading anyways?");
-                return false;
-            }
-            if (!mData.Connected)
-            {
-                LogVerbose($"No connected instance, will not intercept spawn");
-                return false;
-            }
-            if (mInstance != null)
-            {
-                LogVerbose($"Active instance, will not intercept spawn");
-                return false;
-            }
-            if (baseAi == null)
-            {
-                LogVerbose($"Null baseAi, will not intercept spawn");
-                return false;
-            }
-            if (region == null)
-            {
-                LogVerbose($"Null SpawnRegion, will not intercept spawn");
-                return false;
-            }
-            if (mData.SpawnRegionModDataProxy == null)
-            {
-                LogVerbose($"Null proxy, will not intercept spawn");
-                return false;
-            }
-            if (mData.SpawnRegionModDataProxy.Scene != GameManager.m_ActiveScene
-                || Vector3.Distance(mData.SpawnRegionModDataProxy.Position, region.transform.position) > 0.001f
-                || mData.SpawnRegionModDataProxy.AiType != baseAi.m_AiType
-                || mData.SpawnRegionModDataProxy.AiSubType != baseAi.m_AiSubType)
-            {
-                LogVerbose($"Proxy mismatch, will not intercept spawn");
-                return false;
-            }
-
-            LogVerbose($"Proxy match to connected CompanionWolf data found, overriding WeightedTypePicker and spawning companionwolf where it first spawned {GetCurrentTimelinePoint() - Data.SpawnDate} hours ago!");
-            return true;
-        }
+        public void Shutdown() { }
 
 
-        public void Shutdown()
-        {
-            mData = null;
-        }
-
-
-        public void OnStartNewGame()
-        {
-            mData = new CompanionWolfData();
-            //OnSaveGame();
-        }
+        public void OnStartNewGame() { }
 
 
         public void OnLoadGame()
         {
+            //mData needs to NOT be null, at a minimum to populate from loaded data but also this catches "new" scenarios with no connected companion.
             if (mData == null)
             {
                 mData = new CompanionWolfData();
             }
 
-            string json = mManager.LoadData("CompanionWolfMod");
-            if (json != null)
+            string cWolfDataJson = mManager.LoadData("CompanionWolfMod");
+
+            if (cWolfDataJson == null)
             {
-                Variant variant = JSON.Load(json);
-                if (variant != null)
-                {
-                    LogVerbose($"Successfully loaded previously saved CompanionWolfData!");
-                    JSON.Populate(variant, mData);
-                }
+                LogVerbose("No companionwolf data found. explore and find one! :) ");
+                return;
             }
 
-            LogVerbose($"Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
+            Variant cWolfDataVariant = JSON.Load(cWolfDataJson);
+
+            if (cWolfDataVariant == null)
+            {
+                LogWarning($"Found serialized companionwolf data, but could not load to populatable variant!");
+                return;
+            }
+
+            JSON.Populate(cWolfDataVariant, mData);
+            LogVerbose($"Companion data reloaded. Connected: {mData.Connected} | Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
         }
 
 
@@ -449,9 +404,8 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         private void ForceCreateTamedCompanionWolf()
         {
-            mData.Connected = true;
+            mData.Connect();
             mData.Tamed = true;
-            mData.Initialize(null);
             mData.CurrentAffection = CompanionWolf.CompanionWolfSettings.AffectionRequirement;
             mData.CurrentCalories = CompanionWolf.CompanionWolfSettings.MaximumCalorieIntake * 0.5f;
             SpawnCompanion();

@@ -1,4 +1,5 @@
-﻿using MelonLoader.TinyJSON;
+﻿using Il2Cpp;
+using MelonLoader.TinyJSON;
 using MelonLoader.Utils;
 using ModData;
 using UnityEngine;
@@ -25,11 +26,11 @@ namespace ExpandedAiFramework
         public List<WanderPath> AvailableWanderPaths { get { return mAvailableWanderPaths; } }
 
 
-        public DataManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        public DataManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay) : base(manager, subManagers, timeOfDay) { }
 
-        public override void Initialize(EAFManager manager, ISubManager[] subManagers)
+        public override void Initialize(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay)
         {
-            base.Initialize(manager, subManagers);
+            base.Initialize(manager, subManagers, timeOfDay);
             LoadMapData();
         }
 
@@ -86,7 +87,6 @@ namespace ExpandedAiFramework
                 allPaths.AddRange(mWanderPaths[key]);
             }
             File.WriteAllText(Path.Combine(MelonEnvironment.ModsDirectory, "ExpandedAiFramework.WanderPaths.json"), JSON.Dump(allPaths, EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints), System.Text.Encoding.UTF8);
-            List<TypeSpecificSpawnRegionModDataProxy> allSpawnRegionModDataProxies = new List<TypeSpecificSpawnRegionModDataProxy>();
         }
 
 

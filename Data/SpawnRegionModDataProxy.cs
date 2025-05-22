@@ -12,21 +12,23 @@ namespace ExpandedAiFramework
         public string Scene; //might be able to get rid of this?
         public Vector3 OriginalPosition;
         public Vector3 CurrentPosition;
-        public AiType AiType;
+        public AiType AiType; 
         public AiSubType AiSubType;
+        public float LastDespawnTime;
 
 
         public SpawnRegionModDataProxy() { }
 
 
-        public SpawnRegionModDataProxy(Guid guid, string scene, BaseAi ai, SpawnRegion spawnRegion)
+        public SpawnRegionModDataProxy(Guid guid, string scene, SpawnRegion spawnRegion)
         {
             Guid = guid;
             Scene = scene;
             CurrentPosition = spawnRegion.transform.position;
             OriginalPosition = CurrentPosition;
-            AiType = ai.m_AiType;
-            AiSubType = ai.m_AiSubType;
+            AiType = spawnRegion.m_AiTypeSpawned;
+            AiSubType = spawnRegion.m_AiSubTypeSpawned;
+            LastDespawnTime = GetCurrentTimelinePoint();
         }
 
 

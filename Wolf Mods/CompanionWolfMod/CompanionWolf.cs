@@ -105,7 +105,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             }
             mSubManager = companionWolfManager;
             LogVerbose($"Initializing companion! Data: Connected = {mSubManager.Data.Connected}");
-            mSubManager.Data.Initialize(GameManager.m_ActiveScene, ai, spawnRegion);
+            mSubManager.Data.TryConnect();
             mBaseAi.m_MaxHP = mSubManager.Data.MaxCondition;
             mBaseAi.m_CurrentHP = mSubManager.Data.CurrentCondition;
             mBaseAi.transform.localScale = new Vector3(mSubManager.Data.Scale, mSubManager.Data.Scale, mSubManager.Data.Scale);

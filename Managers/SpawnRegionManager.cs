@@ -2,9 +2,15 @@ using Harmony;
 using MelonLoader.TinyJSON;
 using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using System.Collections.Generic;
 
 namespace ExpandedAiFramework
 {
+    //mid-implementation notes
+    // 
+    // Eventually like described below i want these to be their own routines so to speak.
+    // For now, they are just wrappers used at runtime to centrally direct other mods to do stuff with the spawn region persistently.
+    // 
     public sealed class SpawnRegionManager : BaseSubManager
     {
         // Plan for wrapping vanilla spawn regions, while providing json-adjustable entries for planned matches in game.
@@ -32,11 +38,17 @@ namespace ExpandedAiFramework
 
 
         private Dictionary<Guid, SpawnRegionModDataProxy> mSpawnRegionModDataProxies = new Dictionary<Guid, SpawnRegionModDataProxy>();
-
+        private Dictionary<int, ICustomSpawnRegion> mCustomSpawnRegions = new Dictionary<int, ICustomSpawnRegion>();
         private bool mInitializedScene = false;
+
+        public SpawnRegionManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay) : base(manager, subManagers, timeOfDay) { }
+
 
         public override void OnLoadScene()
         {
+            base.OnLoadScene();
+            ClearCustomSpawnRegions();
+            SaveSpawnRegionModDataProxies(); //because we're storing the spawn region mod data proxy in a separate dictionary, destroying the runtime construct should still leave everything behind here
             mInitializedScene = false;
         }
 
@@ -46,13 +58,46 @@ namespace ExpandedAiFramework
             base.OnInitializedScene();
             if (!mInitializedScene && GameManager.m_ActiveScene.Contains("WILDLIFE"))
             {
+                LogDebug($"SpawnRegionManager initializing in scene {mManager.CurrentScene}");
                 mInitializedScene = true;
-                Load();
+                InitializeSpawnRegionModDataProxies();
             }
         }
 
 
-        private void Load()
+        public void ClearCustomSpawnRegions()
+        {
+            foreach (ICustomSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
+            {
+                TryRemoveCustomSpawnRegion(customSpawnRegion.SpawnRegion);
+            }
+            mCustomSpawnRegions.Clear();
+        }
+
+
+        public bool TryRemoveCustomSpawnRegion(SpawnRegion spawnRegion)
+        {
+            if (spawnRegion == null)
+            {
+                return false;
+            }
+            if (!mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out ICustomSpawnRegion customSpawnRegion))
+            {
+                return false;
+            }
+            customSpawnRegion.Despawn(GetCurrentTimelinePoint());
+            //UnityEngine.Object.Destroy(customSpawnRegion.Self); won't be needed until (unless) we turn CustomBaseSpawnRegion into a ticking monobomb
+            mCustomSpawnRegions.Remove(spawnRegion.GetHashCode());
+            return true;
+        }
+
+        public bool TryGetSpawnRegionModDataProxy(Guid guid, out SpawnRegionModDataProxy proxy)
+        {
+            return mSpawnRegionModDataProxies.TryGetValue(guid, out proxy);
+        }
+
+
+        private void InitializeSpawnRegionModDataProxies()
         {
             mSpawnRegionModDataProxies.Clear();
 
@@ -71,6 +116,7 @@ namespace ExpandedAiFramework
             }
 
             Il2CppArrayBase<SpawnRegion> sceneSpawnRegions = Component.FindObjectsOfType<SpawnRegion>();
+            bool matchFound = false;
 
             //Not a huge fan of the loop, but until I get spawnregions added to a quadtree or something this is the simplest method to match them up.
             //Will be done at scene init, hitches are kind of expected here. Im not worrying about it, since this will prevent hitches hopefully during spawning.
@@ -80,68 +126,34 @@ namespace ExpandedAiFramework
                 {
                     if (sceneSpawnRegions[i].m_AiSubTypeSpawned == regionDataProxies[j].AiSubType && SquaredDistance(sceneSpawnRegions[i].transform.position, regionDataProxies[j].OriginalPosition) <= 1.0f)
                     {
-                        // match found, do something..?
+                        //todo: turn into "injectCustomSpawnRegion" method similar to aimanager
+                        matchFound = true;
+                        mCustomSpawnRegions.Add(sceneSpawnRegions[i].GetHashCode(), new CustomBaseSpawnRegion(sceneSpawnRegions[i], regionDataProxies[j], mTimeOfDay));
+                        mSpawnRegionModDataProxies.Add(regionDataProxies[j].Guid, regionDataProxies[j]);
                     }
                 }
+                if (!matchFound)
+                {
+                    SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy(new Guid(), mManager.CurrentScene, sceneSpawnRegions[i]);
+                    mCustomSpawnRegions.Add(sceneSpawnRegions[i].GetHashCode(), new CustomBaseSpawnRegion(sceneSpawnRegions[i], newProxy, mTimeOfDay));
+                    mSpawnRegionModDataProxies.Add(newProxy.Guid, newProxy);
+                }
+                matchFound = false;
             }
         }
     
 
-
-        private void Save()
+        private void SaveSpawnRegionModDataProxies()
         {
             string json = JSON.Dump(mSpawnRegionModDataProxies.Values.ToList(), EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
             mManager.SaveData(json, $"{mManager.CurrentScene}_SpawnRegionModDataProxies");
+            //for now, intentionally no clearing until next load - id like the runtime data available until after aimanager is done with it during its shutdown
         }
 
-
-         /* 
-        // Make sure
-        mSpawnRegionModDataProxies.Clear();
-        string proxiesString = ModData.Load("SpawnRegionModDataProxies");
-        if (proxiesString != null)
-        {
-            Variant proxiesVariant = JSON.Load(proxiesString);
-            foreach (var pathJSON in proxiesVariant as ProxyArray)
-            {
-                canAdd = true;
-                TypeSpecificSpawnRegionModDataProxy newProxy = new TypeSpecificSpawnRegionModDataProxy();
-                JSON.Populate(pathJSON, newProxy);
-                if (!mSpawnRegionModDataProxies.TryGetValue(newProxy.Scene, out List<TypeSpecificSpawnRegionModDataProxy> proxies))
-                {
-                    proxies = new List<TypeSpecificSpawnRegionModDataProxy>();
-                    mSpawnRegionModDataProxies.Add(newProxy.Scene, proxies);
-                }
-                for (int i = 0, iMax = proxies.Count; i < iMax; i++)
-                {
-                    if (proxies[i] == newProxy)
-                    {
-                        LogWarning($"Can't add new proxy {newProxy} because it already exists!");
-                        canAdd = false;
-                    }
-                }
-                if (canAdd)
-                {
-                    proxies.Add(newProxy);
-                }
-            }
-        }
-        */
-
-        //move this to its own data file similar 
-
-        public SpawnRegionManager(EAFManager manager, ISubManager[] subManagers)
-            : base(manager, subManagers) { }
 
         public override void Shutdown()
         {
+            base.Shutdown();
         }
-
-
-        void a() 
-        {
-
-        }
-
     }
 }

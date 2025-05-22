@@ -9,29 +9,40 @@ namespace ExpandedAiFramework
     {
         public Guid Guid;
         public Guid ParentGuid;
-        public string Scene; //might be able to get rid of this??
-        public Vector3 Position;
-        public Quaternion Rotation;
+        public string Scene;
+        public Vector3 OriginalPosition;
+        public Vector3 CurrentPosition;
+        public Quaternion OriginalRotation;
+        public Quaternion CurrentRotation;
+        public AiSubType AiSubType;
         public Type VariantSpawnType;
 
 
         public SpawnModDataProxy() { }
 
-
-        public SpawnModDataProxy(Guid guid, Guid parentGuid, string scene, BaseAi ai, Type variantSpawnType)
+        //Leaving parent guid out of this for now since it wont necessarily be known at construction, only when connected to parent spawn region
+        public SpawnModDataProxy(Guid guid, string scene, BaseAi ai, Type variantSpawnType)
         {
             Guid = guid;
-            ParentGuid = parentGuid;
             Scene = scene;
-            Position = ai.transform.position;
-            Rotation = ai.transform.rotation;
+            OriginalPosition = ai.transform.position;
+            CurrentPosition = OriginalPosition;
+            OriginalRotation = ai.transform.rotation;
+            CurrentRotation = OriginalRotation;
+            AiSubType = ai.m_AiSubType;
             VariantSpawnType = variantSpawnType;
+        }
+
+
+        public virtual void Respawn(BaseAi baseAi)
+        {
+
         }
 
 
         public override string ToString()
         {
-            return $"SpawnModDataProxy with guid {Guid} at {Position} of variant spawn type {VariantSpawnType} in scene {Scene} belonging to spawn region with wrapper guid {ParentGuid}";
+            return $"SpawnModDataProxy with guid {Guid} at {OriginalPosition} of variant spawn type {VariantSpawnType} in scene {Scene} belonging to spawn region with wrapper guid {ParentGuid}";
         }
 
 

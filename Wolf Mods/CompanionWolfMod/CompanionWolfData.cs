@@ -5,11 +5,9 @@ using UnityEngine;
 
 namespace ExpandedAiFramework.CompanionWolfMod
 {
-    //effectively the companion wolf
     [Serializable]
     public class CompanionWolfData
     {
-        public TypeSpecificSpawnRegionModDataProxy SpawnRegionModDataProxy;
         public bool Connected = false;
         public bool Tamed = false;
         public float CurrentAffection = 0.0f;
@@ -26,16 +24,16 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public CompanionWolfData() { }
 
 
-        public void Initialize(string scene, BaseAi ai, SpawnRegion spawnRegion)
+        public void TryConnect()
         {
             if (!Connected) //important safety check, if not connected then we have a "new spawn" to generate. this will do so! We should ensure it gets registered with the new spawn manager so the submanager doesnt have to
             {
-                Initialize(spawnRegion != null ? new TypeSpecificSpawnRegionModDataProxy(new Guid(), scene, ai, spawnRegion, typeof(CompanionWolf)) : null);
+                Connect();
             }
         }
 
 
-        public void Initialize(TypeSpecificSpawnRegionModDataProxy proxy)
+        public void Connect()
         {
             Utility.LogVerbose($"Connecting!");
             Connected = true;
@@ -44,15 +42,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
             AffectionDecayTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.AffectionDecayDelayHours;
             AbleToBeTamedTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.AffectionDaysRequirement * 24;
             LastDespawnTime = Utility.GetCurrentTimelinePoint();
-            SpawnRegionModDataProxy = proxy;
-            
         }
 
 
         public void Disconnect()
         {
             Utility.LogVerbose($"Disconnecting!!");
-            SpawnRegionModDataProxy = null;
             Connected = false;
         }
     }

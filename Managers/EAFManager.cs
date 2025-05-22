@@ -58,12 +58,13 @@ namespace ExpandedAiFramework
 
         private void RegisterBaseSubManagers()
         {
+            TimeOfDay timeOfDay = GameManager.m_TimeOfDay; //This is getting called pretty early, hopefully doesnt come back to bite us with nulls... uhg. Stupid game is horrible for dependency injection x_x
             mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
 
-            mDataManager = new DataManager(this, mSubManagers);
-            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers);
-            mAiManager = new AiManager(this, mSubManagers);
-            mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers);
+            mDataManager = new DataManager(this, mSubManagers, timeOfDay);
+            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers, timeOfDay);
+            mAiManager = new AiManager(this, mSubManagers, timeOfDay);
+            mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers, timeOfDay);
 
             mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
             mBaseSubManagers[(int)BaseSubManagers.SpawnRegionManager] = mSpawnRegionManager;
@@ -87,6 +88,7 @@ namespace ExpandedAiFramework
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } } //should be encapsulated elsewhere, datamanager maybe? or maybe some sort of timeline manager.
         public string CurrentScene => mCurrentScene;
         public DataManager DataManager => mDataManager;
+        public SpawnRegionManager SpawnRegionManager => mSpawnRegionManager;
         public AiManager AiManager => mAiManager;
         public Dictionary<int, ICustomAi> CustomAis => mAiManager.CustomAis;
         public WeightedTypePicker<BaseAi> TypePicker => mAiManager.TypePicker;

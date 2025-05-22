@@ -1,4 +1,5 @@
 ﻿using ComplexLogger;
+using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
 using MelonLoader.TinyJSON;
@@ -27,10 +28,11 @@ namespace ExpandedAiFramework
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict { get { return mSpawnSettingsDict; } }
 
 
-        public AiManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        public AiManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay) : base(manager, subManagers, timeOfDay) { }
 
-        public override void Initialize(EAFManager manager, ISubManager[] subManagers)
+        public override void Initialize(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay)
         {
+            base.Initialize(manager, subManagers, timeOfDay);
             RegisterBaseSpawnableAis();
         }
 
@@ -64,7 +66,7 @@ namespace ExpandedAiFramework
                 {
                     if (baseAi != null && baseAi.gameObject != null && !baseAi.gameObject.TryGetComponent(out CustomAiBase customAi))
                     {
-                        TryInjectCustomBaseAi(baseAi);
+                        TryInjectCustomBaseAi(baseAi); // this hack will not play super well with spawn persistency. we will need to find a way to handle corpses and the like... feh
                     }
                 }
             }
@@ -80,7 +82,15 @@ namespace ExpandedAiFramework
 
         public override void OnLoadScene()
         {
+            base.OnLoadScene();
             ClearCustomAis();
+            SaveSpawnModDataProxies();
+        }
+
+        private void SaveSpawnModDataProxies()
+        {
+            string json = JSON.Dump(mSpawnModDataProxies.Values.ToList(), EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
+            mManager.SaveData(json, $"{mManager.CurrentScene}_SpawnModDataProxies");
         }
 
 
@@ -89,6 +99,8 @@ namespace ExpandedAiFramework
             base.OnInitializedScene();
             if (!mInitializedScene && GameManager.m_ActiveScene.Contains("WILDLIFE"))
             {
+                LogDebug($"AiManager initializing in scene {mManager.CurrentScene}");
+                InitializeSpawnModDataProxies();
                 mCheckForMissingScriptsTime = Time.time;
                 mNeedToCheckForMissingScripts = true;
                 mInitializedScene = true;
@@ -96,7 +108,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private void Load()
+        private void InitializeSpawnModDataProxies()
         {
             mSpawnModDataProxies.Clear();
 
@@ -112,8 +124,12 @@ namespace ExpandedAiFramework
                     spawnDataProxies.Add(newProxy);
                 }
             }
+        }
 
 
+        public bool TryGetSpawnModDataProxy(Guid guid, out SpawnModDataProxy proxy)
+        {
+            return mSpawnModDataProxies.TryGetValue(guid, out proxy);
         }
 
 
@@ -276,7 +292,7 @@ namespace ExpandedAiFramework
             if (mCustomAis.TryGetValue(hashCode, out ICustomAi customAi))
             {
                 customAi.Despawn(GetCurrentTimelinePoint());
-                UnityEngine.Object.Destroy(customAi.Self.gameObject); //if I'm converting back from the interface to destroy it, is there really any point to the interface? We should be demanding people use CustomBaseAi instead...
+                UnityEngine.Object.Destroy(customAi.Self); //this *should* still leave the spawn mod data proxy in the guid dictionary though!!!
                 mCustomAis.Remove(hashCode);
             }
         }

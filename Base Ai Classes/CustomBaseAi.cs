@@ -29,6 +29,9 @@ namespace ExpandedAiFramework
         }
 
 
+        public virtual SpawnModDataProxy GenerateSpawnModDataProxy() => new SpawnModDataProxy(new Guid(), mManager.CurrentScene, mBaseAi, GetType());
+
+
         public virtual void Despawn(float despawnTime) { } //Override this if you need to handle any kind of longer term tracking
 
         

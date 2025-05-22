@@ -8,19 +8,21 @@ namespace ExpandedAiFramework
     public abstract class BaseSubManager
     {
         protected EAFManager mManager;
+        protected TimeOfDay mTimeOfDay;
         protected ISubManager[] mSubManagers;
 
         public EAFManager Manager { get { return mManager; } }
 
-        public BaseSubManager(EAFManager manager, ISubManager[] subManagers)
+        public BaseSubManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay)
         {
-            Initialize(manager, subManagers);
+            Initialize(manager, subManagers, timeOfDay);
         }
 
-        public virtual void Initialize(EAFManager manager, ISubManager[] subManagers)
+        public virtual void Initialize(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay)
         {
             mManager = manager;
             mSubManagers = subManagers;
+            mTimeOfDay = timeOfDay;
         }
 
         public virtual void Shutdown() { }

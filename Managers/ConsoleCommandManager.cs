@@ -2,6 +2,7 @@
 
 using UnityEngine.AI;
 using UnityEngine;
+using Il2Cpp;
 
 namespace ExpandedAiFramework
 {
@@ -15,7 +16,7 @@ namespace ExpandedAiFramework
         private List<GameObject> mDebugShownWanderPaths = new List<GameObject>();
         private List<GameObject> mDebugShownSpawnRegions = new List<GameObject>();
 
-        public ConsoleCommandManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        public ConsoleCommandManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay) : base(manager, subManagers, timeOfDay) { }
 
 
         public override void OnInitializedScene()
