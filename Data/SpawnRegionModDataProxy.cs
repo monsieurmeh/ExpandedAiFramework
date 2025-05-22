@@ -4,24 +4,27 @@ using UnityEngine;
 
 namespace ExpandedAiFramework
 {
-    //todo: need to add originating mod type to construtor and use it in equals
+    //adding guid since I plan to allow people to stack these on spawn regions, which I will be using as dictionary keys to store these on deserialize scene
     [Serializable]
     public class SpawnRegionModDataProxy
     {
-        public string Scene;
-        public Vector3 Position;
+        public Guid Guid;
+        public string Scene; //might be able to get rid of this?
+        public Vector3 OriginalPosition;
+        public Vector3 CurrentPosition;
         public AiType AiType;
         public AiSubType AiSubType;
-        public Type OriginatingModType;
-        // I figure if we need more info we can always inherit this class in a mod class and create our own.
+
 
         public SpawnRegionModDataProxy() { }
 
 
-        public SpawnRegionModDataProxy(string scene, BaseAi ai, SpawnRegion spawnRegion)
+        public SpawnRegionModDataProxy(Guid guid, string scene, BaseAi ai, SpawnRegion spawnRegion)
         {
+            Guid = guid;
             Scene = scene;
-            Position = spawnRegion.transform.position;
+            CurrentPosition = spawnRegion.transform.position;
+            OriginalPosition = CurrentPosition;
             AiType = ai.m_AiType;
             AiSubType = ai.m_AiSubType;
         }
@@ -29,11 +32,11 @@ namespace ExpandedAiFramework
 
         public override string ToString()
         {
-            return $"SpawnRegionModDataProxy at {Position} of type {AiType}.{AiSubType} in scene {Scene}";
+            return $"SpawnRegionModDataProxy with guid {Guid} at {CurrentPosition} [original: {OriginalPosition}] of type {AiType}.{AiSubType} in scene {Scene}";
         }
 
 
-        public override int GetHashCode() => (Scene, Position, AiType, AiSubType).GetHashCode();
+        public override int GetHashCode() => Guid.GetHashCode();
 
         public override bool Equals(object obj) => this.Equals(obj as SpawnRegionModDataProxy);
 
@@ -44,10 +47,7 @@ namespace ExpandedAiFramework
                 return false;
             }
 
-            return (Scene == proxy.Scene)
-                && (Vector3.Distance(Position, proxy.Position) <= 0.001f)
-                && AiType == proxy.AiType
-                && AiSubType == proxy.AiSubType;
+            return Guid == proxy.Guid;
         }
 
         public static bool operator ==(SpawnRegionModDataProxy lhs, SpawnRegionModDataProxy rhs)

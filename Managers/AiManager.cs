@@ -1,6 +1,7 @@
 ﻿using ComplexLogger;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
+using MelonLoader.TinyJSON;
 using UnityEngine;
 
 namespace ExpandedAiFramework
@@ -10,13 +11,16 @@ namespace ExpandedAiFramework
 
    
 
-    public class AiManager : BaseSubManager
+    public sealed class AiManager : BaseSubManager
     {
+
+        private Dictionary<Guid, SpawnModDataProxy> mSpawnModDataProxies = new Dictionary<Guid, SpawnModDataProxy>();
         private Dictionary<int, ICustomAi> mCustomAis = new Dictionary<int, ICustomAi>(); 
         private WeightedTypePicker<BaseAi> mTypePicker = new WeightedTypePicker<BaseAi>();
         private Dictionary<Type, ISpawnTypePickerCandidate> mSpawnSettingsDict = new Dictionary<Type, ISpawnTypePickerCandidate>();
         private float mCheckForMissingScriptsTime = 0.0f;
         private bool mNeedToCheckForMissingScripts = false;
+        private bool mInitializedScene = false;
 
         public Dictionary<int, ICustomAi> CustomAis { get { return mCustomAis; } }
         public WeightedTypePicker<BaseAi> TypePicker { get { return mTypePicker; } }
@@ -24,6 +28,30 @@ namespace ExpandedAiFramework
 
 
         public AiManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+
+        public override void Initialize(EAFManager manager, ISubManager[] subManagers)
+        {
+            RegisterBaseSpawnableAis();
+        }
+
+
+        private void RegisterBaseSpawnableAis()
+        {
+            RegisterBaseSpawnableAi(typeof(BaseWolf), BaseWolf.BaseWolfSettings);
+            RegisterBaseSpawnableAi(typeof(BaseTimberwolf), BaseTimberwolf.BaseTimberwolfSettings);
+            RegisterBaseSpawnableAi(typeof(BaseBear), BaseBear.BaseBearSettings);
+            RegisterBaseSpawnableAi(typeof(BaseCougar), BaseCougar.BaseCougarSettings);
+            RegisterBaseSpawnableAi(typeof(BaseMoose), BaseMoose.BaseMooseSettings);
+            RegisterBaseSpawnableAi(typeof(BaseRabbit), BaseRabbit.BaseRabbitSettings);
+            RegisterBaseSpawnableAi(typeof(BasePtarmigan), BasePtarmigan.BasePtarmiganSettings);
+        }
+
+
+        private void RegisterBaseSpawnableAi<T>(Type type, T settings) where T : JsonModSettings, ISpawnTypePickerCandidate
+        {
+            RegisterSpawnableAi(type, settings);
+            settings.AddToModSettings(ModName);
+        }
 
 
         public override void Update()
@@ -58,9 +86,36 @@ namespace ExpandedAiFramework
 
         public override void OnInitializedScene()
         {
-            mCheckForMissingScriptsTime = Time.time;
-            mNeedToCheckForMissingScripts = true;
+            base.OnInitializedScene();
+            if (!mInitializedScene && GameManager.m_ActiveScene.Contains("WILDLIFE"))
+            {
+                mCheckForMissingScriptsTime = Time.time;
+                mNeedToCheckForMissingScripts = true;
+                mInitializedScene = true;
+            }
         }
+
+
+        private void Load()
+        {
+            mSpawnModDataProxies.Clear();
+
+            List<SpawnModDataProxy> spawnDataProxies = new List<SpawnModDataProxy>();
+            string proxiesString = mManager.LoadData($"{mManager.CurrentScene}_SpawnModDataProxies");
+            if (proxiesString != null)
+            {
+                Variant proxiesVariant = JSON.Load(proxiesString);
+                foreach (var pathJSON in proxiesVariant as ProxyArray)
+                {
+                    SpawnModDataProxy newProxy = new SpawnModDataProxy();
+                    JSON.Populate(pathJSON, newProxy);
+                    spawnDataProxies.Add(newProxy);
+                }
+            }
+
+
+        }
+
 
 
         [HideFromIl2Cpp]

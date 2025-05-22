@@ -6,11 +6,10 @@ using UnityEngine.AI;
 
 namespace ExpandedAiFramework
 {
-    public class DataManager : BaseSubManager
+    public sealed class DataManager : BaseSubManager
     {
         private Dictionary<string, List<HidingSpot>> mHidingSpots = new Dictionary<string, List<HidingSpot>>();
         private Dictionary<string, List<WanderPath>> mWanderPaths = new Dictionary<string, List<WanderPath>>();
-        private Dictionary<string, List<SpawnRegionModDataProxy>> mSpawnRegionModDataProxies = new Dictionary<string, List<SpawnRegionModDataProxy>>();
         private List<HidingSpot> mAvailableHidingSpots = new List<HidingSpot>();
         private List<WanderPath> mAvailableWanderPaths = new List<WanderPath>();
 #if DEV_BUILD
@@ -24,8 +23,6 @@ namespace ExpandedAiFramework
         public Dictionary<string, List<WanderPath>> WanderPaths { get { return mWanderPaths; } }
         public List<HidingSpot> AvailableHidingSpots { get { return mAvailableHidingSpots; } }
         public List<WanderPath> AvailableWanderPaths { get { return mAvailableWanderPaths; } }
-
-        public Dictionary<string, List<SpawnRegionModDataProxy>> SpawnRegionModDataProxies { get { return mSpawnRegionModDataProxies; } }
 
 
         public DataManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
@@ -89,13 +86,7 @@ namespace ExpandedAiFramework
                 allPaths.AddRange(mWanderPaths[key]);
             }
             File.WriteAllText(Path.Combine(MelonEnvironment.ModsDirectory, "ExpandedAiFramework.WanderPaths.json"), JSON.Dump(allPaths, EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints), System.Text.Encoding.UTF8);
-            List<SpawnRegionModDataProxy> allSpawnRegionModDataProxies = new List<SpawnRegionModDataProxy>();
-            foreach (string key in mSpawnRegionModDataProxies.Keys)
-            {
-                allSpawnRegionModDataProxies.AddRange(mSpawnRegionModDataProxies[key]);
-            }
-            string json = JSON.Dump(allPaths, EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
-            mModData.Save(json, "SpawnRegionModDataProxies");
+            List<TypeSpecificSpawnRegionModDataProxy> allSpawnRegionModDataProxies = new List<TypeSpecificSpawnRegionModDataProxy>();
         }
 
 
@@ -159,36 +150,6 @@ namespace ExpandedAiFramework
                     if (canAdd)
                     {
                         scenePaths.Add(newPath);
-                    }
-                }
-            }
-
-            mSpawnRegionModDataProxies.Clear();
-            string proxiesString = ModData.Load("SpawnRegionModDataProxies");
-            if (proxiesString != null)
-            {
-                Variant proxiesVariant = JSON.Load(proxiesString);
-                foreach (var pathJSON in proxiesVariant as ProxyArray)
-                {
-                    canAdd = true;
-                    SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy();
-                    JSON.Populate(pathJSON, newProxy);
-                    if (!mSpawnRegionModDataProxies.TryGetValue(newProxy.Scene, out List<SpawnRegionModDataProxy> proxies))
-                    {
-                        proxies = new List<SpawnRegionModDataProxy>();
-                        mSpawnRegionModDataProxies.Add(newProxy.Scene, proxies);
-                    }
-                    for (int i = 0, iMax = proxies.Count; i < iMax; i++)
-                    {
-                        if (proxies[i] == newProxy)
-                        {
-                            LogWarning($"Can't add new proxy {newProxy} because it already exists!");
-                            canAdd = false;
-                        }
-                    }
-                    if (canAdd)
-                    {
-                        proxies.Add(newProxy);
                     }
                 }
             }

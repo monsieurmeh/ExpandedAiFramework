@@ -3,6 +3,13 @@ using UnityEngine;
 
 namespace ExpandedAiFramework
 {
+    public enum WanderPathTypes : int
+    {
+        IndividualPath = 0,
+        SpawnRegionMigrationPath,
+        PackPack,
+        COUNT
+    }
 
     [Serializable]
     public class WanderPath
@@ -10,14 +17,16 @@ namespace ExpandedAiFramework
         public string Name;
         public string Scene;
         public Vector3[] PathPoints;
+        public WanderPathTypes WanderPathType = WanderPathTypes.IndividualPath;
 
         public WanderPath() { }
 
-        public WanderPath(string name, Vector3[] pathPoints, string scene)
+        public WanderPath(string name, Vector3[] pathPoints, string scene, WanderPathTypes wanderPathType = WanderPathTypes.IndividualPath)
         {
             Name = name;
             Scene = scene;
             PathPoints = pathPoints;
+            WanderPathType = wanderPathType;
         }
 
 

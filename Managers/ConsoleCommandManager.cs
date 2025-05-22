@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ExpandedAiFramework
 {
-    public class ConsoleCommandManager : BaseSubManager
+    public sealed class ConsoleCommandManager : BaseSubManager
     {
         private bool mRecordingWanderPath = false;
         private string mCurrentWanderPathName = string.Empty;

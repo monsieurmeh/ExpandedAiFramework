@@ -122,7 +122,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void OnLoadScene()
         {
-            if (mInstance != null) //this is too late, by now system has serialized the wolf for later. gotta stop it there
+            if (mInstance != null) 
             {
                 GameObject.Destroy(mInstance.gameObject.transform.parent.gameObject); //destroy the whole thing
             }
@@ -224,7 +224,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             wrapper.BaseAi.m_MoveAgent.transform.position = validPos;
             wrapper.BaseAi.m_MoveAgent.Warp(validPos, 5.0f, true, -1);
             mShouldCheckForSpawnTamedCompanion = false;
-            BaseAiManager.Remove(wrapper.BaseAi);
+            BaseAiManager.Remove(wrapper.BaseAi); // justin case, this should no longer even be present in there
             LogVerbose($"Companion wolf loaded!");
         }
 

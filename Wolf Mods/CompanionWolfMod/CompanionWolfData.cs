@@ -9,7 +9,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
     [Serializable]
     public class CompanionWolfData
     {
-        public SpawnRegionModDataProxy SpawnRegionModDataProxy;
+        public TypeSpecificSpawnRegionModDataProxy SpawnRegionModDataProxy;
         public bool Connected = false;
         public bool Tamed = false;
         public float CurrentAffection = 0.0f;
@@ -28,14 +28,14 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void Initialize(string scene, BaseAi ai, SpawnRegion spawnRegion)
         {
-            if (!Connected)
+            if (!Connected) //important safety check, if not connected then we have a "new spawn" to generate. this will do so! We should ensure it gets registered with the new spawn manager so the submanager doesnt have to
             {
-                Initialize(spawnRegion != null ? new SpawnRegionModDataProxy(scene, ai, spawnRegion) : null);
+                Initialize(spawnRegion != null ? new TypeSpecificSpawnRegionModDataProxy(new Guid(), scene, ai, spawnRegion, typeof(CompanionWolf)) : null);
             }
         }
 
 
-        public void Initialize(SpawnRegionModDataProxy proxy)
+        public void Initialize(TypeSpecificSpawnRegionModDataProxy proxy)
         {
             Utility.LogVerbose($"Connecting!");
             Connected = true;

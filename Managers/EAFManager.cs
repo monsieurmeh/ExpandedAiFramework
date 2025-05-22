@@ -36,6 +36,7 @@ namespace ExpandedAiFramework
         private enum BaseSubManagers : int
         {
             DataManager = 0,
+            SpawnRegionManager,
             AiManager,
             ConsoleCommandManager,
             COUNT
@@ -44,6 +45,7 @@ namespace ExpandedAiFramework
 
         private ExpandedAiFrameworkSettings mSettings;
         private DataManager mDataManager;
+        private SpawnRegionManager mSpawnRegionManager;
         private AiManager mAiManager;
         private ConsoleCommandManager mConsoleCommandManager;
         private BaseSubManager[] mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
@@ -53,35 +55,18 @@ namespace ExpandedAiFramework
         private string mCurrentScene = string.Empty;
 
 
-        private void RegisterBaseSpawnableAis()
-        {
-            RegisterBaseSpawnableAi(typeof(BaseWolf), BaseWolf.BaseWolfSettings);
-            RegisterBaseSpawnableAi(typeof(BaseTimberwolf), BaseTimberwolf.BaseTimberwolfSettings);
-            RegisterBaseSpawnableAi(typeof(BaseBear), BaseBear.BaseBearSettings);
-            RegisterBaseSpawnableAi(typeof(BaseCougar), BaseCougar.BaseCougarSettings);
-            RegisterBaseSpawnableAi(typeof(BaseMoose), BaseMoose.BaseMooseSettings);
-            RegisterBaseSpawnableAi(typeof(BaseRabbit), BaseRabbit.BaseRabbitSettings);
-            RegisterBaseSpawnableAi(typeof(BasePtarmigan), BasePtarmigan.BasePtarmiganSettings);
-        }
-
-
-        // good luck getting people to buy this one xD
-        private void RegisterBaseSpawnableAi<T>(Type type, T settings) where T : JsonModSettings, ISpawnTypePickerCandidate
-        {
-            RegisterSpawnableAi(type, settings);
-            settings.AddToModSettings(ModName);
-        }
-
 
         private void RegisterBaseSubManagers()
         {
             mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
 
             mDataManager = new DataManager(this, mSubManagers);
+            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers);
             mAiManager = new AiManager(this, mSubManagers);
             mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers);
 
             mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
+            mBaseSubManagers[(int)BaseSubManagers.SpawnRegionManager] = mSpawnRegionManager;
             mBaseSubManagers[(int)BaseSubManagers.AiManager] = mAiManager;
             mBaseSubManagers[(int)BaseSubManagers.ConsoleCommandManager] = mConsoleCommandManager;
         }
@@ -92,7 +77,6 @@ namespace ExpandedAiFramework
             mSettings = settings;
             InitializeLogger();
             RegisterBaseSubManagers();
-            RegisterBaseSpawnableAis();
         }
 
 
