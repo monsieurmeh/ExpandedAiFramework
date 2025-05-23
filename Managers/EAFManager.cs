@@ -216,8 +216,8 @@ namespace ExpandedAiFramework
         public void ClearCustomAis() => mAiManager.ClearCustomAis();
         public bool TryInterceptSpawn(BaseAi baseAi, SpawnRegion spawnRegion) => mSpawnRegionManager.TryInterceptSpawn(baseAi, spawnRegion);
         public bool TryInjectRandomCustomAi(BaseAi baseAi, SpawnRegion region) => mAiManager.TryInjectRandomCustomAi(baseAi, region);
-        public bool TryInjectCustomBaseAi(BaseAi baseAi) => mAiManager.TryInjectCustomBaseAi(baseAi);
-        public bool TryInjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion region) => mAiManager.TryInjectCustomAi(baseAi, spawnType, region);
+        public bool TryInjectCustomBaseAi(BaseAi baseAi, SpawnRegion spawnRegion) => mAiManager.TryInjectCustomBaseAi(baseAi, spawnRegion);
+        public bool TryInjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion region) => mAiManager.TryInjectCustomAi(baseAi, spawnType, region);
         public bool TryRemoveCustomAi(BaseAi baseAi) => mAiManager.TryRemoveCustomAi(baseAi);
         public bool TryStart(BaseAi baseAi) => mAiManager.TryStart(baseAi);
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode) => mAiManager.TrySetAiMode(baseAi, aiMode);

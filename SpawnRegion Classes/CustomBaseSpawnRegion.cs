@@ -21,7 +21,7 @@ namespace ExpandedAiFramework
         public SpawnRegion SpawnRegion { get { return mSpawnRegion; } }
         //public Component Self { get { return this; } }
         public SpawnRegionModDataProxy ModDataProxy { get { return mModDataProxy; } }
-
+        public int QueuedSpawnsCount { get { return mQueuedSpawnModDataProxies.Count; } }
 
         public CustomBaseSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy dataProxy, TimeOfDay timeOfDay)
         {

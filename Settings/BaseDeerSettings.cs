@@ -18,7 +18,8 @@ namespace ExpandedAiFramework
 
         public override bool CanSpawn(BaseAi ai)
         {
-            return Enable && ai.m_AiSubType == AiSubType.Stag && ai.Stag != null;
+            //LogDebug($"[BaseDeerSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | BaseDeer is null: {ai.BaseDeer == null}");
+            return Enable && ai.m_AiSubType == AiSubType.Stag && ai.BaseDeer != null;
         }
 
 

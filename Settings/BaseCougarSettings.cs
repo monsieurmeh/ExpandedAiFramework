@@ -18,6 +18,7 @@ namespace ExpandedAiFramework
 
         public override bool CanSpawn(BaseAi ai)
         {
+            //LogDebug($"[BaseCougarSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | Cougar is null: {ai.Cougar == null}");
             return Enable && ai.m_AiSubType == AiSubType.Cougar && ai.Cougar != null;
         }
 

@@ -19,6 +19,7 @@ namespace ExpandedAiFramework
 
         public override bool CanSpawn(BaseAi ai)
         {
+            //LogDebug($"[BaseBearSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | Bear is null: {ai.Bear == null}");
             return Enable && ai.m_AiSubType == AiSubType.Bear && ai.Bear != null;
         }
 

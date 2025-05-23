@@ -159,7 +159,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             LogVerbose($"Reparenting...");
             baseAi.ReparentBaseAi(wolfContainer.transform);
             LogVerbose($"Wrapping...");
-            if (!mManager.TryInjectCustomAi(baseAi, Il2CppType.From(typeof(CompanionWolf)), null))
+            if (!mManager.TryInjectCustomAi(baseAi, typeof(CompanionWolf), null))
             {
                 return;
             }

@@ -44,6 +44,7 @@ namespace ExpandedAiFramework
         private Dictionary<Guid, ICustomSpawnRegion> mCustomSpawnRegionsByGuid = new Dictionary<Guid, ICustomSpawnRegion>();
         private Dictionary<int, ICustomSpawnRegion> mCustomSpawnRegions = new Dictionary<int, ICustomSpawnRegion>();
         private bool mInitializedScene = false;
+        private string mLastSceneName;
 
         public SpawnRegionManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
         public Dictionary<int, ICustomSpawnRegion> CustomSpawnRegions { get { return mCustomSpawnRegions; } }
@@ -66,6 +67,7 @@ namespace ExpandedAiFramework
             {
                 LogDebug($"SpawnRegionManager initializing in scene {sceneName}");
                 mInitializedScene = true;
+                mLastSceneName = mManager.CurrentScene;
                 InitializeSpawnRegionModDataProxies();
             }
         }
@@ -98,7 +100,7 @@ namespace ExpandedAiFramework
 
             if (!customSpawnRegion.TryGetQueuedSpawn(out SpawnModDataProxy proxy))
             {
-                LogVerbose("no queued spawns, deferring to ai manager random logic");
+                LogDebug("no queued spawns, deferring to ai manager random logic");
                 return mManager.AiManager.TryInjectRandomCustomAi(baseAi, spawnRegion);
             }
 
@@ -147,6 +149,7 @@ namespace ExpandedAiFramework
 
             List<SpawnRegionModDataProxy> regionDataProxies = new List<SpawnRegionModDataProxy>();
 
+            LogDebug($"Trying to load spawnregion mod data proxie from suffix {mManager.CurrentScene}_SpawnRegionModDataProxies!");
             string proxiesString = mManager.LoadData($"{mManager.CurrentScene}_SpawnRegionModDataProxies");
             if (proxiesString != null)
             {
@@ -160,6 +163,7 @@ namespace ExpandedAiFramework
                 }
             }
 
+            LogDebug($"Deserialized {regionDataProxies.Count} region data proxies");
             Il2CppArrayBase<SpawnRegion> sceneSpawnRegions = Component.FindObjectsOfType<SpawnRegion>();
             bool matchFound = false;
 
@@ -169,7 +173,7 @@ namespace ExpandedAiFramework
             {
                 for (int j = 0, jMax = regionDataProxies.Count; j < jMax; j++)
                 {
-                    LogDebug($"Comparing data proxy {regionDataProxies[j]} with guid {regionDataProxies[j].Guid} against spawn region {sceneSpawnRegions[i]}...");
+                    //LogDebug($"Comparing data proxy {regionDataProxies[j]} with guid {regionDataProxies[j].Guid} against spawn region {sceneSpawnRegions[i]}...");
                     if (regionDataProxies[j].Guid == Guid.Empty)
                     {
                         LogError("Invalid guid in deserialized data proxies. what happened?");
@@ -188,14 +192,16 @@ namespace ExpandedAiFramework
                     //todo: turn into "injectCustomSpawnRegion" method similar to aimanager
                     matchFound = true;
                     mCustomSpawnRegions.Add(sceneSpawnRegions[i].GetHashCode(), new CustomBaseSpawnRegion(sceneSpawnRegions[i], regionDataProxies[j], mTimeOfDay));
+                    mCustomSpawnRegionsByGuid.Add(regionDataProxies[j].Guid, mCustomSpawnRegions[sceneSpawnRegions[i].GetHashCode()]);
                     mSpawnRegionModDataProxies.Add(regionDataProxies[j].Guid, regionDataProxies[j]);
-                    
+                    //LogDebug($"Registered custom spawn region using serialized region proxy data! lets gooooooooo");
                 }
                 if (!matchFound)
                 {
                     SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy(Guid.NewGuid(), mManager.CurrentScene, sceneSpawnRegions[i]); 
-                    LogDebug($"No match found, generated new proxy with guid {newProxy.Guid}");
-                    mCustomSpawnRegions.Add(sceneSpawnRegions[i].GetHashCode(), new CustomBaseSpawnRegion(sceneSpawnRegions[i], newProxy, mTimeOfDay));
+                    //LogDebug($"No match found, generated new proxy with guid {newProxy.Guid}");
+                    mCustomSpawnRegions.Add(sceneSpawnRegions[i].GetHashCode(), new CustomBaseSpawnRegion(sceneSpawnRegions[i], newProxy, mTimeOfDay)); 
+                    mCustomSpawnRegionsByGuid.Add(newProxy.Guid, mCustomSpawnRegions[sceneSpawnRegions[i].GetHashCode()]);
                     mSpawnRegionModDataProxies.Add(newProxy.Guid, newProxy);
                 }
                 matchFound = false;
@@ -205,15 +211,18 @@ namespace ExpandedAiFramework
 
         private void SaveSpawnRegionModDataProxies()
         {
-            LogDebug($"Saving spawnregion mod data proxies!");
+            //LogDebug($"Saving spawnregion mod data proxies to path {mManager.CurrentScene}_SpawnRegionModDataProxies!");
             string json = JSON.Dump(mSpawnRegionModDataProxies.Values.ToList(), EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
-            mManager.SaveData(json, $"{mManager.CurrentScene}_SpawnRegionModDataProxies");
+            mManager.SaveData(json, $"{mLastSceneName}_SpawnRegionModDataProxies");
+            mLastSceneName = string.Empty;
             //for now, intentionally no clearing until next load - id like the runtime data available until after aimanager is done with it during its shutdown
         }
 
 
         public override void Shutdown()
         {
+            //SaveSpawnRegionModDataProxies(); no! bad shutdown! do NOT serialize without an actual save request!
+            ClearCustomSpawnRegions();
             base.Shutdown();
         }
     }

@@ -20,6 +20,7 @@ namespace ExpandedAiFramework
 
         public override bool CanSpawn(BaseAi ai)
         {
+            //LogDebug($"[BaseTimberwolfSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | BaseWolf is null: {ai.BaseWolf == null} | Timberwolf is null: {ai.Timberwolf == null}");
             return Enable && ai.m_AiSubType == AiSubType.Wolf && ai.BaseWolf != null && ai.Timberwolf != null;
         }
 

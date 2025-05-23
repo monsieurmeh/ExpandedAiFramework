@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using Il2Cpp;
+using System.Xml.Linq;
 using UnityEngine;
 
 
@@ -7,7 +8,8 @@ namespace ExpandedAiFramework
     [Serializable]
     public class SpawnModDataProxy
     {
-        public Guid Guid;
+        [NonSerialized] private Type mVariantSpawnType;
+        public Guid Guid = Guid.Empty;
         public Guid ParentGuid = Guid.Empty;
         public string Scene;
         public Vector3 OriginalPosition;
@@ -15,14 +17,51 @@ namespace ExpandedAiFramework
         public Quaternion OriginalRotation;
         public Quaternion CurrentRotation;
         public AiSubType AiSubType;
-        public Il2CppSystem.Type VariantSpawnType;
         public float LastDespawnTime;
+        public string VariantSpawnTypeString;
 
+        public Type VariantSpawnType { get { return mVariantSpawnType; } }
 
         public SpawnModDataProxy() { }
 
-        //Leaving parent guid out of this for now since it wont necessarily be known at construction, only when connected to parent spawn region
-        public SpawnModDataProxy(Guid guid, string scene, BaseAi ai, Il2CppSystem.Type variantSpawnType)
+        public void InitializeType()
+        {
+            if (mVariantSpawnType == null)
+            {
+                var type = Type.GetType(VariantSpawnTypeString);
+                if (type != null)
+                { 
+                    mVariantSpawnType = type;
+                    return;
+                }
+
+                // Fallback: search manually
+                string[] parts = VariantSpawnTypeString.Split(',');
+                if (parts.Length >= 2)
+                {
+                    string fullName = parts[0].Trim();
+                    string assemblyName = parts[1].Trim();
+
+                    foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        if (assembly.GetName().Name == assemblyName)
+                        {
+                            type = assembly.GetType(fullName);
+                            if (type != null)
+                            {
+                                mVariantSpawnType = type;
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                throw new TypeLoadException($"Unable to resolve type: {VariantSpawnTypeString}");
+            }
+        }
+
+
+        public SpawnModDataProxy(Guid guid, string scene, BaseAi ai, Type variantSpawnType)
         {
             Guid = guid;
             Scene = scene;
@@ -31,7 +70,24 @@ namespace ExpandedAiFramework
             OriginalRotation = ai.transform.rotation;
             CurrentRotation = OriginalRotation;
             AiSubType = ai.m_AiSubType;
-            VariantSpawnType = variantSpawnType;
+            mVariantSpawnType = variantSpawnType;
+            VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
+            LastDespawnTime = Utility.GetCurrentTimelinePoint();
+        }
+
+
+        public SpawnModDataProxy(Guid guid, string scene, SpawnRegion spawnRegion, Type variantSpawnType)
+        {
+            Guid = guid;
+            Scene = scene;
+            OriginalPosition = Vector3.zero;
+            OriginalRotation = Quaternion.identity;
+            spawnRegion.TryGetSpawnPositionAndRotation(ref OriginalPosition, ref OriginalRotation);
+            CurrentPosition = OriginalPosition;
+            CurrentRotation = OriginalRotation;
+            AiSubType = spawnRegion.m_AiSubTypeSpawned;
+            mVariantSpawnType = variantSpawnType;
+            VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
             LastDespawnTime = Utility.GetCurrentTimelinePoint();
         }
 
@@ -44,7 +100,7 @@ namespace ExpandedAiFramework
 
         public override string ToString()
         {
-            return $"SpawnModDataProxy with guid {Guid} at {OriginalPosition} of variant spawn type {VariantSpawnType} in scene {Scene} belonging to spawn region with wrapper guid {ParentGuid}";
+            return $"SpawnModDataProxy with guid {Guid} at {OriginalPosition} of variant spawn type {VariantSpawnTypeString} in scene {Scene} belonging to spawn region with wrapper guid {ParentGuid}";
         }
 
 

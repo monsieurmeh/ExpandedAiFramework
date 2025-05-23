@@ -22,6 +22,7 @@ namespace ExpandedAiFramework
         private float mCheckForMissingScriptsTime = 0.0f;
         private bool mNeedToCheckForMissingScripts = false;
         private bool mInitializedScene = false;
+        private string mLastSceneName;
 
         public Dictionary<int, ICustomAi> CustomAis { get { return mCustomAis; } }
         public WeightedTypePicker<BaseAi> TypePicker { get { return mTypePicker; } }
@@ -29,6 +30,7 @@ namespace ExpandedAiFramework
 
 
         public AiManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+
 
         public override void Initialize(EAFManager manager, ISubManager[] subManagers)
         {
@@ -46,6 +48,7 @@ namespace ExpandedAiFramework
             RegisterBaseSpawnableAi(typeof(BaseMoose), BaseMoose.BaseMooseSettings);
             RegisterBaseSpawnableAi(typeof(BaseRabbit), BaseRabbit.BaseRabbitSettings);
             RegisterBaseSpawnableAi(typeof(BasePtarmigan), BasePtarmigan.BasePtarmiganSettings);
+            RegisterBaseSpawnableAi(typeof(BaseDeer), BaseDeer.BaseDeerSettings); //sorry, deer
         }
 
 
@@ -66,7 +69,9 @@ namespace ExpandedAiFramework
                 {
                     if (baseAi != null && baseAi.gameObject != null && !baseAi.gameObject.TryGetComponent(out CustomAiBase customAi))
                     {
-                        TryInjectCustomBaseAi(baseAi); // this hack will not play super well with spawn persistency. we will need to find a way to handle corpses and the like... feh
+                        TryInjectCustomBaseAi(baseAi); 
+                        // this hack will not play super well with spawn persistency. we will need to find a way to handle corpses and the like... feh
+                        // Additionally, without a spawn region a lot of crap will go wrong! Big issue happening here.
                     }
                 }
             }
@@ -76,6 +81,7 @@ namespace ExpandedAiFramework
         public override void Shutdown()
         {
             ClearCustomAis();
+            //SaveSpawnModDataProxies(); No! bad shutdown! do NOT serialize without actual save request!
             base.Shutdown();
         }
 
@@ -83,15 +89,17 @@ namespace ExpandedAiFramework
         public override void OnLoadScene()
         {
             base.OnLoadScene();
+            mInitializedScene = false;
             ClearCustomAis();
             SaveSpawnModDataProxies();
         }
 
         private void SaveSpawnModDataProxies()
         {
-            LogDebug($"Saving spawn mod data proxies!");
+            //LogDebug($"Saving spawn mod data proxies with suffix {mLastSceneName}_SpawnModDataProxies! Count: {mSpawnModDataProxies.Values.Count}");
             string json = JSON.Dump(mSpawnModDataProxies.Values.ToList(), EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
-            mManager.SaveData(json, $"{mManager.CurrentScene}_SpawnModDataProxies");
+            mManager.SaveData(json, $"{mLastSceneName}_SpawnModDataProxies");
+            mLastSceneName = string.Empty;
         }
 
 
@@ -100,7 +108,8 @@ namespace ExpandedAiFramework
             base.OnInitializedScene(sceneName);
             if (!mInitializedScene && sceneName.Contains("WILDLIFE"))
             {
-                LogDebug($"AiManager initializing in scene {sceneName}");
+               // LogDebug($"AiManager initializing in scene {sceneName}");
+                mLastSceneName = mManager.CurrentScene;
                 InitializeSpawnModDataProxies();
                 mCheckForMissingScriptsTime = Time.time;
                 mNeedToCheckForMissingScripts = true;
@@ -114,7 +123,7 @@ namespace ExpandedAiFramework
             mSpawnModDataProxies.Clear();
 
             List<SpawnModDataProxy> spawnDataProxies = new List<SpawnModDataProxy>();
-            string proxiesString = mManager.LoadData($"{mManager.CurrentScene}_SpawnModDataProxies");
+            string proxiesString = mManager.LoadData($"{mLastSceneName}_SpawnModDataProxies");
             if (proxiesString != null)
             {
                 Variant proxiesVariant = JSON.Load(proxiesString);
@@ -122,18 +131,26 @@ namespace ExpandedAiFramework
                 {
                     SpawnModDataProxy newProxy = new SpawnModDataProxy();
                     JSON.Populate(pathJSON, newProxy);
+                    newProxy.InitializeType();
                     spawnDataProxies.Add(newProxy);
                 }
             }
 
+            //LogDebug($"Deserialized {spawnDataProxies.Count} spawn mod data proxies");
+
             for (int i = 0, iMax = spawnDataProxies.Count; i < iMax; i++)
             {
+                if (spawnDataProxies[i].Guid == Guid.Empty)
+                {
+                    LogWarning($"Guidless spawn mod data proxy found! aborting...");
+                    continue;
+                }
                 if (spawnDataProxies[i].ParentGuid == Guid.Empty)
                 {
                     LogWarning("Parentless spawn mod data proxy found! cannot correlate to a spawn region...");
                     continue;
                 }
-                if (mManager.SpawnRegionManager.TryGetCustomSpawnRegionByProxyGuid(spawnDataProxies[i].ParentGuid, out ICustomSpawnRegion customSpawnRegion))
+                if (!mManager.SpawnRegionManager.TryGetCustomSpawnRegionByProxyGuid(spawnDataProxies[i].ParentGuid, out ICustomSpawnRegion customSpawnRegion))
                 {
                     LogError("Could not find custom spawn region using parent guid! continueing...");
                     continue;
@@ -142,6 +159,59 @@ namespace ExpandedAiFramework
                 {
                     LogError("Could not queue new spawn proxy!");
                     continue;
+                }
+                //LogDebug($"Queued spawn mod proxy data with guid {spawnDataProxies[i].Guid}!");
+                mSpawnModDataProxies.Add(spawnDataProxies[i].Guid, spawnDataProxies[i]);
+            }
+
+
+            // pre-queueing some more spawns to avoid mid-scene hitches later
+            foreach (ICustomSpawnRegion customSpawnRegion in mManager.SpawnRegionManager.CustomSpawnRegions.Values)
+            {
+                if (customSpawnRegion == null)
+                {
+                    continue;
+                }
+                if (customSpawnRegion.QueuedSpawnsCount < 3)
+                {
+                    LogDebug($"customSpawnRegion has only {customSpawnRegion.QueuedSpawnsCount} queued spawns, adding {3 - customSpawnRegion.QueuedSpawnsCount} new ones");
+                    if (customSpawnRegion.SpawnRegion == null)
+                    {
+                        LogError("Null spawn region on customSpawnRegion wrapper!");
+                        continue;
+                    }
+                    if (customSpawnRegion.SpawnRegion.m_SpawnablePrefab == null)
+                    {
+                        LogError("Null spawnable prefab on spawn region on customSpawnRegion wrapper!");
+                        continue;
+                    }
+                    if (!customSpawnRegion.SpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi spawnableBaseAi))
+                    {
+                        
+                        LogError("Could not get base ai script from spawnable prefab on spawn region on customSpawnRegion wrapper!");
+                        continue;
+                    }
+                    for (int i = 0, iMax = 3 - customSpawnRegion.QueuedSpawnsCount; i < iMax; i++)
+                    {
+                        Type spawnType = mTypePicker.PickType(spawnableBaseAi);
+                        if (spawnType == typeof(void))
+                        {
+                            spawnType = GetFallbackBaseSpawnableType(spawnableBaseAi);
+                        }
+                        if (spawnType == typeof(void))
+                        {
+                            LogError("Could not find valid spawn type for base ai while pre-queuing spawns! what the heck bruh");
+                            continue;
+                        }
+                        SpawnModDataProxy newProxy = (new SpawnModDataProxy(Guid.NewGuid(), mManager.CurrentScene, customSpawnRegion.SpawnRegion, spawnType));
+                        if (!customSpawnRegion.TryQueueSpawn(newProxy))
+                        {
+                            LogError("Could pre-queue new spawn proxy!");
+                            continue;
+                        }
+                        mSpawnModDataProxies.Add(newProxy.Guid, newProxy);
+                        LogDebug($"Prequeued!");
+                    }
                 }
             }
         }
@@ -184,32 +254,35 @@ namespace ExpandedAiFramework
         {
             if (baseAi == null)
             {
-                LogVerbose("Null base ai, can't augment.");
+                //LogDebug("Null base ai, can't augment.");
                 return false;
             }
             if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
             {
-                LogVerbose("BaseAi in dictionary, can't augment.");
+                //LogDebug("BaseAi in dictionary, can't augment.");
                 return false;
             }
 
-            Il2CppSystem.Type spawnType = Il2CppType.From(typeof(void));
+            Type spawnType = typeof(void);
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
+                //LogDebug($"Allowing submanager {mSubManagers[i]} to intercept spawn...");
                 if (mSubManagers[i].ShouldInterceptSpawn(baseAi, region))
                 {
-                    spawnType = Il2CppType.From(mSubManagers[i].SpawnType);
+                    //LogDebug($"Spawn intercept from submanager {mSubManagers[i]}! new type: {mSubManagers[i].SpawnType}");
+                    spawnType =mSubManagers[i].SpawnType;
                     break;
                 }
             }
-            if (spawnType == Il2CppType.From(typeof(void)))
+            if (spawnType == typeof(void))
             {
-                spawnType = Il2CppType.From(mTypePicker.PickType(baseAi));
+                //LogDebug($"No submanager interceptions, attempting to randomly pick a valid spawn type...");
+                spawnType = mTypePicker.PickType(baseAi);
             }
-            if (spawnType == Il2CppType.From(typeof(void)))
+            if (spawnType == typeof(void))
             {
-                LogVerbose($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
-                return TryInjectCustomBaseAi(baseAi);
+                LogDebug($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
+                return TryInjectCustomBaseAi(baseAi, region);
             }
             return TryInjectCustomAi(baseAi, spawnType, region);
         }
@@ -217,22 +290,34 @@ namespace ExpandedAiFramework
 
         public bool TryInjectCustomBaseAi(BaseAi baseAi)
         {
+            return TryInjectCustomBaseAi(baseAi, baseAi.m_SpawnRegionParent);
+        }
+
+
+        private Type GetFallbackBaseSpawnableType(BaseAi baseAi)
+        {
             switch (baseAi.m_AiSubType)
             {
-                case AiSubType.Wolf: return TryInjectCustomAi(baseAi, baseAi.Timberwolf == null ? Il2CppType.From(typeof(BaseWolf)) : Il2CppType.From(typeof(BaseTimberwolf)), baseAi.m_SpawnRegionParent);
-                case AiSubType.Rabbit: return TryInjectCustomAi(baseAi, baseAi.Ptarmigan == null ? Il2CppType.From(typeof(BaseRabbit)) : Il2CppType.From(typeof(BasePtarmigan)), baseAi.m_SpawnRegionParent);
-                case AiSubType.Bear: return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseBear)), baseAi.m_SpawnRegionParent);
-                case AiSubType.Moose: return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseMoose)), baseAi.m_SpawnRegionParent);
-                case AiSubType.Stag: return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseDeer)), baseAi.m_SpawnRegionParent);
-                case AiSubType.Cougar: return TryInjectCustomAi(baseAi, Il2CppType.From(typeof(BaseCougar)), baseAi.m_SpawnRegionParent);
+                case AiSubType.Wolf: return baseAi.Timberwolf == null ? typeof(BaseWolf) : typeof(BaseTimberwolf);
+                case AiSubType.Rabbit: return baseAi.Ptarmigan == null ? typeof(BaseRabbit) : typeof(BasePtarmigan);
+                case AiSubType.Bear: return typeof(BaseBear);
+                case AiSubType.Moose: return typeof(BaseMoose);
+                case AiSubType.Stag: return typeof(BaseDeer);
+                case AiSubType.Cougar: return typeof(BaseCougar);
                 default:
                     LogError($"Can't find fallback custom base ai for baseAi {baseAi.gameObject.name}!");
-                    return false;
+                    return typeof(void);
             }
         }
 
 
-        public bool TryInjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion region, SpawnModDataProxy proxy = null)
+        public bool TryInjectCustomBaseAi(BaseAi baseAi, SpawnRegion spawnRegion, SpawnModDataProxy proxy = null)
+        {
+            return TryInjectCustomAi(baseAi, GetFallbackBaseSpawnableType(baseAi), spawnRegion, proxy);
+        }
+
+
+        public bool TryInjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion region, SpawnModDataProxy proxy = null)
         {
             InjectCustomAi(baseAi, spawnType, region, proxy);
             return true;
@@ -287,35 +372,54 @@ namespace ExpandedAiFramework
         }
 
 
-        private void InjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion spawnRegion, SpawnModDataProxy proxy)
+        private void InjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion spawnRegion, SpawnModDataProxy proxy)
         {
-            LogVerbose($"Spawning {spawnType.Name} at {baseAi.gameObject.transform.position}");
             try
             {
                 if (proxy == null)
                 {
-                    proxy = new SpawnModDataProxy(new Guid(), mManager.CurrentScene, baseAi, spawnType);
+                    //LogDebug("Generating new proxy");
+                    proxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.CurrentScene, baseAi, spawnType);
                 }
                 if (proxy.ParentGuid == Guid.Empty)
                 {
+                    //LogDebug("Trying to connect to parent spawn region proxy");
+                    if (mManager == null)
+                    {
+                        LogError("Null manager!");
+                    }
+                    if (mManager.SpawnRegionManager == null)
+                    {
+                        LogError("Null mManager.SpawnRegionManager!");
+                    }
+                    if (mManager.SpawnRegionManager.CustomSpawnRegions == null)
+                    {
+                        LogError("Null mManager.SpawnRegionManager.CustomSpawnRegions!");
+                    }
+                    if (spawnRegion == null)
+                    {
+                        LogError("Null spawnregion! how the heck did we even get here like this???");
+                    }
                     if (!mManager.SpawnRegionManager.CustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out ICustomSpawnRegion customSpawnRegion))
                     {
                         LogError($"Could not fetch custom spawn region wrapper to correlate parentless-spawnmoddataproxy! Aborting..");
                         return;
                     }
+                    //LogDebug("Trying to set parent guid per parent proxy");
                     proxy.ParentGuid = customSpawnRegion.ModDataProxy.Guid;
                 }
-                mCustomAis.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(spawnType));
+                //LogDebug("Adding new component");
+                mCustomAis.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(Il2CppType.From(spawnType)));
+                //LogDebug("Adding to proxy dict");
+                mSpawnModDataProxies.Add(proxy.Guid, proxy);
+                //LogDebug("trying to re-fetch ai wrapper");
                 if (!mCustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
                 {
                     LogError($"Critical error at ExpandedAiFramework.AugmentAi: newly created {spawnType} cannot be found in augment dictionary! Did its hash code change?", FlaggedLoggingLevel.Critical);
                     return;
                 }
-    
-                customAi.Initialize(baseAi, GameManager.m_TimeOfDay, spawnRegion, proxy);//, this);
-                //todo: Im assuming eventually we'll want to create a "Timeline Manager" that we can refer this to, but we need to handle time passing for persistency's sake.
-                //Would be done on a per-variant basis, i.e. wandering wolves would do their loop for awhile and end up at specific spot
-                // for now i'm passing the proxy to the script for read/write, we'll save it back to data later.
+                //LogDebug("initializing wrapper");;
+                customAi.Initialize(baseAi, GameManager.m_TimeOfDay, spawnRegion, proxy);
             }
             catch (Exception e)
             {
