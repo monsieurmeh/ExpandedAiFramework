@@ -12,7 +12,7 @@ namespace ExpandedAiFramework
         void Shutdown();
         void OnStartNewGame();
         void OnLoadScene();
-        void OnInitializedScene();
+        void OnInitializedScene(string sceneName);
         void OnSaveGame();
         void OnLoadGame();
         void Update();

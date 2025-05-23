@@ -13,6 +13,7 @@ namespace ExpandedAiFramework
         private Dictionary<string, List<WanderPath>> mWanderPaths = new Dictionary<string, List<WanderPath>>();
         private List<HidingSpot> mAvailableHidingSpots = new List<HidingSpot>();
         private List<WanderPath> mAvailableWanderPaths = new List<WanderPath>();
+        private bool mMapDataInitialized = false;
 #if DEV_BUILD
         private ModDataManager mModData = new ModDataManager(ModName, true);
 #else
@@ -26,11 +27,11 @@ namespace ExpandedAiFramework
         public List<WanderPath> AvailableWanderPaths { get { return mAvailableWanderPaths; } }
 
 
-        public DataManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay) : base(manager, subManagers, timeOfDay) { }
+        public DataManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
 
-        public override void Initialize(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay)
+        public override void Initialize(EAFManager manager, ISubManager[] subManagers)
         {
-            base.Initialize(manager, subManagers, timeOfDay);
+            base.Initialize(manager, subManagers);
             LoadMapData();
         }
 
@@ -42,9 +43,20 @@ namespace ExpandedAiFramework
         }
 
 
-        public override void OnInitializedScene()
+        public override void OnLoadScene()
         {
-            RefreshAvailableMapData(mManager.CurrentScene);
+            base.OnLoadScene();
+            mMapDataInitialized = false;
+        }
+
+
+        public override void OnInitializedScene(string sceneName)
+        {
+            if (!mMapDataInitialized)
+            {
+                mMapDataInitialized = true;
+                RefreshAvailableMapData(mManager.CurrentScene);
+            }
         }
 
 

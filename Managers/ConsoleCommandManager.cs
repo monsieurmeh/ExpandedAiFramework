@@ -16,10 +16,10 @@ namespace ExpandedAiFramework
         private List<GameObject> mDebugShownWanderPaths = new List<GameObject>();
         private List<GameObject> mDebugShownSpawnRegions = new List<GameObject>();
 
-        public ConsoleCommandManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay) : base(manager, subManagers, timeOfDay) { }
+        public ConsoleCommandManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
 
 
-        public override void OnInitializedScene()
+        public override void OnInitializedScene(string sceneName)
         {
             mRecordingWanderPath = false;
             mCurrentWanderPathName = string.Empty;

@@ -3,6 +3,9 @@ using MelonLoader.TinyJSON;
 using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System.Collections.Generic;
+using Il2CppInterop.Runtime;
+using static Il2Cpp.PlayerVoice;
+using Il2Cpp;
 
 namespace ExpandedAiFramework
 {
@@ -38,10 +41,13 @@ namespace ExpandedAiFramework
 
 
         private Dictionary<Guid, SpawnRegionModDataProxy> mSpawnRegionModDataProxies = new Dictionary<Guid, SpawnRegionModDataProxy>();
+        private Dictionary<Guid, ICustomSpawnRegion> mCustomSpawnRegionsByGuid = new Dictionary<Guid, ICustomSpawnRegion>();
         private Dictionary<int, ICustomSpawnRegion> mCustomSpawnRegions = new Dictionary<int, ICustomSpawnRegion>();
         private bool mInitializedScene = false;
 
-        public SpawnRegionManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay) : base(manager, subManagers, timeOfDay) { }
+        public SpawnRegionManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        public Dictionary<int, ICustomSpawnRegion> CustomSpawnRegions { get { return mCustomSpawnRegions; } }
+
 
 
         public override void OnLoadScene()
@@ -53,12 +59,12 @@ namespace ExpandedAiFramework
         }
 
 
-        public override void OnInitializedScene()
+        public override void OnInitializedScene(string sceneName)
         {
-            base.OnInitializedScene();
-            if (!mInitializedScene && GameManager.m_ActiveScene.Contains("WILDLIFE"))
+            base.OnInitializedScene(sceneName);
+            if (!mInitializedScene && sceneName.Contains("WILDLIFE"))
             {
-                LogDebug($"SpawnRegionManager initializing in scene {mManager.CurrentScene}");
+                LogDebug($"SpawnRegionManager initializing in scene {sceneName}");
                 mInitializedScene = true;
                 InitializeSpawnRegionModDataProxies();
             }
@@ -72,6 +78,37 @@ namespace ExpandedAiFramework
                 TryRemoveCustomSpawnRegion(customSpawnRegion.SpawnRegion);
             }
             mCustomSpawnRegions.Clear();
+            mCustomSpawnRegionsByGuid.Clear();
+        }
+
+
+        public bool TryInterceptSpawn(BaseAi baseAi, SpawnRegion spawnRegion)
+        {
+            if (spawnRegion == null)
+            {
+                LogVerbose("Null spawn region, can't intercept.");
+                return false;
+            }
+
+            if (!mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out ICustomSpawnRegion customSpawnRegion))
+            {
+                LogError("Trying to intercept spawn from region that is not wrapped, aborting!");
+                return false;
+            }
+
+            if (!customSpawnRegion.TryGetQueuedSpawn(out SpawnModDataProxy proxy))
+            {
+                LogVerbose("no queued spawns, deferring to ai manager random logic");
+                return mManager.AiManager.TryInjectRandomCustomAi(baseAi, spawnRegion);
+            }
+
+            if (!mManager.AiManager.TryInjectCustomAi(baseAi, proxy.VariantSpawnType, spawnRegion))
+            {
+                LogError("Error in AiManager ai injection process while trying to respawn previously found ai variant!");
+                return false;
+            }
+            LogDebug($"Successfully spawned a {proxy.VariantSpawnType} where it first spawned!");
+            return true;
         }
 
 
@@ -87,6 +124,7 @@ namespace ExpandedAiFramework
             }
             customSpawnRegion.Despawn(GetCurrentTimelinePoint());
             //UnityEngine.Object.Destroy(customSpawnRegion.Self); won't be needed until (unless) we turn CustomBaseSpawnRegion into a ticking monobomb
+            mCustomSpawnRegionsByGuid.Remove(customSpawnRegion.ModDataProxy.Guid);
             mCustomSpawnRegions.Remove(spawnRegion.GetHashCode());
             return true;
         }
@@ -94,6 +132,12 @@ namespace ExpandedAiFramework
         public bool TryGetSpawnRegionModDataProxy(Guid guid, out SpawnRegionModDataProxy proxy)
         {
             return mSpawnRegionModDataProxies.TryGetValue(guid, out proxy);
+        }
+
+
+        public bool TryGetCustomSpawnRegionByProxyGuid(Guid guid, out ICustomSpawnRegion customSpawnRegion)
+        {
+            return mCustomSpawnRegionsByGuid.TryGetValue(guid, out customSpawnRegion);
         }
 
 
@@ -106,6 +150,7 @@ namespace ExpandedAiFramework
             string proxiesString = mManager.LoadData($"{mManager.CurrentScene}_SpawnRegionModDataProxies");
             if (proxiesString != null)
             {
+                LogDebug($"Loading spawnregion mod data proxies!");
                 Variant proxiesVariant = JSON.Load(proxiesString);
                 foreach (var pathJSON in proxiesVariant as ProxyArray)
                 {
@@ -124,17 +169,32 @@ namespace ExpandedAiFramework
             {
                 for (int j = 0, jMax = regionDataProxies.Count; j < jMax; j++)
                 {
-                    if (sceneSpawnRegions[i].m_AiSubTypeSpawned == regionDataProxies[j].AiSubType && SquaredDistance(sceneSpawnRegions[i].transform.position, regionDataProxies[j].OriginalPosition) <= 1.0f)
+                    LogDebug($"Comparing data proxy {regionDataProxies[j]} with guid {regionDataProxies[j].Guid} against spawn region {sceneSpawnRegions[i]}...");
+                    if (regionDataProxies[j].Guid == Guid.Empty)
                     {
-                        //todo: turn into "injectCustomSpawnRegion" method similar to aimanager
-                        matchFound = true;
-                        mCustomSpawnRegions.Add(sceneSpawnRegions[i].GetHashCode(), new CustomBaseSpawnRegion(sceneSpawnRegions[i], regionDataProxies[j], mTimeOfDay));
-                        mSpawnRegionModDataProxies.Add(regionDataProxies[j].Guid, regionDataProxies[j]);
+                        LogError("Invalid guid in deserialized data proxies. what happened?");
+                        continue;
                     }
+                    if (sceneSpawnRegions[i].m_AiSubTypeSpawned != regionDataProxies[j].AiSubType)
+                    {
+                        LogVerbose("AiSubtype mismatch");
+                        continue;
+                    }
+                    if (SquaredDistance(sceneSpawnRegions[i].transform.position, regionDataProxies[j].OriginalPosition) > 1.0f)
+                    {
+                        LogVerbose("proximity misimatch");
+                        continue;
+                    }
+                    //todo: turn into "injectCustomSpawnRegion" method similar to aimanager
+                    matchFound = true;
+                    mCustomSpawnRegions.Add(sceneSpawnRegions[i].GetHashCode(), new CustomBaseSpawnRegion(sceneSpawnRegions[i], regionDataProxies[j], mTimeOfDay));
+                    mSpawnRegionModDataProxies.Add(regionDataProxies[j].Guid, regionDataProxies[j]);
+                    
                 }
                 if (!matchFound)
                 {
-                    SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy(new Guid(), mManager.CurrentScene, sceneSpawnRegions[i]);
+                    SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy(Guid.NewGuid(), mManager.CurrentScene, sceneSpawnRegions[i]); 
+                    LogDebug($"No match found, generated new proxy with guid {newProxy.Guid}");
                     mCustomSpawnRegions.Add(sceneSpawnRegions[i].GetHashCode(), new CustomBaseSpawnRegion(sceneSpawnRegions[i], newProxy, mTimeOfDay));
                     mSpawnRegionModDataProxies.Add(newProxy.Guid, newProxy);
                 }
@@ -145,6 +205,7 @@ namespace ExpandedAiFramework
 
         private void SaveSpawnRegionModDataProxies()
         {
+            LogDebug($"Saving spawnregion mod data proxies!");
             string json = JSON.Dump(mSpawnRegionModDataProxies.Values.ToList(), EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
             mManager.SaveData(json, $"{mManager.CurrentScene}_SpawnRegionModDataProxies");
             //for now, intentionally no clearing until next load - id like the runtime data available until after aimanager is done with it during its shutdown

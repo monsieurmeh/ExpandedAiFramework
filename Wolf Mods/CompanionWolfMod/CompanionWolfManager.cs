@@ -84,7 +84,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        public void OnInitializedScene()
+        public void OnInitializedScene(string sceneName)
         {
             if (GameManager.m_ActiveSceneSet != null && GameManager.m_ActiveSceneSet.m_IsOutdoors && mData != null && mData.Tamed && mInstance == null)
             {

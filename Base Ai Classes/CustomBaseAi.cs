@@ -13,6 +13,7 @@ namespace ExpandedAiFramework
         protected BaseAi mBaseAi;
         protected TimeOfDay mTimeOfDay;
         protected EAFManager mManager;
+        protected SpawnModDataProxy mProxy;
         protected float mTimeSinceCheckForTargetInPatrolWaypointsMode = 0.0f;
 
         public BaseAi BaseAi { get { return mBaseAi; } }
@@ -20,19 +21,23 @@ namespace ExpandedAiFramework
 
         //ML is fighting me on dependency injection, doesn't want to "support" injecting my manager class for whatever reason. Feh
         // Occasionally the spawn region is needed during initial setup, and it doesn't always seem to set itself until after the spawn process, so it's being passed here just in case
-        public virtual void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion)//, EAFManager manager)
+        public virtual void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy proxy)//, EAFManager manager)
         {
             mBaseAi = ai;
             mTimeOfDay = timeOfDay;
             mManager = Manager;// manager;
+            mProxy = proxy;
+            mBaseAi.transform.position = proxy.CurrentPosition; //test make sure this works? might need to do a delayed teleport after  full scene load or whatever. feh
             OnAugmentDebug();
         }
 
 
-        public virtual SpawnModDataProxy GenerateSpawnModDataProxy() => new SpawnModDataProxy(new Guid(), mManager.CurrentScene, mBaseAi, GetType());
-
-
-        public virtual void Despawn(float despawnTime) { } //Override this if you need to handle any kind of longer term tracking
+        //Override this if you need to handle any kind of longer term tracking
+        public virtual void Despawn(float despawnTime) 
+        {
+            mProxy.CurrentPosition = mBaseAi.transform.position;
+            mProxy.LastDespawnTime = Utility.GetCurrentTimelinePoint();
+        } 
 
         
         public void OverrideStart() //Manager is triggering this so we don't want to use "start" itself unfortunately

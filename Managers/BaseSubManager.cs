@@ -13,22 +13,21 @@ namespace ExpandedAiFramework
 
         public EAFManager Manager { get { return mManager; } }
 
-        public BaseSubManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay)
+        public BaseSubManager(EAFManager manager, ISubManager[] subManagers)
         {
-            Initialize(manager, subManagers, timeOfDay);
+            Initialize(manager, subManagers);
         }
 
-        public virtual void Initialize(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay)
+        public virtual void Initialize(EAFManager manager, ISubManager[] subManagers)
         {
             mManager = manager;
             mSubManagers = subManagers;
-            mTimeOfDay = timeOfDay;
         }
 
         public virtual void Shutdown() { }
-        public virtual void OnStartNewGame() { }
+        public virtual void OnStartNewGame() { OnLoadScene(); }
         public virtual void OnLoadScene() { }
-        public virtual void OnInitializedScene() { }
+        public virtual void OnInitializedScene(string sceneName) { }
         public virtual void OnSaveGame() { }
         public virtual void OnLoadGame() { }
         public virtual void Update() { }

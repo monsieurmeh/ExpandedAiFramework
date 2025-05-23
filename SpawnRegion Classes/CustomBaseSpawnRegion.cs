@@ -68,5 +68,28 @@ namespace ExpandedAiFramework
             LogDebug("Queuing spawn!");
             return true;
         }
+
+        public bool TryGetQueuedSpawn(out SpawnModDataProxy proxy)
+        {
+            proxy = null;
+            if (mQueuedSpawnModDataProxies == null)
+            {
+                LogError("Can't get proxy from null list! Aborting");
+                return false;
+            }
+            if (mQueuedSpawnModDataProxies.Count == 0)
+            {
+                LogVerbose("No queued proxies, aborting");
+                return false;
+            }
+            if (mQueuedSpawnModDataProxies[0] == null)
+            {
+                LogError("Found null spawn mod data proxy in list! what the heck? Aborting..");
+                return false;
+            }
+            proxy = mQueuedSpawnModDataProxies[0];
+            mQueuedSpawnModDataProxies.RemoveAt(0);
+            return true;
+        }
     }
 }

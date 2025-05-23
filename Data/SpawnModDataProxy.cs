@@ -8,20 +8,21 @@ namespace ExpandedAiFramework
     public class SpawnModDataProxy
     {
         public Guid Guid;
-        public Guid ParentGuid;
+        public Guid ParentGuid = Guid.Empty;
         public string Scene;
         public Vector3 OriginalPosition;
         public Vector3 CurrentPosition;
         public Quaternion OriginalRotation;
         public Quaternion CurrentRotation;
         public AiSubType AiSubType;
-        public Type VariantSpawnType;
+        public Il2CppSystem.Type VariantSpawnType;
+        public float LastDespawnTime;
 
 
         public SpawnModDataProxy() { }
 
         //Leaving parent guid out of this for now since it wont necessarily be known at construction, only when connected to parent spawn region
-        public SpawnModDataProxy(Guid guid, string scene, BaseAi ai, Type variantSpawnType)
+        public SpawnModDataProxy(Guid guid, string scene, BaseAi ai, Il2CppSystem.Type variantSpawnType)
         {
             Guid = guid;
             Scene = scene;
@@ -31,6 +32,7 @@ namespace ExpandedAiFramework
             CurrentRotation = OriginalRotation;
             AiSubType = ai.m_AiSubType;
             VariantSpawnType = variantSpawnType;
+            LastDespawnTime = Utility.GetCurrentTimelinePoint();
         }
 
 

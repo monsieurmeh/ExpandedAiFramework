@@ -28,11 +28,11 @@ namespace ExpandedAiFramework
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict { get { return mSpawnSettingsDict; } }
 
 
-        public AiManager(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay) : base(manager, subManagers, timeOfDay) { }
+        public AiManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
 
-        public override void Initialize(EAFManager manager, ISubManager[] subManagers, TimeOfDay timeOfDay)
+        public override void Initialize(EAFManager manager, ISubManager[] subManagers)
         {
-            base.Initialize(manager, subManagers, timeOfDay);
+            base.Initialize(manager, subManagers);
             RegisterBaseSpawnableAis();
         }
 
@@ -89,17 +89,18 @@ namespace ExpandedAiFramework
 
         private void SaveSpawnModDataProxies()
         {
+            LogDebug($"Saving spawn mod data proxies!");
             string json = JSON.Dump(mSpawnModDataProxies.Values.ToList(), EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
             mManager.SaveData(json, $"{mManager.CurrentScene}_SpawnModDataProxies");
         }
 
 
-        public override void OnInitializedScene()
+        public override void OnInitializedScene(string sceneName)
         {
-            base.OnInitializedScene();
-            if (!mInitializedScene && GameManager.m_ActiveScene.Contains("WILDLIFE"))
+            base.OnInitializedScene(sceneName);
+            if (!mInitializedScene && sceneName.Contains("WILDLIFE"))
             {
-                LogDebug($"AiManager initializing in scene {mManager.CurrentScene}");
+                LogDebug($"AiManager initializing in scene {sceneName}");
                 InitializeSpawnModDataProxies();
                 mCheckForMissingScriptsTime = Time.time;
                 mNeedToCheckForMissingScripts = true;
@@ -122,6 +123,25 @@ namespace ExpandedAiFramework
                     SpawnModDataProxy newProxy = new SpawnModDataProxy();
                     JSON.Populate(pathJSON, newProxy);
                     spawnDataProxies.Add(newProxy);
+                }
+            }
+
+            for (int i = 0, iMax = spawnDataProxies.Count; i < iMax; i++)
+            {
+                if (spawnDataProxies[i].ParentGuid == Guid.Empty)
+                {
+                    LogWarning("Parentless spawn mod data proxy found! cannot correlate to a spawn region...");
+                    continue;
+                }
+                if (mManager.SpawnRegionManager.TryGetCustomSpawnRegionByProxyGuid(spawnDataProxies[i].ParentGuid, out ICustomSpawnRegion customSpawnRegion))
+                {
+                    LogError("Could not find custom spawn region using parent guid! continueing...");
+                    continue;
+                }
+                if (!customSpawnRegion.TryQueueSpawn(spawnDataProxies[i]))
+                {
+                    LogError("Could not queue new spawn proxy!");
+                    continue;
                 }
             }
         }
@@ -212,9 +232,9 @@ namespace ExpandedAiFramework
         }
 
 
-        public bool TryInjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion region)
+        public bool TryInjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion region, SpawnModDataProxy proxy = null)
         {
-            InjectCustomAi(baseAi, spawnType, region);
+            InjectCustomAi(baseAi, spawnType, region, proxy);
             return true;
         }
 
@@ -267,18 +287,35 @@ namespace ExpandedAiFramework
         }
 
 
-        private void InjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion spawnRegion)
+        private void InjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion spawnRegion, SpawnModDataProxy proxy)
         {
             LogVerbose($"Spawning {spawnType.Name} at {baseAi.gameObject.transform.position}");
             try
             {
+                if (proxy == null)
+                {
+                    proxy = new SpawnModDataProxy(new Guid(), mManager.CurrentScene, baseAi, spawnType);
+                }
+                if (proxy.ParentGuid == Guid.Empty)
+                {
+                    if (!mManager.SpawnRegionManager.CustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out ICustomSpawnRegion customSpawnRegion))
+                    {
+                        LogError($"Could not fetch custom spawn region wrapper to correlate parentless-spawnmoddataproxy! Aborting..");
+                        return;
+                    }
+                    proxy.ParentGuid = customSpawnRegion.ModDataProxy.Guid;
+                }
                 mCustomAis.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(spawnType));
                 if (!mCustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
                 {
                     LogError($"Critical error at ExpandedAiFramework.AugmentAi: newly created {spawnType} cannot be found in augment dictionary! Did its hash code change?", FlaggedLoggingLevel.Critical);
                     return;
                 }
-                customAi.Initialize(baseAi, GameManager.m_TimeOfDay, spawnRegion);//, this);
+    
+                customAi.Initialize(baseAi, GameManager.m_TimeOfDay, spawnRegion, proxy);//, this);
+                //todo: Im assuming eventually we'll want to create a "Timeline Manager" that we can refer this to, but we need to handle time passing for persistency's sake.
+                //Would be done on a per-variant basis, i.e. wandering wolves would do their loop for awhile and end up at specific spot
+                // for now i'm passing the proxy to the script for read/write, we'll save it back to data later.
             }
             catch (Exception e)
             {

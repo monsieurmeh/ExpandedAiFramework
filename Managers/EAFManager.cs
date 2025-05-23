@@ -58,13 +58,12 @@ namespace ExpandedAiFramework
 
         private void RegisterBaseSubManagers()
         {
-            TimeOfDay timeOfDay = GameManager.m_TimeOfDay; //This is getting called pretty early, hopefully doesnt come back to bite us with nulls... uhg. Stupid game is horrible for dependency injection x_x
             mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
 
-            mDataManager = new DataManager(this, mSubManagers, timeOfDay);
-            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers, timeOfDay);
-            mAiManager = new AiManager(this, mSubManagers, timeOfDay);
-            mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers, timeOfDay);
+            mDataManager = new DataManager(this, mSubManagers);
+            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers);
+            mAiManager = new AiManager(this, mSubManagers);
+            mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers);
 
             mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
             mBaseSubManagers[(int)BaseSubManagers.SpawnRegionManager] = mSpawnRegionManager;
@@ -174,21 +173,25 @@ namespace ExpandedAiFramework
         }
 
 
-        public void OnInitializedScene()
+        public void OnInitializedScene(string sceneName)
         {
-            if (GameManager.m_ActiveScene == null)
+            if (sceneName == null)
             {
                 return;
             }
-            if (mCurrentScene == string.Empty && IsValidGameplayScene(GameManager.m_ActiveScene, out mCurrentScene))
+            if (IsValidGameplayScene(sceneName, out string newCurrentScene))
             { 
+                if (mCurrentScene == string.Empty)
+                {
+                    mCurrentScene = newCurrentScene;
+                }
                 for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
                 {
-                    mBaseSubManagers[i].OnInitializedScene();
+                    mBaseSubManagers[i].OnInitializedScene(sceneName);
                 }
                 for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
                 {
-                    mSubManagers[i].OnInitializedScene();
+                    mSubManagers[i].OnInitializedScene(sceneName);
                 }
             }
         }
@@ -211,6 +214,7 @@ namespace ExpandedAiFramework
         public string LoadData(string suffix) => DataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
         public void ClearCustomAis() => mAiManager.ClearCustomAis();
+        public bool TryInterceptSpawn(BaseAi baseAi, SpawnRegion spawnRegion) => mSpawnRegionManager.TryInterceptSpawn(baseAi, spawnRegion);
         public bool TryInjectRandomCustomAi(BaseAi baseAi, SpawnRegion region) => mAiManager.TryInjectRandomCustomAi(baseAi, region);
         public bool TryInjectCustomBaseAi(BaseAi baseAi) => mAiManager.TryInjectCustomBaseAi(baseAi);
         public bool TryInjectCustomAi(BaseAi baseAi, Il2CppSystem.Type spawnType, SpawnRegion region) => mAiManager.TryInjectCustomAi(baseAi, spawnType, region);
@@ -220,6 +224,7 @@ namespace ExpandedAiFramework
         public bool TryApplyDamage(BaseAi baseAi, float damage, float bleedOutTime, DamageSource damageSource) => mAiManager.TryApplyDamage(baseAi, damage, bleedOutTime, damageSource);
         public HidingSpot GetNearestHidingSpot(ICustomAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false) => mDataManager.GetNearestHidingSpot(ai, extraNearestCandidatesToMaybePickFrom, requireAbleToPathfind);
         public WanderPath GetNearestWanderPath(ICustomAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false) => mDataManager.GetNearestWanderPath(ai, extraNearestCandidatesToMaybePickFrom, requireAbleToPathfind);
+
 
         /*
         #region Event Registers

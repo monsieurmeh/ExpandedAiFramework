@@ -89,9 +89,9 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public CompanionWolf(IntPtr ptr) : base(ptr) { }
 
-        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion)//, EAFManager manager)
+        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy proxy)//, EAFManager manager)
         {
-            base.Initialize(ai, timeOfDay, spawnRegion);//, manager);
+            base.Initialize(ai, timeOfDay, spawnRegion, proxy); //this should already handle any teleporting needed
             if (!mManager.SubManagers.TryGetValue(GetType(), out ISubManager subManager))
             {
                 LogError("Could not fetch submanager for CompanionWolf!");

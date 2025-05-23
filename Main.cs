@@ -26,11 +26,11 @@ namespace ExpandedAiFramework
             LoggerInstance.Msg(Shutdown() ? "Shutdown Successfully!" : "Shutdown Errors!");
         }
 
-
+        //MUCH MUCH MUCH more reliable than trying to parse "current scene" all over the place. This catches loading of non-active scenes! 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             LogVerbose("OnInitializedScene");
-            Manager.OnInitializedScene();
+            Manager.OnInitializedScene(sceneName);
         }
 
 

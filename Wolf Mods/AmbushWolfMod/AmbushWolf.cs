@@ -20,9 +20,9 @@ namespace ExpandedAiFramework.AmbushWolfMod
         public AmbushWolf(IntPtr ptr) : base(ptr) { }
 
 
-        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion)//, EAFManager manager)
+        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy proxy)//, EAFManager manager)
         {
-            base.Initialize(ai, timeOfDay, spawnRegion);//, manager); 
+            base.Initialize(ai, timeOfDay, spawnRegion, proxy);//, manager); 
             mHidingSpot = mManager.GetNearestHidingSpot(this, 3, false); 
             mBaseAi.m_DefaultMode = (AiMode)AmbushWolfAiMode.Hide;
             mBaseAi.m_StartMode = (AiMode)AmbushWolfAiMode.Hide;
