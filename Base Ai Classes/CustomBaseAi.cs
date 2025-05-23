@@ -27,7 +27,10 @@ namespace ExpandedAiFramework
             mTimeOfDay = timeOfDay;
             mManager = Manager;// manager;
             mProxy = proxy;
-            mBaseAi.transform.position = proxy.CurrentPosition; //test make sure this works? might need to do a delayed teleport after  full scene load or whatever. feh
+            if (proxy != null) // persistency needs to be disabled for this to end up happening, but it CAN happen!
+            {
+                mBaseAi.transform.position = proxy.CurrentPosition;
+            }
             OnAugmentDebug();
         }
 
@@ -35,8 +38,11 @@ namespace ExpandedAiFramework
         //Override this if you need to handle any kind of longer term tracking
         public virtual void Despawn(float despawnTime) 
         {
-            mProxy.CurrentPosition = mBaseAi.transform.position;
-            mProxy.LastDespawnTime = Utility.GetCurrentTimelinePoint();
+            if (mProxy != null)
+            {
+                mProxy.CurrentPosition = mBaseAi.transform.position;
+                mProxy.LastDespawnTime = Utility.GetCurrentTimelinePoint();
+            }
         } 
 
         

@@ -95,7 +95,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         public void OnSaveGame()
-        {
+        {   
+            if (mData == null)
+            {
+                //Can happen on new game loads I guess.
+                return;
+            }
             mData.LastDespawnTime = GetCurrentTimelinePoint();
             string json = JSON.Dump(mData);
             if (json != null)

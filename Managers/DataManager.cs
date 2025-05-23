@@ -62,7 +62,7 @@ namespace ExpandedAiFramework
 
         public void RefreshAvailableMapData(string sceneName)
         {
-            LogDebug($"Loading EAF map data for scene {sceneName}");
+            LogVerbose($"Loading EAF map data for scene {sceneName}");
             mAvailableHidingSpots.Clear();
             mAvailableWanderPaths.Clear();
             if (HidingSpots.TryGetValue(sceneName, out List<HidingSpot> hidingSpots))
@@ -71,7 +71,7 @@ namespace ExpandedAiFramework
             }
             for (int i = 0, iMax = mAvailableHidingSpots.Count; i < iMax; i++)
             {
-                LogDebug($"Available Hiding spot {i}: {mAvailableHidingSpots[i]}");
+                LogVerbose($"Available Hiding spot {i}: {mAvailableHidingSpots[i]}");
             }
             if (WanderPaths.TryGetValue(sceneName, out List<WanderPath> wanderPaths))
             {
@@ -79,7 +79,7 @@ namespace ExpandedAiFramework
             }
             for (int i = 0, iMax = mAvailableWanderPaths.Count; i < iMax; i++)
             {
-                LogDebug($"Available Wander Path {i}: {mAvailableWanderPaths[i]}");
+                LogVerbose($"Available Wander Path {i}: {mAvailableWanderPaths[i]}");
             }
         }
 
@@ -130,7 +130,7 @@ namespace ExpandedAiFramework
                     }
                     if (canAdd)
                     {
-                        LogDebug($"Found {newSpot}, adding...");
+                        LogVerbose($"Found {newSpot}, adding...");
                         sceneSpots.Add(newSpot);
                     }
                 }

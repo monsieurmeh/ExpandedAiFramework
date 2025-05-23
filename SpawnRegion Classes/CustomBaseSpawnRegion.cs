@@ -65,7 +65,7 @@ namespace ExpandedAiFramework
             }
 
             mQueuedSpawnModDataProxies.Add(proxy);
-            LogDebug("Queuing spawn!");
+            LogVerbose("Queuing spawn!");
             return true;
         }
 

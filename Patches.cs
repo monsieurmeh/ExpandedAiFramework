@@ -2,6 +2,7 @@
 using UnityEngine;
 using static Il2Cpp.SaveGameSlots;
 using System.Collections;
+using Il2Cpp;
 
 
 namespace ExpandedAiFramework
@@ -164,6 +165,36 @@ namespace ExpandedAiFramework
 
         #endregion
 
+
+        #region CarcassSite
+
+        [HarmonyPatch(typeof(CarcassSite.Manager), nameof(CarcassSite.Manager.TryInstanciateCarcassSite), new Type[] { typeof(GameObject), typeof(Vector3), typeof(GameObject)})]
+        internal class CarcassSitePatches_TryInstanciateCarcassSite
+        {
+            private static void Postfix(GameObject carcassSitePrefab, Vector3 position, GameObject originCorpse)
+            {
+                LogVerbose($"CarcassSite.Manager.TryInstanciateCarcassSite on {carcassSitePrefab.name} at {position}");
+                BaseAi baseAi = null;
+                bool carcassAiFound = carcassSitePrefab != null && carcassSitePrefab.TryGetComponent(out baseAi);
+                carcassAiFound = carcassAiFound || (originCorpse != null && originCorpse.TryGetComponent(out baseAi));
+                if (!carcassAiFound)
+                {
+                    LogVerbose($"No base ai script found on carcass prefab or origin corpse, aborting...");
+                    return;
+                }
+                if (baseAi == null)
+                {
+                    LogError("How was baseAi null if we passed TryGetComponent checks?");
+                    return;
+                }
+                if (!Manager.AiManager.TryInterceptCarcassSpawn(baseAi))
+                {
+                    LogError("Carcass intercept error!");
+                }
+            }
+        }
+
+        #endregion
 
 
         #region Console/Debug
