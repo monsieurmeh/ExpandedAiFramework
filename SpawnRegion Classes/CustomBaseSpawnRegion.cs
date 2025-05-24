@@ -5,8 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+
 namespace ExpandedAiFramework
 { 
+    //right now this is just a spawn region wrapper holding a proxy and itself serving as an index.
+    //Eventually might grow. Doing most stuff with managers right now, messy but works at least.
     //[RegisterTypeInIl2Cpp]
     public class CustomBaseSpawnRegion : /*MonoBehaviour, */ICustomSpawnRegion
     {
@@ -16,12 +19,11 @@ namespace ExpandedAiFramework
         protected TimeOfDay mTimeOfDay;
         protected EAFManager mManager;
         protected SpawnRegionModDataProxy mModDataProxy;
-        protected List<SpawnModDataProxy> mQueuedSpawnModDataProxies = new List<SpawnModDataProxy>();
 
         public SpawnRegion SpawnRegion { get { return mSpawnRegion; } }
         //public Component Self { get { return this; } }
         public SpawnRegionModDataProxy ModDataProxy { get { return mModDataProxy; } }
-        public int QueuedSpawnsCount { get { return mQueuedSpawnModDataProxies.Count; } }
+
 
         public CustomBaseSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy dataProxy, TimeOfDay timeOfDay)
         {
@@ -41,9 +43,10 @@ namespace ExpandedAiFramework
         public void Despawn(float time)
         {
             mModDataProxy.LastDespawnTime = time;
+            mModDataProxy.CurrentPosition = mSpawnRegion.transform.position;
         }
 
-
+        /*
         public bool TryQueueSpawn(SpawnModDataProxy proxy)
         {
             if (proxy == null)
@@ -91,5 +94,6 @@ namespace ExpandedAiFramework
             mQueuedSpawnModDataProxies.RemoveAt(0);
             return true;
         }
+        */
     }
 }

@@ -36,8 +36,8 @@ namespace ExpandedAiFramework
         private enum BaseSubManagers : int
         {
             DataManager = 0,
-            SpawnRegionManager,
             AiManager,
+            SpawnRegionManager,
             ConsoleCommandManager,
             COUNT
         }

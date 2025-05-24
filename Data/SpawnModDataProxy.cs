@@ -1,6 +1,4 @@
-﻿using Il2Cpp;
-using System.Xml.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 namespace ExpandedAiFramework
@@ -9,6 +7,7 @@ namespace ExpandedAiFramework
     public class SpawnModDataProxy
     {
         [NonSerialized] private Type mVariantSpawnType;
+        [NonSerialized] public bool Disconnected = false;
         public Guid Guid = Guid.Empty;
         public Guid ParentGuid = Guid.Empty;
         public string Scene;
@@ -72,7 +71,7 @@ namespace ExpandedAiFramework
             AiSubType = ai.m_AiSubType;
             mVariantSpawnType = variantSpawnType;
             VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
-            LastDespawnTime = Utility.GetCurrentTimelinePoint();
+            LastDespawnTime = GetCurrentTimelinePoint();
         }
 
 
@@ -88,7 +87,14 @@ namespace ExpandedAiFramework
             AiSubType = spawnRegion.m_AiSubTypeSpawned;
             mVariantSpawnType = variantSpawnType;
             VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
-            LastDespawnTime = Utility.GetCurrentTimelinePoint();
+            LastDespawnTime = GetCurrentTimelinePoint();
+        }
+
+        //eventually we'll use this in a cascade from the spawn region wrapper, but the code is a bit too tight right now for it to be fast.
+        // I can optimize later, I'd like to get this running first so I have a baseline, however buggy, to test features on.
+        public virtual void Despawn()
+        {
+            LastDespawnTime = GetCurrentTimelinePoint();
         }
 
 

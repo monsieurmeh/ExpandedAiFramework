@@ -10,12 +10,11 @@ namespace ExpandedAiFramework
     //This will act similar to in-game BaseAiManager, but for the ICustomAi wrappers. Things like tracking spawn variant persistency, etc
     //at some point I'll probably make a SpawnRegionManager too, which will do something similar but wrap up the spawn regions instead.
 
-   
-
     public sealed class AiManager : BaseSubManager
     {
-
-        private Dictionary<Guid, SpawnModDataProxy> mSpawnModDataProxies = new Dictionary<Guid, SpawnModDataProxy>();
+        //lots of cross-manager contamination happening as part of your 'get this shit working' push. Need to clean it up eventually
+        private Dictionary<Guid, SpawnModDataProxy> mSpawnModDataProxiesByGuid = new Dictionary<Guid, SpawnModDataProxy>(); //this originally lived inside the spawn region wrapper, but i kept needing to access it here so I stole it. Now it needs to go back some day!
+        private Dictionary<Guid, List<Guid>> mQueuedSpawnModDataProxiesByParentGuid = new Dictionary<Guid, List<Guid>>(); // holds spawn
         private Dictionary<int, ICustomAi> mCustomAis = new Dictionary<int, ICustomAi>(); 
         private WeightedTypePicker<BaseAi> mTypePicker = new WeightedTypePicker<BaseAi>();
         private Dictionary<Type, ISpawnTypePickerCandidate> mSpawnSettingsDict = new Dictionary<Type, ISpawnTypePickerCandidate>();
@@ -59,25 +58,6 @@ namespace ExpandedAiFramework
         }
 
 
-        public override void Update()
-        {
-            base.Update();
-            /* After finding CarcassSite.Manager.TrySpawnCarcassSite, i think we're good without this now
-            if (mNeedToCheckForMissingScripts && Time.time - mCheckForMissingScriptsTime >= 2.0f)
-            {
-                mNeedToCheckForMissingScripts = false;
-                foreach (BaseAi baseAi in GameObject.FindObjectsOfType<BaseAi>())
-                {
-                    if (baseAi != null && baseAi.gameObject != null && !baseAi.gameObject.TryGetComponent(out CustomAiBase customAi) && baseAi.m_SpawnRegionParent != null)
-                    {
-                        TryInjectCustomBaseAi(baseAi, baseAi.m_SpawnRegionParent); 
-                    }
-                }
-            }
-            */
-        }
-
-
         public override void Shutdown()
         {
             ClearCustomAis();
@@ -90,13 +70,23 @@ namespace ExpandedAiFramework
         {
             base.OnLoadScene();
             mInitializedScene = false;
-            ClearCustomAis();
             SaveSpawnModDataProxies();
+            ClearCustomAis();
         }
+
 
         private void SaveSpawnModDataProxies()
         {
-            string json = JSON.Dump(mSpawnModDataProxies.Values.ToList(), EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
+            List<SpawnModDataProxy> saveList = new List<SpawnModDataProxy>();
+            foreach (SpawnModDataProxy proxyToSave in mSpawnModDataProxiesByGuid.Values)
+            {
+                if (proxyToSave.Disconnected)
+                {
+                    continue;
+                }
+                saveList.Add(proxyToSave);
+            }
+            string json = JSON.Dump(saveList, EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
             mManager.SaveData(json, $"{mLastSceneName}_SpawnModDataProxies");
         }
 
@@ -105,19 +95,57 @@ namespace ExpandedAiFramework
         {
             base.OnInitializedScene(sceneName);
             mLastSceneName = mManager.CurrentScene;
-            InitializeSpawnModDataProxies(!mInitializedScene);
-            mInitializedScene = true;
+            if (!mInitializedScene)
+            {
+                mInitializedScene = true;
+                InitializeSpawnModDataProxies();
+            }
+        }
+
+        public bool TryGetNextAvailableSpawnModDataProxy(Guid spawnRegionModDataProxyGuid, out SpawnModDataProxy proxy)
+        {
+            proxy = null;
+            if (!mQueuedSpawnModDataProxiesByParentGuid.TryGetValue(spawnRegionModDataProxyGuid, out List<Guid> availableProxies))
+            {
+                availableProxies = new List<Guid>();
+                mQueuedSpawnModDataProxiesByParentGuid.Add(spawnRegionModDataProxyGuid, availableProxies);
+            }
+            if (availableProxies.Count == 0)
+            {
+                LogDebug($"No available proxies queued, generate a new one.");
+                return false;
+            }
+            if (!mSpawnModDataProxiesByGuid.TryGetValue(availableProxies[0], out proxy))
+            {
+                LogError($"Couldnt match existing matched spawn mod data proxy guid {availableProxies[0]} to intended parent proxy guid {spawnRegionModDataProxyGuid}!");
+                return false;
+            }
+            availableProxies.RemoveAt(0);
+            return true;
         }
 
 
-        private void InitializeSpawnModDataProxies( bool firstPass = false)
+        public Type GetRandomSpawnType(BaseAi baseAi)
         {
-            if (firstPass)
+            Type spawnType = mTypePicker.PickType(baseAi);
+            if (spawnType == typeof(void))
             {
-                mSpawnModDataProxies.Clear();
+                spawnType = GetFallbackBaseSpawnableType(baseAi);
             }
+            if (spawnType == typeof(void))
+            {
+                LogError("Could not find valid spawn type for base ai while pre-queuing spawns! what the heck bruh");
+            }
+            return spawnType;
+        }
 
-            List<SpawnModDataProxy> spawnDataProxies = new List<SpawnModDataProxy>();
+
+
+        private void InitializeSpawnModDataProxies()
+        {
+            mSpawnModDataProxiesByGuid.Clear();
+            mQueuedSpawnModDataProxiesByParentGuid.Clear();
+            LogDebug($"Trying to load spawn mod data proxies from suffix {mLastSceneName}_SpawnModDataProxies!");
             string proxiesString = mManager.LoadData($"{mLastSceneName}_SpawnModDataProxies");
             if (proxiesString != null)
             {
@@ -126,102 +154,40 @@ namespace ExpandedAiFramework
                 {
                     SpawnModDataProxy newProxy = new SpawnModDataProxy();
                     JSON.Populate(pathJSON, newProxy);
-                    newProxy.InitializeType();
-                    spawnDataProxies.Add(newProxy);
-                }
-            }
-
-            LogDebug($"Deserialized {spawnDataProxies.Count} spawn mod data proxies");
-
-            for (int i = 0, iMax = spawnDataProxies.Count; i < iMax; i++)
-            {
-                if (mSpawnModDataProxies.ContainsKey(spawnDataProxies[i].Guid))
-                {
-                    LogWarning($"Somehow we found a repeat proxy guid {spawnDataProxies[i].Guid}?");
-                    return;
-                }
-                if (spawnDataProxies[i].Guid == Guid.Empty)
-                {
-                    LogWarning($"Guidless spawn mod data proxy found! aborting...");
-                    continue;
-                }
-                if (spawnDataProxies[i].ParentGuid == Guid.Empty)
-                {
-                    LogWarning("Parentless spawn mod data proxy found! cannot correlate to a spawn region...");
-                    continue;
-                }
-                if (!mManager.SpawnRegionManager.TryGetCustomSpawnRegionByProxyGuid(spawnDataProxies[i].ParentGuid, out ICustomSpawnRegion customSpawnRegion))
-                {
-                    LogError("Could not find custom spawn region using parent guid! continueing...");
-                    continue;
-                }
-                if (!customSpawnRegion.TryQueueSpawn(spawnDataProxies[i]))
-                {
-                    LogError("Could not queue new spawn proxy!");
-                    continue;
-                }
-                LogDebug($"Queued spawn mod proxy data with guid {spawnDataProxies[i].Guid} on spawn region with hash code {customSpawnRegion.SpawnRegion.GetHashCode()}!");
-                mSpawnModDataProxies.Add(spawnDataProxies[i].Guid, spawnDataProxies[i]);
-            }
-
-
-            // pre-queueing some more spawns to avoid mid-scene hitches later
-            foreach (ICustomSpawnRegion customSpawnRegion in mManager.SpawnRegionManager.CustomSpawnRegions.Values)
-            {
-                if (customSpawnRegion == null)
-                {
-                    continue;
-                }
-                if (customSpawnRegion.QueuedSpawnsCount < 3)
-                {
-                    if (customSpawnRegion.SpawnRegion == null)
+                    newProxy.InitializeType(); 
+                    if (mSpawnModDataProxiesByGuid.ContainsKey(newProxy.Guid))
                     {
-                        LogError("Null spawn region on customSpawnRegion wrapper!");
+                        LogError($"Spawn mod data proxy with guid {newProxy.Guid} already contained in loaded data, discarding new version...");
                         continue;
                     }
-                    LogDebug($"customSpawnRegion with spawn region hash code {customSpawnRegion.SpawnRegion.GetHashCode()} has only {customSpawnRegion.QueuedSpawnsCount} queued spawns, adding {3 - customSpawnRegion.QueuedSpawnsCount} new ones");
-                    if (customSpawnRegion.SpawnRegion.m_SpawnablePrefab == null)
+                    if (newProxy.ParentGuid == Guid.Empty)
                     {
-                        LogDebug("Null spawnable prefab on spawn region on customSpawnRegion wrapper! Usually this means the spawn region isn't active in this run and thus doesnt have its prefab connected.");
+                        LogError("Empty parent guid, cannot match with spawn region! ignoring.");
                         continue;
                     }
-                    if (!customSpawnRegion.SpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi spawnableBaseAi))
+                    if (!mQueuedSpawnModDataProxiesByParentGuid.TryGetValue(newProxy.ParentGuid, out List<Guid> proxyList))
                     {
-                        
-                        LogError("Could not get base ai script from spawnable prefab on spawn region on customSpawnRegion wrapper!");
+                        proxyList = new List<Guid>();
+                        mQueuedSpawnModDataProxiesByParentGuid.Add(newProxy.ParentGuid, proxyList);
+                    }
+                    for (int i = 0, iMax = proxyList.Count; i < iMax; i++)
+                    {
+                        if (proxyList[i] == newProxy.Guid)
+                        {
+                            LogDebug($"Guid collision on trying to deserialize spawn mod data proxy with guid {newProxy.Guid} && parent guid {newProxy.ParentGuid}");
+                            newProxy = null;
+                        }
+                    }                    
+                    if (newProxy == null)
+                    {
                         continue;
                     }
-                    for (int i = 0, iMax = 3 - customSpawnRegion.QueuedSpawnsCount; i < iMax; i++)
-                    {
-                        Type spawnType = mTypePicker.PickType(spawnableBaseAi);
-                        if (spawnType == typeof(void))
-                        {
-                            spawnType = GetFallbackBaseSpawnableType(spawnableBaseAi);
-                        }
-                        if (spawnType == typeof(void))
-                        {
-                            LogError("Could not find valid spawn type for base ai while pre-queuing spawns! what the heck bruh");
-                            continue;
-                        }
-                        SpawnModDataProxy newProxy = (new SpawnModDataProxy(Guid.NewGuid(), mManager.CurrentScene, customSpawnRegion.SpawnRegion, spawnType));
-                        if (!customSpawnRegion.TryQueueSpawn(newProxy))
-                        {
-                            LogError("Could pre-queue new spawn proxy!");
-                            continue;
-                        }
-                        mSpawnModDataProxies.Add(newProxy.Guid, newProxy);
-                        LogDebug($"Prequeued new spawn guid {newProxy.Guid} on spawn region with hash code {customSpawnRegion.SpawnRegion.GetHashCode()}!");
-                    }
+                    mSpawnModDataProxiesByGuid.Add(newProxy.Guid, newProxy);
+                    proxyList.Add(newProxy.Guid);
+                    LogDebug($"Queued spawn mod data proxy with guid {newProxy.Guid} in spawn list for parent guid {newProxy.ParentGuid}");
                 }
             }
         }
-
-
-        public bool TryGetSpawnModDataProxy(Guid guid, out SpawnModDataProxy proxy)
-        {
-            return mSpawnModDataProxies.TryGetValue(guid, out proxy);
-        }
-
 
 
         [HideFromIl2Cpp]
@@ -254,34 +220,34 @@ namespace ExpandedAiFramework
         {
             if (baseAi == null)
             {
-                //LogDebug("Null base ai, can't augment.");
+                LogDebug("Null base ai, can't augment.");
                 return false;
             }
             if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
             {
-                //LogDebug("BaseAi in dictionary, can't augment.");
+                LogDebug("BaseAi in dictionary, can't augment.");
                 return false;
             }
 
             Type spawnType = typeof(void);
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
-                //LogDebug($"Allowing submanager {mSubManagers[i]} to intercept spawn...");
+                LogDebug($"Allowing submanager {mSubManagers[i]} to intercept spawn...");
                 if (mSubManagers[i].ShouldInterceptSpawn(baseAi, region))
                 {
-                    //LogDebug($"Spawn intercept from submanager {mSubManagers[i]}! new type: {mSubManagers[i].SpawnType}");
+                    LogDebug($"Spawn intercept from submanager {mSubManagers[i]}! new type: {mSubManagers[i].SpawnType}");
                     spawnType =mSubManagers[i].SpawnType;
                     break;
                 }
             }
             if (spawnType == typeof(void))
             {
-                //LogDebug($"No submanager interceptions, attempting to randomly pick a valid spawn type...");
+                LogDebug($"No submanager interceptions, attempting to randomly pick a valid spawn type...");
                 spawnType = mTypePicker.PickType(baseAi);
             }
             if (spawnType == typeof(void))
             {
-                LogVerbose($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
+                LogDebug($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
                 return TryInjectCustomBaseAi(baseAi, region);
             }
             return TryInjectCustomAi(baseAi, spawnType, region);
@@ -384,6 +350,51 @@ namespace ExpandedAiFramework
         }
 
 
+        public SpawnModDataProxy GenerateNewSpawnModDataProxy(string scene, SpawnRegion spawnRegion, Type variantSpawnType)
+        {
+            if (spawnRegion == null)
+            {
+                LogDebug($"Cant generate a new spawn mod data proxy without parent region!");
+                return null;
+            }
+            if (variantSpawnType == null)
+            {
+                LogDebug($"Can't generate new spawn mod data proxy with null variant spawn type!");
+                return null;
+            }
+            //if (!variantSpawnType.IsSubclassOf(typeof(ICustomAi)))
+            //{
+            //    LogDebug($"Can't generate new spawn mod data proxy with non-ICustomAi implementing variant spawn type!");
+            //    return null;
+            //}
+            if (!mManager.SpawnRegionManager.CustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out ICustomSpawnRegion customSpawnRegion))
+            {
+                LogDebug($"Can't fetch wrapper for spawn region with hash code {spawnRegion.GetHashCode()}!");
+                return null;
+            }
+            if (customSpawnRegion.ModDataProxy == null || customSpawnRegion.ModDataProxy.Guid == Guid.Empty)
+            {
+                LogDebug($"Couldnt fetch guid from spawn region with hash code {spawnRegion.GetHashCode()}!");
+                return null;
+            }
+            SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), scene, spawnRegion, variantSpawnType);
+            newProxy.ParentGuid = customSpawnRegion.ModDataProxy.Guid;
+            mSpawnModDataProxiesByGuid.Add(newProxy.Guid, newProxy);
+            /*
+            if (queueForSpawn)
+            {
+                if (!mQueuedSpawnModDataProxiesByParentGuid.TryGetValue(newProxy.ParentGuid, out List<Guid> proxyList))
+                {
+                    proxyList = new List<Guid>();
+                    mQueuedSpawnModDataProxiesByParentGuid.Add(newProxy.ParentGuid, proxyList);
+                }
+                mQueuedSpawnModDataProxiesByParentGuid[newProxy.ParentGuid].Add(newProxy.Guid);
+            }
+            */
+            return newProxy;
+        }
+
+
         private void InjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion spawnRegion, SpawnModDataProxy proxy, bool bypassProxy = false)
         {
             try
@@ -393,43 +404,52 @@ namespace ExpandedAiFramework
                     if (proxy == null)
                     {
                         //LogDebug("Generating new proxy");
-                        proxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.CurrentScene, baseAi, spawnType);
+                        proxy = GenerateNewSpawnModDataProxy(mLastSceneName, spawnRegion, spawnType);
                     }
                     if (proxy.ParentGuid == Guid.Empty)
                     {
-                        //LogDebug("Trying to connect to parent spawn region proxy");
+                        LogDebug($"Triggered section that is going to disappear, figure out why!");
+                        bool fixedParentGuid = true;
                         if (mManager == null)
                         {
                             LogError("Null manager!");
+                            fixedParentGuid = false;
                         }
-                        if (mManager.SpawnRegionManager == null)
+                        if (fixedParentGuid && mManager.SpawnRegionManager == null)
                         {
                             LogError("Null mManager.SpawnRegionManager!");
+                            fixedParentGuid = false;
                         }
-                        if (mManager.SpawnRegionManager.CustomSpawnRegions == null)
+                        if (fixedParentGuid && mManager.SpawnRegionManager.CustomSpawnRegions == null)
                         {
                             LogError("Null mManager.SpawnRegionManager.CustomSpawnRegions!");
+                            fixedParentGuid = false;
                         }
-                        if (spawnRegion == null)
+                        if (fixedParentGuid && spawnRegion == null)
                         {
                             LogError("Null spawnregion! how the heck did we even get here like this???");
+                            fixedParentGuid = false;
                         }
+                        if (!fixedParentGuid)
+                        {
+                            return;
+                        } 
                         if (!mManager.SpawnRegionManager.CustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out ICustomSpawnRegion customSpawnRegion))
                         {
                             LogError($"Could not fetch custom spawn region wrapper to correlate parentless-spawnmoddataproxy! Aborting..");
                             return;
                         }
-                        //LogDebug("Trying to set parent guid per parent proxy");
                         proxy.ParentGuid = customSpawnRegion.ModDataProxy.Guid;
+                    }
+                    if (!mSpawnModDataProxiesByGuid.ContainsKey(proxy.Guid))
+                    {
+                        LogDebug($"Caught spawn mod data proxy guid {proxy.Guid} uncontained in master list, adding...");
+                        mSpawnModDataProxiesByGuid.Add(proxy.Guid, proxy);
                     }
                 }
                 //LogDebug("Adding new component");
                 mCustomAis.Add(baseAi.GetHashCode(), (ICustomAi)baseAi.gameObject.AddComponent(Il2CppType.From(spawnType)));
                 //LogDebug("Adding to proxy dict");
-                if (!bypassProxy)
-                {
-                    mSpawnModDataProxies.Add(proxy.Guid, proxy);
-                }
                 //LogDebug("trying to re-fetch ai wrapper");
                 if (!mCustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi customAi))
                 {

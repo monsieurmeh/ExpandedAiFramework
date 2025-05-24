@@ -8,6 +8,7 @@ namespace ExpandedAiFramework
     [Serializable]
     public class SpawnRegionModDataProxy
     {
+        //[NonSerialized] public SpawnRegion SpawnRegion;
         public Guid Guid = Guid.Empty;
         public string Scene; //might be able to get rid of this?
         public Vector3 OriginalPosition;
@@ -28,6 +29,13 @@ namespace ExpandedAiFramework
             OriginalPosition = CurrentPosition;
             AiType = spawnRegion.m_AiTypeSpawned;
             AiSubType = spawnRegion.m_AiSubTypeSpawned;
+            LastDespawnTime = GetCurrentTimelinePoint();
+            //SpawnRegion = spawnRegion;
+        }
+
+
+        public void Despawn()
+        {
             LastDespawnTime = GetCurrentTimelinePoint();
         }
 

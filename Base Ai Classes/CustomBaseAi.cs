@@ -443,7 +443,13 @@ namespace ExpandedAiFramework
             switch (mode)
             {
                 case AiMode.Attack: mBaseAi.EnterAttack(); break;
-                case AiMode.Dead: mBaseAi.EnterDead(); break;
+                case AiMode.Dead:
+                    mBaseAi.EnterDead(); 
+                    if (mProxy != null)
+                    {
+                        mProxy.Disconnected = true;
+                    }
+                    break;
                 case AiMode.Feeding: mBaseAi.EnterFeeding(); break;
                 case AiMode.Flee: mBaseAi.EnterFlee(); break;
                 case AiMode.FollowWaypoints: mBaseAi.EnterFollowWaypoints(); break;

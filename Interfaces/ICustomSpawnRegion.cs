@@ -13,9 +13,9 @@ namespace ExpandedAiFramework
         SpawnRegionModDataProxy ModDataProxy { get; }
         void Initialize(SpawnRegion spawnRegion, SpawnRegionModDataProxy modDataProxy, TimeOfDay timeOfDay);
         void Despawn(float despawnTime);
-        bool TryQueueSpawn(SpawnModDataProxy proxy);
-        bool TryGetQueuedSpawn(out SpawnModDataProxy proxy);
-        int QueuedSpawnsCount { get; }
+        //bool TryQueueSpawn(SpawnModDataProxy proxy);
+        //bool TryGetQueuedSpawn(out SpawnModDataProxy proxy);
+        //int QueuedSpawnsCount { get; }
         //bool ShouldInterceptSpawn(BaseAi baseAi);
         //For now I dont think I'm going to incorporate this.
         //Adding an extra layer for actual custom spawn region functionality is a huge task
