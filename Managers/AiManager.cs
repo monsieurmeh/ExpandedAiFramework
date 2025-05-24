@@ -160,7 +160,7 @@ namespace ExpandedAiFramework
                     LogError("Could not queue new spawn proxy!");
                     continue;
                 }
-                LogDebug($"Queued spawn mod proxy data with guid {spawnDataProxies[i].Guid}!");
+                LogDebug($"Queued spawn mod proxy data with guid {spawnDataProxies[i].Guid} on spawn region with hash code {customSpawnRegion.SpawnRegion.GetHashCode()}!");
                 mSpawnModDataProxies.Add(spawnDataProxies[i].Guid, spawnDataProxies[i]);
             }
 
@@ -174,12 +174,12 @@ namespace ExpandedAiFramework
                 }
                 if (customSpawnRegion.QueuedSpawnsCount < 3)
                 {
-                    LogDebug($"customSpawnRegion has only {customSpawnRegion.QueuedSpawnsCount} queued spawns, adding {3 - customSpawnRegion.QueuedSpawnsCount} new ones");
                     if (customSpawnRegion.SpawnRegion == null)
                     {
                         LogError("Null spawn region on customSpawnRegion wrapper!");
                         continue;
                     }
+                    LogDebug($"customSpawnRegion with spawn region hash code {customSpawnRegion.SpawnRegion.GetHashCode()} has only {customSpawnRegion.QueuedSpawnsCount} queued spawns, adding {3 - customSpawnRegion.QueuedSpawnsCount} new ones");
                     if (customSpawnRegion.SpawnRegion.m_SpawnablePrefab == null)
                     {
                         LogDebug("Null spawnable prefab on spawn region on customSpawnRegion wrapper! Usually this means the spawn region isn't active in this run and thus doesnt have its prefab connected.");
@@ -210,7 +210,7 @@ namespace ExpandedAiFramework
                             continue;
                         }
                         mSpawnModDataProxies.Add(newProxy.Guid, newProxy);
-                        LogDebug($"Prequeued!");
+                        LogDebug($"Prequeued new spawn guid {newProxy.Guid} on spawn region with hash code {customSpawnRegion.SpawnRegion.GetHashCode()}!");
                     }
                 }
             }
