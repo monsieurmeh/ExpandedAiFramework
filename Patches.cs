@@ -9,22 +9,6 @@ namespace ExpandedAiFramework
 {
     internal class Patches
     {
-        #region General
-
-        
-        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadScene), new Type[] { typeof(string), typeof(string) })]
-        internal class GameManagerPatches_LoadScene
-        {
-            private static void Postfix()
-            {
-                LogVerbose("OnLoadScene");
-                Manager.OnLoadScene();
-            }
-        }
-        
-        #endregion
-
-
         #region Save/Load/ModData
         
 

@@ -5,9 +5,9 @@ using UnityEngine;
 namespace ExpandedAiFramework
 {
     [RegisterTypeInIl2Cpp]
-    public class CustomAiBase : MonoBehaviour, ICustomAi
+    public class CustomBaseAi : MonoBehaviour
     {
-        public CustomAiBase(IntPtr intPtr) : base(intPtr) { }
+        public CustomBaseAi(IntPtr intPtr) : base(intPtr) { }
 
         protected BaseAi mBaseAi;
         protected TimeOfDay mTimeOfDay;

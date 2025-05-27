@@ -89,7 +89,7 @@ namespace ExpandedAiFramework
         public DataManager DataManager => mDataManager;
         public SpawnRegionManager SpawnRegionManager => mSpawnRegionManager;
         public AiManager AiManager => mAiManager;
-        public Dictionary<int, ICustomAi> CustomAis => mAiManager.CustomAis;
+        public Dictionary<int, CustomBaseAi> CustomAis => mAiManager.CustomAis;
         public WeightedTypePicker<BaseAi> TypePicker => mAiManager.TypePicker;
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
 
@@ -159,16 +159,21 @@ namespace ExpandedAiFramework
         }
 
 
-        public void OnLoadScene()
+        public void OnLoadScene(string sceneName)
         {
             mCurrentScene = string.Empty;
+            if (sceneName.Contains("MainMenu"))
+            {
+                OnQuitToMainMenu();
+                return;
+            }
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
-                mBaseSubManagers[i].OnLoadScene();
+                mBaseSubManagers[i].OnLoadScene(sceneName);
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
-                mSubManagers[i].OnLoadScene();
+                mSubManagers[i].OnLoadScene(sceneName);
             }
         }
 
@@ -197,6 +202,19 @@ namespace ExpandedAiFramework
         }
 
 
+        public void OnQuitToMainMenu()
+        {
+            for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
+            {
+                mBaseSubManagers[i].OnQuitToMainMenu();
+            }
+            for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
+            {
+                mSubManagers[i].OnQuitToMainMenu();
+            }
+        }
+
+
         public void RegisterSubmanager(Type type, ISubManager subManager)
         { 
             if (mSubManagerDict.TryGetValue(type, out ISubManager _))
@@ -210,8 +228,8 @@ namespace ExpandedAiFramework
             mSubManagers[^1] = subManager;
         }
 
-        public bool SaveData(string data, string suffix) => DataManager.ModData.Save(data, suffix);
-        public string LoadData(string suffix) => DataManager.ModData.Load(suffix);
+        public void SaveData(string data, string suffix) => mDataManager.ModData.Save(data, suffix);
+        public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
         public void ClearCustomAis() => mAiManager.ClearCustomAis();
         public bool TryInterceptSpawn(BaseAi baseAi, SpawnRegion spawnRegion) => mSpawnRegionManager.TryInterceptSpawn(baseAi, spawnRegion);
@@ -222,8 +240,8 @@ namespace ExpandedAiFramework
         public bool TryStart(BaseAi baseAi) => mAiManager.TryStart(baseAi);
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode) => mAiManager.TrySetAiMode(baseAi, aiMode);
         public bool TryApplyDamage(BaseAi baseAi, float damage, float bleedOutTime, DamageSource damageSource) => mAiManager.TryApplyDamage(baseAi, damage, bleedOutTime, damageSource);
-        public HidingSpot GetNearestHidingSpot(ICustomAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false) => mDataManager.GetNearestHidingSpot(ai, extraNearestCandidatesToMaybePickFrom, requireAbleToPathfind);
-        public WanderPath GetNearestWanderPath(ICustomAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false) => mDataManager.GetNearestWanderPath(ai, extraNearestCandidatesToMaybePickFrom, requireAbleToPathfind);
+        public HidingSpot GetNearestHidingSpot(CustomBaseAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false) => mDataManager.GetNearestHidingSpot(ai, extraNearestCandidatesToMaybePickFrom, requireAbleToPathfind);
+        public WanderPath GetNearestWanderPath(CustomBaseAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false) => mDataManager.GetNearestWanderPath(ai, extraNearestCandidatesToMaybePickFrom, requireAbleToPathfind);
 
 
         /*

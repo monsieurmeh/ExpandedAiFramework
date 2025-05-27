@@ -75,7 +75,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        public void OnLoadScene()
+        public void OnLoadScene(string sceneName)
         {
             if (mInstance != null) 
             {
@@ -107,6 +107,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 mManager.SaveData(json, "CompanionWolfMod");
             }
+        }
+
+
+        public void OnQuitToMainMenu()
+        {
+            mData = null;
         }
 
 
@@ -169,7 +175,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 return;
             }
             LogVerbose($"re-grabbing wrapper..");
-            if (!mManager.CustomAis.TryGetValue(baseAi.GetHashCode(), out ICustomAi wrapper))
+            if (!mManager.CustomAis.TryGetValue(baseAi.GetHashCode(), out CustomBaseAi wrapper))
             {
                 LogError("Did not find new wrapper for new base ai!");
                 return;

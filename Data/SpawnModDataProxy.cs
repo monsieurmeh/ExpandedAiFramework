@@ -23,40 +23,42 @@ namespace ExpandedAiFramework
 
         public SpawnModDataProxy() { }
 
-        public void InitializeType()
+        public bool InitializeType()
         {
-            if (mVariantSpawnType == null)
+            if (mVariantSpawnType != null)
             {
-                var type = Type.GetType(VariantSpawnTypeString);
-                if (type != null)
-                { 
-                    mVariantSpawnType = type;
-                    return;
-                }
-
-                // Fallback: search manually
-                string[] parts = VariantSpawnTypeString.Split(',');
-                if (parts.Length >= 2)
-                {
-                    string fullName = parts[0].Trim();
-                    string assemblyName = parts[1].Trim();
-
-                    foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-                    {
-                        if (assembly.GetName().Name == assemblyName)
-                        {
-                            type = assembly.GetType(fullName);
-                            if (type != null)
-                            {
-                                mVariantSpawnType = type;
-                                return;
-                            }
-                        }
-                    }
-                }
-
-                throw new TypeLoadException($"Unable to resolve type: {VariantSpawnTypeString}");
+                return true;
             }
+            var type = Type.GetType(VariantSpawnTypeString);
+            if (type != null)
+            { 
+                mVariantSpawnType = type;
+                return true;
+            }
+            string[] parts = VariantSpawnTypeString.Split(',');
+            if (parts.Length < 2)
+            {
+                LogError($"Could not parse type string {VariantSpawnTypeString} during SpawnModDataProxy.InitializeType()!");
+                return false;
+            }
+            string fullName = parts[0].Trim();
+            string assemblyName = parts[1].Trim();
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (assembly.GetName().Name != assemblyName)
+                {
+                    continue;
+                }
+                type = assembly.GetType(fullName);
+                if (type == null)
+                {
+                    continue;
+                }
+                mVariantSpawnType = type;
+                return true;
+            }
+            LogError($"Unable to resolve type: {VariantSpawnTypeString} during SpawnModDataProxy.InitializeType()!");
+            return false;   
         }
 
 

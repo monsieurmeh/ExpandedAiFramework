@@ -11,7 +11,7 @@ namespace ExpandedAiFramework
     //right now this is just a spawn region wrapper holding a proxy and itself serving as an index.
     //Eventually might grow. Doing most stuff with managers right now, messy but works at least.
     //[RegisterTypeInIl2Cpp]
-    public class CustomBaseSpawnRegion : /*MonoBehaviour, */ICustomSpawnRegion
+    public class CustomBaseSpawnRegion //: MonoBehaviour
     {
         //public CustomBaseSpawnRegion(IntPtr intPtr) : base(intPtr) { }
 

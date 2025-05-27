@@ -2,6 +2,7 @@
 using MelonLoader.TinyJSON;
 using MelonLoader.Utils;
 using ModData;
+using System.Security.AccessControl;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,12 +17,14 @@ namespace ExpandedAiFramework
         private Dictionary<Guid, SpawnModDataProxy> mActiveSpawnModDataProxies = new Dictionary<Guid, SpawnModDataProxy>(); //this originally lived inside the spawn region wrapper, but i kept needing to access it here so I stole it. Now it needs to go back some day!
         private Dictionary<Guid, List<Guid>> mQueuedSpawnModDataProxiesByParentGuid = new Dictionary<Guid, List<Guid>>();
         private Dictionary<Guid, SpawnRegionModDataProxy> mUnmatchedSpawnRegionModDataProxies = new Dictionary<Guid, SpawnRegionModDataProxy>(); // holds unmatched proxies during init for easy matching
-        private Dictionary<Guid, ICustomSpawnRegion> mCustomSpawnRegionsByGuid = new Dictionary<Guid, ICustomSpawnRegion>(); // provides easy map to spawn regions from their proxy (do we still need this?)
-        private Dictionary<string, List<SpawnRegionModDataProxy>> mSpawnRegionModDataProxies = new Dictionary<string, List<SpawnRegionModDataProxy>>();
-        private Dictionary<string, List<SpawnModDataProxy>> mSpawnModDataProxies = new Dictionary<string, List<SpawnModDataProxy>>();
+        private Dictionary<string, List<SpawnRegionModDataProxy>> mSpawnRegionModDataProxyCache = new Dictionary<string, List<SpawnRegionModDataProxy>>();
+        private Dictionary<string, List<SpawnModDataProxy>> mSpawnModDataProxyCache = new Dictionary<string, List<SpawnModDataProxy>>();
         private List<HidingSpot> mAvailableHidingSpots = new List<HidingSpot>();
         private List<WanderPath> mAvailableWanderPaths = new List<WanderPath>();
         private bool mMapDataInitialized = false;
+        private bool mProxyDataLoaded = false;
+        private bool mProxyDataUncached = false;
+        private string mLastSceneName = string.Empty;
 #if DEV_BUILD
         private ModDataManager mModData = new ModDataManager(ModName, true);
 #else
@@ -51,43 +54,76 @@ namespace ExpandedAiFramework
         public override void Shutdown()
         {
             ClearMapData();
+            ClearDataCache();
             base.Shutdown();
         }
 
 
-        public override void OnLoadScene()
+        public override void OnQuitToMainMenu()
         {
-            base.OnLoadScene();
-            mMapDataInitialized = false;
+            LogTrace($"DataCache clearing!");
+            ClearDataCache();
         }
 
 
-        public override void OnStartNewGame()
+        private void ClearDataCache()
         {
-            base.OnStartNewGame();
-            LogDebug($"Loading SpawnRegionModProxyData and SpawnModProxyData library for current save...");
-            LoadSpawnRegionModDataProxies();
-            LoadSpawnModDataProxies();
+            mSpawnModDataProxyCache.Clear();
+            mSpawnRegionModDataProxyCache.Clear();
+            mActiveSpawnModDataProxies.Clear();
+            mQueuedSpawnModDataProxiesByParentGuid.Clear();
+            mUnmatchedSpawnRegionModDataProxies.Clear();
+        }
+
+        public override void OnLoadScene(string sceneName)
+        {
+            base.OnLoadScene(sceneName);
+            CacheSpawnRegionModDataProxies();
+            CacheSpawnModDataProxies(); 
+            mMapDataInitialized = false;
+            mProxyDataUncached = false;
+        }
+
+
+        public override void OnLoadGame()
+        {
+            base.OnLoadGame();
+            mProxyDataLoaded = false;
         }
 
 
         public override void OnSaveGame()
         {
             base.OnSaveGame();
-            SaveSpawnModDataProxies();
+            CacheSpawnRegionModDataProxies();
+            CacheSpawnModDataProxies();
             SaveSpawnRegionModDataProxies();
+            SaveSpawnModDataProxies();
         }
 
 
         public override void OnInitializedScene(string sceneName)
         {
+            mLastSceneName = mManager.CurrentScene;
             if (!mMapDataInitialized)
             {
                 mMapDataInitialized = true;
                 RefreshAvailableMapData(mManager.CurrentScene);
             }
+            if (!mProxyDataLoaded && GameManager.m_ActiveScene != null && Utility.IsValidGameplayScene(GameManager.m_ActiveScene, out string parsedSceneName))
+            {
+                mProxyDataLoaded = true;
+                LogTrace($"Loading SpawnRegionModProxyData and SpawnModProxyData library for current save...");
+                LoadSpawnRegionModDataProxies();
+                LoadSpawnModDataProxies();
+            }
+            if (!mProxyDataUncached)
+            {
+                mProxyDataUncached = true;
+                UncacheSpawnRegionModDataProxies(mLastSceneName);
+                UncacheSpawnModDataProxies(mLastSceneName);
+            }
         }
-
 
         #endregion
 
@@ -139,64 +175,78 @@ namespace ExpandedAiFramework
         {
             mHidingSpots.Clear();
             bool canAdd;
-            string hidingSpots = File.ReadAllText(Path.Combine(MelonEnvironment.ModsDirectory, "ExpandedAiFramework.HidingSpots.json"), System.Text.Encoding.UTF8);
-            if (hidingSpots != null)
+            try
             {
-                Variant hidingSpotsVariant = JSON.Load(hidingSpots);
-                foreach (var spotJSON in hidingSpotsVariant as ProxyArray)
+                string hidingSpots = File.ReadAllText(Path.Combine(MelonEnvironment.ModsDirectory, "ExpandedAiFramework.HidingSpots.json"), System.Text.Encoding.UTF8);
+                if (hidingSpots != null)
                 {
-                    canAdd = true;
-                    HidingSpot newSpot = new HidingSpot();
-                    JSON.Populate(spotJSON, newSpot);
-                    if (!mHidingSpots.TryGetValue(newSpot.Scene, out List<HidingSpot> sceneSpots))
+                    Variant hidingSpotsVariant = JSON.Load(hidingSpots);
+                    foreach (var spotJSON in hidingSpotsVariant as ProxyArray)
                     {
-                        sceneSpots = new List<HidingSpot>();
-                        mHidingSpots.Add(newSpot.Scene, sceneSpots);
-                    }
-                    for (int i = 0, iMax = sceneSpots.Count; i < iMax; i++)
-                    {
-                        if (sceneSpots[i] == newSpot)
+                        canAdd = true;
+                        HidingSpot newSpot = new HidingSpot();
+                        JSON.Populate(spotJSON, newSpot);
+                        if (!mHidingSpots.TryGetValue(newSpot.Scene, out List<HidingSpot> sceneSpots))
                         {
-                            LogWarning($"Can't add hiding spot {newSpot.Name} at {newSpot.Position} because another hiding spot with the same name is already defined!");
-                            canAdd = false;
+                            sceneSpots = new List<HidingSpot>();
+                            mHidingSpots.Add(newSpot.Scene, sceneSpots);
                         }
-                    }
-                    if (canAdd)
-                    {
-                        LogVerbose($"Found {newSpot}, adding...");
-                        sceneSpots.Add(newSpot);
+                        for (int i = 0, iMax = sceneSpots.Count; i < iMax; i++)
+                        {
+                            if (sceneSpots[i] == newSpot)
+                            {
+                                LogWarning($"Can't add hiding spot {newSpot.Name} at {newSpot.Position} because another hiding spot with the same name is already defined!");
+                                canAdd = false;
+                            }
+                        }
+                        if (canAdd)
+                        {
+                            LogVerbose($"Found {newSpot}, adding...");
+                            sceneSpots.Add(newSpot);
+                        }
                     }
                 }
             }
-
-            mWanderPaths.Clear();
-            string wanderPaths = File.ReadAllText(Path.Combine(MelonEnvironment.ModsDirectory, "ExpandedAiFramework.WanderPaths.json"), System.Text.Encoding.UTF8);
-            if (wanderPaths != null)
+            catch (Exception e)
             {
-                Variant wanderPathsVariant = JSON.Load(wanderPaths);
-                foreach (var pathJSON in wanderPathsVariant as ProxyArray)
+                LogError($"Error during DataManager.LoadMapData.HidingSpots: {e}");
+            }
+
+            mWanderPaths.Clear(); 
+            try
+            {
+                string wanderPaths = File.ReadAllText(Path.Combine(MelonEnvironment.ModsDirectory, "ExpandedAiFramework.WanderPaths.json"), System.Text.Encoding.UTF8);
+                if (wanderPaths != null)
                 {
-                    canAdd = true;
-                    WanderPath newPath = new WanderPath();
-                    JSON.Populate(pathJSON, newPath);
-                    if (!mWanderPaths.TryGetValue(newPath.Scene, out List<WanderPath> scenePaths))
+                    Variant wanderPathsVariant = JSON.Load(wanderPaths);
+                    foreach (var pathJSON in wanderPathsVariant as ProxyArray)
                     {
-                        scenePaths = new List<WanderPath>();
-                        mWanderPaths.Add(newPath.Scene, scenePaths);
-                    }
-                    for (int i = 0, iMax = scenePaths.Count; i < iMax; i++)
-                    {
-                        if (scenePaths[i] == newPath)
+                        canAdd = true;
+                        WanderPath newPath = new WanderPath();
+                        JSON.Populate(pathJSON, newPath);
+                        if (!mWanderPaths.TryGetValue(newPath.Scene, out List<WanderPath> scenePaths))
                         {
-                            LogWarning($"Can't add hiding spot {newPath} because another hiding spot with the same name is already defined!");
-                            canAdd = false;
+                            scenePaths = new List<WanderPath>();
+                            mWanderPaths.Add(newPath.Scene, scenePaths);
+                        }
+                        for (int i = 0, iMax = scenePaths.Count; i < iMax; i++)
+                        {
+                            if (scenePaths[i] == newPath)
+                            {
+                                LogWarning($"Can't add hiding spot {newPath} because another hiding spot with the same name is already defined!");
+                                canAdd = false;
+                            }
+                        }
+                        if (canAdd)
+                        {
+                            scenePaths.Add(newPath);
                         }
                     }
-                    if (canAdd)
-                    {
-                        scenePaths.Add(newPath);
-                    }
                 }
+            }
+            catch (Exception e)
+            {
+                LogError($"Error during DataManager.LoadMapData.HidingSpots: {e}");
             }
         }
 
@@ -208,7 +258,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public HidingSpot GetNearestHidingSpot(ICustomAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false)
+        public HidingSpot GetNearestHidingSpot(CustomBaseAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false)
         {
             Vector3 spawnPosition = ai.BaseAi.transform.position;
             int pickIndex = -1;
@@ -264,7 +314,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public WanderPath GetNearestWanderPath(ICustomAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false)
+        public WanderPath GetNearestWanderPath(CustomBaseAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false)
         {
             Vector3 spawnPosition = ai.BaseAi.transform.position;
             int pickIndex = -1;
@@ -343,41 +393,38 @@ namespace ExpandedAiFramework
 
         #region SpawmRegionModDataProxy Management
 
-
         public void LoadSpawnRegionModDataProxies()
         {
-            mSpawnRegionModDataProxies.Clear();
-            LogDebug($"Trying to load spawn region mod data proxies from suffix SpawnRegionModDataProxies!");
-            string proxiesString = mManager.LoadData($"SpawnRegionModDataProxies");
-            if (proxiesString != null)
+            mSpawnRegionModDataProxyCache.Clear();
+            LogTrace($"Trying to load spawn region mod data proxies from suffix SpawnRegionModDataProxies!");
+            string proxiesString = mModData.Load($"SpawnRegionModDataProxies");
+            if (proxiesString == null)
             {
-                Variant proxiesVariant = JSON.Load(proxiesString);
-                foreach (var pathJSON in proxiesVariant as ProxyArray)
+                LogTrace($"Null proxy string, aborting!");
+                return;
+            }
+            Variant proxiesVariant = JSON.Load(proxiesString);
+            foreach (var pathJSON in proxiesVariant as ProxyArray)
+            {
+                SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy();
+                JSON.Populate(pathJSON, newProxy);
+                List<SpawnRegionModDataProxy> proxies = GetCachedSpawnRegionModDataProxies(newProxy.Scene);
+                if (proxies.Contains(newProxy))
                 {
-                    SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy();
-                    JSON.Populate(pathJSON, newProxy);
-                    if (!mSpawnRegionModDataProxies.TryGetValue(newProxy.Scene, out List<SpawnRegionModDataProxy> proxies))
-                    {
-                        proxies = new List<SpawnRegionModDataProxy>();
-                        mSpawnRegionModDataProxies.Add(newProxy.Scene, proxies);
-                    }
-                    if (proxies.Contains(newProxy))
-                    {
-                        LogDebug($"Couldn't add new spawn region data proxy to data manager library with guid {newProxy.Guid} in scene {newProxy.Scene} because it already exists!");
-                        continue;
-                    }
-                    LogDebug($"DataManager: Deserialized spawn region mod data proxy with guid {newProxy.Guid} in scene {newProxy.Scene}!");
-                    proxies.Add(newProxy);
+                    LogTrace($"Couldn't add new spawn region data proxy to data manager library with guid {newProxy.Guid} in scene {newProxy.Scene} because it already exists!");
+                    continue;
                 }
+                LogTrace($"DataManager: Deserialized spawn region mod data proxy with guid {newProxy.Guid} in scene {newProxy.Scene}!");
+                proxies.Add(newProxy);
             }
         }
 
 
         public void SaveSpawnRegionModDataProxies()
         {
-            LogDebug($"Saving spawn region mod data proxies to suffix SpawnRegionModDataProxies!");
+            LogTrace($"Saving spawn region mod data proxies to suffix SpawnRegionModDataProxies!");
             List<SpawnRegionModDataProxy> masterProxyList = new List<SpawnRegionModDataProxy>();
-            foreach (List<SpawnRegionModDataProxy> subProxyList in mSpawnRegionModDataProxies.Values)
+            foreach (List<SpawnRegionModDataProxy> subProxyList in mSpawnRegionModDataProxyCache.Values)
             {
                 masterProxyList.AddRange(subProxyList);
             }
@@ -386,36 +433,63 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            mManager.SaveData(json, $"SpawnRegionModDataProxies");
-            LogDebug($"Saved!");
+            mModData.Save(json, $"SpawnRegionModDataProxies");
+            LogTrace($"Saved!");
         }
 
 
         public List<SpawnRegionModDataProxy> GetCachedSpawnRegionModDataProxies(string sceneName)
         {
-            if (!mSpawnRegionModDataProxies.TryGetValue(sceneName, out List<SpawnRegionModDataProxy> cachedProxies))
+            if (!mSpawnRegionModDataProxyCache.TryGetValue(sceneName, out List<SpawnRegionModDataProxy> cachedProxies))
             {
                 cachedProxies = new List<SpawnRegionModDataProxy>();
-                mSpawnRegionModDataProxies.Add(sceneName, cachedProxies);
+                mSpawnRegionModDataProxyCache.Add(sceneName, cachedProxies);
             }
             return cachedProxies;
+        }
+
+
+        private void CacheSpawnRegionModDataProxies()
+        {
+            if (mLastSceneName == string.Empty)
+            {
+                return;
+            }
+            LogTrace($"Caching spawn region mod data proxies to scene {mLastSceneName}!");
+            List<SpawnRegionModDataProxy> cachedProxies = GetCachedSpawnRegionModDataProxies(mLastSceneName);
+            cachedProxies.Clear();
+            foreach (CustomBaseSpawnRegion customSpawnRegion in mManager.SpawnRegionManager.CustomSpawnRegions.Values)
+            {
+                if (customSpawnRegion == null)
+                {
+                    LogTrace($"Null CustomAi found??");
+                    continue;
+                }
+                if (customSpawnRegion.ModDataProxy == null ||
+                    customSpawnRegion.ModDataProxy.Guid == Guid.Empty)
+                {
+                    continue;
+                }
+                LogTrace($"Caching spawn region mod data proxies with guid {customSpawnRegion.ModDataProxy.Guid}");
+                cachedProxies.Add(customSpawnRegion.ModDataProxy);
+            }
         }
 
 
         public void UncacheSpawnRegionModDataProxies(string sceneName)
         {
             mUnmatchedSpawnRegionModDataProxies.Clear();
-            LogDebug($"Decaching spawn region mod data proxies from cache for scene {sceneName}!");
+            LogTrace($"Uncaching spawn region mod data proxies from cache for scene {sceneName}!");
             List<SpawnRegionModDataProxy> cachedProxies = GetCachedSpawnRegionModDataProxies(sceneName);
             for (int i = 0, iMax = cachedProxies.Count; i < iMax; i++)
             {
                 if (!mUnmatchedSpawnRegionModDataProxies.TryAdd(cachedProxies[i].Guid, cachedProxies[i]))
                 {
-                    LogDebug($"Even though we checked at cache load, we have a spawn region mod data proxy guid collision at {cachedProxies[i].Guid} during de-caching!");
+                    LogTrace($"Even though we checked at cache load, we have a spawn region mod data proxy guid collision at {cachedProxies[i].Guid} during de-caching!");
                 }
-                LogDebug($"Decached spawn region mod data proxy with guid {cachedProxies.Count}!");
+                LogTrace($"Uncached spawn region mod data proxy with guid {cachedProxies[i].Guid}!");
             }
-            LogDebug($"Decached {mUnmatchedSpawnRegionModDataProxies.Count} region data proxies");
+            LogTrace($"Uncached {mUnmatchedSpawnRegionModDataProxies.Count} region data proxies");
         }
 
 
@@ -423,10 +497,10 @@ namespace ExpandedAiFramework
         {
             if (!mUnmatchedSpawnRegionModDataProxies.TryGetValue(guid, out matchedProxy))
             {
-                LogDebug($"Couldnt find unmached spawn region mod data proxy with guid {guid}");
+                LogTrace($"Couldnt find unmached spawn region mod data proxy with guid {guid}");
                 return false;
             }
-            LogDebug($"Matched against spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}, uncaching and wrapping");
+            LogTrace($"Matched against spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}, uncaching and wrapping");
             mUnmatchedSpawnRegionModDataProxies.Remove(guid);
             return true;
         }
@@ -439,9 +513,9 @@ namespace ExpandedAiFramework
         //if we start getting too many more of these, im going to turn it into a damn generic library! lol
         public void LoadSpawnModDataProxies()
         {
-            mSpawnModDataProxies.Clear();
-            LogDebug($"Trying to load spawn  mod data proxies from suffix SpawnModDataProxies!");
-            string proxiesString = mManager.LoadData($"SpawnModDataProxies");
+            mSpawnModDataProxyCache.Clear();
+            LogTrace($"Trying to load spawn  mod data proxies from suffix SpawnModDataProxies!");
+            string proxiesString = mModData.Load($"SpawnModDataProxies");
             if (proxiesString != null)
             {
                 Variant proxiesVariant = JSON.Load(proxiesString);
@@ -449,17 +523,18 @@ namespace ExpandedAiFramework
                 {
                     SpawnModDataProxy newProxy = new SpawnModDataProxy();
                     JSON.Populate(pathJSON, newProxy);
-                    if (!mSpawnModDataProxies.TryGetValue(newProxy.Scene, out List<SpawnModDataProxy> proxies))
-                    {
-                        proxies = new List<SpawnModDataProxy>();
-                        mSpawnModDataProxies.Add(newProxy.Scene, proxies);
-                    }
+                    List<SpawnModDataProxy> proxies = GetCachedSpawnModDataProxies(newProxy.Scene);
                     if (proxies.Contains(newProxy))
                     {
-                        LogDebug($"Couldn't add new spawn region data proxy to data manager library with guid {newProxy.Guid} in scene {newProxy.Scene} because it already exists!");
+                        LogError($"Couldn't add new spawn region data proxy to data manager library with guid {newProxy.Guid} in scene {newProxy.Scene} due to guid collision!");
                         continue;
                     }
-                    LogDebug($"DataManager: Deserialized spawn region mod data proxy with guid {newProxy.Guid} in scene {newProxy.Scene}!");
+                    if (!newProxy.InitializeType())
+                    {
+                        LogError($"Couldn't add new spawn region data proxy to data manager library with guid {newProxy.Guid} in scene {newProxy.Scene} because of type resolution error!");
+                        continue;
+                    }
+                    LogTrace($"DataManager: Deserialized spawn region mod data proxy with guid {newProxy.Guid} in scene {newProxy.Scene}!");
                     proxies.Add(newProxy);
                 }
             }
@@ -468,9 +543,9 @@ namespace ExpandedAiFramework
 
         public void SaveSpawnModDataProxies()
         {
-            LogDebug($"Saving spawn mod data proxies to suffix SpawnModDataProxies!");
+            LogTrace($"Saving spawn mod data proxies to suffix SpawnModDataProxies!");
             List<SpawnModDataProxy> masterProxyList = new List<SpawnModDataProxy>();
-            foreach (List<SpawnModDataProxy> subProxyList in mSpawnModDataProxies.Values)
+            foreach (List<SpawnModDataProxy> subProxyList in mSpawnModDataProxyCache.Values)
             {
                 masterProxyList.AddRange(subProxyList);
             }
@@ -479,8 +554,36 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            mManager.SaveData(json, $"SpawnModDataProxies");
-            LogDebug($"Saved!");
+            mModData.Save(json, $"SpawnModDataProxies");
+            LogTrace($"Saved!");
+        }
+
+
+        private void CacheSpawnModDataProxies()
+        {
+            if (mLastSceneName == string.Empty)
+            {
+                return;
+            }
+            LogTrace($"Caching spawn mod data proxies to scene {mLastSceneName}!");
+            List<SpawnModDataProxy> cachedProxies = GetCachedSpawnModDataProxies(mLastSceneName);
+            cachedProxies.Clear();
+            foreach (CustomBaseAi customAi in mManager.AiManager.CustomAis.Values)
+            {
+                if (customAi == null)
+                {
+                    LogTrace($"Null CustomAi found??");
+                    continue;
+                }
+                if (customAi.ModDataProxy == null ||
+                    customAi.ModDataProxy.Guid == Guid.Empty ||
+                    customAi.ModDataProxy.ParentGuid == Guid.Empty)
+                {
+                    continue;
+                }
+                LogTrace($"Caching spawn region mod data proxies with guid {customAi.ModDataProxy.Guid}");
+                cachedProxies.Add(customAi.ModDataProxy);
+            }
         }
 
 
@@ -488,7 +591,7 @@ namespace ExpandedAiFramework
         {
             mActiveSpawnModDataProxies.Clear();
             mQueuedSpawnModDataProxiesByParentGuid.Clear();
-            LogDebug($"Pulling spawn mod data proxies from cache for scene {sceneName}!");
+            LogTrace($"Uncaching spawn mod data proxies for scene {sceneName}!");
             List<SpawnModDataProxy> cachedProxies = GetCachedSpawnModDataProxies(sceneName);
             for (int i = 0, iMax = cachedProxies.Count; i < iMax; i++)
             {
@@ -499,29 +602,29 @@ namespace ExpandedAiFramework
                 }
                 if (!mActiveSpawnModDataProxies.TryAdd(cachedProxies[i].Guid, cachedProxies[i]))
                 {
-                    LogDebug($"Even though we checked at cache load, we have a spawn mod data proxy guid collision at {cachedProxies[i].Guid} during de-caching!");
+                    LogTrace($"Even though we checked at cache load, we have a spawn mod data proxy guid collision at {cachedProxies[i].Guid} during de-caching!");
                     continue;
                 }
-                LogDebug($"Decached spawn mod data proxy with guid {cachedProxies[i].Guid} which needs pairing against spawn region wrapper with guid {cachedProxies[i].ParentGuid}!");
+                LogTrace($"Uncached spawn mod data proxy with guid {cachedProxies[i].Guid} which needs pairing against spawn region wrapper with guid {cachedProxies[i].ParentGuid}!");
                 List<Guid> proxyGuidsByParentGuid = GetCachedSpawnModDataProxiesByParentGuid(cachedProxies[i].ParentGuid);
                 if (proxyGuidsByParentGuid.Contains(cachedProxies[i].Guid))
                 {
-                    LogDebug($"Even though we checked at cache load, we have a spawn mod data proxy guid collision at {cachedProxies[i].Guid} within parent queued spawn list for parent guid {cachedProxies[i].ParentGuid}!");
+                    LogTrace($"Even though we checked at cache load, we have a spawn mod data proxy guid collision at {cachedProxies[i].Guid} within parent queued spawn list for parent guid {cachedProxies[i].ParentGuid}!");
                     continue;
                 }
                 proxyGuidsByParentGuid.Add(cachedProxies[i].Guid);
-                LogDebug($"Queued spawn mod data proxy with guid {cachedProxies[i].Guid} in spawn list for parent guid {cachedProxies[i].ParentGuid}");
+                LogTrace($"Queued spawn mod data proxy with guid {cachedProxies[i].Guid} in spawn list for parent guid {cachedProxies[i].ParentGuid}");
             }
-            LogDebug($"Decached {mActiveSpawnModDataProxies.Count} data proxies paired against {mQueuedSpawnModDataProxiesByParentGuid.Count} parent spawn regions!");
+            LogTrace($"Uncached {mActiveSpawnModDataProxies.Count} data proxies paired against {mQueuedSpawnModDataProxiesByParentGuid.Count} parent spawn regions!");
         }
 
 
         public List<SpawnModDataProxy> GetCachedSpawnModDataProxies(string sceneName)
         {
-            if (!mSpawnModDataProxies.TryGetValue(sceneName, out List<SpawnModDataProxy> cachedProxies))
+            if (!mSpawnModDataProxyCache.TryGetValue(sceneName, out List<SpawnModDataProxy> cachedProxies))
             {
                 cachedProxies = new List<SpawnModDataProxy>();
-                mSpawnModDataProxies.Add(sceneName, cachedProxies);
+                mSpawnModDataProxyCache.Add(sceneName, cachedProxies);
             }
             return cachedProxies;
         }
@@ -548,7 +651,7 @@ namespace ExpandedAiFramework
             }
             if (availableProxies.Count == 0)
             {
-                LogDebug($"No available proxies queued, generate a new one.");
+                LogTrace($"No available proxies queued, generate a new one.");
                 return false;
             }
             if (!mActiveSpawnModDataProxies.TryGetValue(availableProxies[0], out proxy))

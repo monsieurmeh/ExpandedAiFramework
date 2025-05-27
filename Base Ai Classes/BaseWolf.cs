@@ -8,7 +8,7 @@ namespace ExpandedAiFramework
     // No attacking bears, moose or cougars! RUN when you see them!
 
     [RegisterTypeInIl2Cpp]
-    public class BaseWolf : CustomAiBase
+    public class BaseWolf : CustomBaseAi
     {
         public static BaseWolfSettings BaseWolfSettings = new BaseWolfSettings();
         public BaseWolf(IntPtr ptr) : base(ptr) { }

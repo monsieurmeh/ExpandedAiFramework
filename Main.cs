@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEngine;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.10.6", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.10.7", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 namespace ExpandedAiFramework
@@ -26,11 +26,17 @@ namespace ExpandedAiFramework
             LoggerInstance.Msg(Shutdown() ? "Shutdown Successfully!" : "Shutdown Errors!");
         }
 
-        //MUCH MUCH MUCH more reliable than trying to parse "current scene" all over the place. This catches loading of non-active scenes! 
+
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             LogVerbose("OnInitializedScene");
             Manager.OnInitializedScene(sceneName);
+        }
+
+
+        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
+        {
+            mManager.OnLoadScene(sceneName);
         }
 
 

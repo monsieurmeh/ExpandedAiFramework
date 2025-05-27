@@ -25,11 +25,12 @@ namespace ExpandedAiFramework
         }
 
         public virtual void Shutdown() { }
-        public virtual void OnStartNewGame() { OnLoadScene(); }
-        public virtual void OnLoadScene() { }
+        public virtual void OnStartNewGame() { OnLoadScene(mManager.CurrentScene); }
+        public virtual void OnLoadScene(string sceneName) { }
         public virtual void OnInitializedScene(string sceneName) { }
         public virtual void OnSaveGame() { }
         public virtual void OnLoadGame() { }
         public virtual void Update() { }
+        public virtual void OnQuitToMainMenu() { }
     }
 }
