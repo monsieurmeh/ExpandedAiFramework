@@ -187,6 +187,11 @@ namespace ExpandedAiFramework
                 LogError("TryInterceptCarcassSpawn given null base ai, aborting!");
                 return false;
             }
+            if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
+            {
+                LogTrace("Already wrapped this ai, no need for a second on transition to carcass state.");
+                return false;
+            }
             InjectCustomAi(baseAi, GetFallbackBaseSpawnableType(baseAi), null, null, true);
             return true;
         }
