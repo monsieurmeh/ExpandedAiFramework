@@ -1,5 +1,4 @@
 ﻿using ComplexLogger;
-using Il2Cpp;
 using UnityEngine;
 
 
@@ -13,11 +12,13 @@ namespace ExpandedAiFramework
         protected BaseAi mBaseAi;
         protected TimeOfDay mTimeOfDay;
         protected EAFManager mManager;
-        protected SpawnModDataProxy mProxy;
+        protected SpawnModDataProxy mModDataProxy;
         protected float mTimeSinceCheckForTargetInPatrolWaypointsMode = 0.0f;
+
 
         public BaseAi BaseAi { get { return mBaseAi; } }
         public Component Self { get { return this; } }
+        public SpawnModDataProxy ModDataProxy { get { return mModDataProxy; } }
 
         //ML is fighting me on dependency injection, doesn't want to "support" injecting my manager class for whatever reason. Feh
         // Occasionally the spawn region is needed during initial setup, and it doesn't always seem to set itself until after the spawn process, so it's being passed here just in case
@@ -26,7 +27,7 @@ namespace ExpandedAiFramework
             mBaseAi = ai;
             mTimeOfDay = timeOfDay;
             mManager = Manager;// manager;
-            mProxy = proxy;
+            mModDataProxy = proxy;
             if (proxy != null) // persistency needs to be disabled for this to end up happening, but it CAN happen!
             {
                 mBaseAi.transform.position = proxy.CurrentPosition;
@@ -38,10 +39,10 @@ namespace ExpandedAiFramework
         //Override this if you need to handle any kind of longer term tracking
         public virtual void Despawn(float despawnTime) 
         {
-            if (mProxy != null)
+            if (mModDataProxy != null)
             {
-                mProxy.CurrentPosition = mBaseAi.transform.position;
-                mProxy.LastDespawnTime = Utility.GetCurrentTimelinePoint();
+                mModDataProxy.CurrentPosition = mBaseAi.transform.position;
+                mModDataProxy.LastDespawnTime = Utility.GetCurrentTimelinePoint();
             }
         } 
 
@@ -445,9 +446,9 @@ namespace ExpandedAiFramework
                 case AiMode.Attack: mBaseAi.EnterAttack(); break;
                 case AiMode.Dead:
                     mBaseAi.EnterDead(); 
-                    if (mProxy != null)
+                    if (mModDataProxy != null)
                     {
-                        mProxy.Disconnected = true;
+                        mModDataProxy.Disconnected = true;
                     }
                     break;
                 case AiMode.Feeding: mBaseAi.EnterFeeding(); break;

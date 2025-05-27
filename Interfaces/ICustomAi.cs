@@ -11,6 +11,7 @@ namespace ExpandedAiFramework
         BaseAi BaseAi { get; }
         //
         Component Self { get; }
+        SpawnModDataProxy ModDataProxy { get; }
         void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy proxy);//, EAFManager manager);
         void Despawn(float despawnTime);
         void SetAiMode(AiMode mode);
