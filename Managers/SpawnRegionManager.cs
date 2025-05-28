@@ -44,23 +44,7 @@ namespace ExpandedAiFramework
             }
             for (int i = 0, iMax = sceneSpawnRegions.Count; i < iMax; i++)
             {
-                if (!TryInjectCustomSpawnRegion(sceneSpawnRegions[i], out CustomBaseSpawnRegion newSpawnRegionWrapper))
-                {
-                    continue;
-                }
-                // Try and fetch existing spawn mod data proxies for spawning
-                if (sceneSpawnRegions[i].m_SpawnablePrefab == null)
-                {
-                   LogTrace($"Null spawnable prefab on spawn region with hashcode {sceneSpawnRegions[i].GetHashCode()}! This happens, spawn region will try to wrap itself during spawn intercept instead. This is just an optimized step!");
-                    continue;
-                }
-                if (!sceneSpawnRegions[i].m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi spawnableAi))
-                {
-                    LogTrace($"Could not get base ai script from spawnable prefab on spawn region with hashcode {sceneSpawnRegions[i].GetHashCode()}!");
-                    continue;
-                }
-                LogTrace($"Region with hashcode {sceneSpawnRegions[i].GetHashCode()} and region guid {newSpawnRegionWrapper.ModDataProxy.Guid} wrapped and registered.");
-                //Had some pre-queuing behavior here, it really messed up development at the time. Delegating to "future nick" to implement... oneday...lol
+                TryInjectCustomSpawnRegion(sceneSpawnRegions[i], out CustomBaseSpawnRegion newSpawnRegionWrapper);
             }
         }
 
@@ -138,7 +122,7 @@ namespace ExpandedAiFramework
             }
             if (mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out customSpawnRegion))
             {
-                LogTrace($"Previously matched spawn region with hash code {spawnRegion.GetHashCode()} and guid {customSpawnRegion.ModDataProxy.Guid}, skipping.");
+                //LogTrace($"Previously matched spawn region with hash code {spawnRegion.GetHashCode()} and guid {customSpawnRegion.ModDataProxy.Guid}, skipping.");
                 return false;
             }
             if (!spawnRegion.TryGetComponent<ObjectGuid>(out ObjectGuid guid))
@@ -157,7 +141,7 @@ namespace ExpandedAiFramework
             if (!mDataManager.TryGetUnmatchedSpawnRegionModDataProxy(guid, spawnRegion, out SpawnRegionModDataProxy matchedProxy))
             { 
                 LogTrace($"No spawn region mod data proxy matched to spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}. creating then wrapping");
-                matchedProxy = new SpawnRegionModDataProxy(guid, mManager.CurrentScene, spawnRegion);
+                matchedProxy = GenerateNewSpawnRegionModDataProxy(mManager.CurrentScene, spawnRegion, guid);
             }
             else
             {
@@ -168,6 +152,27 @@ namespace ExpandedAiFramework
             return newSpawnRegionWrapper;
         }
 
+
+        public SpawnRegionModDataProxy GenerateNewSpawnRegionModDataProxy(string scene, SpawnRegion spawnRegion, Guid guid)
+        {
+            if (spawnRegion == null)
+            {
+                LogTrace($"Cant generate a new spawn mod data proxy without parent region!");
+                return null;
+            }
+            if (mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out CustomBaseSpawnRegion customSpawnRegion))
+            {
+                LogTrace($"Spawn region with hash code {spawnRegion.GetHashCode()} already wrapped, cannot re-wrap!");
+                return null;
+            }
+            SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy(guid, scene, spawnRegion);
+            if (!mDataManager.TryRegisterActiveSpawnRegionModDataProxy(newProxy))
+            {
+                LogTrace($"Couldnt register new spawn region mod data proxy with guid {newProxy.Guid} due to guid collision!");
+                return null;
+            }
+            return newProxy;
+        }
 
 
         public override void Shutdown()
