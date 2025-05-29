@@ -1329,7 +1329,7 @@ namespace ExpandedAiFramework
 
                         // Exit paint mode
                         mSelectingHidingSpotRotation = false;
-                        CleanUpPaintMode();
+                        RefreshPaintMode();
                         SaveMapData();
                     }
                 }
@@ -1365,11 +1365,18 @@ namespace ExpandedAiFramework
 
         private void CleanUpPaintMode()
         {
-            CleanUpPaintMarker();
+            RefreshPaintMode();
             mCurrentPaintMode = PaintMode.COUNT;
             mIsPaintModeInitialized = false;
+        }
+
+
+        private void RefreshPaintMode()
+        {
+            CleanUpPaintMarker();
             mCurrentWanderPathName = string.Empty;
         }
+
 
         private void ExitPaintMode()
         {
