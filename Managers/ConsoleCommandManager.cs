@@ -1105,7 +1105,17 @@ namespace ExpandedAiFramework
                 mPaintMarkerPosition = hit.point;
                 if (mSelectingHidingSpotRotation)
                 {
-                    //AIDER: Add logic for rotating upper arrow-shaped marker in XZ direction of raycast hit above, it is temporary so it should be added already and turned into the "current" marker for this step
+                    // Update arrow rotation to point at mouse position in XZ plane
+                    Transform arrow = mPaintMarker?.transform?.Find("DirectionArrow");
+                    if (arrow != null)
+                    {
+                        Vector3 direction = hit.point - mPendingHidingSpotPosition;
+                        direction.y = 0; // Keep in XZ plane
+                        if (direction != Vector3.zero)
+                        {
+                            arrow.rotation = Quaternion.LookRotation(direction.normalized);
+                        }
+                    }
                 }
                 else
                 {
@@ -1123,6 +1133,11 @@ namespace ExpandedAiFramework
         {
             if (mPaintMarker != null)
             {
+                // Destroy any child objects (like direction arrow) first
+                foreach (Transform child in mPaintMarker.transform)
+                {
+                    UnityEngine.Object.Destroy(child.gameObject);
+                }
                 UnityEngine.Object.Destroy(mPaintMarker);
                 mPaintMarker = null;
             }
@@ -1246,6 +1261,23 @@ namespace ExpandedAiFramework
                     // First click for hiding spot - set position
                     mPendingHidingSpotPosition = mPaintMarkerPosition;
                     mSelectingHidingSpotRotation = true;
+                    
+                    // Create directional arrow marker
+                    if (mPaintMarker != null)
+                    {
+                        // Position arrow on top of marker
+                        Vector3 arrowPos = mPaintMarker.transform.position + new Vector3(0, 100f, 0);
+                        GameObject arrow = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                        UnityEngine.Object.Destroy(arrow.GetComponent<Collider>());
+                        arrow.transform.localScale = new Vector3(5f, 100f, 5f);
+                        arrow.transform.position = arrowPos;
+                        arrow.GetComponent<Renderer>().material.color = Color.magenta;
+                        arrow.name = "DirectionArrow";
+                        
+                        // Parent to paint marker so it moves with it
+                        arrow.transform.SetParent(mPaintMarker.transform);
+                    }
+                    
                     LogAlways($"Selected hiding spot position at {mPendingHidingSpotPosition}. Left click to set rotation.");
                 }
             }
