@@ -3,13 +3,20 @@
 using UnityEngine.AI;
 using UnityEngine;
 using Il2Cpp;
+using System.Xml.Linq;
 
 namespace ExpandedAiFramework
 {
     public sealed class ConsoleCommandManager : BaseSubManager
     {
-        private bool mRecordingWanderPath = false;
-        private bool mInPaintMode = false;
+        private enum PaintMode : int
+        {
+            WanderPath = 0,
+            HidingSpot = 1,
+            COUNT
+        }
+
+        private PaintMode mCurrentPaintMode = PaintMode.COUNT;
         private bool mSelectingHidingSpotRotation = false;
         private Vector3 mPendingHidingSpotPosition;
         private string mCurrentWanderPathName = string.Empty;
@@ -27,8 +34,7 @@ namespace ExpandedAiFramework
 
         public override void OnInitializedScene(string sceneName)
         {
-            mRecordingWanderPath = false;
-            mInPaintMode = false;
+            mCurrentPaintMode = PaintMode.COUNT;
             mCurrentWanderPathName = string.Empty;
             mCurrentWanderPathPoints.Clear();
             for (int i = 0, iMax = mCurrentWanderPathPointMarkers.Count; i < iMax; i++)
@@ -46,7 +52,6 @@ namespace ExpandedAiFramework
         public override void Update()
         {
             UpdatePaintMarker();
-            HandlePaintModeInput();
         }
 
         #region Helpers
@@ -193,7 +198,7 @@ namespace ExpandedAiFramework
 
         private void Console_CreateWanderPath()
         {
-            if (mRecordingWanderPath)
+            if (mCurrentPaintMode != PaintMode.WanderPath)
             {
                 LogWarning($"Can't start recording path because path {mCurrentWanderPathName} is still active! enter command '{CommandString} {CommandString_Finish} {CommandString_WanderPath}' to finish current wander path.");
                 return;
@@ -217,7 +222,7 @@ namespace ExpandedAiFramework
                     return;
                 }
             }
-            mRecordingWanderPath = true;
+            mCurrentPaintMode = PaintMode.WanderPath;
             mCurrentWanderPathName = name;
             Console_AddToCurrentWanderPath();
             LogAlways($"Started wander path with name {name} at {mCurrentWanderPathPoints[0]}. Use command '{CommandString} {CommandString_AddTo} {CommandString_WanderPath}' to add more points, and '{CommandString} {CommandString_Finish} {CommandString_WanderPath} to finish the path.");
@@ -408,7 +413,7 @@ namespace ExpandedAiFramework
         private void Console_AddToCurrentWanderPath()
         {
             Vector3 pos = GameManager.m_vpFPSCamera.transform.position;
-            if (!mRecordingWanderPath)
+            if (mCurrentPaintMode != PaintMode.WanderPath)
             {
                 LogWarning($"Start a path first!");
                 return;
@@ -445,12 +450,12 @@ namespace ExpandedAiFramework
 
         private void Console_FinishWanderPath()
         {
-            if (!mRecordingWanderPath)
+            if (mCurrentPaintMode != PaintMode.WanderPath)
             {
                 LogWarning($"Start recording a path to cancel!");
                 return;
             }
-            mRecordingWanderPath = false;
+            mCurrentPaintMode = PaintMode.COUNT;
             WanderPaths[GameManager.m_ActiveScene].Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), GameManager.m_ActiveScene));
             LogAlways($"Generated wander path {mCurrentWanderPathName} starting at {mCurrentWanderPathPoints[0]}.");
             mCurrentWanderPathPointMarkers.Add(ConnectMarkers(mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], mCurrentWanderPathPoints[0], Color.blue, $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 100));
@@ -895,17 +900,16 @@ namespace ExpandedAiFramework
 
             if (type == CommandString_HidingSpot)
             {
-                if (!InitializePaintMode(name ?? "HidingSpot"))
+                if (!InitializePaintHidingSpot(name ?? "HidingSpot")) //AIDER: Implement a "auto new name" that checks current hiding spots and creats a new "ExpressHidingSpot" with a number after as needed, similar to windows auto-renaming new files to avoid overwrites
                 {
                     LogWarning("Failed to initialize paint mode");
                     return;
                 }
                 LogAlways($"Entered hiding spot paint mode. Left click to select position, then left click again to set rotation.");
-                mSelectingHidingSpotRotation = false;
             }
             else if (type == CommandString_WanderPath)
             {
-                if (!InitializePaintMode(name ?? "WanderPath"))
+                if (!InitializePaintWanderPath(name ?? "WanderPath"))//AIDER: Implement a "auto new name" that checks current wander paths and creats a new "ExpressHidingSpot" with a number after as needed, similar to windows auto-renaming new files to avoid overwrites
                 {
                     LogWarning("Failed to initialize paint mode");
                     return;
@@ -916,7 +920,51 @@ namespace ExpandedAiFramework
 
         private bool mIsPaintModeInitialized = false;
 
-        private bool InitializePaintMode(string name)
+
+        private bool InitializePaintWanderPath(string name)
+        {
+            try
+            {
+                // Clear any existing state
+                CleanUpPaintMarker();
+                mCurrentWanderPathPoints.Clear();
+                if (mCurrentWanderPathPointMarkers != null)
+                {
+                    foreach (var marker in mCurrentWanderPathPointMarkers)
+                    {
+                        if (marker != null) UnityEngine.Object.Destroy(marker);
+                    }
+                    mCurrentWanderPathPointMarkers.Clear();
+                }
+                else
+                {
+                    mCurrentWanderPathPointMarkers = new List<GameObject>();
+                }
+
+                // Set new state
+                mCurrentWanderPathName = name;
+
+                // Create initial marker
+                mPaintMarker = CreateMarker(Vector3.zero, Color.green, "PaintMarker", 50f, 2f);
+                if (mPaintMarker == null)
+                {
+                    LogWarning("Failed to create paint marker");
+                    return false;
+                }
+
+                mCurrentPaintMode = PaintMode.WanderPath;
+                mIsPaintModeInitialized = true;
+                return true;
+            }
+            catch (Exception e)
+            {
+                LogError($"Paint mode initialization failed: {e}");
+                CleanUpPaintMode();
+                return false;
+            }
+        }
+
+        private bool InitializePaintHidingSpot(string name)
         {
             try
             {
@@ -947,7 +995,8 @@ namespace ExpandedAiFramework
                     return false;
                 }
 
-                mInPaintMode = true;
+                mCurrentPaintMode = PaintMode.HidingSpot;
+                mSelectingHidingSpotRotation = false;
                 mIsPaintModeInitialized = true;
                 return true;
             }
@@ -961,43 +1010,78 @@ namespace ExpandedAiFramework
 
         private void UpdatePaintMarker()
         {
-            if (!mInPaintMode || GameManager.m_vpFPSCamera.m_Camera == null) 
+            HandlePaintInput();
+            UpdatePaintMarkerInternal();
+        }
+
+
+        private void HandlePaintInput()
+        {
+            switch (mCurrentPaintMode)
+            {
+                case PaintMode.WanderPath: HandlePaintWanderPathInput(); return;
+                case PaintMode.HidingSpot: HandlePaintHidingSpotInput(); return;
+            }
+        }
+
+
+        private void UpdatePaintMarkerInternal()
+        {
+            switch (mCurrentPaintMode)
+            {
+                case PaintMode.WanderPath: UpdatePaintMarkerWanderPath(); return;
+                case PaintMode.HidingSpot: UpdatePaintMarkerHidingSpot(); return;
+            }
+        }
+
+
+        private void UpdatePaintMarkerWanderPath()
+        {
+            if (mCurrentPaintMode == PaintMode.COUNT || GameManager.m_vpFPSCamera.m_Camera == null)
             {
                 CleanUpPaintMarker();
                 return;
             }
 
-            try 
+            Ray ray = GameManager.m_vpFPSCamera.m_Camera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
             {
-                Ray ray = GameManager.m_vpFPSCamera.m_Camera.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
+                mPaintMarkerPosition = hit.point;
+                if (mPaintMarker != null && mPaintMarker.transform != null)
                 {
-                    mPaintMarkerPosition = hit.point;
-                    
-                    // Ensure marker exists
-                    if (mPaintMarker == null)
-                    {
-                        if (!InitializePaintMode(mCurrentWanderPathName))
-                        {
-                            mInPaintMode = false;
-                            return;
-                        }
-                    }
+                    mPaintMarker.transform.position = hit.point;
+                }
+            }
+        }
 
-                    // Update marker position
+
+        private void UpdatePaintMarkerHidingSpot()
+        {
+            if (mCurrentPaintMode == PaintMode.COUNT || GameManager.m_vpFPSCamera.m_Camera == null)
+            {
+                CleanUpPaintMarker();
+                return;
+            }
+
+            Ray ray = GameManager.m_vpFPSCamera.m_Camera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
+            {
+                mPaintMarkerPosition = hit.point;
+                if (mSelectingHidingSpotRotation)
+                {
+                    //AIDER: Add logic for rotating upper arrow-shaped marker in XZ direction of raycast hit above, it is temporary so it should be added already and turned into the "current" marker for this step
+                }
+                else
+                {
                     if (mPaintMarker != null && mPaintMarker.transform != null)
                     {
                         mPaintMarker.transform.position = hit.point;
                     }
                 }
             }
-            catch (Exception e)
-            {
-                LogError($"Error in UpdatePaintMarker: {e}");
-                mInPaintMode = false;
-                CleanUpPaintMarker();
-            }
         }
+
+
 
         private void CleanUpPaintMarker()
         {
@@ -1008,175 +1092,156 @@ namespace ExpandedAiFramework
             }
         }
 
-        private void HandlePaintModeInput()
+
+        private void HandlePaintWanderPathInput()
         {
-            try
+            if (Input.GetMouseButtonDown(0)) // Left click
             {
-                if (!mIsPaintModeInitialized || (!mInPaintMode && !mSelectingHidingSpotRotation) || mPaintMarker == null)
+                if (mCurrentWanderPathPointMarkers == null)
                 {
-                    // Only log warning if we're supposed to be in paint mode but something's wrong
-                    if (mInPaintMode && !mIsPaintModeInitialized)
-                    {
-                        LogWarning("Paint mode not initialized - attempting recovery...");
-                        if (!InitializePaintMode(mCurrentWanderPathName))
-                        {
-                            CleanUpPaintMode();
-                        }
-                    }
-                    return;
+                    mCurrentWanderPathPointMarkers = new List<GameObject>();
                 }
 
-                if (Input.GetMouseButtonDown(0)) // Left click
+                if (mCurrentWanderPathPoints.Count == 0)
                 {
-                    if (mSelectingHidingSpotRotation)
+                    // First point
+                    mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
+                    var marker = CreateMarker(
+                        mPaintMarkerPosition,
+                        Color.blue,
+                        $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker",
+                        100);
+                    if (marker != null)
                     {
-                        // Second click - set rotation
-                        Ray ray = GameManager.m_vpFPSCamera.m_Camera.ScreenPointToRay(Input.mousePosition);
-                        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
-                        {
-                            Vector3 direction = hit.point - mPendingHidingSpotPosition;
-                            direction.y = 0; // Keep rotation only in XZ plane
-                            Quaternion rotation = Quaternion.LookRotation(direction.normalized);
-
-                            // Create the hiding spot
-                            string scene = GameManager.m_ActiveScene;
-                            if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
-                            {
-                                spots = new List<HidingSpot>();
-                                HidingSpots.Add(scene, spots);
-                            }
-
-                            string name = $"HidingSpot_{spots.Count + 1}";
-                            HidingSpot newSpot = new HidingSpot(name, mPendingHidingSpotPosition, rotation, scene);
-                            spots.Add(newSpot);
-                            
-                            // Show marker
-                            mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {name}", 100.0f));
-                            LogAlways($"Created hiding spot {name} at {newSpot.Position} with rotation {newSpot.Rotation}");
-
-                            // Exit paint mode
-                            mSelectingHidingSpotRotation = false;
-                            CleanUpPaintMode();
-                            SaveMapData();
-                        }
+                        mCurrentWanderPathPointMarkers.Add(marker);
                     }
-                    else if (mInPaintMode && !mSelectingHidingSpotRotation)
+                }
+                else
+                {
+                    // Additional points
+                    mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
+                    var marker = CreateMarker(
+                        mPaintMarkerPosition,
+                        Color.blue,
+                        $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker",
+                        100);
+                    if (marker != null)
                     {
-                        // First click for hiding spot - set position
-                        mPendingHidingSpotPosition = mPaintMarkerPosition;
-                        mSelectingHidingSpotRotation = true;
-                        mInPaintMode = false;
-                        LogAlways($"Selected hiding spot position at {mPendingHidingSpotPosition}. Left click to set rotation.");
+                        mCurrentWanderPathPointMarkers.Add(marker);
                     }
-                    else if (mInPaintMode)
-                    {
-                        if (mCurrentWanderPathPointMarkers == null) 
-                        {
-                            mCurrentWanderPathPointMarkers = new List<GameObject>();
-                        }
 
-                        if (mCurrentWanderPathPoints.Count == 0)
+                    if (mCurrentWanderPathPoints.Count > 1)
                     {
-                        // First point
-                        mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
-                        var marker = CreateMarker(
-                            mPaintMarkerPosition, 
-                            Color.blue, 
-                            $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker", 
+                        var connector = ConnectMarkers(
+                            mPaintMarkerPosition,
+                            mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2],
+                            Color.blue,
+                            $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}",
                             100);
-                        if (marker != null)
+                        if (connector != null)
                         {
-                            mCurrentWanderPathPointMarkers.Add(marker);
-                        }
-                    }
-                    else
-                    {
-                        // Additional points
-                        mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
-                        var marker = CreateMarker(
-                            mPaintMarkerPosition, 
-                            Color.blue, 
-                            $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker", 
-                            100);
-                        if (marker != null)
-                        {
-                            mCurrentWanderPathPointMarkers.Add(marker);
-                        }
-
-                        if (mCurrentWanderPathPoints.Count > 1)
-                        {
-                            var connector = ConnectMarkers(
-                                mPaintMarkerPosition, 
-                                mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], 
-                                Color.blue, 
-                                $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 
-                                100);
-                            if (connector != null)
-                            {
-                                mCurrentWanderPathPointMarkers.Add(connector);
-                            }
+                            mCurrentWanderPathPointMarkers.Add(connector);
                         }
                     }
                 }
-                else if (Input.GetMouseButtonDown(1)) // Right click
-                {
-                    ExitPaintMode();
-                }
+                
             }
-            catch (Exception e)
+            else if (Input.GetMouseButtonDown(1)) // Right click
             {
-                LogError($"Error in HandlePaintModeInput: {e}");
-                mInPaintMode = false;
-                CleanUpPaintMarker();
+                ExitPaintMode();
             }
         }
+
+
+        private void HandlePaintHidingSpotInput()
+        {
+            if (Input.GetMouseButtonDown(0)) // Left click
+            {
+                if (mSelectingHidingSpotRotation)
+                {
+                    // Second click - set rotation
+                    Ray ray = GameManager.m_vpFPSCamera.m_Camera.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
+                    {
+                        Vector3 direction = hit.point - mPendingHidingSpotPosition;
+                        direction.y = 0; // Keep rotation only in XZ plane
+                        Quaternion rotation = Quaternion.LookRotation(direction.normalized);
+
+                        // Create the hiding spot
+                        string scene = GameManager.m_ActiveScene;
+                        if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
+                        {
+                            spots = new List<HidingSpot>();
+                            HidingSpots.Add(scene, spots);
+                        }
+
+                        string name = $"HidingSpot_{spots.Count + 1}";
+                        HidingSpot newSpot = new HidingSpot(name, mPendingHidingSpotPosition, rotation, scene);
+                        spots.Add(newSpot);
+                            
+                        // Show marker
+                        mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {name}", 100.0f));
+                        LogAlways($"Created hiding spot {name} at {newSpot.Position} with rotation {newSpot.Rotation}");
+
+                        // Exit paint mode
+                        mSelectingHidingSpotRotation = false;
+                        CleanUpPaintMode();
+                        SaveMapData();
+                    }
+                }
+                else
+                {
+                    // First click for hiding spot - set position
+                    mPendingHidingSpotPosition = mPaintMarkerPosition;
+                    mSelectingHidingSpotRotation = true;
+                    LogAlways($"Selected hiding spot position at {mPendingHidingSpotPosition}. Left click to set rotation.");
+                }
+            }
+            else if (Input.GetMouseButtonDown(1)) // Right click
+            {
+                ExitPaintMode();
+            }
+        }
+
 
         private void CleanUpPaintMode()
         {
             CleanUpPaintMarker();
-            mInPaintMode = false;
+            mCurrentPaintMode = PaintMode.COUNT;
             mIsPaintModeInitialized = false;
             mCurrentWanderPathName = string.Empty;
         }
 
         private void ExitPaintMode()
         {
-            try
+            if (mCurrentWanderPathPoints.Count > 1)
             {
-                if (mCurrentWanderPathPoints.Count > 1)
-                {
-                    // Close the loop for wanderpaths
-                    mCurrentWanderPathPointMarkers.Add(ConnectMarkers(
-                        mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1],
-                        mCurrentWanderPathPoints[0],
-                        Color.blue,
-                        $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}",
-                        100));
+                // Close the loop for wanderpaths
+                mCurrentWanderPathPointMarkers.Add(ConnectMarkers(
+                    mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1],
+                    mCurrentWanderPathPoints[0],
+                    Color.blue,
+                    $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}",
+                    100));
 
-                    // Save the path
-                    string scene = GameManager.m_ActiveScene;
-                    if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
-                    {
-                        paths = new List<WanderPath>();
-                        WanderPaths.Add(scene, paths);
-                    }
-                    paths.Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), scene));
-                    SaveMapData();
-                }
-                mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
-
-                mCurrentWanderPathPoints.Clear();
-                if (mCurrentWanderPathPointMarkers != null)
+                // Save the path
+                string scene = GameManager.m_ActiveScene;
+                if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
                 {
-                    mCurrentWanderPathPointMarkers.Clear();
+                    paths = new List<WanderPath>();
+                    WanderPaths.Add(scene, paths);
                 }
-                CleanUpPaintMode();
+                paths.Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), scene));
+                SaveMapData();
             }
-            catch (Exception e)
+            mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
+
+            mCurrentWanderPathPoints.Clear();
+            if (mCurrentWanderPathPointMarkers != null)
             {
-                LogError($"Error in ExitPaintMode: {e}");
-                mInPaintMode = false;
+                mCurrentWanderPathPointMarkers.Clear();
             }
+            CleanUpPaintMode();
         }
 
         #endregion
