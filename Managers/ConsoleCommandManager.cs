@@ -977,8 +977,6 @@ namespace ExpandedAiFramework
             }
         }
 
-        private bool mIsPaintModeInitialized = false;
-
 
         private string GetUniqueWanderPathName()
         {
@@ -1048,7 +1046,6 @@ namespace ExpandedAiFramework
                 }
 
                 mCurrentPaintMode = PaintMode.WanderPath;
-                mIsPaintModeInitialized = true;
                 return true;
             }
             catch (Exception e)
@@ -1092,7 +1089,6 @@ namespace ExpandedAiFramework
 
                 mCurrentPaintMode = PaintMode.HidingSpot;
                 mSelectingHidingSpotRotation = false;
-                mIsPaintModeInitialized = true;
                 return true;
             }
             catch (Exception e)
@@ -1293,6 +1289,7 @@ namespace ExpandedAiFramework
                 {
                     // Regular Right click - finish current path
                     ExitPaintMode();
+                    InitializePaintWanderPath(GetUniqueWanderPathName());
                 }
                 else
                 {
@@ -1337,6 +1334,7 @@ namespace ExpandedAiFramework
                         mSelectingHidingSpotRotation = false;
                         RefreshPaintMode();
                         SaveMapData();
+                        InitializePaintHidingSpot(GetUniqueHidingSpotName());
                     }
                 }
                 else
@@ -1373,7 +1371,6 @@ namespace ExpandedAiFramework
         {
             RefreshPaintMode();
             mCurrentPaintMode = PaintMode.COUNT;
-            mIsPaintModeInitialized = false;
         }
 
 
