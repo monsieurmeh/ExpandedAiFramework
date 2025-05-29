@@ -9,9 +9,13 @@ namespace ExpandedAiFramework
     public sealed class ConsoleCommandManager : BaseSubManager
     {
         private bool mRecordingWanderPath = false;
+        private bool mInPaintMode = false;
         private string mCurrentWanderPathName = string.Empty;
         private List<Vector3> mCurrentWanderPathPoints = new List<Vector3>();
         private List<GameObject> mCurrentWanderPathPointMarkers = new List<GameObject>();
+        private GameObject mPaintMarker = null;
+        private Vector3 mPaintMarkerPosition = Vector3.zero;
+        private Quaternion mPaintMarkerRotation = Quaternion.identity;
         private List<GameObject> mDebugShownHidingSpots = new List<GameObject>();
         private List<GameObject> mDebugShownWanderPaths = new List<GameObject>();
         private List<GameObject> mDebugShownSpawnRegions = new List<GameObject>();
@@ -22,6 +26,7 @@ namespace ExpandedAiFramework
         public override void OnInitializedScene(string sceneName)
         {
             mRecordingWanderPath = false;
+            mInPaintMode = false;
             mCurrentWanderPathName = string.Empty;
             mCurrentWanderPathPoints.Clear();
             for (int i = 0, iMax = mCurrentWanderPathPointMarkers.Count; i < iMax; i++)
@@ -29,6 +34,17 @@ namespace ExpandedAiFramework
                 UnityEngine.Object.Destroy(mCurrentWanderPathPointMarkers[i]);
             }
             mCurrentWanderPathPointMarkers.Clear();
+            if (mPaintMarker != null)
+            {
+                UnityEngine.Object.Destroy(mPaintMarker);
+                mPaintMarker = null;
+            }
+        }
+
+        public override void Update()
+        {
+            UpdatePaintMarker();
+            HandlePaintModeInput();
         }
 
         #region Helpers
@@ -862,7 +878,121 @@ namespace ExpandedAiFramework
 
         private void Console_Paint()
         {
+            string type = uConsole.GetString();
+            if (!IsTypeSupported(type, CommandString_PaintSupportedTypes))
+            {
+                return;
+            }
 
+            string name = uConsole.GetString();
+            if (!IsNameProvided(name))
+            {
+                return;
+            }
+
+            mInPaintMode = true;
+            mCurrentWanderPathName = name;
+            mCurrentWanderPathPoints.Clear();
+            mCurrentWanderPathPointMarkers.Clear();
+
+            LogAlways($"Entered paint mode for {type} {name}. Left click to place points, right click to finish.");
+        }
+
+        private void UpdatePaintMarker()
+        {
+            if (!mInPaintMode) return;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
+            {
+                mPaintMarkerPosition = hit.point;
+                if (mPaintMarker == null)
+                {
+                    mPaintMarker = CreateMarker(hit.point, Color.green, "PaintMarker", 50f, 2f);
+                }
+                else
+                {
+                    mPaintMarker.transform.position = hit.point;
+                }
+            }
+        }
+
+        private void HandlePaintModeInput()
+        {
+            if (!mInPaintMode) return;
+
+            if (Input.GetMouseButtonDown(0)) // Left click
+            {
+                if (mPaintMarker != null)
+                {
+                    if (mCurrentWanderPathPoints.Count == 0)
+                    {
+                        // First point for hiding spot or wanderpath
+                        mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
+                        mCurrentWanderPathPointMarkers.Add(CreateMarker(
+                            mPaintMarkerPosition, 
+                            Color.blue, 
+                            $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker", 
+                            100));
+                    }
+                    else
+                    {
+                        // Additional points for wanderpath
+                        mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
+                        mCurrentWanderPathPointMarkers.Add(CreateMarker(
+                            mPaintMarkerPosition, 
+                            Color.blue, 
+                            $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker", 
+                            100));
+                        mCurrentWanderPathPointMarkers.Add(ConnectMarkers(
+                            mPaintMarkerPosition, 
+                            mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], 
+                            Color.blue, 
+                            $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 
+                            100));
+                    }
+                }
+            }
+            else if (Input.GetMouseButtonDown(1)) // Right click
+            {
+                ExitPaintMode();
+            }
+        }
+
+        private void ExitPaintMode()
+        {
+            if (mPaintMarker != null)
+            {
+                UnityEngine.Object.Destroy(mPaintMarker);
+                mPaintMarker = null;
+            }
+
+            if (mCurrentWanderPathPoints.Count > 1)
+            {
+                // Close the loop for wanderpaths
+                mCurrentWanderPathPointMarkers.Add(ConnectMarkers(
+                    mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], 
+                    mCurrentWanderPathPoints[0], 
+                    Color.blue, 
+                    $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 
+                    100));
+                
+                // Save the path
+                string scene = GameManager.m_ActiveScene;
+                if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
+                {
+                    paths = new List<WanderPath>();
+                    WanderPaths.Add(scene, paths);
+                }
+                paths.Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), scene));
+                SaveMapData();
+            }
+
+            mInPaintMode = false;
+            mCurrentWanderPathName = string.Empty;
+            mCurrentWanderPathPoints.Clear();
+            mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
+            mCurrentWanderPathPointMarkers.Clear();
         }
 
         #endregion
