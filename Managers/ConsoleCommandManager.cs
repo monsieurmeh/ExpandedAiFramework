@@ -23,6 +23,7 @@ namespace ExpandedAiFramework
         private List<Vector3> mCurrentWanderPathPoints = new List<Vector3>();
         private List<GameObject> mCurrentWanderPathPointMarkers = new List<GameObject>();
         private GameObject mPaintMarker = null;
+        private GameObject mDirectionArrow = null;
         private Vector3 mPaintMarkerPosition = Vector3.zero;
         private Quaternion mPaintMarkerRotation = Quaternion.identity;
         private List<GameObject> mDebugShownHidingSpots = new List<GameObject>();
@@ -1106,14 +1107,13 @@ namespace ExpandedAiFramework
                 if (mSelectingHidingSpotRotation)
                 {
                     // Update arrow rotation to point at mouse position in XZ plane
-                    Transform arrow = mPaintMarker?.transform?.Find("DirectionArrow");
-                    if (arrow != null)
+                    if (mDirectionArrow != null)
                     {
                         Vector3 direction = hit.point - mPendingHidingSpotPosition;
                         direction.y = 0; // Keep in XZ plane
                         if (direction != Vector3.zero)
                         {
-                            arrow.rotation = Quaternion.LookRotation(direction.normalized);
+                            mDirectionArrow.transform.rotation = Quaternion.LookRotation(direction.normalized);
                         }
                     }
                 }
@@ -1131,13 +1131,14 @@ namespace ExpandedAiFramework
 
         private void CleanUpPaintMarker()
         {
+            if (mDirectionArrow != null)
+            {
+                UnityEngine.Object.Destroy(mDirectionArrow);
+                mDirectionArrow = null;
+            }
+            
             if (mPaintMarker != null)
             {
-                // Destroy any child objects (like direction arrow) first
-                foreach (Transform child in mPaintMarker.transform)
-                {
-                    UnityEngine.Object.Destroy(child.gameObject);
-                }
                 UnityEngine.Object.Destroy(mPaintMarker);
                 mPaintMarker = null;
             }
@@ -1263,19 +1264,18 @@ namespace ExpandedAiFramework
                     mSelectingHidingSpotRotation = true;
                     
                     // Create directional arrow marker
-                    if (mPaintMarker != null)
+                    if (mPaintMarker != null && mDirectionArrow == null)
                     {
                         // Position arrow on top of marker
                         Vector3 arrowPos = mPaintMarker.transform.position + new Vector3(0, 100f, 0);
-                        GameObject arrow = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                        UnityEngine.Object.Destroy(arrow.GetComponent<Collider>());
-                        arrow.transform.localScale = new Vector3(5f, 100f, 5f);
-                        arrow.transform.position = arrowPos;
-                        arrow.GetComponent<Renderer>().material.color = Color.magenta;
-                        arrow.name = "DirectionArrow";
+                        mDirectionArrow = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                        UnityEngine.Object.Destroy(mDirectionArrow.GetComponent<Collider>());
+                        mDirectionArrow.transform.localScale = new Vector3(5f, 100f, 5f);
+                        mDirectionArrow.transform.position = arrowPos;
+                        mDirectionArrow.GetComponent<Renderer>().material.color = Color.green;
                         
                         // Parent to paint marker so it moves with it
-                        arrow.transform.SetParent(mPaintMarker.transform);
+                        mDirectionArrow.transform.SetParent(mPaintMarker.transform);
                     }
                     
                     LogAlways($"Selected hiding spot position at {mPendingHidingSpotPosition}. Left click to set rotation.");
