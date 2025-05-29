@@ -900,7 +900,7 @@ namespace ExpandedAiFramework
 
             if (type == CommandString_HidingSpot)
             {
-                if (!InitializePaintHidingSpot(name ?? "HidingSpot")) //AIDER: Implement a "auto new name" that checks current hiding spots and creats a new "ExpressHidingSpot" with a number after as needed, similar to windows auto-renaming new files to avoid overwrites
+                if (!InitializePaintHidingSpot(name ?? GetUniqueHidingSpotName()))
                 {
                     LogWarning("Failed to initialize paint mode");
                     return;
@@ -909,7 +909,7 @@ namespace ExpandedAiFramework
             }
             else if (type == CommandString_WanderPath)
             {
-                if (!InitializePaintWanderPath(name ?? "WanderPath"))//AIDER: Implement a "auto new name" that checks current wander paths and creats a new "ExpressHidingSpot" with a number after as needed, similar to windows auto-renaming new files to avoid overwrites
+                if (!InitializePaintWanderPath(name ?? GetUniqueWanderPathName()))
                 {
                     LogWarning("Failed to initialize paint mode");
                     return;
@@ -920,6 +920,42 @@ namespace ExpandedAiFramework
 
         private bool mIsPaintModeInitialized = false;
 
+
+        private string GetUniqueWanderPathName()
+        {
+            string baseName = "ExpressWanderPath";
+            int counter = 1;
+            string scene = GameManager.m_ActiveScene;
+            
+            if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
+            {
+                return $"{baseName}_{counter}";
+            }
+
+            while (paths.Any(p => p.Name == $"{baseName}_{counter}"))
+            {
+                counter++;
+            }
+            return $"{baseName}_{counter}";
+        }
+
+        private string GetUniqueHidingSpotName()
+        {
+            string baseName = "ExpressHidingSpot";
+            int counter = 1;
+            string scene = GameManager.m_ActiveScene;
+            
+            if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
+            {
+                return $"{baseName}_{counter}";
+            }
+
+            while (spots.Any(s => s.Name == $"{baseName}_{counter}"))
+            {
+                counter++;
+            }
+            return $"{baseName}_{counter}";
+        }
 
         private bool InitializePaintWanderPath(string name)
         {
@@ -1148,7 +1184,15 @@ namespace ExpandedAiFramework
             }
             else if (Input.GetMouseButtonDown(1)) // Right click
             {
-                ExitPaintMode();
+                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    ExitPaintMode();
+                    InitializePaintWanderPath(GetUniqueWanderPathName());
+                }
+                else
+                {
+                    ExitPaintMode();
+                }
             }
         }
 
@@ -1183,9 +1227,17 @@ namespace ExpandedAiFramework
                         mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {name}", 100.0f));
                         LogAlways($"Created hiding spot {name} at {newSpot.Position} with rotation {newSpot.Rotation}");
 
-                        // Exit paint mode
+                        // Exit paint mode or start new one if shift held
                         mSelectingHidingSpotRotation = false;
-                        CleanUpPaintMode();
+                        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                        {
+                            CleanUpPaintMode();
+                            InitializePaintHidingSpot(GetUniqueHidingSpotName());
+                        }
+                        else
+                        {
+                            CleanUpPaintMode();
+                        }
                         SaveMapData();
                     }
                 }
