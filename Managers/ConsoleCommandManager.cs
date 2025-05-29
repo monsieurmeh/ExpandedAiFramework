@@ -10,6 +10,8 @@ namespace ExpandedAiFramework
     {
         private bool mRecordingWanderPath = false;
         private bool mInPaintMode = false;
+        private bool mSelectingHidingSpotRotation = false;
+        private Vector3 mPendingHidingSpotPosition;
         private string mCurrentWanderPathName = string.Empty;
         private List<Vector3> mCurrentWanderPathPoints = new List<Vector3>();
         private List<GameObject> mCurrentWanderPathPointMarkers = new List<GameObject>();
@@ -886,18 +888,30 @@ namespace ExpandedAiFramework
             }
 
             string name = uConsole.GetString();
-            if (!IsNameProvided(name))
+            if (!IsNameProvided(name, false))
             {
-                return;
+                name = null; // Auto-generate name if not provided
             }
 
-            if (!InitializePaintMode(name))
+            if (type == CommandString_HidingSpot)
             {
-                LogWarning("Failed to initialize paint mode");
-                return;
+                if (!InitializePaintMode(name ?? "HidingSpot"))
+                {
+                    LogWarning("Failed to initialize paint mode");
+                    return;
+                }
+                LogAlways($"Entered hiding spot paint mode. Left click to select position, then left click again to set rotation.");
+                mSelectingHidingSpotRotation = false;
             }
-
-            LogAlways($"Entered paint mode for {type} {name}. Left click to place points, right click to finish.");
+            else if (type == CommandString_WanderPath)
+            {
+                if (!InitializePaintMode(name ?? "WanderPath"))
+                {
+                    LogWarning("Failed to initialize paint mode");
+                    return;
+                }
+                LogAlways($"Entered wander path paint mode for {name}. Left click to place points, right click to finish.");
+            }
         }
 
         private bool mIsPaintModeInitialized = false;
@@ -998,7 +1012,7 @@ namespace ExpandedAiFramework
         {
             try
             {
-                if (!mIsPaintModeInitialized || !mInPaintMode || mPaintMarker == null)
+                if (!mIsPaintModeInitialized || (!mInPaintMode && !mSelectingHidingSpotRotation) || mPaintMarker == null)
                 {
                     // Only log warning if we're supposed to be in paint mode but something's wrong
                     if (mInPaintMode && !mIsPaintModeInitialized)
@@ -1013,6 +1027,41 @@ namespace ExpandedAiFramework
                 }
 
                 if (Input.GetMouseButtonDown(0)) // Left click
+                {
+                    if (mSelectingHidingSpotRotation)
+                    {
+                        // Second click - set rotation
+                        Ray ray = GameManager.m_vpFPSCamera.m_Camera.ScreenPointToRay(Input.mousePosition);
+                        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
+                        {
+                            Vector3 direction = hit.point - mPendingHidingSpotPosition;
+                            direction.y = 0; // Keep rotation only in XZ plane
+                            Quaternion rotation = Quaternion.LookRotation(direction.normalized);
+
+                            // Create the hiding spot
+                            string scene = GameManager.m_ActiveScene;
+                            if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
+                            {
+                                spots = new List<HidingSpot>();
+                                HidingSpots.Add(scene, spots);
+                            }
+
+                            string name = $"HidingSpot_{spots.Count + 1}";
+                            HidingSpot newSpot = new HidingSpot(name, mPendingHidingSpotPosition, rotation, scene);
+                            spots.Add(newSpot);
+                            
+                            // Show marker
+                            mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {name}", 100.0f));
+                            LogAlways($"Created hiding spot {name} at {newSpot.Position} with rotation {newSpot.Rotation}");
+
+                            // Exit paint mode
+                            mSelectingHidingSpotRotation = false;
+                            CleanUpPaintMode();
+                            SaveMapData();
+                        }
+                    }
+                    else if (mInPaintMode)
+                    {
                 {
                     if (mCurrentWanderPathPointMarkers == null) 
                     {
