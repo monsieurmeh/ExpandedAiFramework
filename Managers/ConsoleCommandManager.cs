@@ -900,62 +900,113 @@ namespace ExpandedAiFramework
 
         private void UpdatePaintMarker()
         {
-            if (!mInPaintMode) return;
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
+            try 
             {
-                mPaintMarkerPosition = hit.point;
-                if (mPaintMarker == null)
+                if (!mInPaintMode || Camera.main == null) return;
+
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
                 {
-                    mPaintMarker = CreateMarker(hit.point, Color.green, "PaintMarker", 50f, 2f);
+                    mPaintMarkerPosition = hit.point;
+                    if (mPaintMarker == null)
+                    {
+                        mPaintMarker = CreateMarker(hit.point, Color.green, "PaintMarker", 50f, 2f);
+                        if (mPaintMarker == null)
+                        {
+                            LogWarning("Failed to create paint marker!");
+                            return;
+                        }
+                    }
+                    else if (mPaintMarker.transform != null)
+                    {
+                        mPaintMarker.transform.position = hit.point;
+                    }
                 }
-                else
-                {
-                    mPaintMarker.transform.position = hit.point;
-                }
+            }
+            catch (Exception e)
+            {
+                LogError($"Error in UpdatePaintMarker: {e}");
+                mInPaintMode = false;
+                CleanUpPaintMarker();
+            }
+        }
+
+        private void CleanUpPaintMarker()
+        {
+            if (mPaintMarker != null)
+            {
+                UnityEngine.Object.Destroy(mPaintMarker);
+                mPaintMarker = null;
             }
         }
 
         private void HandlePaintModeInput()
         {
-            if (!mInPaintMode) return;
-
-            if (Input.GetMouseButtonDown(0)) // Left click
+            try
             {
-                if (mPaintMarker != null)
+                if (!mInPaintMode || mCurrentWanderPathName == null) return;
+
+                if (Input.GetMouseButtonDown(0)) // Left click
                 {
+                    if (mPaintMarker == null || mCurrentWanderPathPointMarkers == null) 
+                    {
+                        LogWarning("Paint mode objects not initialized properly");
+                        return;
+                    }
+
                     if (mCurrentWanderPathPoints.Count == 0)
                     {
-                        // First point for hiding spot or wanderpath
+                        // First point
                         mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
-                        mCurrentWanderPathPointMarkers.Add(CreateMarker(
+                        var marker = CreateMarker(
                             mPaintMarkerPosition, 
                             Color.blue, 
                             $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker", 
-                            100));
+                            100);
+                        if (marker != null)
+                        {
+                            mCurrentWanderPathPointMarkers.Add(marker);
+                        }
                     }
                     else
                     {
-                        // Additional points for wanderpath
+                        // Additional points
                         mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
-                        mCurrentWanderPathPointMarkers.Add(CreateMarker(
+                        var marker = CreateMarker(
                             mPaintMarkerPosition, 
                             Color.blue, 
                             $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker", 
-                            100));
-                        mCurrentWanderPathPointMarkers.Add(ConnectMarkers(
-                            mPaintMarkerPosition, 
-                            mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], 
-                            Color.blue, 
-                            $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 
-                            100));
+                            100);
+                        if (marker != null)
+                        {
+                            mCurrentWanderPathPointMarkers.Add(marker);
+                        }
+
+                        if (mCurrentWanderPathPoints.Count > 1)
+                        {
+                            var connector = ConnectMarkers(
+                                mPaintMarkerPosition, 
+                                mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], 
+                                Color.blue, 
+                                $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 
+                                100);
+                            if (connector != null)
+                            {
+                                mCurrentWanderPathPointMarkers.Add(connector);
+                            }
+                        }
                     }
                 }
+                else if (Input.GetMouseButtonDown(1)) // Right click
+                {
+                    ExitPaintMode();
+                }
             }
-            else if (Input.GetMouseButtonDown(1)) // Right click
+            catch (Exception e)
             {
-                ExitPaintMode();
+                LogError($"Error in HandlePaintModeInput: {e}");
+                mInPaintMode = false;
+                CleanUpPaintMarker();
             }
         }
 
