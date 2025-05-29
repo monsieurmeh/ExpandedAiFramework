@@ -1060,15 +1060,22 @@ namespace ExpandedAiFramework
                             SaveMapData();
                         }
                     }
+                    else if (mInPaintMode && !mSelectingHidingSpotRotation)
+                    {
+                        // First click for hiding spot - set position
+                        mPendingHidingSpotPosition = mPaintMarkerPosition;
+                        mSelectingHidingSpotRotation = true;
+                        mInPaintMode = false;
+                        LogAlways($"Selected hiding spot position at {mPendingHidingSpotPosition}. Left click to set rotation.");
+                    }
                     else if (mInPaintMode)
                     {
-                {
-                    if (mCurrentWanderPathPointMarkers == null) 
-                    {
-                        mCurrentWanderPathPointMarkers = new List<GameObject>();
-                    }
+                        if (mCurrentWanderPathPointMarkers == null) 
+                        {
+                            mCurrentWanderPathPointMarkers = new List<GameObject>();
+                        }
 
-                    if (mCurrentWanderPathPoints.Count == 0)
+                        if (mCurrentWanderPathPoints.Count == 0)
                     {
                         // First point
                         mCurrentWanderPathPoints.Add(mPaintMarkerPosition);
