@@ -76,8 +76,8 @@ namespace ExpandedAiFramework
             direction.y = 0; // Keep in XZ plane
             float distance = Mathf.Max(direction.magnitude, 30f); // Minimum length
             
-            // Position and scale - place above position marker
-            Vector3 arrowPos = startPos + new Vector3(0, 75f, 0); // Higher than position marker
+            // Position at same height as position marker (50 units up)
+            Vector3 arrowPos = startPos + new Vector3(0, 50f, 0);
             arrow.transform.position = arrowPos;
             arrow.transform.localScale = new Vector3(3f, distance/2f, 3f); // Thinner than position marker
             
@@ -88,10 +88,12 @@ namespace ExpandedAiFramework
             GameObject arrowHead = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             UnityEngine.Object.Destroy(arrowHead.GetComponent<Collider>());
             arrowHead.transform.localScale = new Vector3(6f, 6f, 6f); // Slightly larger than arrow width
-            arrowHead.transform.position = arrowPos + (direction.normalized * distance/2f);
             arrowHead.GetComponent<Renderer>().material.color = color;
             arrowHead.name = name + "Head";
             arrowHead.transform.SetParent(arrow.transform);
+            
+            // Position arrow head at end of arrow
+            UpdateArrowDirection(arrow, targetPos, startPos);
             
             arrow.GetComponent<Renderer>().material.color = color;
             arrow.name = name;
@@ -1148,6 +1150,8 @@ namespace ExpandedAiFramework
         }
 
 
+        private GameObject mRotationTargetMarker = null;
+
         private void UpdatePaintMarkerHidingSpot()
         {
             if (mCurrentPaintMode == PaintMode.COUNT || GameManager.m_vpFPSCamera.m_Camera == null)
@@ -1160,9 +1164,23 @@ namespace ExpandedAiFramework
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
             {
                 mPaintMarkerPosition = hit.point;
+                
                 if (mSelectingHidingSpotRotation)
                 {
-                    // Update arrow to point at mouse position in XZ plane
+                    // Create/show rotation target marker if needed
+                    if (mRotationTargetMarker == null)
+                    {
+                        mRotationTargetMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                        UnityEngine.Object.Destroy(mRotationTargetMarker.GetComponent<Collider>());
+                        mRotationTargetMarker.transform.localScale = new Vector3(3f, 3f, 3f);
+                        mRotationTargetMarker.GetComponent<Renderer>().material.color = new Color(1f, 0.5f, 0f); // Orange
+                        mRotationTargetMarker.name = "RotationTargetMarker";
+                    }
+                    
+                    // Update marker position
+                    mRotationTargetMarker.transform.position = hit.point;
+                    
+                    // Update arrow direction
                     if (mDirectionArrow != null)
                     {
                         UpdateArrowDirection(mDirectionArrow, hit.point, mPendingHidingSpotPosition);
@@ -1170,6 +1188,14 @@ namespace ExpandedAiFramework
                 }
                 else
                 {
+                    // Clean up rotation target marker if not needed
+                    if (mRotationTargetMarker != null)
+                    {
+                        UnityEngine.Object.Destroy(mRotationTargetMarker);
+                        mRotationTargetMarker = null;
+                    }
+                    
+                    // Update position marker
                     if (mPaintMarker != null && mPaintMarker.transform != null)
                     {
                         mPaintMarker.transform.position = hit.point;
@@ -1192,6 +1218,12 @@ namespace ExpandedAiFramework
             {
                 UnityEngine.Object.Destroy(mPaintMarker);
                 mPaintMarker = null;
+            }
+            
+            if (mRotationTargetMarker != null)
+            {
+                UnityEngine.Object.Destroy(mRotationTargetMarker);
+                mRotationTargetMarker = null;
             }
         }
 
