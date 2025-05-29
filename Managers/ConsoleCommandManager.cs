@@ -74,14 +74,24 @@ namespace ExpandedAiFramework
             // Calculate direction and distance
             Vector3 direction = targetPos - startPos;
             direction.y = 0; // Keep in XZ plane
-            float distance = direction.magnitude;
+            float distance = Mathf.Max(direction.magnitude, 30f); // Minimum length
             
-            // Position and scale
-            arrow.transform.position = startPos + new Vector3(0, 50f, 0); // Same height as position marker
-            arrow.transform.localScale = new Vector3(5f, distance/2f, 5f); // Thinner and length based on distance
+            // Position and scale - place above position marker
+            Vector3 arrowPos = startPos + new Vector3(0, 75f, 0); // Higher than position marker
+            arrow.transform.position = arrowPos;
+            arrow.transform.localScale = new Vector3(3f, distance/2f, 3f); // Thinner than position marker
             
             // Point towards target
             UpdateArrowDirection(arrow, targetPos, startPos);
+            
+            // Make arrow head (sphere)
+            GameObject arrowHead = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            UnityEngine.Object.Destroy(arrowHead.GetComponent<Collider>());
+            arrowHead.transform.localScale = new Vector3(6f, 6f, 6f); // Slightly larger than arrow width
+            arrowHead.transform.position = arrowPos + (direction.normalized * distance/2f);
+            arrowHead.GetComponent<Renderer>().material.color = color;
+            arrowHead.name = name + "Head";
+            arrowHead.transform.SetParent(arrow.transform);
             
             arrow.GetComponent<Renderer>().material.color = color;
             arrow.name = name;
@@ -96,9 +106,18 @@ namespace ExpandedAiFramework
             direction.y = 0; // Keep in XZ plane
             if (direction != Vector3.zero)
             {
-                arrow.transform.rotation = Quaternion.LookRotation(direction.normalized);
-                // Adjust cylinder rotation since they default to pointing up
-                arrow.transform.Rotate(Vector3.right, 90f);
+                // Point cylinder along direction (they default to Y-up)
+                arrow.transform.rotation = Quaternion.LookRotation(direction.normalized) * 
+                                           Quaternion.Euler(90f, 0f, 0f);
+                
+                // Update arrow head position if it exists
+                Transform arrowHead = arrow.transform.Find(arrow.name + "Head");
+                if (arrowHead != null)
+                {
+                    float distance = arrow.transform.localScale.y * 2f;
+                    arrowHead.position = arrow.transform.position + 
+                                       (direction.normalized * distance/2f);
+                }
             }
         }
 
