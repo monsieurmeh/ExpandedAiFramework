@@ -899,30 +899,47 @@ namespace ExpandedAiFramework
             LogAlways($"Entered paint mode for {type} {name}. Left click to place points, right click to finish.");
         }
 
+        private bool mIsPaintModeInitialized = false;
+
         private bool InitializePaintMode(string name)
         {
             try
             {
-                mInPaintMode = true;
-                mCurrentWanderPathName = name;
+                // Clear any existing state
+                CleanUpPaintMarker();
                 mCurrentWanderPathPoints.Clear();
-                mCurrentWanderPathPointMarkers.Clear();
+                if (mCurrentWanderPathPointMarkers != null)
+                {
+                    foreach (var marker in mCurrentWanderPathPointMarkers)
+                    {
+                        if (marker != null) UnityEngine.Object.Destroy(marker);
+                    }
+                    mCurrentWanderPathPointMarkers.Clear();
+                }
+                else
+                {
+                    mCurrentWanderPathPointMarkers = new List<GameObject>();
+                }
+
+                // Set new state
+                mCurrentWanderPathName = name;
                 
-                // Create initial marker if it doesn't exist
+                // Create initial marker
+                mPaintMarker = CreateMarker(Vector3.zero, Color.green, "PaintMarker", 50f, 2f);
                 if (mPaintMarker == null)
                 {
-                    mPaintMarker = CreateMarker(Vector3.zero, Color.green, "PaintMarker", 50f, 2f);
-                    if (mPaintMarker == null)
-                    {
-                        LogWarning("Failed to create paint marker");
-                        return false;
-                    }
+                    LogWarning("Failed to create paint marker");
+                    return false;
                 }
+
+                mInPaintMode = true;
+                mIsPaintModeInitialized = true;
                 return true;
             }
             catch (Exception e)
             {
                 LogError($"Paint mode initialization failed: {e}");
+                CleanUpPaintMode();
                 return false;
             }
         }
@@ -980,11 +997,16 @@ namespace ExpandedAiFramework
         {
             try
             {
-                if (!mInPaintMode || mCurrentWanderPathName == null || mPaintMarker == null) 
+                if (!mIsPaintModeInitialized || !mInPaintMode || mPaintMarker == null)
                 {
-                    if (mInPaintMode)
+                    // Only log warning if we're supposed to be in paint mode but something's wrong
+                    if (mInPaintMode && !mIsPaintModeInitialized)
                     {
-                        LogWarning("Paint mode not properly initialized - ignoring input");
+                        LogWarning("Paint mode not initialized - attempting recovery...");
+                        if (!InitializePaintMode(mCurrentWanderPathName))
+                        {
+                            CleanUpPaintMode();
+                        }
                     }
                     return;
                 }
@@ -1052,15 +1074,19 @@ namespace ExpandedAiFramework
             }
         }
 
+        private void CleanUpPaintMode()
+        {
+            CleanUpPaintMarker();
+            mInPaintMode = false;
+            mIsPaintModeInitialized = false;
+            mCurrentWanderPathName = string.Empty;
+        }
+
         private void ExitPaintMode()
         {
-            if (mPaintMarker != null)
+            try 
             {
-                UnityEngine.Object.Destroy(mPaintMarker);
-                mPaintMarker = null;
-            }
-
-            if (mCurrentWanderPathPoints.Count > 1)
+                if (mCurrentWanderPathPoints.Count > 1)
             {
                 // Close the loop for wanderpaths
                 mCurrentWanderPathPointMarkers.Add(ConnectMarkers(
@@ -1081,11 +1107,14 @@ namespace ExpandedAiFramework
                 SaveMapData();
             }
 
-            mInPaintMode = false;
-            mCurrentWanderPathName = string.Empty;
+                mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
+            }
             mCurrentWanderPathPoints.Clear();
-            mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
-            mCurrentWanderPathPointMarkers.Clear();
+            if (mCurrentWanderPathPointMarkers != null)
+            {
+                mCurrentWanderPathPointMarkers.Clear();
+            }
+            CleanUpPaintMode();
         }
 
         #endregion
