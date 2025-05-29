@@ -890,34 +890,70 @@ namespace ExpandedAiFramework
                 return;
             }
 
-            mInPaintMode = true;
-            mCurrentWanderPathName = name;
-            mCurrentWanderPathPoints.Clear();
-            mCurrentWanderPathPointMarkers.Clear();
+            if (!InitializePaintMode(name))
+            {
+                LogWarning("Failed to initialize paint mode");
+                return;
+            }
 
             LogAlways($"Entered paint mode for {type} {name}. Left click to place points, right click to finish.");
         }
 
+        private bool InitializePaintMode(string name)
+        {
+            try
+            {
+                mInPaintMode = true;
+                mCurrentWanderPathName = name;
+                mCurrentWanderPathPoints.Clear();
+                mCurrentWanderPathPointMarkers.Clear();
+                
+                // Create initial marker if it doesn't exist
+                if (mPaintMarker == null)
+                {
+                    mPaintMarker = CreateMarker(Vector3.zero, Color.green, "PaintMarker", 50f, 2f);
+                    if (mPaintMarker == null)
+                    {
+                        LogWarning("Failed to create paint marker");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                LogError($"Paint mode initialization failed: {e}");
+                return false;
+            }
+        }
+
         private void UpdatePaintMarker()
         {
+            if (!mInPaintMode || Camera.main == null) 
+            {
+                CleanUpPaintMarker();
+                return;
+            }
+
             try 
             {
-                if (!mInPaintMode || Camera.main == null) return;
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
                 {
                     mPaintMarkerPosition = hit.point;
+                    
+                    // Ensure marker exists
                     if (mPaintMarker == null)
                     {
-                        mPaintMarker = CreateMarker(hit.point, Color.green, "PaintMarker", 50f, 2f);
-                        if (mPaintMarker == null)
+                        if (!InitializePaintMode(mCurrentWanderPathName))
                         {
-                            LogWarning("Failed to create paint marker!");
+                            mInPaintMode = false;
                             return;
                         }
                     }
-                    else if (mPaintMarker.transform != null)
+
+                    // Update marker position
+                    if (mPaintMarker != null && mPaintMarker.transform != null)
                     {
                         mPaintMarker.transform.position = hit.point;
                     }
@@ -944,14 +980,20 @@ namespace ExpandedAiFramework
         {
             try
             {
-                if (!mInPaintMode || mCurrentWanderPathName == null) return;
+                if (!mInPaintMode || mCurrentWanderPathName == null || mPaintMarker == null) 
+                {
+                    if (mInPaintMode)
+                    {
+                        LogWarning("Paint mode not properly initialized - ignoring input");
+                    }
+                    return;
+                }
 
                 if (Input.GetMouseButtonDown(0)) // Left click
                 {
-                    if (mPaintMarker == null || mCurrentWanderPathPointMarkers == null) 
+                    if (mCurrentWanderPathPointMarkers == null) 
                     {
-                        LogWarning("Paint mode objects not initialized properly");
-                        return;
+                        mCurrentWanderPathPointMarkers = new List<GameObject>();
                     }
 
                     if (mCurrentWanderPathPoints.Count == 0)
