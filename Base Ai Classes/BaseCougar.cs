@@ -181,10 +181,6 @@ namespace ExpandedAiFramework
             return false;
         }
 
-
-
-
-
         private void DoPassingAttackDamage()
         {
             if (!DoPassingAttackDamageCustom())
@@ -207,7 +203,6 @@ namespace ExpandedAiFramework
                     }
                     else
                     {
-
                         CurrentTarget.ApplyDamage(mCougar.m_AiPassingAttackDamage, DamageSource.Cougar, "PassingAiAttack");
                     }              
                 }

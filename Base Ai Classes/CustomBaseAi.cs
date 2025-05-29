@@ -448,7 +448,8 @@ namespace ExpandedAiFramework
                     mBaseAi.EnterDead(); 
                     if (mModDataProxy != null)
                     {
-                        mModDataProxy.Disconnected = true;
+                        //This should only occur if the carcass has been around long enough. We'll need to add a catch here for that eventually, for now this plugs the "sitting corpse" issue again
+                        //mModDataProxy.Disconnected = true;
                     }
                     break;
                 case AiMode.Feeding: mBaseAi.EnterFeeding(); break;

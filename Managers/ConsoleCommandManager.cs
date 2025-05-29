@@ -876,6 +876,7 @@ namespace ExpandedAiFramework
 
         #region Paint
         //totally didnt vibe code this region or anything like that
+        //and it couldnt manage to actually render a single fuckin thing. had to fix it. lmfao
         private void Console_Paint()
         {
             string type = uConsole.GetString();
@@ -946,7 +947,7 @@ namespace ExpandedAiFramework
 
         private void UpdatePaintMarker()
         {
-            if (!mInPaintMode || Camera.main == null) 
+            if (!mInPaintMode || GameManager.m_vpFPSCamera.m_Camera == null) 
             {
                 CleanUpPaintMarker();
                 return;
@@ -954,7 +955,7 @@ namespace ExpandedAiFramework
 
             try 
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = GameManager.m_vpFPSCamera.m_Camera.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, Utils.m_PhysicalCollisionLayerMask))
                 {
                     mPaintMarkerPosition = hit.point;
@@ -1084,37 +1085,42 @@ namespace ExpandedAiFramework
 
         private void ExitPaintMode()
         {
-            try 
+            try
             {
                 if (mCurrentWanderPathPoints.Count > 1)
-            {
-                // Close the loop for wanderpaths
-                mCurrentWanderPathPointMarkers.Add(ConnectMarkers(
-                    mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], 
-                    mCurrentWanderPathPoints[0], 
-                    Color.blue, 
-                    $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 
-                    100));
-                
-                // Save the path
-                string scene = GameManager.m_ActiveScene;
-                if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
                 {
-                    paths = new List<WanderPath>();
-                    WanderPaths.Add(scene, paths);
-                }
-                paths.Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), scene));
-                SaveMapData();
-            }
+                    // Close the loop for wanderpaths
+                    mCurrentWanderPathPointMarkers.Add(ConnectMarkers(
+                        mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1],
+                        mCurrentWanderPathPoints[0],
+                        Color.blue,
+                        $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}",
+                        100));
 
+                    // Save the path
+                    string scene = GameManager.m_ActiveScene;
+                    if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
+                    {
+                        paths = new List<WanderPath>();
+                        WanderPaths.Add(scene, paths);
+                    }
+                    paths.Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), scene));
+                    SaveMapData();
+                }
                 mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
+
+                mCurrentWanderPathPoints.Clear();
+                if (mCurrentWanderPathPointMarkers != null)
+                {
+                    mCurrentWanderPathPointMarkers.Clear();
+                }
+                CleanUpPaintMode();
             }
-            mCurrentWanderPathPoints.Clear();
-            if (mCurrentWanderPathPointMarkers != null)
+            catch (Exception e)
             {
-                mCurrentWanderPathPointMarkers.Clear();
+                LogError($"Error in ExitPaintMode: {e}");
+                mInPaintMode = false;
             }
-            CleanUpPaintMode();
         }
 
         #endregion
