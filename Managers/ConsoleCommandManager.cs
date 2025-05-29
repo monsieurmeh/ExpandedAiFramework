@@ -875,7 +875,7 @@ namespace ExpandedAiFramework
 
 
         #region Paint
-
+        //totally didnt vibe code this region or anything like that
         private void Console_Paint()
         {
             string type = uConsole.GetString();
