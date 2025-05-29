@@ -74,6 +74,7 @@ namespace ExpandedAiFramework
             mSpawnRegionModDataProxyCache.Clear();
             mActiveSpawnModDataProxies.Clear();
             mQueuedSpawnModDataProxiesByParentGuid.Clear();
+            mActiveSpawnRegionModDataProxies.Clear(); 
             mUnmatchedSpawnRegionModDataProxies.Clear();
         }
 
