@@ -1283,14 +1283,15 @@ namespace ExpandedAiFramework
             }
             else if (Input.GetMouseButtonDown(1)) // Right click
             {
-                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                if (mCurrentWanderPathPoints.Count > 0)
                 {
+                    // Finish current path
                     ExitPaintMode();
-                    InitializePaintWanderPath(GetUniqueWanderPathName());
                 }
                 else
                 {
-                    ExitPaintMode();
+                    // Exit completely if no points placed yet
+                    CleanUpPaintMode();
                 }
             }
         }
@@ -1326,17 +1327,9 @@ namespace ExpandedAiFramework
                         mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {name}", 100.0f));
                         LogAlways($"Created hiding spot {name} at {newSpot.Position} with rotation {newSpot.Rotation}");
 
-                        // Exit paint mode or start new one if shift held
+                        // Exit paint mode
                         mSelectingHidingSpotRotation = false;
-                        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-                        {
-                            CleanUpPaintMode();
-                            InitializePaintHidingSpot(GetUniqueHidingSpotName());
-                        }
-                        else
-                        {
-                            CleanUpPaintMode();
-                        }
+                        CleanUpPaintMode();
                         SaveMapData();
                     }
                 }
