@@ -1283,9 +1283,15 @@ namespace ExpandedAiFramework
             }
             else if (Input.GetMouseButtonDown(1)) // Right click
             {
-                if (mCurrentWanderPathPoints.Count > 0)
+                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
-                    // Finish current path
+                    // Shift+Right click - discard current path
+                    CleanUpPaintMode();
+                    LogAlways("Discarded current wander path");
+                }
+                else if (mCurrentWanderPathPoints.Count > 0)
+                {
+                    // Regular Right click - finish current path
                     ExitPaintMode();
                 }
                 else
