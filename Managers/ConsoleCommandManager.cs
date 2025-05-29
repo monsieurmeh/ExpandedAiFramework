@@ -65,6 +65,43 @@ namespace ExpandedAiFramework
         private List<WanderPath> AvailableWanderPaths => mManager.DataManager.AvailableWanderPaths;
 
 
+        public GameObject CreateDirectionArrow(Vector3 startPos, Vector3 targetPos, Color color, string name)
+        {
+            // Create arrow body (cylinder)
+            GameObject arrow = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            UnityEngine.Object.Destroy(arrow.GetComponent<Collider>());
+            
+            // Calculate direction and distance
+            Vector3 direction = targetPos - startPos;
+            direction.y = 0; // Keep in XZ plane
+            float distance = direction.magnitude;
+            
+            // Position and scale
+            arrow.transform.position = startPos + new Vector3(0, 50f, 0); // Same height as position marker
+            arrow.transform.localScale = new Vector3(5f, distance/2f, 5f); // Thinner and length based on distance
+            
+            // Point towards target
+            UpdateArrowDirection(arrow, targetPos, startPos);
+            
+            arrow.GetComponent<Renderer>().material.color = color;
+            arrow.name = name;
+            return arrow;
+        }
+
+        private void UpdateArrowDirection(GameObject arrow, Vector3 targetPos, Vector3 startPos)
+        {
+            if (arrow == null) return;
+            
+            Vector3 direction = targetPos - startPos;
+            direction.y = 0; // Keep in XZ plane
+            if (direction != Vector3.zero)
+            {
+                arrow.transform.rotation = Quaternion.LookRotation(direction.normalized);
+                // Adjust cylinder rotation since they default to pointing up
+                arrow.transform.Rotate(Vector3.right, 90f);
+            }
+        }
+
         public GameObject CreateMarker(Vector3 position, Color color, string name, float height, float diameter = 5f)
         {
             GameObject waypointMarker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -1106,15 +1143,10 @@ namespace ExpandedAiFramework
                 mPaintMarkerPosition = hit.point;
                 if (mSelectingHidingSpotRotation)
                 {
-                    // Update arrow rotation to point at mouse position in XZ plane
+                    // Update arrow to point at mouse position in XZ plane
                     if (mDirectionArrow != null)
                     {
-                        Vector3 direction = hit.point - mPendingHidingSpotPosition;
-                        direction.y = 0; // Keep in XZ plane
-                        if (direction != Vector3.zero)
-                        {
-                            mDirectionArrow.transform.rotation = Quaternion.LookRotation(direction.normalized);
-                        }
+                        UpdateArrowDirection(mDirectionArrow, hit.point, mPendingHidingSpotPosition);
                     }
                 }
                 else
@@ -1266,13 +1298,12 @@ namespace ExpandedAiFramework
                     // Create directional arrow marker
                     if (mPaintMarker != null && mDirectionArrow == null)
                     {
-                        // Position arrow on top of marker
-                        Vector3 arrowPos = mPaintMarker.transform.position + new Vector3(0, 100f, 0);
-                        mDirectionArrow = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                        UnityEngine.Object.Destroy(mDirectionArrow.GetComponent<Collider>());
-                        mDirectionArrow.transform.localScale = new Vector3(5f, 100f, 5f);
-                        mDirectionArrow.transform.position = arrowPos;
-                        mDirectionArrow.GetComponent<Renderer>().material.color = Color.green;
+                        // Create arrow pointing from marker position to current mouse position
+                        mDirectionArrow = CreateDirectionArrow(
+                            mPaintMarker.transform.position,
+                            mPaintMarker.transform.position + Vector3.forward, // Initial forward direction
+                            Color.green,
+                            "DirectionArrow");
                         
                         // Parent to paint marker so it moves with it
                         mDirectionArrow.transform.SetParent(mPaintMarker.transform);
