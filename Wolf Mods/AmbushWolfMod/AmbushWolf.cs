@@ -20,21 +20,88 @@ namespace ExpandedAiFramework.AmbushWolfMod
         public AmbushWolf(IntPtr ptr) : base(ptr) { }
 
 
-        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy proxy)//, EAFManager manager)
+        public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy
+proxy)
         {
-            base.Initialize(ai, timeOfDay, spawnRegion, proxy);//, manager); 
-            mHidingSpot = mManager.GetNearestHidingSpot(this, 3, false); 
+            base.Initialize(ai, timeOfDay, spawnRegion, proxy);
+            LogTrace($"Initializing AmbushWolf at {spawnRegion.transform.position}");
             mBaseAi.m_DefaultMode = (AiMode)AmbushWolfAiMode.Hide;
             mBaseAi.m_StartMode = (AiMode)AmbushWolfAiMode.Hide;
         }
 
 
+        private bool TryGetSavedHidingSpot(SpawnModDataProxy proxy)
+        {
+            if (proxy == null 
+                || proxy.CustomData == null
+                || proxy.CustomData.Length == 0)
+            {
+                LogTrace($"[AmbushWolf.TryGetSavedHidingSpot] Null proxy, null proxy custom data or no length to proxy custom data");
+                return false;
+            }
+            Guid spotGuid = (Guid)proxy.CustomData[0];
+            if (spotGuid == Guid.Empty)
+            {
+                LogTrace($"[AmbushWolf.TryGetSavedHidingSpot] Proxy spot guid is empty");
+                return false;
+            }
+            if (!mManager.DataManager.AvailableHidingSpots.TryGetValue(spotGuid, out HidingSpot hidingSpot))
+            {
+                LogTrace($"[AmbushWolf.TryGetSavedHidingSpot] Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary");
+                return false;
+            }
+            LogTrace($"[AmbushWolf.TryGetSavedHidingSpot] Found saved hiding spot with guid <<<{spotGuid}>>>");
+            AttachHidingSpot(hidingSpot);
+            return true;
+        }
+
+
         protected override bool FirstFrameCustom()
         {
+            if (mModDataProxy != null && mModDataProxy.AsyncProcessing)
+            {
+                return false;
+            }
+
+            if (mHidingSpot == null)
+            {
+                LogTrace("FirstFrameCustom: No hiding spot assigned");
+                if (!TryGetSavedHidingSpot(mModDataProxy))
+                {
+                    LogTrace("FirstFrameCustom: Getting new hiding spot");
+                    mManager.DataManager.GetNearestHidingSpotAsync(mBaseAi.transform.position, AttachHidingSpot, 3);
+                }
+            }
+
+            LogTrace($"FirstFrameCustom: Warping to hiding spot at {mHidingSpot.Position} and setting hide mode");
             mBaseAi.m_MoveAgent.transform.position = mHidingSpot.Position;
             mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 2.0f, true, -1);
+
             SetAiMode((AiMode)AmbushWolfAiMode.Hide);
             return true;
+        }
+
+
+        public void AttachHidingSpot(HidingSpot hidingSpot)
+        {
+            if (hidingSpot == null)
+            {
+                LogWarning("Received NULL hiding spot, creating fallback spot");
+                mHidingSpot = new HidingSpot("FALLBACK_SPOT", mBaseAi.transform.position, mBaseAi.transform.rotation,
+mManager.CurrentScene, true);
+            }
+            else
+            {
+                LogTrace($"Attached hiding spot: {hidingSpot}");
+                mHidingSpot = hidingSpot;
+            }
+
+            if (mModDataProxy != null)
+            {
+                mModDataProxy.CustomData = [mHidingSpot.Guid];
+                LogTrace($"Saved spot {mHidingSpot} to proxy data");
+            }
+            hidingSpot.Claim();
         }
 
 
@@ -125,20 +192,32 @@ namespace ExpandedAiFramework.AmbushWolfMod
 
         protected void ProcessHiding()
         {
+            if (mHidingSpot == null)
+            {
+                //Dont do anythign yet till you have a hiding spot
+                //LogError("ProcessHiding called but no hiding spot assigned!");
+                return;
+            }
+
             float hidingSpotDistance = Vector3.Distance(mBaseAi.transform.position, mHidingSpot.Position);
+
             if (hidingSpotDistance >= 2.0f)
             {
-                LogVerbose($"ProcessHiding: Far from hiding spot ({hidingSpotDistance}), moving to returning.");
                 SetAiMode((AiMode)AmbushWolfAiMode.Return);
                 return;
             }
-            LogVerbose($"ProcessHiding: Scanning for target...");
+
             mBaseAi.ScanForNewTarget();
         }
 
 
         protected void EnterHiding()
         {
+            if (mHidingSpot == null)
+            {
+                LogError("EnterHiding called but no hiding spot assigned!");
+                return;
+            }
             mBaseAi.MoveAgentStop();
             mBaseAi.ClearTarget();
             mBaseAi.m_MoveAgent.transform.rotation = mHidingSpot.Rotation;

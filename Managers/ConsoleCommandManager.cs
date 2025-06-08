@@ -59,10 +59,10 @@ namespace ExpandedAiFramework
 
         private void SaveMapData() => mManager.DataManager.SaveMapData();
         private void LoadMapData() => mManager.DataManager.LoadMapData();
-        private Dictionary<string, List<HidingSpot>> HidingSpots => mManager.DataManager.HidingSpots;
-        private Dictionary<string, List<WanderPath>> WanderPaths => mManager.DataManager.WanderPaths;
-        private List<HidingSpot> AvailableHidingSpots => mManager.DataManager.AvailableHidingSpots;
-        private List<WanderPath> AvailableWanderPaths => mManager.DataManager.AvailableWanderPaths;
+        private Dictionary<string, List<HidingSpot>> HidingSpots => mManager.DataManager.HidingSpotManager.Data;
+        private Dictionary<string, List<WanderPath>> WanderPaths => mManager.DataManager.WanderPathManager.Data;
+        private Dictionary<Guid, HidingSpot> AvailableHidingSpots => mManager.DataManager.HidingSpotManager.AvailableData;
+        private Dictionary<Guid, WanderPath> AvailableWanderPaths => mManager.DataManager.WanderPathManager.AvailableData;
 
 
         public GameObject CreateDirectionArrow(Vector3 startPos, Vector3 targetPos, Color color, string name)
@@ -259,7 +259,7 @@ namespace ExpandedAiFramework
         {
             if (mCurrentPaintMode != PaintMode.WanderPath)
             {
-                LogWarning($"Can't start recording path because path {mCurrentWanderPathName} is still active! enter command '{CommandString} {CommandString_Finish} {CommandString_WanderPath}' to finish current wander path.");
+                LogWarning($"[ConsoleCommandManager.Console_CreateWanderPath] Can't start recording path because path {mCurrentWanderPathName} is still active! enter command '{CommandString} {CommandString_Finish} {CommandString_WanderPath}' to finish current wander path.");
                 return;
             }
             string name = uConsole.GetString();
@@ -277,7 +277,7 @@ namespace ExpandedAiFramework
             {
                 if (paths[i].Name == name)
                 {
-                    LogWarning($"Can't start recording path because a path with this name exists in this scene!");
+                    LogWarning($"[ConsoleCommandManager.Console_CreateWanderPath] Can't start recording path because a path with this name exists in this scene!");
                     return;
                 }
             }
@@ -915,7 +915,7 @@ namespace ExpandedAiFramework
             {
                 if (spot.Scene == GameManager.m_ActiveScene)
                 {
-                    LogAlways($"Found {spot}. Occupied: {!AvailableHidingSpots.Contains(spot)}");
+                    LogAlways($"Found {spot}. Occupied: {spot.Claimed}");
                 }
             }
         }
@@ -932,7 +932,7 @@ namespace ExpandedAiFramework
             {
                 if (path.Scene == GameManager.m_ActiveScene)
                 {
-                    LogAlways($"Found {path}. Occupied: {!AvailableWanderPaths.Contains(path)}");
+                    LogAlways($"Found {path}. Occupied: {path.Claimed}");
                 }
             }
         }
@@ -1050,7 +1050,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"Paint mode initialization failed: {e}");
+                LogError($"[ConsoleCommandManager.InitializePaintWanderPath] Paint mode initialization failed: {e}");
                 CleanUpPaintMode();
                 return false;
             }

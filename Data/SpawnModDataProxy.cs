@@ -8,6 +8,8 @@ namespace ExpandedAiFramework
     {
         [NonSerialized] private Type mVariantSpawnType;
         [NonSerialized] public bool Disconnected = false;
+        [NonSerialized] public bool AsyncProcessing = false;
+        public object[] CustomData;
         public Guid Guid = Guid.Empty;
         public Guid ParentGuid = Guid.Empty;
         public string Scene;
@@ -87,6 +89,21 @@ namespace ExpandedAiFramework
             CurrentPosition = OriginalPosition;
             CurrentRotation = OriginalRotation;
             AiSubType = spawnRegion.m_AiSubTypeSpawned;
+            mVariantSpawnType = variantSpawnType;
+            VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
+            LastDespawnTime = GetCurrentTimelinePoint();
+        }
+
+
+        public SpawnModDataProxy(Guid guid, string scene, Vector3 originalPosition, Quaternion originalRotation, AiSubType subTypeSpawned, Type variantSpawnType)
+        {
+            Guid = guid;
+            Scene = scene;
+            OriginalPosition = originalPosition;
+            OriginalRotation = originalRotation;
+            CurrentPosition = OriginalPosition;
+            CurrentRotation = OriginalRotation;
+            AiSubType = subTypeSpawned;
             mVariantSpawnType = variantSpawnType;
             VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
             LastDespawnTime = GetCurrentTimelinePoint();

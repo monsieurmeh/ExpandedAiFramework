@@ -1731,13 +1731,13 @@ namespace ExpandedAiFramework
 
         #region ***DEBUG***
 
-        protected void LogTrace(string message) { Utility.LogTrace($"[{this}]: {message}"); }
-        protected void LogDebug(string message) { Utility.LogDebug($"[{this}]: {message}"); ; }
-        protected void LogVerbose(string message) { Utility.LogVerbose($"[{this}]: {message}"); ; }
-        protected void LogWarning(string message) { Utility.LogWarning($"[{this}]:  {message}"); ; }
-        protected void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U) { Utility.LogError($"[{this}]:  {message}", additionalFlags); }
-        protected void LogCriticalError(string message) { LogError($"[{this}]:  {message}", FlaggedLoggingLevel.Critical); }
-        protected void LogException(string message) { LogError($"[{this}]:  {message}", FlaggedLoggingLevel.Exception); }
+        protected void LogTrace(string message) { Utility.LogTrace(message); }
+        protected void LogDebug(string message) { Utility.LogDebug(message); }
+        protected void LogVerbose(string message) { Utility.LogVerbose(message); }
+        protected void LogWarning(string message) { Utility.LogWarning(message); }
+        protected void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U) { Utility.LogError(message, additionalFlags); }
+        protected void LogCriticalError(string message) { LogError(message, FlaggedLoggingLevel.Critical); }
+        protected void LogException(string message) { LogError(message, FlaggedLoggingLevel.Exception); }
 
 
 #if DEV_BUILD

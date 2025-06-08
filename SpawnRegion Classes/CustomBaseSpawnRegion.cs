@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Il2CppRewired.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,19 @@ namespace ExpandedAiFramework
             Initialize(spawnRegion, dataProxy, timeOfDay);
         }
 
+        //One day I might uproot this, but it's not tiny (~500 lines decompiled) and unless we want to start adjusting spawn rate *mechanics* (not just numeric values) we can probably leave it alone. Just need to hook into it for registration
+        //public void OverrideStart()
+        //{
+            //if (!OverrideStartCustom())
+            //{
+               // return;
+            //}
+            //mSpawnRegion.Start();
+        //}
+
+
+        //protected virtual bool OverrideStartCustom() => true;
+
 
         public virtual void Initialize(SpawnRegion spawnRegion, SpawnRegionModDataProxy dataProxy, TimeOfDay timeOfDay)
         {
@@ -45,55 +59,5 @@ namespace ExpandedAiFramework
             mModDataProxy.LastDespawnTime = time;
             mModDataProxy.CurrentPosition = mSpawnRegion.transform.position;
         }
-
-        /*
-        public bool TryQueueSpawn(SpawnModDataProxy proxy)
-        {
-            if (proxy == null)
-            {
-                LogWarning("Null proxy, cannot queue spawn.");
-                return false;
-            }
-
-            if (mModDataProxy == null)
-            {
-                LogWarning("Null mod data proxy, cannot queue spawn");
-                return false;
-            }
-
-            if (proxy.AiSubType != mModDataProxy.AiSubType)
-            {
-                LogWarning("Ai subtype mismatch, cannot queue spawn");
-                return false;
-            }
-
-            mQueuedSpawnModDataProxies.Add(proxy);
-            LogVerbose("Queuing spawn!");
-            return true;
-        }
-
-        public bool TryGetQueuedSpawn(out SpawnModDataProxy proxy)
-        {
-            proxy = null;
-            if (mQueuedSpawnModDataProxies == null)
-            {
-                LogError("Can't get proxy from null list! Aborting");
-                return false;
-            }
-            if (mQueuedSpawnModDataProxies.Count == 0)
-            {
-                LogVerbose("No queued proxies, aborting");
-                return false;
-            }
-            if (mQueuedSpawnModDataProxies[0] == null)
-            {
-                LogError("Found null spawn mod data proxy in list! what the heck? Aborting..");
-                return false;
-            }
-            proxy = mQueuedSpawnModDataProxies[0];
-            mQueuedSpawnModDataProxies.RemoveAt(0);
-            return true;
-        }
-        */
     }
 }

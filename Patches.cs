@@ -65,9 +65,9 @@ namespace ExpandedAiFramework
         [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.Update))]
         internal class BaseAiPatches_Update
         {
-            private static bool Prefix(BaseAi __instance)
+            private static bool Prefix()
             {
-                return false;// __instance.m_AiSubType != AiSubType.Wolf || __instance.Timberwolf;
+                return false;
             }
         }
 
@@ -139,10 +139,23 @@ namespace ExpandedAiFramework
         {
             private static void Postfix(BaseAi __result, SpawnRegion __instance)
             {
-                LogVerbose($"SpawnRegion.InstantiateSpawnInternal on {__result.gameObject.name} at {__result?.transform?.position ?? Vector3.zero}");
+                LogVerbose($"[SpawnRegionPatches_InstantiateSpawnInternal.Postfix]: SpawnRegion.InstantiateSpawnInternal on {__result.gameObject.name} at {__result?.transform?.position ?? Vector3.zero}");
                 if (!Manager.SpawnRegionManager.TryInterceptSpawn(__result, __instance))
                 {
-                    LogError("Spawn intercept error!");
+                    LogError("[SpawnRegionPatches_InstantiateSpawnInternal.Postfix]: Spawn intercept error!");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.Start))]
+        internal class SpawnRegionPatches_Start
+        {
+            private static /*bool*/ void Prefix(SpawnRegion __instance)
+            {
+                //return !Manager.TryStart(__instance);
+                if (!Manager.TryStart(__instance))
+                {
+                    //LogTrace($"[SpawnRegionPatches_Start.Prefix]: Could not start spawn region instance with hash code {__instance.GetHashCode()}!");
                 }
             }
         }
@@ -157,23 +170,23 @@ namespace ExpandedAiFramework
         {
             private static void Postfix(GameObject carcassSitePrefab, Vector3 position, GameObject originCorpse)
             {
-                LogVerbose($"CarcassSite.Manager.TryInstanciateCarcassSite on {carcassSitePrefab.name} at {position}");
+                LogVerbose($"[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: CarcassSite.Manager.TryInstanciateCarcassSite on {carcassSitePrefab.name} at {position}");
                 BaseAi baseAi = null;
                 bool carcassAiFound = carcassSitePrefab != null && carcassSitePrefab.TryGetComponent(out baseAi);
                 carcassAiFound = carcassAiFound || (originCorpse != null && originCorpse.TryGetComponent(out baseAi));
                 if (!carcassAiFound)
                 {
-                    LogVerbose($"No base ai script found on carcass prefab or origin corpse, aborting...");
+                    LogVerbose($"[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: No base ai script found on carcass prefab or origin corpse, aborting...");
                     return;
                 }
                 if (baseAi == null)
                 {
-                    LogError("How was baseAi null if we passed TryGetComponent checks?");
+                    LogError("[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: How was baseAi null if we passed TryGetComponent checks?");
                     return;
                 }
                 if (!Manager.AiManager.TryInterceptCarcassSpawn(baseAi))
                 {
-                    LogError("Carcass intercept error!");
+                    LogError("[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: Carcass intercept error!");
                 }
             }
         }

@@ -35,6 +35,9 @@ namespace ExpandedAiFramework.CompanionWolfMod
             mInitialized = true;
             LogVerbose("CompanionWolfManager initialized!");
         }
+
+
+        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { } //Do nothing yet
         
 
         public bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region) => false;

@@ -39,6 +39,7 @@ namespace ExpandedAiFramework
             AiManager,
             SpawnRegionManager,
             ConsoleCommandManager,
+            DispatchManager,
             COUNT
         }
 
@@ -48,6 +49,7 @@ namespace ExpandedAiFramework
         private SpawnRegionManager mSpawnRegionManager;
         private AiManager mAiManager;
         private ConsoleCommandManager mConsoleCommandManager;
+        private DispatchManager mDispatchManager;
         private BaseSubManager[] mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
         private Dictionary<Type, ISubManager> mSubManagerDict = new Dictionary<Type, ISubManager>();
         private ISubManager[] mSubManagers = new ISubManager[0];
@@ -64,11 +66,13 @@ namespace ExpandedAiFramework
             mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers);
             mAiManager = new AiManager(this, mSubManagers);
             mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers);
+            mDispatchManager = new DispatchManager(this, mSubManagers);
 
             mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
             mBaseSubManagers[(int)BaseSubManagers.SpawnRegionManager] = mSpawnRegionManager;
             mBaseSubManagers[(int)BaseSubManagers.AiManager] = mAiManager;
             mBaseSubManagers[(int)BaseSubManagers.ConsoleCommandManager] = mConsoleCommandManager;
+            mBaseSubManagers[(int)BaseSubManagers.DispatchManager] = mDispatchManager;
         }
 
 
@@ -84,11 +88,13 @@ namespace ExpandedAiFramework
 
         public ExpandedAiFrameworkSettings Settings => mSettings;
         public Dictionary<Type, ISubManager> SubManagers => mSubManagerDict;
+        public ISubManager[] SubManagerArray => mSubManagers;
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } } //should be encapsulated elsewhere, datamanager maybe? or maybe some sort of timeline manager.
         public string CurrentScene => mCurrentScene;
         public DataManager DataManager => mDataManager;
         public SpawnRegionManager SpawnRegionManager => mSpawnRegionManager;
         public AiManager AiManager => mAiManager;
+        public DispatchManager DispatchManager => mDispatchManager;
         public Dictionary<int, CustomBaseAi> CustomAis => mAiManager.CustomAis;
         public WeightedTypePicker<BaseAi> TypePicker => mAiManager.TypePicker;
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
@@ -219,10 +225,10 @@ namespace ExpandedAiFramework
         { 
             if (mSubManagerDict.TryGetValue(type, out ISubManager _))
             {
-                LogError($"Type {type} already registered in submanager dictionary!");
+                LogError($"[EAFManager.RegisterSubmanager] Type {type} already registered in submanager dictionary!");
                 return;
             }
-            LogAlways($"Registering SubManager for type {type}");
+            LogAlways($"[EAFManager.RegisterSubmanager] Registering SubManager for type {type}");
             mSubManagerDict.Add(type, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);
             mSubManagers[^1] = subManager;
@@ -238,12 +244,9 @@ namespace ExpandedAiFramework
         public bool TryInjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion region) => mAiManager.TryInjectCustomAi(baseAi, spawnType, region);
         public bool TryRemoveCustomAi(BaseAi baseAi) => mAiManager.TryRemoveCustomAi(baseAi);
         public bool TryStart(BaseAi baseAi) => mAiManager.TryStart(baseAi);
+        public bool TryStart(SpawnRegion spawnRegion) => mSpawnRegionManager.TryStart(spawnRegion);
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode) => mAiManager.TrySetAiMode(baseAi, aiMode);
         public bool TryApplyDamage(BaseAi baseAi, float damage, float bleedOutTime, DamageSource damageSource) => mAiManager.TryApplyDamage(baseAi, damage, bleedOutTime, damageSource);
-        public HidingSpot GetNearestHidingSpot(CustomBaseAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false) => mDataManager.GetNearestHidingSpot(ai, extraNearestCandidatesToMaybePickFrom, requireAbleToPathfind);
-        public WanderPath GetNearestWanderPath(CustomBaseAi ai, int extraNearestCandidatesToMaybePickFrom = 0, bool requireAbleToPathfind = false) => mDataManager.GetNearestWanderPath(ai, extraNearestCandidatesToMaybePickFrom, requireAbleToPathfind);
-
-
         /*
         #region Event Registers
 
