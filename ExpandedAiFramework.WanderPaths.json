@@ -1,9 +1,5 @@
 ﻿[
 	{
-		"Transient": false,
-		"mGuid": "b10150c3-d84f-42c9-9bc7-ff7b9d20003c",
-		"mName": "ChurchPatrol",
-		"mScene": "WhalingStationRegion",
 		"mPathPoints": [
 			{
 				"x": 263.94583,
@@ -96,13 +92,18 @@
 				"z": 1047.3396
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "b10150c3-d84f-42c9-9bc7-ff7b9d20003c",
+		"mName": "ChurchPatrol",
+		"mScene": "WhalingStationRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "02a18b30-b7c2-494a-a10e-27f2c443b00a",
-		"mName": "ModRegionToProcessing",
-		"mScene": "WhalingStationRegion",
 		"mPathPoints": [
 			{
 				"x": 867.85187,
@@ -180,13 +181,18 @@
 				"z": 1264.0387
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "02a18b30-b7c2-494a-a10e-27f2c443b00a",
+		"mName": "ModRegionToProcessing",
+		"mScene": "WhalingStationRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "eedcbcf1-9368-4caa-8f1a-5e6b9676ec5d",
-		"mName": "roundtrip",
-		"mScene": "WhalingStationRegion",
 		"mPathPoints": [
 			{
 				"x": 642.73236,
@@ -269,13 +275,18 @@
 				"z": 942.5051
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "eedcbcf1-9368-4caa-8f1a-5e6b9676ec5d",
+		"mName": "roundtrip",
+		"mScene": "WhalingStationRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "b10150c3-d84f-42c9-9bc7-ff7b9d20003c",
-		"mName": "ChurchPatrol",
-		"mScene": "WhalingStationRegion",
 		"mPathPoints": [
 			{
 				"x": 263.94583,
@@ -368,13 +379,18 @@
 				"z": 1047.3396
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "b10150c3-d84f-42c9-9bc7-ff7b9d20003c",
+		"mName": "ChurchPatrol",
+		"mScene": "WhalingStationRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "02a18b30-b7c2-494a-a10e-27f2c443b00a",
-		"mName": "ModRegionToProcessing",
-		"mScene": "WhalingStationRegion",
 		"mPathPoints": [
 			{
 				"x": 867.85187,
@@ -452,13 +468,18 @@
 				"z": 1264.0387
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "02a18b30-b7c2-494a-a10e-27f2c443b00a",
+		"mName": "ModRegionToProcessing",
+		"mScene": "WhalingStationRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "eedcbcf1-9368-4caa-8f1a-5e6b9676ec5d",
-		"mName": "roundtrip",
-		"mScene": "WhalingStationRegion",
 		"mPathPoints": [
 			{
 				"x": 642.73236,
@@ -541,13 +562,18 @@
 				"z": 942.5051
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "eedcbcf1-9368-4caa-8f1a-5e6b9676ec5d",
+		"mName": "roundtrip",
+		"mScene": "WhalingStationRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c8dbc3fe-8f02-4229-add5-5d046a820966",
-		"mName": "cabin",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 864.8148,
@@ -595,13 +621,18 @@
 				"z": 429.57086
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c8dbc3fe-8f02-4229-add5-5d046a820966",
+		"mName": "cabin",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c9da611b-e08c-4543-9ad3-6d8afde35eda",
-		"mName": "cabinriver",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 864.0942,
@@ -719,13 +750,18 @@
 				"z": 503.8872
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c9da611b-e08c-4543-9ad3-6d8afde35eda",
+		"mName": "cabinriver",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "0c8fd89d-422a-486a-bad5-712deee65884",
-		"mName": "summitpath1",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 446.07874,
@@ -793,13 +829,18 @@
 				"z": 1132.987
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "0c8fd89d-422a-486a-bad5-712deee65884",
+		"mName": "summitpath1",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "43c15247-cc55-40e8-bdb4-f17a48132627",
-		"mName": "summitpath2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 374.4656,
@@ -1067,13 +1108,18 @@
 				"z": 1573.7944
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "43c15247-cc55-40e8-bdb4-f17a48132627",
+		"mName": "summitpath2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ff08a253-ecc6-4875-a2cd-9d5f1e779fbe",
-		"mName": "cabinoverlook",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 880.2762,
@@ -1166,13 +1212,18 @@
 				"z": 687.28406
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ff08a253-ecc6-4875-a2cd-9d5f1e779fbe",
+		"mName": "cabinoverlook",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "a8344df8-add3-4077-a000-1f4a559fe9d2",
-		"mName": "canyon",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1205.3679,
@@ -1265,13 +1316,18 @@
 				"z": 913.6391
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "a8344df8-add3-4077-a000-1f4a559fe9d2",
+		"mName": "canyon",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "9ccb1557-2057-4b7b-8ad9-1219a9a04af3",
-		"mName": "canyon2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1174.2412,
@@ -1414,13 +1470,18 @@
 				"z": 979.9179
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "9ccb1557-2057-4b7b-8ad9-1219a9a04af3",
+		"mName": "canyon2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "94862afc-4b56-4767-86ce-9b3b4558cf2a",
-		"mName": "bunker",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1810.6162,
@@ -1518,13 +1579,18 @@
 				"z": 950.4132
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "94862afc-4b56-4767-86ce-9b3b4558cf2a",
+		"mName": "bunker",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "1acec7e9-79af-47cb-9141-5e1566d857b6",
-		"mName": "summitpath0",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1606.1206,
@@ -1632,13 +1698,18 @@
 				"z": 459.53348
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "1acec7e9-79af-47cb-9141-5e1566d857b6",
+		"mName": "summitpath0",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "86480103-70c7-41c6-86bd-0052e17c1e60",
-		"mName": "cabin1",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 916.3631,
@@ -1761,13 +1832,18 @@
 				"z": 462.999
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "86480103-70c7-41c6-86bd-0052e17c1e60",
+		"mName": "cabin1",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "06a78deb-4475-43bd-afba-67cca3f436eb",
-		"mName": "PVEntry1",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 427.08646,
@@ -1870,13 +1946,18 @@
 				"z": 288.0686
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "06a78deb-4475-43bd-afba-67cca3f436eb",
+		"mName": "PVEntry1",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ea42a883-0264-492f-8f3f-37f77ade2f0f",
-		"mName": "PVEntry2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 477.0613,
@@ -1949,13 +2030,18 @@
 				"z": 324.56113
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ea42a883-0264-492f-8f3f-37f77ade2f0f",
+		"mName": "PVEntry2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "694fc349-ba77-4319-9dca-76355471bb6b",
-		"mName": "summit",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 876.1483,
@@ -2058,13 +2144,18 @@
 				"z": 1232.6844
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "694fc349-ba77-4319-9dca-76355471bb6b",
+		"mName": "summit",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "fb0f9b66-b724-45c3-bd94-1df4a482f167",
-		"mName": "summitpath6",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1683.6376,
@@ -2142,13 +2233,18 @@
 				"z": 1288.258
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "fb0f9b66-b724-45c3-bd94-1df4a482f167",
+		"mName": "summitpath6",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "91d90091-bcce-4b91-9b12-fd55aed5f650",
-		"mName": "ACNorthEntry",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1619.013,
@@ -2211,13 +2307,18 @@
 				"z": 1619.2006
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "91d90091-bcce-4b91-9b12-fd55aed5f650",
+		"mName": "ACNorthEntry",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ade18dda-6e77-4ab2-94ab-29cba81a9aa1",
-		"mName": "ACNorthEntry2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1655.6477,
@@ -2320,13 +2421,18 @@
 				"z": 1655.963
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ade18dda-6e77-4ab2-94ab-29cba81a9aa1",
+		"mName": "ACNorthEntry2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "e77295c0-7a8e-4337-ad18-cef4e395e6d4",
-		"mName": "summitpath7",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 360.6019,
@@ -2439,13 +2545,18 @@
 				"z": 739.6021
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "e77295c0-7a8e-4337-ad18-cef4e395e6d4",
+		"mName": "summitpath7",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "f3c0fa86-a6f0-4232-b122-ed3a62ec8d13",
-		"mName": "ExpressWanderPath_1",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1227.909,
@@ -2513,13 +2624,18 @@
 				"z": 1597.5939
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "f3c0fa86-a6f0-4232-b122-ed3a62ec8d13",
+		"mName": "ExpressWanderPath_1",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "4ea31251-7284-4094-98e4-3efe2a0be807",
-		"mName": "ExpressWanderPath_2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 509.88007,
@@ -2582,13 +2698,18 @@
 				"z": 1481.1356
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "4ea31251-7284-4094-98e4-3efe2a0be807",
+		"mName": "ExpressWanderPath_2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "28510045-f51b-431a-b61d-7bd64dc5f917",
-		"mName": "ExpressWanderPath_3",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 418.76938,
@@ -2626,13 +2747,18 @@
 				"z": 1273.4203
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "28510045-f51b-431a-b61d-7bd64dc5f917",
+		"mName": "ExpressWanderPath_3",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "3362d4c2-7cda-4afd-97c3-bd49f893cfb0",
-		"mName": "ExpressWanderPath_4",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 699.75726,
@@ -2680,13 +2806,18 @@
 				"z": 1112.1632
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "3362d4c2-7cda-4afd-97c3-bd49f893cfb0",
+		"mName": "ExpressWanderPath_4",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "170510c4-307d-4ce8-b60f-52777040e221",
-		"mName": "ExpressWanderPath_5",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1596.5576,
@@ -2724,13 +2855,18 @@
 				"z": 196.48721
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "170510c4-307d-4ce8-b60f-52777040e221",
+		"mName": "ExpressWanderPath_5",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c8dbc3fe-8f02-4229-add5-5d046a820966",
-		"mName": "cabin",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 864.8148,
@@ -2778,13 +2914,18 @@
 				"z": 429.57086
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c8dbc3fe-8f02-4229-add5-5d046a820966",
+		"mName": "cabin",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c9da611b-e08c-4543-9ad3-6d8afde35eda",
-		"mName": "cabinriver",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 864.0942,
@@ -2902,13 +3043,18 @@
 				"z": 503.8872
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c9da611b-e08c-4543-9ad3-6d8afde35eda",
+		"mName": "cabinriver",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "0c8fd89d-422a-486a-bad5-712deee65884",
-		"mName": "summitpath1",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 446.07874,
@@ -2976,13 +3122,18 @@
 				"z": 1132.987
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "0c8fd89d-422a-486a-bad5-712deee65884",
+		"mName": "summitpath1",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "43c15247-cc55-40e8-bdb4-f17a48132627",
-		"mName": "summitpath2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 374.4656,
@@ -3250,13 +3401,18 @@
 				"z": 1573.7944
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "43c15247-cc55-40e8-bdb4-f17a48132627",
+		"mName": "summitpath2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ff08a253-ecc6-4875-a2cd-9d5f1e779fbe",
-		"mName": "cabinoverlook",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 880.2762,
@@ -3349,13 +3505,18 @@
 				"z": 687.28406
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ff08a253-ecc6-4875-a2cd-9d5f1e779fbe",
+		"mName": "cabinoverlook",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "a8344df8-add3-4077-a000-1f4a559fe9d2",
-		"mName": "canyon",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1205.3679,
@@ -3448,13 +3609,18 @@
 				"z": 913.6391
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "a8344df8-add3-4077-a000-1f4a559fe9d2",
+		"mName": "canyon",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "9ccb1557-2057-4b7b-8ad9-1219a9a04af3",
-		"mName": "canyon2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1174.2412,
@@ -3597,13 +3763,18 @@
 				"z": 979.9179
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "9ccb1557-2057-4b7b-8ad9-1219a9a04af3",
+		"mName": "canyon2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "94862afc-4b56-4767-86ce-9b3b4558cf2a",
-		"mName": "bunker",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1810.6162,
@@ -3701,13 +3872,18 @@
 				"z": 950.4132
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "94862afc-4b56-4767-86ce-9b3b4558cf2a",
+		"mName": "bunker",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "1acec7e9-79af-47cb-9141-5e1566d857b6",
-		"mName": "summitpath0",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1606.1206,
@@ -3815,13 +3991,18 @@
 				"z": 459.53348
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "1acec7e9-79af-47cb-9141-5e1566d857b6",
+		"mName": "summitpath0",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "86480103-70c7-41c6-86bd-0052e17c1e60",
-		"mName": "cabin1",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 916.3631,
@@ -3944,13 +4125,18 @@
 				"z": 462.999
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "86480103-70c7-41c6-86bd-0052e17c1e60",
+		"mName": "cabin1",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "06a78deb-4475-43bd-afba-67cca3f436eb",
-		"mName": "PVEntry1",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 427.08646,
@@ -4053,13 +4239,18 @@
 				"z": 288.0686
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "06a78deb-4475-43bd-afba-67cca3f436eb",
+		"mName": "PVEntry1",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ea42a883-0264-492f-8f3f-37f77ade2f0f",
-		"mName": "PVEntry2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 477.0613,
@@ -4132,13 +4323,18 @@
 				"z": 324.56113
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ea42a883-0264-492f-8f3f-37f77ade2f0f",
+		"mName": "PVEntry2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "694fc349-ba77-4319-9dca-76355471bb6b",
-		"mName": "summit",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 876.1483,
@@ -4241,13 +4437,18 @@
 				"z": 1232.6844
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "694fc349-ba77-4319-9dca-76355471bb6b",
+		"mName": "summit",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "fb0f9b66-b724-45c3-bd94-1df4a482f167",
-		"mName": "summitpath6",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1683.6376,
@@ -4325,13 +4526,18 @@
 				"z": 1288.258
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "fb0f9b66-b724-45c3-bd94-1df4a482f167",
+		"mName": "summitpath6",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "91d90091-bcce-4b91-9b12-fd55aed5f650",
-		"mName": "ACNorthEntry",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1619.013,
@@ -4394,13 +4600,18 @@
 				"z": 1619.2006
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "91d90091-bcce-4b91-9b12-fd55aed5f650",
+		"mName": "ACNorthEntry",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ade18dda-6e77-4ab2-94ab-29cba81a9aa1",
-		"mName": "ACNorthEntry2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1655.6477,
@@ -4503,13 +4714,18 @@
 				"z": 1655.963
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ade18dda-6e77-4ab2-94ab-29cba81a9aa1",
+		"mName": "ACNorthEntry2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "e77295c0-7a8e-4337-ad18-cef4e395e6d4",
-		"mName": "summitpath7",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 360.6019,
@@ -4622,13 +4838,18 @@
 				"z": 739.6021
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "e77295c0-7a8e-4337-ad18-cef4e395e6d4",
+		"mName": "summitpath7",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "f3c0fa86-a6f0-4232-b122-ed3a62ec8d13",
-		"mName": "ExpressWanderPath_1",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1227.909,
@@ -4696,13 +4917,18 @@
 				"z": 1597.5939
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "f3c0fa86-a6f0-4232-b122-ed3a62ec8d13",
+		"mName": "ExpressWanderPath_1",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "4ea31251-7284-4094-98e4-3efe2a0be807",
-		"mName": "ExpressWanderPath_2",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 509.88007,
@@ -4765,13 +4991,18 @@
 				"z": 1481.1356
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "4ea31251-7284-4094-98e4-3efe2a0be807",
+		"mName": "ExpressWanderPath_2",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "28510045-f51b-431a-b61d-7bd64dc5f917",
-		"mName": "ExpressWanderPath_3",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 418.76938,
@@ -4809,13 +5040,18 @@
 				"z": 1273.4203
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "28510045-f51b-431a-b61d-7bd64dc5f917",
+		"mName": "ExpressWanderPath_3",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "3362d4c2-7cda-4afd-97c3-bd49f893cfb0",
-		"mName": "ExpressWanderPath_4",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 699.75726,
@@ -4863,13 +5099,18 @@
 				"z": 1112.1632
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "3362d4c2-7cda-4afd-97c3-bd49f893cfb0",
+		"mName": "ExpressWanderPath_4",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "170510c4-307d-4ce8-b60f-52777040e221",
-		"mName": "ExpressWanderPath_5",
-		"mScene": "CrashMountainRegion",
 		"mPathPoints": [
 			{
 				"x": 1596.5576,
@@ -4907,13 +5148,18 @@
 				"z": 196.48721
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "170510c4-307d-4ce8-b60f-52777040e221",
+		"mName": "ExpressWanderPath_5",
+		"mScene": "CrashMountainRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "80df8b7a-121b-4cf0-a727-3f8aba1f6fbe",
-		"mName": "plane",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 588.79175,
@@ -5016,13 +5262,18 @@
 				"z": 1963.8217
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "80df8b7a-121b-4cf0-a727-3f8aba1f6fbe",
+		"mName": "plane",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ec70bdf0-c72d-4c87-a1e1-522b110e122b",
-		"mName": "plane1",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 715.41974,
@@ -5135,13 +5386,18 @@
 				"z": 1675.7368
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ec70bdf0-c72d-4c87-a1e1-522b110e122b",
+		"mName": "plane1",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "5f0181c6-d3b0-4918-ab91-9c547ae27193",
-		"mName": "disagreement",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 672.20233,
@@ -5219,13 +5475,18 @@
 				"z": 2284.0366
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "5f0181c6-d3b0-4918-ab91-9c547ae27193",
+		"mName": "disagreement",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "a718b330-f655-43c0-a536-f2585aa229e6",
-		"mName": "river",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 934.0715,
@@ -5383,13 +5644,18 @@
 				"z": 1368.0077
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "a718b330-f655-43c0-a536-f2585aa229e6",
+		"mName": "river",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "43ff421f-cfb2-4d17-afa6-821400e6df3a",
-		"mName": "river1",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 630.97754,
@@ -5547,13 +5813,18 @@
 				"z": 1152.7129
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "43ff421f-cfb2-4d17-afa6-821400e6df3a",
+		"mName": "river1",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "b590cba2-0bc0-43a5-80dc-57383964e483",
-		"mName": "ch",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2265.6458,
@@ -5636,13 +5907,18 @@
 				"z": 2781.6287
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "b590cba2-0bc0-43a5-80dc-57383964e483",
+		"mName": "ch",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "042ae169-f4b6-47da-a2bf-62b092848fe4",
-		"mName": "town0",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2406.8467,
@@ -5745,13 +6021,18 @@
 				"z": 2269.1155
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "042ae169-f4b6-47da-a2bf-62b092848fe4",
+		"mName": "town0",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "163bcbd9-e70d-4a78-9146-46f86dbada40",
-		"mName": "barn0",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2255.4512,
@@ -5759,13 +6040,18 @@
 				"z": 2100.7488
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "163bcbd9-e70d-4a78-9146-46f86dbada40",
+		"mName": "barn0",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "be370e36-8a63-46e7-82b6-5bfd8aebdd0c",
-		"mName": "barn1",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2169.7625,
@@ -5868,13 +6154,18 @@
 				"z": 2110.9314
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "be370e36-8a63-46e7-82b6-5bfd8aebdd0c",
+		"mName": "barn1",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "362aa82a-5592-4235-b87f-1a96a25d9009",
-		"mName": "road0",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 1168.5903,
@@ -5932,13 +6223,18 @@
 				"z": 1000.7013
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "362aa82a-5592-4235-b87f-1a96a25d9009",
+		"mName": "road0",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "da8f4b3b-2ffc-4eb8-8ad7-6cd1bc62f0bf",
-		"mName": "townhouse",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 1412.7852,
@@ -5986,13 +6282,18 @@
 				"z": 1065.3247
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "da8f4b3b-2ffc-4eb8-8ad7-6cd1bc62f0bf",
+		"mName": "townhouse",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "109da0b7-67e4-4e22-a872-d44142a032a2",
-		"mName": "totwm0",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 876.7998,
@@ -6140,13 +6441,18 @@
 				"z": 2645.297
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "109da0b7-67e4-4e22-a872-d44142a032a2",
+		"mName": "totwm0",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c1b553b7-20cb-43e9-b50a-9eafcc2ee64e",
-		"mName": "transmitter",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2157.4517,
@@ -6234,13 +6540,18 @@
 				"z": 566.65466
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c1b553b7-20cb-43e9-b50a-9eafcc2ee64e",
+		"mName": "transmitter",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "80df8b7a-121b-4cf0-a727-3f8aba1f6fbe",
-		"mName": "plane",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 588.79175,
@@ -6343,13 +6654,18 @@
 				"z": 1963.8217
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "80df8b7a-121b-4cf0-a727-3f8aba1f6fbe",
+		"mName": "plane",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ec70bdf0-c72d-4c87-a1e1-522b110e122b",
-		"mName": "plane1",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 715.41974,
@@ -6462,13 +6778,18 @@
 				"z": 1675.7368
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ec70bdf0-c72d-4c87-a1e1-522b110e122b",
+		"mName": "plane1",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "5f0181c6-d3b0-4918-ab91-9c547ae27193",
-		"mName": "disagreement",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 672.20233,
@@ -6546,13 +6867,18 @@
 				"z": 2284.0366
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "5f0181c6-d3b0-4918-ab91-9c547ae27193",
+		"mName": "disagreement",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "a718b330-f655-43c0-a536-f2585aa229e6",
-		"mName": "river",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 934.0715,
@@ -6710,13 +7036,18 @@
 				"z": 1368.0077
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "a718b330-f655-43c0-a536-f2585aa229e6",
+		"mName": "river",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "43ff421f-cfb2-4d17-afa6-821400e6df3a",
-		"mName": "river1",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 630.97754,
@@ -6874,13 +7205,18 @@
 				"z": 1152.7129
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "43ff421f-cfb2-4d17-afa6-821400e6df3a",
+		"mName": "river1",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "b590cba2-0bc0-43a5-80dc-57383964e483",
-		"mName": "ch",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2265.6458,
@@ -6963,13 +7299,18 @@
 				"z": 2781.6287
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "b590cba2-0bc0-43a5-80dc-57383964e483",
+		"mName": "ch",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "042ae169-f4b6-47da-a2bf-62b092848fe4",
-		"mName": "town0",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2406.8467,
@@ -7072,13 +7413,18 @@
 				"z": 2269.1155
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "042ae169-f4b6-47da-a2bf-62b092848fe4",
+		"mName": "town0",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "163bcbd9-e70d-4a78-9146-46f86dbada40",
-		"mName": "barn0",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2255.4512,
@@ -7086,13 +7432,18 @@
 				"z": 2100.7488
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "163bcbd9-e70d-4a78-9146-46f86dbada40",
+		"mName": "barn0",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "be370e36-8a63-46e7-82b6-5bfd8aebdd0c",
-		"mName": "barn1",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2169.7625,
@@ -7195,13 +7546,18 @@
 				"z": 2110.9314
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "be370e36-8a63-46e7-82b6-5bfd8aebdd0c",
+		"mName": "barn1",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "362aa82a-5592-4235-b87f-1a96a25d9009",
-		"mName": "road0",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 1168.5903,
@@ -7259,13 +7615,18 @@
 				"z": 1000.7013
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "362aa82a-5592-4235-b87f-1a96a25d9009",
+		"mName": "road0",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "da8f4b3b-2ffc-4eb8-8ad7-6cd1bc62f0bf",
-		"mName": "townhouse",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 1412.7852,
@@ -7313,13 +7674,18 @@
 				"z": 1065.3247
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "da8f4b3b-2ffc-4eb8-8ad7-6cd1bc62f0bf",
+		"mName": "townhouse",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "109da0b7-67e4-4e22-a872-d44142a032a2",
-		"mName": "totwm0",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 876.7998,
@@ -7467,13 +7833,18 @@
 				"z": 2645.297
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "109da0b7-67e4-4e22-a872-d44142a032a2",
+		"mName": "totwm0",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c1b553b7-20cb-43e9-b50a-9eafcc2ee64e",
-		"mName": "transmitter",
-		"mScene": "RuralRegion",
 		"mPathPoints": [
 			{
 				"x": 2157.4517,
@@ -7561,13 +7932,18 @@
 				"z": 566.65466
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c1b553b7-20cb-43e9-b50a-9eafcc2ee64e",
+		"mName": "transmitter",
+		"mScene": "RuralRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "f0ae718c-c071-4ed7-8708-cfc2b8a0d600",
-		"mName": "ExpressWanderPath_1",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 843.297,
@@ -7650,13 +8026,18 @@
 				"z": -722.1534
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "f0ae718c-c071-4ed7-8708-cfc2b8a0d600",
+		"mName": "ExpressWanderPath_1",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "736d2a3f-9526-481b-a6d1-3ee83dce6952",
-		"mName": "ExpressWanderPath_2",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 775.6967,
@@ -7804,13 +8185,18 @@
 				"z": -711.1472
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "736d2a3f-9526-481b-a6d1-3ee83dce6952",
+		"mName": "ExpressWanderPath_2",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c1c9bcfd-00a5-4c99-9fc7-80b1ea7ac896",
-		"mName": "ExpressWanderPath_3",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 700.001,
@@ -7908,13 +8294,18 @@
 				"z": -411.01773
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c1c9bcfd-00a5-4c99-9fc7-80b1ea7ac896",
+		"mName": "ExpressWanderPath_3",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "1f5d56c9-e90b-4eee-8181-e8d99180761a",
-		"mName": "ExpressWanderPath_4",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 413.9214,
@@ -7937,13 +8328,18 @@
 				"z": -584.0769
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "1f5d56c9-e90b-4eee-8181-e8d99180761a",
+		"mName": "ExpressWanderPath_4",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "4b98215a-67a8-4c57-853d-10cad4b1d971",
-		"mName": "ExpressWanderPath_5",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 482.8473,
@@ -7986,13 +8382,18 @@
 				"z": -582.81116
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "4b98215a-67a8-4c57-853d-10cad4b1d971",
+		"mName": "ExpressWanderPath_5",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "9125e985-97ee-471b-9587-074cff201f39",
-		"mName": "ExpressWanderPath_6",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -40.992767,
@@ -8055,13 +8456,18 @@
 				"z": -307.4273
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "9125e985-97ee-471b-9587-074cff201f39",
+		"mName": "ExpressWanderPath_6",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "47f785fe-44ed-49b2-81c5-658b0cc03759",
-		"mName": "ExpressWanderPath_7",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 53.042637,
@@ -8089,13 +8495,18 @@
 				"z": -31.970337
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "47f785fe-44ed-49b2-81c5-658b0cc03759",
+		"mName": "ExpressWanderPath_7",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "04bfefe8-9493-4830-900a-04ffe2328c00",
-		"mName": "ExpressWanderPath_8",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 31.50687,
@@ -8163,13 +8574,18 @@
 				"z": -378.10107
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "04bfefe8-9493-4830-900a-04ffe2328c00",
+		"mName": "ExpressWanderPath_8",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "3afcccd5-0c78-43d7-a9dc-25455423d9a8",
-		"mName": "ExpressWanderPath_9",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 136.18768,
@@ -8252,13 +8668,18 @@
 				"z": -2.7879639
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "3afcccd5-0c78-43d7-a9dc-25455423d9a8",
+		"mName": "ExpressWanderPath_9",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "392dc487-d9fe-4265-a205-d8688afbe861",
-		"mName": "ExpressWanderPath_10",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 271.53955,
@@ -8341,13 +8762,18 @@
 				"z": -460.6385
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "392dc487-d9fe-4265-a205-d8688afbe861",
+		"mName": "ExpressWanderPath_10",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "4e443093-2818-4a99-870d-33551207cbf1",
-		"mName": "ExpressWanderPath_11",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -53.36087,
@@ -8400,13 +8826,18 @@
 				"z": -705.9383
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "4e443093-2818-4a99-870d-33551207cbf1",
+		"mName": "ExpressWanderPath_11",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "8186eecf-fc79-4e3d-8093-4ff9cd3daabe",
-		"mName": "ExpressWanderPath_12",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 94.38692,
@@ -8519,13 +8950,18 @@
 				"z": -638.4669
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "8186eecf-fc79-4e3d-8093-4ff9cd3daabe",
+		"mName": "ExpressWanderPath_12",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "03a2f765-9e1a-4b7b-bae1-c29db249626c",
-		"mName": "ExpressWanderPath_13",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -267.07898,
@@ -8593,13 +9029,18 @@
 				"z": -597.11096
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "03a2f765-9e1a-4b7b-bae1-c29db249626c",
+		"mName": "ExpressWanderPath_13",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "af3385ce-d915-43d7-a2ad-9786230ecd61",
-		"mName": "ExpressWanderPath_14",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -188.16461,
@@ -8687,13 +9128,18 @@
 				"z": -785.76306
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "af3385ce-d915-43d7-a2ad-9786230ecd61",
+		"mName": "ExpressWanderPath_14",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "2d23b43b-d2ce-48aa-bb9e-778dc88b0a23",
-		"mName": "ExpressWanderPath_15",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -381.3239,
@@ -8776,13 +9222,18 @@
 				"z": -437.79395
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "2d23b43b-d2ce-48aa-bb9e-778dc88b0a23",
+		"mName": "ExpressWanderPath_15",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "189a312d-c62d-4d66-9ad3-e2114361f074",
-		"mName": "ExpressWanderPath_16",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 686.05,
@@ -8825,13 +9276,18 @@
 				"z": 245.33432
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "189a312d-c62d-4d66-9ad3-e2114361f074",
+		"mName": "ExpressWanderPath_16",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "54158f19-bccc-4252-9c30-b8298183479a",
-		"mName": "ExpressWanderPath_17",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 377.2524,
@@ -8919,13 +9375,18 @@
 				"z": 493.60083
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "54158f19-bccc-4252-9c30-b8298183479a",
+		"mName": "ExpressWanderPath_17",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c5095dd3-c46b-4655-bc64-a7f4be000cc6",
-		"mName": "ExpressWanderPath_18",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 178.4339,
@@ -8973,13 +9434,18 @@
 				"z": 577.1081
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c5095dd3-c46b-4655-bc64-a7f4be000cc6",
+		"mName": "ExpressWanderPath_18",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "21f0782d-c403-4865-8f15-1a45df3f8c29",
-		"mName": "ExpressWanderPath_19",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 51.154716,
@@ -9047,13 +9513,18 @@
 				"z": 600.4825
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "21f0782d-c403-4865-8f15-1a45df3f8c29",
+		"mName": "ExpressWanderPath_19",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "7ed2eae8-8cdd-4d10-bf17-1f95251f4df4",
-		"mName": "ExpressWanderPath_20",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 250.31165,
@@ -9091,13 +9562,18 @@
 				"z": 858.0374
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "7ed2eae8-8cdd-4d10-bf17-1f95251f4df4",
+		"mName": "ExpressWanderPath_20",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "8bf6cfda-7189-4853-8266-bc977cce4de2",
-		"mName": "ExpressWanderPath_21",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -104.69141,
@@ -9165,13 +9641,18 @@
 				"z": 791.1128
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "8bf6cfda-7189-4853-8266-bc977cce4de2",
+		"mName": "ExpressWanderPath_21",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "47179a4f-7c33-4979-8a45-cee6a2a0977b",
-		"mName": "ExpressWanderPath_22",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -204.54749,
@@ -9304,13 +9785,18 @@
 				"z": 714.0582
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "47179a4f-7c33-4979-8a45-cee6a2a0977b",
+		"mName": "ExpressWanderPath_22",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "d6a027cd-a053-48ff-8712-b90606df4027",
-		"mName": "ExpressWanderPath_23",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -159.41684,
@@ -9408,13 +9894,18 @@
 				"z": -328.20172
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "d6a027cd-a053-48ff-8712-b90606df4027",
+		"mName": "ExpressWanderPath_23",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "94d997af-f46d-48c2-b453-799024533efd",
-		"mName": "ExpressWanderPath_24",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -160.3734,
@@ -9467,13 +9958,18 @@
 				"z": -56.480164
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "94d997af-f46d-48c2-b453-799024533efd",
+		"mName": "ExpressWanderPath_24",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ad70d253-d278-4a68-b944-0c74f2b743d6",
-		"mName": "ExpressWanderPath_25",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -519.17615,
@@ -9636,13 +10132,18 @@
 				"z": 6.706096
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ad70d253-d278-4a68-b944-0c74f2b743d6",
+		"mName": "ExpressWanderPath_25",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "4e3b52ca-e551-4d3c-95d6-29b155ba496d",
-		"mName": "ExpressWanderPath_26",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -703.71277,
@@ -9710,13 +10211,18 @@
 				"z": 367.7735
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "4e3b52ca-e551-4d3c-95d6-29b155ba496d",
+		"mName": "ExpressWanderPath_26",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "2bec617a-f2fe-4c21-9c5f-61f676643da1",
-		"mName": "ExpressWanderPath_27",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -748.79376,
@@ -9879,13 +10385,18 @@
 				"z": -73.65552
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "2bec617a-f2fe-4c21-9c5f-61f676643da1",
+		"mName": "ExpressWanderPath_27",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ae362413-fd20-491b-a84d-3423162b1529",
-		"mName": "ExpressWanderPath_28",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -577.17224,
@@ -10073,13 +10584,18 @@
 				"z": 680.6952
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ae362413-fd20-491b-a84d-3423162b1529",
+		"mName": "ExpressWanderPath_28",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "77faea90-163a-4502-8734-32db052110aa",
-		"mName": "ExpressWanderPath_29",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -596.761,
@@ -10202,13 +10718,18 @@
 				"z": 532.9107
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "77faea90-163a-4502-8734-32db052110aa",
+		"mName": "ExpressWanderPath_29",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "87aefd74-5e26-4c90-82e9-86086d9703de",
-		"mName": "ExpressWanderPath_30",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -45.801483,
@@ -10311,13 +10832,18 @@
 				"z": 337.17642
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "87aefd74-5e26-4c90-82e9-86086d9703de",
+		"mName": "ExpressWanderPath_30",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "7dff8c75-5b41-4d2a-9ba3-4ab28b487504",
-		"mName": "ExpressWanderPath_31",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -102.17798,
@@ -10415,13 +10941,18 @@
 				"z": 188.12326
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "7dff8c75-5b41-4d2a-9ba3-4ab28b487504",
+		"mName": "ExpressWanderPath_31",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "987dabe2-3398-458d-849e-7d9a15c7045d",
-		"mName": "ExpressWanderPath_32",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -186.96716,
@@ -10524,13 +11055,18 @@
 				"z": 185.04971
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "987dabe2-3398-458d-849e-7d9a15c7045d",
+		"mName": "ExpressWanderPath_32",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "44023705-bedf-44bc-a435-53605c4bff3e",
-		"mName": "ExpressWanderPath_33",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -406.4537,
@@ -10613,13 +11149,18 @@
 				"z": -100.65109
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "44023705-bedf-44bc-a435-53605c4bff3e",
+		"mName": "ExpressWanderPath_33",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "7aad14f4-e0f1-4156-ad02-a05b87a02bc6",
-		"mName": "ExpressWanderPath_34",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -208.55441,
@@ -10672,13 +11213,18 @@
 				"z": 278.68774
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "7aad14f4-e0f1-4156-ad02-a05b87a02bc6",
+		"mName": "ExpressWanderPath_34",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "7b70d199-63ec-499f-bbab-bcd1e791790d",
-		"mName": "ExpressWanderPath_35",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 319.73535,
@@ -10826,13 +11372,18 @@
 				"z": 215.2063
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "7b70d199-63ec-499f-bbab-bcd1e791790d",
+		"mName": "ExpressWanderPath_35",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c115f8dd-fe62-4358-948f-8e37a452b62b",
-		"mName": "ExpressWanderPath_36",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 108.08409,
@@ -10905,13 +11456,18 @@
 				"z": 214.71667
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c115f8dd-fe62-4358-948f-8e37a452b62b",
+		"mName": "ExpressWanderPath_36",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "fbd18803-68db-47d8-9bde-d8127f95dca5",
-		"mName": "ExpressWanderPath_37",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 102.64429,
@@ -10979,13 +11535,18 @@
 				"z": -283.45502
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "fbd18803-68db-47d8-9bde-d8127f95dca5",
+		"mName": "ExpressWanderPath_37",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c8b28766-25a1-4788-be9d-8c6e8fb3d5bb",
-		"mName": "ExpressWanderPath_38",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 431.667,
@@ -11063,13 +11624,18 @@
 				"z": 18.441738
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c8b28766-25a1-4788-be9d-8c6e8fb3d5bb",
+		"mName": "ExpressWanderPath_38",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "8fbba337-0c9e-49c4-a29e-57a58085c58e",
-		"mName": "ExpressWanderPath_39",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 490.85648,
@@ -11187,13 +11753,18 @@
 				"z": -0.12768555
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "8fbba337-0c9e-49c4-a29e-57a58085c58e",
+		"mName": "ExpressWanderPath_39",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "3bd53bd6-6769-4c49-903d-62e9e5057c6e",
-		"mName": "ExpressWanderPath_40",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 630.07605,
@@ -11281,13 +11852,18 @@
 				"z": -85.27582
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "3bd53bd6-6769-4c49-903d-62e9e5057c6e",
+		"mName": "ExpressWanderPath_40",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "0768bd79-7745-4876-a9fb-3318ca485ca9",
-		"mName": "ExpressWanderPath_41",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 527.5432,
@@ -11385,13 +11961,18 @@
 				"z": -345.69043
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "0768bd79-7745-4876-a9fb-3318ca485ca9",
+		"mName": "ExpressWanderPath_41",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "237de863-2422-4de6-b8b1-7778209acbc9",
-		"mName": "ExpressWanderPath_42",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 366.60812,
@@ -11514,13 +12095,18 @@
 				"z": 195.2675
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "237de863-2422-4de6-b8b1-7778209acbc9",
+		"mName": "ExpressWanderPath_42",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "f0ae718c-c071-4ed7-8708-cfc2b8a0d600",
-		"mName": "ExpressWanderPath_1",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 843.297,
@@ -11603,13 +12189,18 @@
 				"z": -722.1534
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "f0ae718c-c071-4ed7-8708-cfc2b8a0d600",
+		"mName": "ExpressWanderPath_1",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "736d2a3f-9526-481b-a6d1-3ee83dce6952",
-		"mName": "ExpressWanderPath_2",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 775.6967,
@@ -11757,13 +12348,18 @@
 				"z": -711.1472
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "736d2a3f-9526-481b-a6d1-3ee83dce6952",
+		"mName": "ExpressWanderPath_2",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c1c9bcfd-00a5-4c99-9fc7-80b1ea7ac896",
-		"mName": "ExpressWanderPath_3",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 700.001,
@@ -11861,13 +12457,18 @@
 				"z": -411.01773
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c1c9bcfd-00a5-4c99-9fc7-80b1ea7ac896",
+		"mName": "ExpressWanderPath_3",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "1f5d56c9-e90b-4eee-8181-e8d99180761a",
-		"mName": "ExpressWanderPath_4",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 413.9214,
@@ -11890,13 +12491,18 @@
 				"z": -584.0769
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "1f5d56c9-e90b-4eee-8181-e8d99180761a",
+		"mName": "ExpressWanderPath_4",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "4b98215a-67a8-4c57-853d-10cad4b1d971",
-		"mName": "ExpressWanderPath_5",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 482.8473,
@@ -11939,13 +12545,18 @@
 				"z": -582.81116
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "4b98215a-67a8-4c57-853d-10cad4b1d971",
+		"mName": "ExpressWanderPath_5",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "9125e985-97ee-471b-9587-074cff201f39",
-		"mName": "ExpressWanderPath_6",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -40.992767,
@@ -12008,13 +12619,18 @@
 				"z": -307.4273
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "9125e985-97ee-471b-9587-074cff201f39",
+		"mName": "ExpressWanderPath_6",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "47f785fe-44ed-49b2-81c5-658b0cc03759",
-		"mName": "ExpressWanderPath_7",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 53.042637,
@@ -12042,13 +12658,18 @@
 				"z": -31.970337
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "47f785fe-44ed-49b2-81c5-658b0cc03759",
+		"mName": "ExpressWanderPath_7",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "04bfefe8-9493-4830-900a-04ffe2328c00",
-		"mName": "ExpressWanderPath_8",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 31.50687,
@@ -12116,13 +12737,18 @@
 				"z": -378.10107
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "04bfefe8-9493-4830-900a-04ffe2328c00",
+		"mName": "ExpressWanderPath_8",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "3afcccd5-0c78-43d7-a9dc-25455423d9a8",
-		"mName": "ExpressWanderPath_9",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 136.18768,
@@ -12205,13 +12831,18 @@
 				"z": -2.7879639
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "3afcccd5-0c78-43d7-a9dc-25455423d9a8",
+		"mName": "ExpressWanderPath_9",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "392dc487-d9fe-4265-a205-d8688afbe861",
-		"mName": "ExpressWanderPath_10",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 271.53955,
@@ -12294,13 +12925,18 @@
 				"z": -460.6385
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "392dc487-d9fe-4265-a205-d8688afbe861",
+		"mName": "ExpressWanderPath_10",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "4e443093-2818-4a99-870d-33551207cbf1",
-		"mName": "ExpressWanderPath_11",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -53.36087,
@@ -12353,13 +12989,18 @@
 				"z": -705.9383
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "4e443093-2818-4a99-870d-33551207cbf1",
+		"mName": "ExpressWanderPath_11",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "8186eecf-fc79-4e3d-8093-4ff9cd3daabe",
-		"mName": "ExpressWanderPath_12",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 94.38692,
@@ -12472,13 +13113,18 @@
 				"z": -638.4669
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "8186eecf-fc79-4e3d-8093-4ff9cd3daabe",
+		"mName": "ExpressWanderPath_12",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "03a2f765-9e1a-4b7b-bae1-c29db249626c",
-		"mName": "ExpressWanderPath_13",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -267.07898,
@@ -12546,13 +13192,18 @@
 				"z": -597.11096
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "03a2f765-9e1a-4b7b-bae1-c29db249626c",
+		"mName": "ExpressWanderPath_13",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "af3385ce-d915-43d7-a2ad-9786230ecd61",
-		"mName": "ExpressWanderPath_14",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -188.16461,
@@ -12640,13 +13291,18 @@
 				"z": -785.76306
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "af3385ce-d915-43d7-a2ad-9786230ecd61",
+		"mName": "ExpressWanderPath_14",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "2d23b43b-d2ce-48aa-bb9e-778dc88b0a23",
-		"mName": "ExpressWanderPath_15",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -381.3239,
@@ -12729,13 +13385,18 @@
 				"z": -437.79395
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "2d23b43b-d2ce-48aa-bb9e-778dc88b0a23",
+		"mName": "ExpressWanderPath_15",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "189a312d-c62d-4d66-9ad3-e2114361f074",
-		"mName": "ExpressWanderPath_16",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 686.05,
@@ -12778,13 +13439,18 @@
 				"z": 245.33432
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "189a312d-c62d-4d66-9ad3-e2114361f074",
+		"mName": "ExpressWanderPath_16",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "54158f19-bccc-4252-9c30-b8298183479a",
-		"mName": "ExpressWanderPath_17",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 377.2524,
@@ -12872,13 +13538,18 @@
 				"z": 493.60083
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "54158f19-bccc-4252-9c30-b8298183479a",
+		"mName": "ExpressWanderPath_17",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c5095dd3-c46b-4655-bc64-a7f4be000cc6",
-		"mName": "ExpressWanderPath_18",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 178.4339,
@@ -12926,13 +13597,18 @@
 				"z": 577.1081
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c5095dd3-c46b-4655-bc64-a7f4be000cc6",
+		"mName": "ExpressWanderPath_18",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "21f0782d-c403-4865-8f15-1a45df3f8c29",
-		"mName": "ExpressWanderPath_19",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 51.154716,
@@ -13000,13 +13676,18 @@
 				"z": 600.4825
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "21f0782d-c403-4865-8f15-1a45df3f8c29",
+		"mName": "ExpressWanderPath_19",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "7ed2eae8-8cdd-4d10-bf17-1f95251f4df4",
-		"mName": "ExpressWanderPath_20",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 250.31165,
@@ -13044,13 +13725,18 @@
 				"z": 858.0374
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "7ed2eae8-8cdd-4d10-bf17-1f95251f4df4",
+		"mName": "ExpressWanderPath_20",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "8bf6cfda-7189-4853-8266-bc977cce4de2",
-		"mName": "ExpressWanderPath_21",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -104.69141,
@@ -13118,13 +13804,18 @@
 				"z": 791.1128
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "8bf6cfda-7189-4853-8266-bc977cce4de2",
+		"mName": "ExpressWanderPath_21",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "47179a4f-7c33-4979-8a45-cee6a2a0977b",
-		"mName": "ExpressWanderPath_22",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -204.54749,
@@ -13257,13 +13948,18 @@
 				"z": 714.0582
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "47179a4f-7c33-4979-8a45-cee6a2a0977b",
+		"mName": "ExpressWanderPath_22",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "d6a027cd-a053-48ff-8712-b90606df4027",
-		"mName": "ExpressWanderPath_23",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -159.41684,
@@ -13361,13 +14057,18 @@
 				"z": -328.20172
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "d6a027cd-a053-48ff-8712-b90606df4027",
+		"mName": "ExpressWanderPath_23",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "94d997af-f46d-48c2-b453-799024533efd",
-		"mName": "ExpressWanderPath_24",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -160.3734,
@@ -13420,13 +14121,18 @@
 				"z": -56.480164
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "94d997af-f46d-48c2-b453-799024533efd",
+		"mName": "ExpressWanderPath_24",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ad70d253-d278-4a68-b944-0c74f2b743d6",
-		"mName": "ExpressWanderPath_25",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -519.17615,
@@ -13589,13 +14295,18 @@
 				"z": 6.706096
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ad70d253-d278-4a68-b944-0c74f2b743d6",
+		"mName": "ExpressWanderPath_25",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "4e3b52ca-e551-4d3c-95d6-29b155ba496d",
-		"mName": "ExpressWanderPath_26",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -703.71277,
@@ -13663,13 +14374,18 @@
 				"z": 367.7735
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "4e3b52ca-e551-4d3c-95d6-29b155ba496d",
+		"mName": "ExpressWanderPath_26",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "2bec617a-f2fe-4c21-9c5f-61f676643da1",
-		"mName": "ExpressWanderPath_27",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -748.79376,
@@ -13832,13 +14548,18 @@
 				"z": -73.65552
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "2bec617a-f2fe-4c21-9c5f-61f676643da1",
+		"mName": "ExpressWanderPath_27",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "ae362413-fd20-491b-a84d-3423162b1529",
-		"mName": "ExpressWanderPath_28",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -577.17224,
@@ -14026,13 +14747,18 @@
 				"z": 680.6952
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "ae362413-fd20-491b-a84d-3423162b1529",
+		"mName": "ExpressWanderPath_28",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "77faea90-163a-4502-8734-32db052110aa",
-		"mName": "ExpressWanderPath_29",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -596.761,
@@ -14155,13 +14881,18 @@
 				"z": 532.9107
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "77faea90-163a-4502-8734-32db052110aa",
+		"mName": "ExpressWanderPath_29",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "87aefd74-5e26-4c90-82e9-86086d9703de",
-		"mName": "ExpressWanderPath_30",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -45.801483,
@@ -14264,13 +14995,18 @@
 				"z": 337.17642
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "87aefd74-5e26-4c90-82e9-86086d9703de",
+		"mName": "ExpressWanderPath_30",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "7dff8c75-5b41-4d2a-9ba3-4ab28b487504",
-		"mName": "ExpressWanderPath_31",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -102.17798,
@@ -14368,13 +15104,18 @@
 				"z": 188.12326
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "7dff8c75-5b41-4d2a-9ba3-4ab28b487504",
+		"mName": "ExpressWanderPath_31",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "987dabe2-3398-458d-849e-7d9a15c7045d",
-		"mName": "ExpressWanderPath_32",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -186.96716,
@@ -14477,13 +15218,18 @@
 				"z": 185.04971
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "987dabe2-3398-458d-849e-7d9a15c7045d",
+		"mName": "ExpressWanderPath_32",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "44023705-bedf-44bc-a435-53605c4bff3e",
-		"mName": "ExpressWanderPath_33",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -406.4537,
@@ -14566,13 +15312,18 @@
 				"z": -100.65109
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "44023705-bedf-44bc-a435-53605c4bff3e",
+		"mName": "ExpressWanderPath_33",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "7aad14f4-e0f1-4156-ad02-a05b87a02bc6",
-		"mName": "ExpressWanderPath_34",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": -208.55441,
@@ -14625,13 +15376,18 @@
 				"z": 278.68774
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "7aad14f4-e0f1-4156-ad02-a05b87a02bc6",
+		"mName": "ExpressWanderPath_34",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "7b70d199-63ec-499f-bbab-bcd1e791790d",
-		"mName": "ExpressWanderPath_35",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 319.73535,
@@ -14779,13 +15535,18 @@
 				"z": 215.2063
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "7b70d199-63ec-499f-bbab-bcd1e791790d",
+		"mName": "ExpressWanderPath_35",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c115f8dd-fe62-4358-948f-8e37a452b62b",
-		"mName": "ExpressWanderPath_36",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 108.08409,
@@ -14858,13 +15619,18 @@
 				"z": 214.71667
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c115f8dd-fe62-4358-948f-8e37a452b62b",
+		"mName": "ExpressWanderPath_36",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "fbd18803-68db-47d8-9bde-d8127f95dca5",
-		"mName": "ExpressWanderPath_37",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 102.64429,
@@ -14932,13 +15698,18 @@
 				"z": -283.45502
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "fbd18803-68db-47d8-9bde-d8127f95dca5",
+		"mName": "ExpressWanderPath_37",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "c8b28766-25a1-4788-be9d-8c6e8fb3d5bb",
-		"mName": "ExpressWanderPath_38",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 431.667,
@@ -15016,13 +15787,18 @@
 				"z": 18.441738
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "c8b28766-25a1-4788-be9d-8c6e8fb3d5bb",
+		"mName": "ExpressWanderPath_38",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "8fbba337-0c9e-49c4-a29e-57a58085c58e",
-		"mName": "ExpressWanderPath_39",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 490.85648,
@@ -15140,13 +15916,18 @@
 				"z": -0.12768555
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "8fbba337-0c9e-49c4-a29e-57a58085c58e",
+		"mName": "ExpressWanderPath_39",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "3bd53bd6-6769-4c49-903d-62e9e5057c6e",
-		"mName": "ExpressWanderPath_40",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 630.07605,
@@ -15234,13 +16015,18 @@
 				"z": -85.27582
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "3bd53bd6-6769-4c49-903d-62e9e5057c6e",
+		"mName": "ExpressWanderPath_40",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "0768bd79-7745-4876-a9fb-3318ca485ca9",
-		"mName": "ExpressWanderPath_41",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 527.5432,
@@ -15338,13 +16124,18 @@
 				"z": -345.69043
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "0768bd79-7745-4876-a9fb-3318ca485ca9",
+		"mName": "ExpressWanderPath_41",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	},
 	{
-		"Transient": false,
-		"mGuid": "237de863-2422-4de6-b8b1-7778209acbc9",
-		"mName": "ExpressWanderPath_42",
-		"mScene": "AshCanyonRegion",
 		"mPathPoints": [
 			{
 				"x": 366.60812,
@@ -15467,6 +16258,15 @@
 				"z": 195.2675
 			}
 		],
-		"mWanderPathType": "IndividualPath"
+		"mWanderPathType": "IndividualPath",
+		"mGuid": "237de863-2422-4de6-b8b1-7778209acbc9",
+		"mName": "ExpressWanderPath_42",
+		"mScene": "AshCanyonRegion",
+		"mAnchorPosition": {
+			"x": 0,
+			"y": 0,
+			"z": 0
+		},
+		"mClaimed": false
 	}
 ]
