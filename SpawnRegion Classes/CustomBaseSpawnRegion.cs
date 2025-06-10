@@ -4,13 +4,16 @@ using Il2Cpp;
 using Il2CppInterop.Runtime.Runtime;
 using Il2CppNodeCanvas.Tasks.Actions;
 using Il2CppRewired.Utils;
+using Il2CppSystem.Runtime.InteropServices;
 using Il2CppTLD.AI;
 using Il2CppTLD.Gameplay;
+using Il2CppTLD.Gameplay.Tunable;
 using Il2CppTLD.PDID;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static Il2Cpp.UITweener;
+using static MelonLoader.Modules.MelonModule;
 
 
 namespace ExpandedAiFramework
@@ -69,7 +72,490 @@ namespace ExpandedAiFramework
 
         #region Attempts at vanilla overrides
 
-        bool Spawn(WildlifeMode wildlifeMode)
+        public void AddActiveSpawns(int numToActivate, WildlifeMode wildlifeMode)
+        {
+            if (mSpawnRegion.m_HasBeenDisabledByAurora)
+            {
+                LogTrace($"Disabled by aurora, aborting");
+                return;
+            }
+            if (!SpawnRegionCloseEnoughForSpawning())
+            {
+                LogTrace($"Too far for spawning, aborting");
+                return;
+            }
+            if (numToActivate <= 0)
+            {
+                LogTrace($"numToActivate (!_{numToActivate}_!) invalid, aborting");
+                return;
+            }
+            LogTrace($"AddActiveSpawns -> Spawn");
+            Spawn(wildlifeMode);
+        }
+
+
+        public void AdjustActiveSpawnRegionPopulation()
+        {
+            int targetPopulation = CalculateTargetPopulation();
+            WildlifeMode currentMode = mSpawnRegion.m_WildlifeMode;
+            WildlifeMode oppositeMode = currentMode == WildlifeMode.Normal ? WildlifeMode.Aurora : WildlifeMode.Normal;
+
+            int oppositeActive = GetCurrentActivePopulation(oppositeMode);
+            if (oppositeActive > 0)
+            {
+                LogTrace($"!_{oppositeActive}_! active wildlife of opposite type, removing");
+                RemoveActiveSpawns(oppositeActive, oppositeMode, true);
+            }
+
+            int currentActive = GetCurrentActivePopulation(currentMode);
+            int deficit = targetPopulation - currentActive;
+
+            if (deficit < 0)
+            {
+                LogTrace($"!_{-deficit}_! excess active wildlife of current type, removing");
+                RemoveActiveSpawns(-deficit, currentMode, false);
+                return;
+            }
+
+            if (deficit > 0 &&
+                !mSpawnRegion.m_HasBeenDisabledByAurora &&
+                SpawnRegionCloseEnoughForSpawning())
+            {
+                LogTrace($"!_{deficit}_! unspawned active wildlife of current type, spawning");
+                Spawn(currentMode);
+            }
+        }
+
+
+        public BaseAi AttemptInstantiateAndPlaceSpawnFromSave(WildlifeMode wildlifeMode, PendingSerializedRespawnInfo pendingSerializedRespawnInfo)
+        {
+            if (pendingSerializedRespawnInfo == null)
+            {
+                LogWarning($"null PendingSerializedRespawnInfo!");
+                return null;
+            }
+            if (pendingSerializedRespawnInfo.m_SaveData == null)
+            {
+                LogWarning($"null PendingSerializedRespawnInfo.m_SaveData!");
+                return null;
+            }
+            if (!PositionValidForSpawn(pendingSerializedRespawnInfo.m_SaveData.m_Position))
+            {
+                LogWarning($"invalid spawn location!");
+                return null;
+            }
+            PlayerManager playerManager = GameManager.m_PlayerManager;
+            if (playerManager == null)
+            {
+                LogError($"null PlayerManager");
+                return null;
+            }
+            playerManager.GetTeleportTransformAfterSceneLoad(out Vector3 position, out Quaternion rotation);
+            float distanceToPlayer = Vector3.Distance(position, pendingSerializedRespawnInfo.m_SaveData.m_Position);
+            Il2Cpp.SpawnRegionManager spawnRegionManager = GameManager.m_SpawnRegionManager;
+            if (spawnRegionManager == null)
+            {
+                LogError($"null Il2Cpp.SpawnRegionManager");
+                return null;
+            }
+            float minSpawnDist = spawnRegionManager.m_ClosestSpawnDistanceToPlayerAfterSceneTransition;
+            ExperienceModeManager experienceModeManager = GameManager.m_ExperienceModeManager;
+            if (experienceModeManager == null)
+            {
+                LogError($"null ExperienceModEmanager");
+                return null;
+            }
+            ExperienceMode currentExperienceMode = experienceModeManager.GetCurrentExperienceMode();
+            float closestSpawnDistanceAfterTransitionScale = 1.0f;
+            if (currentExperienceMode != null)
+            {
+                closestSpawnDistanceAfterTransitionScale = currentExperienceMode.m_ClosestSpawnDistanceAfterTransitionScale;
+            }
+            if (distanceToPlayer < minSpawnDist * closestSpawnDistanceAfterTransitionScale)
+            {
+                LogTrace($"Player is too close, aborting");
+                return null;
+            }
+            return InstantiateSpawnFromSaveData(pendingSerializedRespawnInfo.m_SaveData, wildlifeMode);
+        }
+
+
+        public int CalculateTargetPopulation()
+        {
+            if (mSpawnRegion.m_SpawnLevel == 0)
+            {
+                LogTrace($"SpawnLevel is zero, aborting");
+                return 0;
+            }
+
+            if (mSpawnRegion.m_AiTypeSpawned == 0 && !mSpawnRegion.m_ForcePredatorOverride)
+            {
+                if (GetCurrentTimelinePoint() < Il2Cpp.SpawnRegionManager.m_NoPredatorSpawningInVoyageurHours)
+                {
+                    LogTrace($"Voyager mode, no predator spawning, aborting");
+                    return 0;
+                }
+            }
+            if (!SpawnRegionCloseEnoughForSpawning())
+            {
+                LogTrace($"Too far for spawning, returning active population to prevent changes");
+                return GetCurrentActivePopulation(mSpawnRegion.m_WildlifeMode);
+            }
+            if (!mSpawnRegion.m_CanSpawnInBlizzard && GameManager.m_Weather.IsBlizzard())
+            {
+                LogTrace($"Cannot spawn in blizzard");
+                return 0;
+            }
+            int maxSimultaneousSpawns = GameManager.m_TimeOfDay.IsDay()
+                ? mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay
+                : mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsNight;
+            int adjustedMaxSimultaneousSpawns = maxSimultaneousSpawns - mSpawnRegion.m_NumTrapped - mSpawnRegion.m_NumRespawnsPending;
+            if (adjustedMaxSimultaneousSpawns < 0)
+            {
+                return 0;
+            }
+            if (mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay < adjustedMaxSimultaneousSpawns)
+            {
+                return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay;
+            }
+            return adjustedMaxSimultaneousSpawns;
+        }
+
+
+        public bool CanDoReRoll()
+        {
+            if (mSpawnRegion.m_ControlledByRandomSpawner)
+            {
+                return false;
+            }
+            if (mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Count > 0)
+            {
+                return false;
+            }
+            if (mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Count > 0)
+            {
+                return false;
+            }
+            return GetNumActiveSpawns() == 0;
+        }
+
+
+        public bool CanTrap()
+        {
+            return GameManager.m_TimeOfDay.IsDay()
+                ? mSpawnRegion.m_NumTrapped < mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay
+                : mSpawnRegion.m_NumTrapped < mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsNight;
+        }
+
+
+        public void Deserialize(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                LogError($"Null or empty text, cannot deserialize");
+                return;
+            }
+            Start();
+            SpawnRegionDataProxy proxy = Utils.DeserializeObject<SpawnRegionDataProxy>(text);
+            mSpawnRegion.gameObject.SetActive(true);
+            mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = proxy.m_ElapsedHoursAtLastActiveReRoll;
+            mSpawnRegion.m_NumRespawnsPending = proxy.m_NumRespawnsPending;
+            mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = proxy.m_ElapasedHoursNextRespawnAllowed;
+            mSpawnRegion.m_NumTrapped = proxy.m_NumTrapped;
+            mSpawnRegion.m_HoursNextTrapReset = proxy.m_HoursNextTrapReset;
+            mSpawnRegion.m_SpawnGuidCounter = proxy.m_SpawnGuidCounter;
+            mSpawnRegion.m_CurrentWaypointPathIndex = proxy.m_CurrentWaypointPathIndex;
+            mSpawnRegion.m_WildlifeMode = proxy.m_WildlifeMode;
+            mSpawnRegion.m_HasBeenDisabledByAurora = proxy.m_HasBeenDisabledByAurora;
+            mSpawnRegion.m_WasActiveBeforeAurora = proxy.m_WasActiveBeforeAurora;
+            SetBoundingSphereBasedOnWaypoints(proxy.m_CurrentWaypointPathIndex);
+            mSpawnRegion.m_CooldownTimerHours = SpawnRegion.m_SpawnRegionDataProxy.m_CooldownTimerHours;
+            mSpawnRegion.m_DeferredSpawnWildlifeMode = proxy.m_WildlifeMode;
+            if (GetCurrentTimelinePoint() - proxy.m_HoursPlayed < GameManager.m_SpawnRegionManager.m_RandomizeRestoredSpawnsAfterHoursInside)
+            {
+                foreach (SpawnDataProxy spawnProxy in proxy.m_ActiveSpawns)
+                {
+                    mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Add(spawnProxy);
+                }
+                mSpawnRegion.m_DeferredSpawnWildlifeMode = proxy.m_WildlifeMode;
+            }
+            else
+            {
+                MaybeReRollActive();
+                //Is this section needed? maybe not...
+                if (!mSpawnRegion.gameObject.activeInHierarchy)
+                {
+                    UpdateDeferredDeserialize();
+                    return;
+                }
+                foreach (SpawnDataProxy spawnProxy in proxy.m_ActiveSpawns)
+                {
+                    mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Add(spawnProxy);
+                }
+            }
+            UpdateDeferredDeserialize();
+        }
+
+        public GameObject GetClosestActiveSpawn(Vector3 pos)
+        {
+            float closestDist = float.MaxValue;
+            GameObject closestObj = null;
+            for (int i = 0, iMax = mSpawnRegion.m_Spawns.Count; i < iMax; i++)
+            {
+                if (mSpawnRegion.m_Spawns[i].IsNullOrDestroyed())
+                {
+                    continue;
+                }
+                if (!mSpawnRegion.m_Spawns[i].gameObject.activeSelf)
+                {
+                    continue;
+                }
+                float currentDist = SquaredDistance(pos, mSpawnRegion.m_Spawns[i].transform.position);
+                if (currentDist < closestDist)
+                {
+                    closestDist = currentDist;
+                    closestObj = mSpawnRegion.m_Spawns[i].gameObject;
+                }
+            }
+            return closestObj;
+        }
+
+
+        public int GetCurrentActivePopulation(WildlifeMode wildlifeMode)
+        {
+            int count = 0;
+            for (int i = 0, iMax = mSpawnRegion.m_Spawns.Count; i < iMax; i++)
+            {
+                if (mSpawnRegion.m_Spawns[i].m_WildlifeMode != wildlifeMode)
+                {
+                    continue;
+                }
+                if (!mSpawnRegion.m_Spawns[i].gameObject.activeSelf)
+                {
+                    continue;
+                }
+                count++;
+            }
+            return count;
+        }
+
+
+        public float GetCustomSpawnRegionChanceActiveScale()
+        {
+            CustomExperienceMode customMode = GameManager.GetCustomMode();
+            if (customMode.IsNullOrDestroyed())
+            {
+                LogError($"No custom mode found");
+                return 1.0f;
+            }
+            CustomExperienceModeTunableLookupTable lookupTable = customMode.m_LookupTable;
+            if (lookupTable.IsNullOrDestroyed())
+            {
+                LogError($"No custom mode lookup table found");
+                return 1.0f;
+            }
+            Il2CppSystem.Collections.Generic.List<ExperienceMode> experienceModes = lookupTable.m_BaseExperienceModes;
+            if (experienceModes.IsNullOrDestroyed())
+            {
+                LogError($"No base experience mode table found");
+                return 1.0f;
+            }
+            if (experienceModes.Count < 4)
+            {
+                LogError($"Cannot fetch all base experience modes");
+                return 1.0f;
+            }
+            ExperienceMode pilgrimExperienceMode = experienceModes[0];
+            ExperienceMode voyagerExperienceMode = experienceModes[1];
+            ExperienceMode stalkerExperienceMode = experienceModes[2];
+            ExperienceMode interloperExperienceMode = experienceModes[3];
+            CustomTunableNLMHV spawnChance = CustomTunableNLMHV.None;
+            switch (mSpawnRegion.m_AiSubTypeSpawned)
+            {
+                case AiSubType.Wolf:
+                    spawnChance = customMode.GetWolfSpawnChance(mSpawnRegion.m_WolfTypeSpawned);
+                    break;
+                case AiSubType.Bear:
+                    spawnChance = customMode.m_BearSpawnChance;
+                    break;
+                case AiSubType.Stag:
+                    spawnChance = customMode.m_DeerSpawnChance;
+                    break;
+                case AiSubType.Rabbit:
+                    spawnChance = customMode.m_RabbitSpawnChance;
+                    break;
+                case AiSubType.Moose:
+                    spawnChance = customMode.m_MooseSpawnChance;
+                    break;
+                case AiSubType.Cougar:
+                    return 1.0f;
+            }
+            if (spawnChance == CustomTunableNLMHV.None)
+            {
+                return 0.0f;
+            }
+            if (mSpawnRegion.m_AiTypeSpawned == AiType.Ambient)
+            {
+                switch (spawnChance)
+                {
+                    case CustomTunableNLMHV.Low: return interloperExperienceMode.m_SpawnRegionChanceActiveScale;
+                    case CustomTunableNLMHV.Medium: return stalkerExperienceMode.m_SpawnRegionChanceActiveScale;
+                    case CustomTunableNLMHV.High: return voyagerExperienceMode.m_SpawnRegionChanceActiveScale;
+                    case CustomTunableNLMHV.VeryHigh: return pilgrimExperienceMode.m_SpawnRegionChanceActiveScale;
+                    default: return 1.0f;
+                }
+            }
+            else
+            {
+                switch (spawnChance)
+                {
+                    case CustomTunableNLMHV.Low: return pilgrimExperienceMode.m_SpawnRegionChanceActiveScale;
+                    case CustomTunableNLMHV.Medium: return voyagerExperienceMode.m_SpawnRegionChanceActiveScale;
+                    case CustomTunableNLMHV.High: return interloperExperienceMode.m_SpawnRegionChanceActiveScale;
+                    case CustomTunableNLMHV.VeryHigh: return stalkerExperienceMode.m_SpawnRegionChanceActiveScale;
+                    default: return 1.0f;
+                }
+            }
+        }
+
+
+        public float GetDenSleepDurationInHours()
+        {
+            if (mSpawnRegion.m_Den.IsNullOrDestroyed())
+            {
+                LogTrace($"No den, no sleep duration");
+                return 0.0f;
+            }
+            return GameManager.m_TimeOfDay.IsDay()
+                ? UnityEngine.Random.Range(mSpawnRegion.m_Den.m_MinSleepHoursDay, mSpawnRegion.m_Den.m_MaxSleepHoursDay)
+                : UnityEngine.Random.Range(mSpawnRegion.m_Den.m_MinSleepHoursNight, mSpawnRegion.m_Den.m_MaxSleepHoursNight);
+        }
+
+
+        public int GetMaxSimultaneousSpawnsDay()
+        {
+            if (mSpawnRegion.m_DifficultySettings == null)
+            {
+                LogTrace($"Null mSpawnRegion.m_DifficultySettings");
+                return 0;
+            }
+            return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay;
+        }
+
+
+        public int GetMaxSimultaneousSpawnsNight()
+        {
+            if (mSpawnRegion.m_DifficultySettings == null)
+            {
+                LogTrace($"Null mSpawnRegion.m_DifficultySettings");
+                return 0;
+            }
+            return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsNight;
+        }
+
+
+        public int GetNumActiveSpawns()
+        {
+            if (mSpawnRegion.gameObject.IsNullOrDestroyed())
+            {
+                LogError($"Null mSpawnRegion.gameObject");
+                return 0;
+            }    
+            if (!mSpawnRegion.gameObject.activeSelf)
+            {
+                LogError($"Inactive mSpawnRegion.gameObject");
+                return 0;
+            }
+            if (mSpawnRegion.m_Spawns.IsNullOrDestroyed())
+            {
+                LogError($"Null mSpawnRegion.m_Spawns");
+                return 0;
+            }
+            int count = 0;
+            for (int i = 0, iMax = mSpawnRegion.m_Spawns.Count; i < iMax; i++)
+            {
+                if (mSpawnRegion.m_Spawns[i].IsNullOrDestroyed())
+                {
+                    continue;
+                }
+                if (!mSpawnRegion.m_Spawns[i].gameObject.activeSelf)
+                {
+                    continue;
+                }
+                count++;
+            }
+            return count;
+        }
+
+
+
+        public float GetNumHoursBetweenRespawns()
+        {
+            float daysSurvived = GetCurrentTimelinePoint() / 24.0f;
+            ExperienceMode currentExperienceMode = GameManager.m_ExperienceModeManager.GetCurrentExperienceMode();
+            if (daysSurvived <= currentExperienceMode.m_RespawnHoursScaleDayStart)
+            {
+                return mSpawnRegion.m_NumHoursBetweenRespawns;
+            }
+            if (daysSurvived <= currentExperienceMode.m_RespawnHoursScaleDayFinal)
+            { 
+                float normalizedBoundedDaysSurvivedMultiplier = Mathf.Clamp01(daysSurvived - currentExperienceMode.m_RespawnHoursScaleDayStart) / (currentExperienceMode.m_RespawnHoursScaleDayFinal - currentExperienceMode.m_RespawnHoursScaleDayStart);
+                return mSpawnRegion.m_NumHoursBetweenRespawns * (currentExperienceMode.m_RespawnHoursScaleMax - 1.0f) * (normalizedBoundedDaysSurvivedMultiplier + 1.0f);
+            }
+            else
+            {
+                return currentExperienceMode.m_RespawnHoursScaleMax * mSpawnRegion.m_NumHoursBetweenRespawns;
+            }
+        }
+
+
+        //Not going to override this one unless we have problems, we arent introducing new prefabs yet (ever?)
+        public static string GetPrefabNameFromInstanceName(string instanceName)
+        {
+            return string.Empty;
+        }
+
+        public string GetSpawnablePrefabName()
+        {
+            if (string.IsNullOrEmpty(mSpawnRegion.m_SpawnablePrefabName))
+            {
+                if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
+                {
+                    LogTrace($"null spawnable prefab on spawn region, fetching...");
+                    AssetReferenceAnimalPrefab animalReferencePrefab = mSpawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(WildlifeMode.Normal);
+                    mSpawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
+                    animalReferencePrefab.ReleaseAsset();
+                }
+                if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
+                {
+                    LogError($"Could not fetch spawnable prefab");
+                    return string.Empty;
+                }
+            }
+            return mSpawnRegion.m_SpawnablePrefabName;
+        }
+
+
+        public WanderRegion GetWanderRegion(Vector3 pos)
+        {
+            foreach(WanderRegion wanderRegion in mSpawnRegion.gameObject.GetComponentsInChildren<WanderRegion>())
+            {
+                if (wanderRegion.IsNullOrDestroyed())
+                {
+                    continue;
+                }
+                if (SquaredDistance(pos, wanderRegion.transform.position) < 0.001f)
+                {
+                    return wanderRegion;
+                }
+            }
+            return null;
+        }
+
+
+
+
+        public bool Spawn(WildlifeMode wildlifeMode)
         {
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
@@ -155,6 +641,9 @@ namespace ExpandedAiFramework
         {
             return true;
         }
+
+
+
 
 
         public BaseAi InstantiateSpawnInternal(GameObject spawnablePrefab, WildlifeMode wildlifeMode, Vector3 spawnPos, Quaternion spawnRot)
@@ -288,60 +777,6 @@ namespace ExpandedAiFramework
             }
             return null;
         }
-
-
-        public BaseAi AttemptInstantiateAndPlaceSpawnFromSave(WildlifeMode wildlifeMode, PendingSerializedRespawnInfo pendingSerializedRespawnInfo)
-        {
-            if (pendingSerializedRespawnInfo == null)
-            {
-                LogWarning($"null PendingSerializedRespawnInfo!");
-                return null;
-            }
-            if (pendingSerializedRespawnInfo.m_SaveData == null)
-            {
-                LogWarning($"null PendingSerializedRespawnInfo.m_SaveData!");
-                return null;
-            }
-            if (!PositionValidForSpawn(pendingSerializedRespawnInfo.m_SaveData.m_Position))
-            {
-                LogWarning($"invalid spawn location!");
-                return null;
-            }
-            PlayerManager playerManager = GameManager.m_PlayerManager;
-            if (playerManager == null)
-            {
-                LogError($"null PlayerManager");
-                return null;
-            }
-            playerManager.GetTeleportTransformAfterSceneLoad(out Vector3 position, out Quaternion rotation);
-            float distanceToPlayer = Vector3.Distance(position, pendingSerializedRespawnInfo.m_SaveData.m_Position);
-            Il2Cpp.SpawnRegionManager spawnRegionManager = GameManager.m_SpawnRegionManager;
-            if (spawnRegionManager == null)
-            {
-                LogError($"null Il2Cpp.SpawnRegionManager");
-                return null;
-            }
-            float minSpawnDist = spawnRegionManager.m_ClosestSpawnDistanceToPlayerAfterSceneTransition;
-            ExperienceModeManager experienceModeManager = GameManager.m_ExperienceModeManager;
-            if (experienceModeManager == null)
-            {
-                LogError($"null ExperienceModEmanager");
-                return null;
-            }
-            ExperienceMode currentExperienceMode = experienceModeManager.GetCurrentExperienceMode();
-            float closestSpawnDistanceAfterTransitionScale = 1.0f;
-            if (currentExperienceMode != null)
-            {
-                closestSpawnDistanceAfterTransitionScale = currentExperienceMode.m_ClosestSpawnDistanceAfterTransitionScale;
-            }
-            if (distanceToPlayer < minSpawnDist * closestSpawnDistanceAfterTransitionScale)
-            {
-                LogTrace($"Player is too close, aborting");
-                return null;
-            }
-            return InstantiateSpawnFromSaveData(pendingSerializedRespawnInfo.m_SaveData, wildlifeMode);
-        }
-
 
         public BaseAi InstantiateSpawnFromSaveData(SpawnDataProxy spawnData, WildlifeMode wildlifeMode)
         {
