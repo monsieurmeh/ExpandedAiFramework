@@ -1,6 +1,7 @@
 ﻿global using Il2Cpp;
 global using MelonLoader;
 global using ModSettings;
+global using static ExpandedAiFramework.Utility;
 using ExpandedAiFramework.WanderingWolfMod;
 
 

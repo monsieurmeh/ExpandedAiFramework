@@ -75,7 +75,7 @@ namespace ExpandedAiFramework
                 return;
             }
             mKeepTaskRunning = true;
-            LogTrace($"[{nameof(MapDataManager<T>)}<{typeof(T)}>.{nameof(StartWorker)}] Starting worker thread");
+            LogTrace($"Starting worker thread");
             mTask = Task.Run(Worker);
         }
 
@@ -93,7 +93,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"[{nameof(MapDataManager<T>)}<{typeof(T)}>.{nameof(StopWorker)}] Error stopping MapDataManagerBase<{nameof(T)}>: {e}");
+                LogError($"Error stopping MapDataManagerBase<{nameof(T)}>: {e}");
             }
         }
 
@@ -108,7 +108,7 @@ namespace ExpandedAiFramework
                     if (mRequests.Count > 0)
                     {
                         request = mRequests.Dequeue();
-                        LogTrace($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Worker)}] (Queue count: {mRequests.Count + 1} -> {mRequests.Count}) Processing {request}");
+                        LogTrace($"(Queue count: {mRequests.Count + 1} -> {mRequests.Count}) Processing {request}");
                     }
                 }
 
@@ -136,7 +136,7 @@ namespace ExpandedAiFramework
         {
             lock (mQueueLock)
             {
-                LogTrace($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(StopWorker)}] (Queue count: {mRequests.Count} -> {mRequests.Count + 1}");
+                LogTrace($"(Queue count: {mRequests.Count} -> {mRequests.Count + 1}");
                 mRequests.Enqueue(new MapDataRequest<T>(position, callback, extraNearestCandidatesToMaybePickFrom, args));
             }
         }
@@ -148,7 +148,7 @@ namespace ExpandedAiFramework
             {
                 if (mAvailableData.Count == 0)
                 {
-                    LogTrace($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(GetNearestMapData)}] No available dictionary entries for {typeof(T).Name}");
+                    LogTrace($"No available dictionary entries for {typeof(T).Name}");
                     return null;
                 }
 
@@ -184,7 +184,7 @@ namespace ExpandedAiFramework
                 {
                     if (!mAvailableData.TryAdd(tItem.Guid, tItem))
                     {
-                        LogError($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(RefreshData)}] Guid collision while trying to add {tItem}!");
+                        LogError($"Guid collision while trying to add {tItem}!");
                     }
                 }
             }
@@ -240,14 +240,14 @@ namespace ExpandedAiFramework
                         {
                             if (sceneData[i] == newData)
                             {
-                                LogWarning($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Load)}] Can't add duplicate {newData}!");
+                                LogWarning($"Can't add duplicate {newData}!");
                                 canAdd = false;
                             }
                         }
                         if (canAdd)
                         {
                             newData.UpdateCachedString();
-                            LogTrace($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Load)}] Found and adding {newData}");
+                            LogTrace($"Found and adding {newData}");
                             sceneData.Add(newData);
                         }
                     }

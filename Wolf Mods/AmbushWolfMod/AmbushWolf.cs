@@ -36,21 +36,21 @@ proxy)
                 || proxy.CustomData == null
                 || proxy.CustomData.Length == 0)
             {
-                LogTrace($"[AmbushWolf.TryGetSavedHidingSpot] Null proxy, null proxy custom data or no length to proxy custom data");
+                LogTrace($"Null proxy, null proxy custom data or no length to proxy custom data");
                 return false;
             }
-            Guid spotGuid = (Guid)proxy.CustomData[0];
+            Guid spotGuid = new Guid(proxy.CustomData[0]);
             if (spotGuid == Guid.Empty)
             {
-                LogTrace($"[AmbushWolf.TryGetSavedHidingSpot] Proxy spot guid is empty");
+                LogTrace($"Proxy spot guid is empty");
                 return false;
             }
             if (!mManager.DataManager.AvailableHidingSpots.TryGetValue(spotGuid, out HidingSpot hidingSpot))
             {
-                LogTrace($"[AmbushWolf.TryGetSavedHidingSpot] Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary");
+                LogTrace($"Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary");
                 return false;
             }
-            LogTrace($"[AmbushWolf.TryGetSavedHidingSpot] Found saved hiding spot with guid <<<{spotGuid}>>>");
+            LogTrace($"Found saved hiding spot with guid <<<{spotGuid}>>>");
             AttachHidingSpot(hidingSpot);
             return true;
         }
@@ -98,7 +98,7 @@ mManager.CurrentScene, true);
 
             if (mModDataProxy != null)
             {
-                mModDataProxy.CustomData = [mHidingSpot.Guid];
+                mModDataProxy.CustomData = [mHidingSpot.Guid.ToString()];
                 LogTrace($"Saved spot {mHidingSpot} to proxy data");
             }
             hidingSpot.Claim();

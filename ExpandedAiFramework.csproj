@@ -68,6 +68,7 @@
     <Reference Include="Il2CppRewired_Core" />
     <Reference Include="Il2CppSystem.Runtime.Serialization" />
     <Reference Include="Il2CppAK.Wwise.Unity.API.WwiseTypes" />
+    <Reference Include="Il2CppSimpleWaypointSystem.Runtime" />
     <Reference Include="Il2CppTLD.Addressables" />
     <Reference Include="Il2CppTLD.Encryption" />
     <Reference Include="Il2CppTLD.Game.Events.Runtime" />
@@ -87,6 +88,8 @@
     <Reference Include="Il2CppTLD.TimeLib" />
     <Reference Include="Il2CppTLD.Trial" />
     <Reference Include="Il2CppTLD.UserGeneratedContent" />
+    <Reference Include="Unity.ResourceManager" />
+    <Reference Include="Unity.Addressables" />
     <Reference Include="Unity.Mathematics" />
     <Reference Include="Unity.TextMeshPro" />
     <Reference Include="UnityEngine.AssetBundleModule" />

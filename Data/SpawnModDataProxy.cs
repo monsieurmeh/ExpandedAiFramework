@@ -9,7 +9,7 @@ namespace ExpandedAiFramework
         [NonSerialized] private Type mVariantSpawnType;
         [NonSerialized] public bool Disconnected = false;
         [NonSerialized] public bool AsyncProcessing = false;
-        public object[] CustomData;
+        public string[] CustomData;
         public Guid Guid = Guid.Empty;
         public Guid ParentGuid = Guid.Empty;
         public string Scene;

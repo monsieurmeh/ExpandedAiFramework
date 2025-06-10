@@ -1,7 +1,10 @@
 ﻿global using static ExpandedAiFramework.Utility;
 using ComplexLogger;
+using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using System.Diagnostics;
+using System.Reflection;
 
 
 namespace ExpandedAiFramework
@@ -229,13 +232,79 @@ namespace ExpandedAiFramework
         };
 
         public static EAFManager Manager { get { return EAFManager.Instance; } }
-        public static void Log(string message, FlaggedLoggingLevel logLevel, bool toUConsole) { Manager.Log(message, logLevel, toUConsole); }
-        public static void LogTrace(string message) { Manager.LogTrace(message); }
-        public static void LogDebug(string message) { Manager.LogDebug(message); }
-        public static void LogVerbose(string message) { Manager.LogVerbose(message); }
-        public static void LogWarning(string message, bool toUConsole = true) { Manager.LogWarning(message, toUConsole); }
-        public static void LogError(string message, FlaggedLoggingLevel additionalLevelFlags = 0U) { Manager.LogError(message, additionalLevelFlags); }
-        public static void LogAlways(string message) { Manager.LogAlways(message); }
+
+        private static string GetLastCallerType()
+        {
+            Type type = new System.Diagnostics.StackTrace().GetFrame(2)?.GetMethod()?.DeclaringType;
+            if (type == null)
+            {
+                return "UNKNOWN";
+            }
+            return GetFriendlyTypeName(type);
+
+        }
+
+
+        private static string GetFriendlyTypeName(Type type)
+        {
+            if (type.IsGenericType)
+            {
+                string baseName = type.Name;
+                int index = baseName.IndexOf('`');
+                if (index > 0)
+                {
+                    baseName = baseName.Substring(0, index);
+                }
+
+                var genericArgs = type.GetGenericArguments()
+                                      .Select(arg =>
+                                          arg.IsGenericParameter
+                                              ? arg.Name
+                                              : GetFriendlyTypeName(arg));
+                return $"{baseName}<{string.Join(", ", genericArgs)}>";
+            }
+
+            return type.Name;
+        }
+
+
+        public static void LogTrace(string message, [CallerMemberName] string memberName = "")
+        {
+            Manager.Log(message, FlaggedLoggingLevel.Trace, false, GetLastCallerType(), memberName);
+        }
+
+
+        public static void LogDebug(string message,[CallerMemberName] string memberName = "")
+        {
+            Manager.Log(message, FlaggedLoggingLevel.Debug, false, GetLastCallerType(), memberName);
+        }
+
+
+        public static void LogVerbose(string message, [CallerMemberName] string memberName = "")
+        {
+            Manager.Log(message, FlaggedLoggingLevel.Verbose, false, GetLastCallerType(), memberName);
+        }
+
+
+        public static void LogWarning(string message, bool toUConsole = true, [CallerMemberName] string memberName = "")
+        {
+            Manager.Log(message, FlaggedLoggingLevel.Warning, toUConsole, GetLastCallerType(), memberName);
+        }
+
+
+        public static void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U, [CallerMemberName] string memberName = "")
+        {
+            Manager.Log(message, FlaggedLoggingLevel.Error | additionalFlags, true, GetLastCallerType(), memberName);
+        }
+
+
+        public static void LogAlways(string message, [CallerMemberName] string memberName = "")
+        {
+            Manager.Log(message, FlaggedLoggingLevel.Always, true, GetLastCallerType(), memberName);
+        }
+
+
+
         public static TEnum ToEnum<TEnum>(this uint uval) where TEnum : Enum { return UnsafeUtility.As<uint, TEnum>(ref uval); }
         public static TEnum ToEnumL<TEnum>(this ulong uval) where TEnum : Enum { return UnsafeUtility.As<ulong, TEnum>(ref uval); }
         public static uint ToUInt<TEnum>(this TEnum val) where TEnum : Enum { return UnsafeUtility.As<TEnum, uint>(ref val); }

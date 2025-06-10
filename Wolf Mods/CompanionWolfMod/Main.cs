@@ -1,6 +1,7 @@
 ﻿global using Il2Cpp;
 global using MelonLoader;
 global using ModSettings;
+global using static ExpandedAiFramework.Utility;
 
 
 [assembly: MelonInfo(typeof(ExpandedAiFramework.CompanionWolfMod.Main), "ExpandedAiFramework.CompanionWolfMod", "0.10.1", "MonsieurMeh", null)]

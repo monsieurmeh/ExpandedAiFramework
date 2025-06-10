@@ -31,19 +31,30 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         private bool TryGetSavedWanderPath(SpawnModDataProxy proxy)
         {
-            if (proxy == null
-                || proxy.CustomData == null
-                || proxy.CustomData.Length == 0)
-            { 
+            if (proxy == null)
+            {
+                LogTrace("Null Proxy, getting new wander path");
                 return false;
             }
-            Guid spotGuid = (Guid)proxy.CustomData[0];
-            if (spotGuid == Guid.Empty)
+            if (proxy.CustomData == null)
             {
+                LogTrace($"Null custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
+                return false;
+            }
+            if (proxy.CustomData.Length == 0) 
+            {
+                LogTrace($"Zero-length custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
+                return false;
+            }
+            Guid spotGuid = new Guid(proxy.CustomData[0]);
+            if (spotGuid == Guid.Empty) 
+            {
+                LogTrace($"Empty GUID on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
                 return false;
             }
             if (!mManager.DataManager.AvailableWanderPaths.TryGetValue(spotGuid, out WanderPath wanderPath))
             {
+                LogTrace($"Could not fetch WanderPath with guid {spotGuid} from proxy with guid <<{proxy.Guid}>>>, getting new wander path");
                 return false;
             }
             AttachWanderPath(wanderPath);
@@ -77,7 +88,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             mWanderPath = path; 
             if (mModDataProxy != null)
             {
-                mModDataProxy.CustomData = [path.Guid];
+                mModDataProxy.CustomData = [path.Guid.ToString()];
             }
             mBaseAi.m_Waypoints = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3>(mWanderPath.PathPoints.Length);
             for (int i = 0, iMax = mBaseAi.m_Waypoints.Length; i < iMax; i++)

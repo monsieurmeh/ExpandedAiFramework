@@ -76,7 +76,7 @@ namespace ExpandedAiFramework
             Type spawnType = mTypePicker.PickType(baseAi);
             if (spawnType == typeof(void))
             {
-                LogError($"[AiManager.GetRandomSpawnType] Could not find valid spawn type for base ai while pre-queuing spawns!");
+                LogError($"Could not find valid spawn type for base ai while pre-queuing spawns!");
             }
             return spawnType;
         }
@@ -87,10 +87,10 @@ namespace ExpandedAiFramework
         {
             if (mSpawnSettingsDict.TryGetValue(type, out _))
             {
-                LogError($"[AiManager.RegisterSpawnableAi] Can't register {type} as it is already registered!", FlaggedLoggingLevel.Critical);
+                LogError($"Can't register {type} as it is already registered!", FlaggedLoggingLevel.Critical);
                 return false;
             }
-            LogAlways($"[EAFManager.RegisterSpawnableAi] Registering type {type}");
+            LogAlways($"Registering type {type}");
 
             mSpawnSettingsDict.Add(type, spawnSettings);
             mTypePicker.AddWeight(type, spawnSettings.SpawnWeight, spawnSettings.CanSpawn);
@@ -113,33 +113,33 @@ namespace ExpandedAiFramework
         {
             if (baseAi == null)
             {
-                LogTrace($"[AiManager.TryInjectRandomCustomAi] Null base ai, can't augment.");
+                LogTrace($"Null base ai, can't augment.");
                 return false;
             }
             if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
             {
-                LogTrace($"[AiManager.TryInjectRandomCustomAi] BaseAi in dictionary, can't augment.");
+                LogTrace($"BaseAi in dictionary, can't augment.");
                 return false;
             }
             Type spawnType = typeof(void);
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
-                LogTrace($"[AiManager.TryInjectRandomCustomAi] Allowing submanager {mSubManagers[i]} to intercept spawn...");
+                LogTrace($"Allowing submanager {mSubManagers[i]} to intercept spawn...");
                 if (mSubManagers[i].ShouldInterceptSpawn(baseAi, region))
                 {
-                    LogTrace($"[AiManager.TryInjectRandomCustomAi] Spawn intercept from submanager {mSubManagers[i]}! new type: {mSubManagers[i].SpawnType}");
+                    LogTrace($"Spawn intercept from submanager {mSubManagers[i]}! new type: {mSubManagers[i].SpawnType}");
                     spawnType =mSubManagers[i].SpawnType;
                     break;
                 }
             }
             if (spawnType == typeof(void))
             {
-                LogTrace($"[AiManager.TryInjectRandomCustomAi] No submanager interceptions, attempting to randomly pick a valid spawn type...");
+                LogTrace($"No submanager interceptions, attempting to randomly pick a valid spawn type...");
                 spawnType = mTypePicker.PickType(baseAi);
             }
             if (spawnType == typeof(void))
             {
-                LogTrace($"[AiManager.TryInjectRandomCustomAi] No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
+                LogTrace($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
                 return TryInjectCustomBaseAi(baseAi, region);
             }
             return TryInjectCustomAi(baseAi, spawnType, region);
@@ -251,18 +251,18 @@ namespace ExpandedAiFramework
         {
             if (spawnRegion == null)
             {
-                LogTrace($"[AiManager.GenerateNewSpawnModDataProxy] Cant generate a new spawn mod data proxy without parent region!");
+                LogTrace($"Cant generate a new spawn mod data proxy without parent region!");
                 return null;
             }
             //need to find a smarter way to bridge this working data gap...
             if (!mManager.SpawnRegionManager.CustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out CustomBaseSpawnRegion customSpawnRegion))
             {
-                LogTrace($"[AiManager.GenerateNewSpawnModDataProxy] Can't fetch wrapper for spawn region with hash code {spawnRegion.GetHashCode()}!");
+                LogTrace($"Can't fetch wrapper for spawn region with hash code {spawnRegion.GetHashCode()}!");
                 return null;
             }
             if (customSpawnRegion.ModDataProxy == null || customSpawnRegion.ModDataProxy.Guid == Guid.Empty)
             {
-                LogTrace($"[AiManager.GenerateNewSpawnModDataProxy] Couldnt fetch guid from spawn region with hash code {spawnRegion.GetHashCode()}!");
+                LogTrace($"Couldnt fetch guid from spawn region with hash code {spawnRegion.GetHashCode()}!");
                 return null;
             }
             return GenerateNewSpawnModDataProxy(scene, customSpawnRegion.ModDataProxy.Guid, spawnRegion.AiSubTypeSpawned, variantSpawnType, spawnRegion.transform.position, spawnRegion.transform.rotation);
@@ -273,14 +273,14 @@ namespace ExpandedAiFramework
         {
             if (variantSpawnType == null)
             {
-                LogTrace($"[AiManager.GenerateNewSpawnModDataProxy] Can't generate new spawn mod data proxy with null variant spawn type!");
+                LogTrace($"Can't generate new spawn mod data proxy with null variant spawn type!");
                 return null;
             }
             SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), scene, position, rotation, spawnType, variantSpawnType);
             newProxy.ParentGuid = parentGuid;
             if (!mDataManager.TryRegisterActiveSpawnModDataProxy(newProxy))
             {
-                LogTrace($"[AiManager.GenerateNewSpawnModDataProxy] Couldnt register new spawn mod data proxy with guid {newProxy.Guid} due to guid collision!");
+                LogTrace($"Couldnt register new spawn mod data proxy with guid {newProxy.Guid} due to guid collision!");
                 return null;
             }
             foreach (ISubManager subManager in mManager.SubManagerArray)
@@ -353,7 +353,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"[AiManager.InjectCustomAi] Error during injection: {e}");
+                LogError($"Error during injection: {e}");
             }
         }
 

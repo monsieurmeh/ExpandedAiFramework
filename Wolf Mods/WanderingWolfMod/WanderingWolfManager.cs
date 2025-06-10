@@ -22,16 +22,20 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public void Update() { }
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
-            proxy.AsyncProcessing = true;
-            mManager.DataManager.GetNearestWanderPathAsync(proxy.CurrentPosition, WanderPathTypes.IndividualPath, new Action<WanderPath>((spot) =>
+            if (proxy.CustomData == null || proxy.CustomData.Length == 0 || !mManager.DataManager.AvailableWanderPaths.ContainsKey(new Guid(proxy.CustomData[0])))
             {
-                proxy.AsyncProcessing = false;
-                if (spot != null)
+                proxy.AsyncProcessing = true;
+                mManager.DataManager.GetNearestWanderPathAsync(proxy.CurrentPosition, WanderPathTypes.IndividualPath, new Action<WanderPath>((spot) =>
                 {
-                    LogDebug($"[WanderingWolfManager.PostProcessNewSpawnModDataProxy] Attaching wanderpath with guid <<<{spot.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>");
-                    proxy.CustomData = [spot.Guid];
-                }
-            }), 3);
+                    proxy.AsyncProcessing = false;
+                    if (spot != null)
+                    {
+                        LogDebug($"Attaching wanderpath with guid <<<{spot.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>");
+                        proxy.CustomData = [spot.Guid.ToString()];
+                        spot.Claim();
+                    }
+                }), 3);
+            }
         }
         public Type SpawnType { get { return typeof(WanderingWolf); } }
     }

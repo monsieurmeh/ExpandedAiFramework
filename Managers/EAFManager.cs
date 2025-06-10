@@ -1,15 +1,9 @@
-﻿using MelonLoader.TinyJSON;
-using UnityEngine;
-using System.Text;
-using MelonLoader.Utils;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.Attributes;
+﻿#define RecordLogCallers
+
 using ComplexLogger;
-using UnityEngine.AI;
-using ModData;
-using Il2Cpp;
-using static Il2Cpp.PlayerVoice;
-using ExpandedAiFramework.Enums;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 
 
 namespace ExpandedAiFramework
@@ -225,10 +219,10 @@ namespace ExpandedAiFramework
         { 
             if (mSubManagerDict.TryGetValue(type, out ISubManager _))
             {
-                LogError($"[EAFManager.RegisterSubmanager] Type {type} already registered in submanager dictionary!");
+                LogError($"Type {type} already registered in submanager dictionary!");
                 return;
             }
-            LogAlways($"[EAFManager.RegisterSubmanager] Registering SubManager for type {type}");
+            LogAlways($"Registering SubManager for type {type}");
             mSubManagerDict.Add(type, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);
             mSubManagers[^1] = subManager;
@@ -313,18 +307,23 @@ namespace ExpandedAiFramework
 
         #region Debug
 
-        private ComplexLogger<Main> mLogger;
-        private void InitializeLogger() => mLogger = new ComplexLogger<Main>();
-        public void Log(string message, FlaggedLoggingLevel logLevel, bool toUConsole) =>  mLogger.Log(message, logLevel, toUConsole ? LoggingSubType.uConsole : LoggingSubType.Normal);
-        public void Log(string message, FlaggedLoggingLevel logLevel) => Log(message, logLevel, false); 
-        public void LogTrace(string message) => Log(message, FlaggedLoggingLevel.Trace, false); 
-        public void LogDebug(string message) => Log(message, FlaggedLoggingLevel.Debug, false); 
-        public void LogVerbose(string message) => Log(message, FlaggedLoggingLevel.Verbose, false); 
-        public void LogWarning(string message, bool toUConsole = true) => Log(message, FlaggedLoggingLevel.Warning, toUConsole); 
-        public void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U) => Log(message, FlaggedLoggingLevel.Error | additionalFlags); 
-        public void LogAlways(string message) => Log(message, FlaggedLoggingLevel.Always, true); 
         public void Console_OnCommand() => mConsoleCommandManager.Console_OnCommand();
 
-        #endregion
+        private ComplexLogger<Main> mLogger;
+        private void InitializeLogger() => mLogger = new ComplexLogger<Main>();
+
+
+        public void Log(
+            string message, 
+            FlaggedLoggingLevel logLevel, 
+            bool toUConsole,
+            string callerType,
+            [CallerMemberName] string callerName = "")
+        {
+            mLogger.Log($"[{callerType}.{callerName}] {message}", logLevel, toUConsole ? LoggingSubType.uConsole : LoggingSubType.Normal);
+        }
+
+#endregion
+
     }
 }

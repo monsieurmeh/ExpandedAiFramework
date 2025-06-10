@@ -259,7 +259,7 @@ namespace ExpandedAiFramework
         {
             if (mCurrentPaintMode != PaintMode.WanderPath)
             {
-                LogWarning($"[ConsoleCommandManager.Console_CreateWanderPath] Can't start recording path because path {mCurrentWanderPathName} is still active! enter command '{CommandString} {CommandString_Finish} {CommandString_WanderPath}' to finish current wander path.");
+                LogWarning($"Can't start recording path because path {mCurrentWanderPathName} is still active! enter command '{CommandString} {CommandString_Finish} {CommandString_WanderPath}' to finish current wander path.");
                 return;
             }
             string name = uConsole.GetString();
@@ -277,7 +277,7 @@ namespace ExpandedAiFramework
             {
                 if (paths[i].Name == name)
                 {
-                    LogWarning($"[ConsoleCommandManager.Console_CreateWanderPath] Can't start recording path because a path with this name exists in this scene!");
+                    LogWarning($"Can't start recording path because a path with this name exists in this scene!");
                     return;
                 }
             }
@@ -1050,7 +1050,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"[ConsoleCommandManager.InitializePaintWanderPath] Paint mode initialization failed: {e}");
+                LogError($"Paint mode initialization failed: {e}");
                 CleanUpPaintMode();
                 return false;
             }
@@ -1461,6 +1461,7 @@ namespace ExpandedAiFramework
                         LogWarning("NavMesh triangulation is empty.");
                         return;
                     }
+                    
 
                     Vector3[] vertices = triangulation.vertices;
                     int[] rawIndices = triangulation.indices;
