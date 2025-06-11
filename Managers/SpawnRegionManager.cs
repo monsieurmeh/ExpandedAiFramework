@@ -11,6 +11,7 @@ namespace ExpandedAiFramework
 {
     public sealed class SpawnRegionManager : BaseSubManager
     {
+        private Il2Cpp.SpawnRegionManager mVanillaManager;
         private Dictionary<int, CustomBaseSpawnRegion> mCustomSpawnRegions = new Dictionary<int, CustomBaseSpawnRegion>();
         private Dictionary<Guid, CustomBaseSpawnRegion> mCustomSpawnRegionsByGuid = new Dictionary<Guid, CustomBaseSpawnRegion>();
         private HashSet<SpawnRegion> mSpawnRegionCatcher = new HashSet<SpawnRegion>();
@@ -19,12 +20,13 @@ namespace ExpandedAiFramework
         public SpawnRegionManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
         public Dictionary<int, CustomBaseSpawnRegion> CustomSpawnRegions { get { return mCustomSpawnRegions; } }
         public Dictionary<Guid, CustomBaseSpawnRegion> CustomSpawnRegionsByGuid { get { return mCustomSpawnRegionsByGuid; } }
-
+        public Il2Cpp.SpawnRegionManager VanillaManager { get { return mVanillaManager; } }
 
         public override void Initialize(EAFManager manager, ISubManager[] subManagers)
         {
             base.Initialize(manager, subManagers);
             mDataManager = mManager.DataManager;
+            mVanillaManager = GameManager.m_SpawnRegionManager;
         }
 
 
@@ -86,7 +88,7 @@ namespace ExpandedAiFramework
                 return;
             }
             List<Guid> guids = mManager.DataManager.GetCachedSpawnModDataProxiesByParentGuid(spawnRegion.ModDataProxy.Guid);
-            if (spawnRegion.SpawnRegion == null || spawnRegion.SpawnRegion.m_SpawnablePrefab == null || !spawnRegion.SpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi spawnableAi) || spawnableAi.IsNullOrDestroyed())
+            if (spawnRegion.VanillaSpawnRegion == null || spawnRegion.VanillaSpawnRegion.m_SpawnablePrefab == null || !spawnRegion.VanillaSpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi spawnableAi) || spawnableAi.IsNullOrDestroyed())
             {
                 LogTrace($"Can't get spawnable ai script from spawn region, no pre-queueing spawns. Next...");
                 return;
@@ -96,7 +98,7 @@ namespace ExpandedAiFramework
                 LogTrace($"Queueing new spawn for spawn region with guid {spawnRegion.ModDataProxy.Guid} #{i}");
                 mManager.TypePicker.PickTypeAsync(spawnableAi, (type) =>
                 {
-                    SpawnModDataProxy newProxy = mManager.AiManager.GenerateNewSpawnModDataProxy(mManager.CurrentScene, spawnRegion.SpawnRegion, type);
+                    SpawnModDataProxy newProxy = mManager.AiManager.GenerateNewSpawnModDataProxy(mManager.CurrentScene, spawnRegion.VanillaSpawnRegion, type);
                     guids.Add(newProxy.Guid);
                 });
             }
@@ -122,7 +124,7 @@ namespace ExpandedAiFramework
         {
             foreach (CustomBaseSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
             {
-                TryRemoveCustomSpawnRegion(customSpawnRegion.SpawnRegion);
+                TryRemoveCustomSpawnRegion(customSpawnRegion.VanillaSpawnRegion);
             }
             mSpawnRegionCatcher.Clear();
             mCustomSpawnRegions.Clear();

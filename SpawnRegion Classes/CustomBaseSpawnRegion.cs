@@ -1,42 +1,30 @@
 ﻿using Harmony;
 using HarmonyLib;
 using Il2Cpp;
-using Il2CppInterop.Runtime.Runtime;
-using Il2CppNodeCanvas.Tasks.Actions;
 using Il2CppRewired.Utils;
-using Il2CppSystem.Runtime.InteropServices;
+using Il2CppSWS;
 using Il2CppTLD.AI;
 using Il2CppTLD.Gameplay;
 using Il2CppTLD.Gameplay.Tunable;
+using Il2CppTLD.GameplayTags;
 using Il2CppTLD.PDID;
 using Il2CppTLD.Serialization;
-using System.Diagnostics;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using static Il2Cpp.GridUI;
+using UnityEngine.AI;
 using static Il2Cpp.UITweener;
-using static Il2CppNewtonsoft.Json.Converters.DiscriminatedUnionConverter;
-using static Il2CppSystem.Linq.Expressions.Interpreter.CastInstruction.CastInstructionNoT;
-using static MelonLoader.Modules.MelonModule;
+
 
 
 namespace ExpandedAiFramework
 {
-    //right now this is just a spawn region wrapper holding a proxy and itself serving as an index.
-    //Eventually might grow. Doing most stuff with managers right now, messy but works at least.
-    //[RegisterTypeInIl2Cpp]
-    public class CustomBaseSpawnRegion //: MonoBehaviour
+    public class CustomBaseSpawnRegion 
     {
-        //public CustomBaseSpawnRegion(IntPtr intPtr) : base(intPtr) { }
-
         protected SpawnRegion mSpawnRegion;
         protected TimeOfDay mTimeOfDay;
         protected EAFManager mManager;
         protected SpawnRegionModDataProxy mModDataProxy;
 
-        public SpawnRegion SpawnRegion { get { return mSpawnRegion; } }
-        //public Component Self { get { return this; } }
+        public SpawnRegion VanillaSpawnRegion { get { return mSpawnRegion; } }
         public SpawnRegionModDataProxy ModDataProxy { get { return mModDataProxy; } }
 
 
@@ -45,26 +33,13 @@ namespace ExpandedAiFramework
             Initialize(spawnRegion, dataProxy, timeOfDay);
         }
 
-        //One day I might uproot this, but it's not tiny (~500 lines decompiled) and unless we want to start adjusting spawn rate *mechanics* (not just numeric values) we can probably leave it alone. Just need to hook into it for registration
-        //public void OverrideStart()
-        //{
-        //if (!OverrideStartCustom())
-        //{
-        // return;
-        //}
-        //mSpawnRegion.Start();
-        //}
-
-
-        //protected virtual bool OverrideStartCustom() => true;
-
 
         public virtual void Initialize(SpawnRegion spawnRegion, SpawnRegionModDataProxy dataProxy, TimeOfDay timeOfDay)
         {
             mSpawnRegion = spawnRegion;
             mModDataProxy = dataProxy;
             mTimeOfDay = timeOfDay;
-            mManager = Manager;// manager;
+            mManager = Manager;
         }
 
 
@@ -185,6 +160,33 @@ namespace ExpandedAiFramework
         }
 
 
+        public void Awake(SpawnRegion spawnRegion)
+        {
+            if (spawnRegion.IsNullOrDestroyed())
+            {
+                LogError($"Null SpawnRegion");
+                return;
+            }
+            if (spawnRegion.m_Registered)
+            {
+                LogTrace($"SpawnRegion already registered");
+                return;
+            }
+            if (!spawnRegion.m_RegisterOnAwake)
+            {
+                LogTrace($"Not set to register on awake");
+                return;
+            }
+            if (!mSpawnRegion.IsNullOrDestroyed() && mSpawnRegion.m_Registered)
+            {
+                LogTrace($"mSpawnRegion already set and registered");
+            }
+            mSpawnRegion = spawnRegion;
+            GameManager.m_SpawnRegionManager.Add(mSpawnRegion);
+            mSpawnRegion.m_Registered = true;
+        }
+
+
         public int CalculateTargetPopulation()
         {
             if (mSpawnRegion.m_SpawnLevel == 0)
@@ -233,14 +235,10 @@ namespace ExpandedAiFramework
             {
                 return false;
             }
-            if (mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Count > 0)
+            if (!HasDeferredDeserializeCompleted())
             {
                 return false;
-            }
-            if (mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Count > 0)
-            {
-                return false;
-            }
+            }    
             return GetNumActiveSpawns() == 0;
         }
 
@@ -274,7 +272,7 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_HasBeenDisabledByAurora = proxy.m_HasBeenDisabledByAurora;
             mSpawnRegion.m_WasActiveBeforeAurora = proxy.m_WasActiveBeforeAurora;
             SetBoundingSphereBasedOnWaypoints(proxy.m_CurrentWaypointPathIndex);
-            mSpawnRegion.m_CooldownTimerHours = SpawnRegion.m_SpawnRegionDataProxy.m_CooldownTimerHours;
+            mSpawnRegion.m_CooldownTimerHours = Il2Cpp.SpawnRegion.m_SpawnRegionDataProxy.m_CooldownTimerHours;
             mSpawnRegion.m_DeferredSpawnWildlifeMode = proxy.m_WildlifeMode;
             if (GetCurrentTimelinePoint() - proxy.m_HoursPlayed < GameManager.m_SpawnRegionManager.m_RandomizeRestoredSpawnsAfterHoursInside)
             {
@@ -287,10 +285,9 @@ namespace ExpandedAiFramework
             else
             {
                 MaybeReRollActive();
-                //Is this section needed? maybe not...
                 if (!mSpawnRegion.gameObject.activeInHierarchy)
                 {
-                    //UpdateDeferredDeserialize();
+                    UpdateDeferredDeserialize();
                     return;
                 }
                 foreach (SpawnDataProxy spawnProxy in proxy.m_ActiveSpawns)
@@ -298,7 +295,7 @@ namespace ExpandedAiFramework
                     mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Add(spawnProxy);
                 }
             }
-            //UpdateDeferredDeserialize();
+            UpdateDeferredDeserialize();
         }
 
 
@@ -587,7 +584,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public bool HasDeferredDeserializeCompleted()
+        private bool HasDeferredDeserializeCompleted()
         {
             if (mSpawnRegion.m_DeferredSpawnsWithRandomPosition == null)
             {
@@ -596,6 +593,7 @@ namespace ExpandedAiFramework
             }
             if (mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Count != 0)
             {
+                LogTrace($"Remaining deferred spawns with random position");
                 return false;
             }
             if (mSpawnRegion.m_DeferredSpawnsWithSavedPosition == null)
@@ -605,6 +603,7 @@ namespace ExpandedAiFramework
             }
             if (mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Count != 0)
             {
+                LogTrace($"Remaining deferred spawns with saved position");
                 return false;
             }
             return true;
@@ -650,7 +649,7 @@ namespace ExpandedAiFramework
                 mSpawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
                 animalReferencePrefab.ReleaseAsset();
             }
-            if (false)//!TryGetSpawnPositionAndRotation(ref spawnPosition, ref spawnRotation))
+            if (TryGetSpawnPositionAndRotation(ref spawnPosition, ref spawnRotation))
             {
                 LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Potential error: Could not get spawn position and rotation. Aborting");
                 return null;
@@ -1144,7 +1143,7 @@ namespace ExpandedAiFramework
         //Since it's just a transfer container, makes some sense for garbage collector optimization
         public string Serialize()
         {
-            SpawnRegionDataProxy regionProxy = SpawnRegion.m_SpawnRegionDataProxy;
+            SpawnRegionDataProxy regionProxy = Il2Cpp.SpawnRegion.m_SpawnRegionDataProxy;
             regionProxy.m_HoursPlayed = GetCurrentTimelinePoint();
             regionProxy.m_ElapsedHoursAtLastActiveReRoll = mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll;
             regionProxy.m_IsActive = mSpawnRegion.gameObject.activeSelf;
@@ -1175,7 +1174,7 @@ namespace ExpandedAiFramework
                     LogTrace($"Inactive BaseAi, skipping");
                     continue;
                 }
-                SpawnDataProxy spawnProxy = i < 0x80 ? SpawnRegion.m_SpawnDataProxyPool[i] : new SpawnDataProxy();
+                SpawnDataProxy spawnProxy = i < 0x80 ? Il2Cpp.SpawnRegion.m_SpawnDataProxyPool[i] : new SpawnDataProxy();
                 spawnProxy.m_Position = mSpawnRegion.m_Spawns[i].transform.position;
                 spawnProxy.m_Rotation = mSpawnRegion.m_Spawns[i].transform.rotation;
                 spawnProxy.m_Guid = ObjectGuid.GetGuidFromGameObject(mSpawnRegion.m_Spawns[i].gameObject);
@@ -1195,7 +1194,7 @@ namespace ExpandedAiFramework
                 LogTrace($"Cougar Override");
                 return;
             }
-            if (SpawnRegion.m_WasForceDisabled && active)
+            if (mSpawnRegion.m_WasForceDisabled && active)
             {
                 LogTrace($"WasForceDisabled, cannot activate");
                 return;
@@ -1529,8 +1528,157 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_HoursNextTrapReset = 0.0f;
             mSpawnRegion.m_NumRespawnsPending = 0;
             mSpawnRegion.m_CooldownTimerHours = 0.0f;
-            //WIP: continue tomorrow
+            
+            GameModeConfig gameModeConfig = ExperienceModeManager.s_CurrentGameMode;
+            if (gameModeConfig.IsNullOrDestroyed())
+            {
+                LogError($"null GameModeConfig");
+                return;
+            }
+            ExperienceMode currentExperienceMode = gameModeConfig.m_XPMode;
+            if (currentExperienceMode.IsNullOrDestroyed())
+            {
+                LogError($"null ExperienceMode");
+                return;
+            }
+            ExperienceModeManager experienceModeManager = GameManager.m_ExperienceModeManager;
+            if (experienceModeManager.IsNullOrDestroyed())
+            {
+                LogError($"null ExperienceModeManager");
+                return;
+            }
+            mSpawnRegion.m_SpawnLevel = currentExperienceMode.GetSpawnRegionLevel(baseAi.m_AiTag);
+            float maxRespawnsPerDay = mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxRespawnsPerDay;
+            mSpawnRegion.m_NumHoursBetweenRespawns = Math.Abs(maxRespawnsPerDay) <= 0.0001 ? float.MaxValue : (24.0f / maxRespawnsPerDay);
+            if (GameManager.InCustomMode())
+            {
+                CustomExperienceMode customMode = experienceModeManager.GetCustomMode();
+                if (customMode.IsNullOrDestroyed())
+                {
+                    LogError($"Null CustomMode");
+                    return;
+                }
+                mSpawnRegion.m_NumHoursBetweenRespawns *= customMode.m_LookupTable.m_WildlifeRespawnTimeModifierList.GetValue(customMode.m_WildlifeSpawnFrequency);
+            }
+            mSpawnRegion.m_PathManagers = (Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<PathManager>)mSpawnRegion.GetComponentsInChildren<PathManager>(false);
+            mSpawnRegion.m_Den = mSpawnRegion.GetComponent<Den>();
+            mSpawnRegion.m_Center = mSpawnRegion.transform.position;
+            if (mSpawnRegion.m_PathManagers == null)
+            {
+                LogError($"Could not construct mSpawnRegion.m_PathManagers");
+                return;
+            }
+
+            if (mSpawnRegion.m_PathManagers.Length != 0)
+            {
+                mSpawnRegion.SetRandomWaypointCircuit();
+            }
+            mSpawnRegion.m_Spawns.Clear();
+            mSpawnRegion.m_SpawnsPrefabReferences.Clear();
+            float chanceActive = mSpawnRegion.m_ChanceActive;
+            chanceActive *= GameManager.InCustomMode() 
+                            ? GetCustomSpawnRegionChanceActiveScale()
+                            : experienceModeManager.GetSpawnRegionChanceActiveScale();
+            if (!Utils.RollChance(chanceActive))
+            {
+                mSpawnRegion.gameObject.SetActive(false);
+                return;
+            }
+            if (Il2Cpp.SpawnRegion.m_SpawnDataProxyPool != null
+                && Il2Cpp.SpawnRegion.m_SpawnDataProxyPool.Length != 0
+                && Il2Cpp.SpawnRegion.m_SpawnDataProxyPool[0].IsNullOrDestroyed())
+            {
+                for (int i = 0, iMax = Il2Cpp.SpawnRegion.m_SpawnDataProxyPool.Length; i < iMax; i++)
+                {
+                    Il2Cpp.SpawnRegion.m_SpawnDataProxyPool[i] = new SpawnDataProxy();
+                }
+            }
         }
+
+
+        public bool TryGetSpawnPositionAndRotation(ref Vector3 spawnPos, ref Quaternion spawnRotation)
+        {
+            if (!mSpawnRegion.m_Den.IsNullOrDestroyed())
+            {
+                spawnPos = mSpawnRegion.m_Den.transform.position;
+                spawnRotation = mSpawnRegion.m_Den.transform.rotation;
+                return true;
+            }
+            AreaMarkupManager areaMarkupManager = GameManager.m_AreaMarkupManager;
+            if (areaMarkupManager.IsNullOrDestroyed())
+            {
+                LogError($"null AreaMarkupManager");
+                return false;
+            }
+            AreaMarkup areaMarkup = areaMarkupManager.GetRandomSpawnAreaMarkupGivenSpawnRegion(mSpawnRegion);
+            if (!areaMarkup.IsNullOrDestroyed())
+            {
+                LogTrace($"Found AreaMarkup");
+                spawnPos = areaMarkup.transform.position;
+                return true;
+            }
+            if (AiUtils.GetRandomPointOnNavmesh(out spawnPos,
+                                                new Vector3(mSpawnRegion.m_Center.x,
+                                                            mSpawnRegion.m_Center.y + mSpawnRegion.m_TopDownTerrainHeight,
+                                                            mSpawnRegion.m_Center.z),
+                                                0.0f,
+                                                mSpawnRegion.m_Radius,
+                                                AiUtils.GetNavmeshArea(mSpawnRegion.transform.position)))
+            {
+                LogTrace($"Found Random navmesh point");
+                return true;
+            }
+            LogTrace($"Couldnt get a valid position and rotation");
+            return false;
+        }
+
+
+        private void UpdateDeferredDeserialize()
+        {
+            if (mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Count > 0)
+            {
+                LogTrace($"Found deferred spawns with random position, spawning immediately");
+                SpawnWithRandomPositions(mSpawnRegion.m_DeferredSpawnsWithRandomPosition, mSpawnRegion.m_DeferredSpawnWildlifeMode);
+                mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Clear();
+            }
+            if (mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Count > 0)
+            {
+                LogTrace($"Found deferred spawns with saved position, Queueing");
+                for (int i = 0, iMax = mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Count; i < iMax; i++)
+                {
+                    QueueSerializedRespawnPending(mSpawnRegion.m_DeferredSpawnsWithSavedPosition[i]);
+                }
+                mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Clear();
+            }
+        }
+
+
+        public void UpdateDeferredDeserializeFromManager()
+        {
+            if (!HasDeferredDeserializeCompleted())
+            {
+                UpdateDeferredDeserialize();
+            }
+        }
+
+
+
+        public void UpdateFromManager()
+        {
+            if (!HasDeferredDeserializeCompleted())
+            {
+                LogTrace($"Awaiting HasDeferredDeserializeCompleted");
+                return;
+            }
+            if (mSpawnRegion.m_HasBeenDisabledByAurora)
+            {
+                mSpawnRegion.gameObject.SetActive(false);
+            }
+            AdjustActiveSpawnRegionPopulation(); 
+            MaybeReduceNumTrapped();
+        }
+
+    
 
 
         public static void VanillaLog(string output) => LogTrace(output, "FromVanilla");
