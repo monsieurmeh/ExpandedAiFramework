@@ -129,7 +129,6 @@ namespace ExpandedAiFramework
         #endregion
 
 
-
         #region CarcassSite
 
         [HarmonyPatch(typeof(CarcassSite.Manager), nameof(CarcassSite.Manager.TryInstanciateCarcassSite), new Type[] { typeof(GameObject), typeof(Vector3), typeof(GameObject)})]

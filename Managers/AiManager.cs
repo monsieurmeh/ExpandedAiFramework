@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace ExpandedAiFramework
 {
+    //todo: clean up!!!
     public sealed class AiManager : BaseSubManager
     {
 
@@ -82,7 +83,6 @@ namespace ExpandedAiFramework
         }
 
 
-        [HideFromIl2Cpp]
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings)
         {
             if (mSpawnSettingsDict.TryGetValue(type, out _))
@@ -128,7 +128,7 @@ namespace ExpandedAiFramework
                 if (mSubManagers[i].ShouldInterceptSpawn(baseAi, region))
                 {
                     LogTrace($"Spawn intercept from submanager {mSubManagers[i]}! new type: {mSubManagers[i].SpawnType}");
-                    spawnType =mSubManagers[i].SpawnType;
+                    spawnType = mSubManagers[i].SpawnType;
                     break;
                 }
             }

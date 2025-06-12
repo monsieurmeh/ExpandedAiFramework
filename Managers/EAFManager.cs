@@ -239,9 +239,12 @@ namespace ExpandedAiFramework
         public bool TryRemoveCustomAi(BaseAi baseAi) => mAiManager.TryRemoveCustomAi(baseAi);
         public bool TryStart(BaseAi baseAi) => mAiManager.TryStart(baseAi);
         public bool TryStart(SpawnRegion spawnRegion) => mSpawnRegionManager.TryStart(spawnRegion);
+        public bool InterceptAwake(SpawnRegion spawnRegion) => mSpawnRegionManager.TryAwake(spawnRegion);
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode) => mAiManager.TrySetAiMode(baseAi, aiMode);
         public bool TryApplyDamage(BaseAi baseAi, float damage, float bleedOutTime, DamageSource damageSource) => mAiManager.TryApplyDamage(baseAi, damage, bleedOutTime, damageSource);
-        /*
+       
+        
+        /* This section needs a rework, possibly its own interop platform specifically for prefix bool patches
         #region Event Registers
 
         #region OnUpdateWounds
