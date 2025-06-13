@@ -5,45 +5,11 @@ using static ExpandedAiFramework.PatchExtensions;
 
 namespace ExpandedAiFramework
 {
-    [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.AdjustActiveSpawnRegionPopulation))]
-    internal class SpawnRegionPatches_AdjustActiveSpawnRegionPopulation
-    {
-        internal static bool Prefix(SpawnRegion __instance)
-        {
-            LogTrace($"Intercepting SpawnRegion.AdjustActiveSpawnRegionPopulation()!");
-            return SpawnRegion_AdjustActiveSpawnRegionPopulation(__instance);
-        }
-    }
-
-
-    [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.AttemptInstantiateAndPlaceSpawnFromSave), new Type[] { typeof(WildlifeMode), typeof(PendingSerializedRespawnInfo) })]
-    internal class SpawnRegionPatches_AttemptInstantiateAndPlaceSpawnFromSave
-    {
-        internal static bool Prefix(SpawnRegion __instance, WildlifeMode wildlifeMode, PendingSerializedRespawnInfo pendingSerializedRespawnInfo, ref BaseAi __result)
-        {
-            LogTrace($"Intercepting SpawnRegion.AdjustActiveSpawnRegionPopulation()!");
-            return SpawnRegion_AttemptInstantiateAndPlaceSpawnFromSave(__instance, 
-                                                                       wildlifeMode,
-                                                                       pendingSerializedRespawnInfo,
-                                                                       ref __result);
-        }
-    }
-
-
-
     [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.Awake))]
     internal class SpawnRegionPatches_Awake
     {
         private static bool Prefix(SpawnRegion __instance)
         {
-            //TEMPORARY: Remove when we are done!!!
-            if (__instance.m_RegisterOnAwake)
-            {
-                GameManager.m_SpawnRegionManager.Add(__instance);
-                __instance.m_Registered = true;
-            }
-
-
             return SpawnRegion_Awake(__instance);
         }
     }

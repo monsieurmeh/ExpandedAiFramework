@@ -14,7 +14,7 @@ namespace ExpandedAiFramework
 
         #region SpawnRegionManager
 
-        public static void SpawnRegionManager_AddSpawnRegion(SpawnRegion sr) => Manager.SpawnRegionManager.Add(sr);
+        //public static void SpawnRegionManager_AddSpawnRegion(SpawnRegion sr) => Manager.SpawnRegionManager.Add(sr);
         public static void SpawnRegionManager_AddNoSpawnRegion(NoSpawnRegion nsr) => Manager.SpawnRegionManager.Add(nsr);
         public static void SpawnRegionManager_Deserialize(string text) => Manager.SpawnRegionManager.Deserialize(text);
         public static SpawnRegion SpawnRegionManager_FindSpawnRegionByGuid(string text) => Manager.SpawnRegionManager.FindSpawnRegionByGuid(text);
@@ -25,7 +25,7 @@ namespace ExpandedAiFramework
         public static SpawnRegion SpawnRegionManager_PointInsideActiveSpawnRegion(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.PointInsideActiveSpawnRegion(pos, filterSpawnablePrefabName);
         public static SpawnRegion SpawnRegionManager_PointInsideSpawnRegion(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
         public static bool SpawnRegionManager_PointInsideNoSpawnRegion(Vector3 pos) => Manager.SpawnRegionManager.PointInsideNoSpawnRegion(pos);
-        public static void SpawnRegionManager_Remove(SpawnRegion sr) => Manager.SpawnRegionManager.Remove(sr);
+        //public static void SpawnRegionManager_Remove(SpawnRegion sr) => Manager.SpawnRegionManager.Remove(sr);
         public static string SpawnRegionManager_Serialize() => Manager.SpawnRegionManager.Serialize();
         public static void SpawnRegionManager_Start() => Manager.SpawnRegionManager.Start();
 
@@ -33,24 +33,6 @@ namespace ExpandedAiFramework
 
 
         #region SpawnRegion
-
-        public static bool SpawnRegion_AdjustActiveSpawnRegionPopulation(SpawnRegion __instance)
-        {
-            return !Manager.SpawnRegionManager.TryAdjustActiveSpawnRegionPopulation(__instance);
-        }
-
-
-        public static bool SpawnRegion_AttemptInstantiateAndPlaceSpawnFromSave(SpawnRegion __instance,
-                                                       WildlifeMode wildlifeMode,
-                                                       PendingSerializedRespawnInfo pendingSerializedRespawnInfo,
-                                                       ref BaseAi __result)
-        {
-            return !Manager.SpawnRegionManager.TryAttemptInstantiateAndPlaceSpawnFromSave(__instance,
-                                                                            wildlifeMode,
-                                                                            pendingSerializedRespawnInfo,
-                                                                            ref __result);
-        }
-
 
 
         public static bool SpawnRegion_Awake(SpawnRegion __instance)

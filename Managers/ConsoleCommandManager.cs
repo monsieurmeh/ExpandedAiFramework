@@ -1228,6 +1228,25 @@ namespace ExpandedAiFramework
         {
             if (Input.GetMouseButtonDown(0)) // Left click
             {
+                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    // Shift+Left click - discard last point
+                    if (mCurrentWanderPathPoints.Count > 0)
+                    {
+                        GameObject marker = mCurrentWanderPathPointMarkers[^1];
+                        mCurrentWanderPathPointMarkers.Remove(marker);
+                        GameObject.Destroy(marker);
+                        if (mCurrentWanderPathPoints.Count > 0)
+                        {
+                            marker = mCurrentWanderPathPointMarkers[^1];
+                            mCurrentWanderPathPointMarkers.Remove(marker);
+                            GameObject.Destroy(marker);
+                        }
+                        mCurrentWanderPathPoints.RemoveAt(mCurrentWanderPathPoints.Count - 1);
+                    }
+                    return;
+                }
+
                 if (mCurrentWanderPathPointMarkers == null)
                 {
                     mCurrentWanderPathPointMarkers = new List<GameObject>();

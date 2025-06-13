@@ -232,7 +232,6 @@ namespace ExpandedAiFramework
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
         public void ClearCustomAis() => mAiManager.ClearCustomAis();
-        public bool TryInterceptSpawn(BaseAi baseAi, SpawnRegion spawnRegion) => mSpawnRegionManager.TryInterceptSpawn(baseAi, spawnRegion);
         public bool TryInjectRandomCustomAi(BaseAi baseAi, SpawnRegion region) => mAiManager.TryInjectRandomCustomAi(baseAi, region);
         public bool TryInjectCustomBaseAi(BaseAi baseAi, SpawnRegion spawnRegion) => mAiManager.TryInjectCustomBaseAi(baseAi, spawnRegion);
         public bool TryInjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion region) => mAiManager.TryInjectCustomAi(baseAi, spawnType, region);
@@ -315,17 +314,17 @@ namespace ExpandedAiFramework
         private ComplexLogger<Main> mLogger;
         private void InitializeLogger() => mLogger = new ComplexLogger<Main>();
 
-
         public void Log(
             string message, 
             FlaggedLoggingLevel logLevel, 
             bool toUConsole,
             string callerType,
+            string callerInstanceInfo = "",
             [CallerMemberName] string callerName = "")
         {
-            mLogger.Log($"[{callerType}.{callerName}] {message}", logLevel, toUConsole ? LoggingSubType.uConsole : LoggingSubType.Normal);
+            callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
+            mLogger.Log($"[{callerType}.{callerName}{callerInstanceInfo}] {message}", logLevel, toUConsole ? LoggingSubType.uConsole : LoggingSubType.Normal);
         }
-
 #endregion
 
     }

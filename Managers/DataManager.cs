@@ -111,13 +111,13 @@ namespace ExpandedAiFramework
 
         public override void OnQuitToMainMenu()
         {
-            LogTrace($"DataCache clearing!");
             ClearDataCache();
         }
 
 
         private void ClearDataCache()
         {
+            LogTrace($"Clearing DataCache");
             mSpawnModDataProxyCache.Clear();
             mSpawnRegionModDataProxyCache.Clear();
             mActiveSpawnModDataProxies.Clear();
@@ -132,37 +132,42 @@ namespace ExpandedAiFramework
         public override void OnLoadScene(string sceneName)
         {
             base.OnLoadScene(sceneName);
-            CacheSpawnRegionModDataProxies(false);
-            CacheSpawnModDataProxies(false); 
+            CacheProxies(false); 
             mMapDataInitialized = false;
         }
 
 
         public override void OnLoadGame()
         {
-            base.OnLoadGame();
-            mProxyDataLoaded = false;
+            base.OnLoadGame(); 
+            ClearDataCache();
         }
 
 
         public override void OnSaveGame()
         {
             base.OnSaveGame();
-            CacheSpawnRegionModDataProxies(true);
-            CacheSpawnModDataProxies(true);
-            SaveSpawnRegionModDataProxies();
-            SaveSpawnModDataProxies();
+            CacheProxies(true); //probably move this to
+            SaveProxies();
         }
 
 
         public override void OnInitializedScene(string sceneName)
         {
             mLastSceneName = mManager.CurrentScene;
-            if (!mMapDataInitialized)
-            {
-                mMapDataInitialized = true;
-                RefreshAvailableMapData(mManager.CurrentScene);
-            }
+            RefreshAvailableMapData(mLastSceneName);
+        }
+
+
+        public void SaveProxies()
+        {
+            SaveSpawnRegionModDataProxies();
+            SaveSpawnModDataProxies();
+        }
+
+
+        public void LoadProxies()
+        {
             if (!mProxyDataLoaded && GameManager.m_ActiveScene != null && Utility.IsValidGameplayScene(GameManager.m_ActiveScene, out string parsedSceneName))
             {
                 mProxyDataLoaded = true;
@@ -170,14 +175,30 @@ namespace ExpandedAiFramework
                 LoadSpawnRegionModDataProxies();
                 LoadSpawnModDataProxies();
             }
+        }
+
+
+        public void CacheProxies(bool keepDataUncached)
+        {
+            CacheSpawnRegionModDataProxies(keepDataUncached);
+            CacheSpawnModDataProxies(keepDataUncached);
+        }
+
+        
+        public void UncacheProxies()
+        {
             UncacheSpawnRegionModDataProxies(mLastSceneName);
             UncacheSpawnModDataProxies(mLastSceneName);
-            mManager.SpawnRegionManager.ProcessCaughtSpawnRegions();
         }
 
 
         public void RefreshAvailableMapData(string sceneName)
         {
+            if (!mMapDataInitialized)
+            {
+
+            }
+
             LogVerbose($"[{nameof(DataManager)}.{nameof(RefreshAvailableMapData)}] Loading EAF map data for scene {sceneName}");
             foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
@@ -220,7 +241,7 @@ namespace ExpandedAiFramework
 
         #region SpawmRegionModDataProxy Management
 
-        public void LoadSpawnRegionModDataProxies()
+        private void LoadSpawnRegionModDataProxies()
         {
             mSpawnRegionModDataProxyCache.Clear();
             LogTrace($"Trying to load spawn region mod data proxies from suffix SpawnRegionModDataProxies!");
@@ -247,7 +268,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public void SaveSpawnRegionModDataProxies()
+        private void SaveSpawnRegionModDataProxies()
         {
             if (!mProxyDataLoaded)
             {
@@ -326,7 +347,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public void UncacheSpawnRegionModDataProxies(string sceneName)
+        private void UncacheSpawnRegionModDataProxies(string sceneName)
         {
             if (!mProxyDataLoaded)
             {
@@ -385,7 +406,7 @@ namespace ExpandedAiFramework
         #region SpawnModDataProxy Management
 
         //if we start getting too many more of these, im going to turn it into a damn generic library! lol
-        public void LoadSpawnModDataProxies()
+        private void LoadSpawnModDataProxies()
         {
             try
             {
@@ -431,7 +452,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public void SaveSpawnModDataProxies()
+        private void SaveSpawnModDataProxies()
         {
             if (!mProxyDataLoaded)
             {
@@ -499,7 +520,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public void UncacheSpawnModDataProxies(string sceneName)
+        private void UncacheSpawnModDataProxies(string sceneName)
         {
             if (!mProxyDataLoaded)
             {
@@ -540,7 +561,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public List<SpawnModDataProxy> GetCachedSpawnModDataProxies(string sceneName)
+        private List<SpawnModDataProxy> GetCachedSpawnModDataProxies(string sceneName)
         {
             if (!mSpawnModDataProxyCache.TryGetValue(sceneName, out List<SpawnModDataProxy> cachedProxies))
             {
@@ -583,9 +604,6 @@ namespace ExpandedAiFramework
             availableProxies.RemoveAt(0);
             return true;
         }
-
-
-
 
         #endregion
     }

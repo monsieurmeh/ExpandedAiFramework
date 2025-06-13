@@ -29,7 +29,7 @@ namespace ExpandedAiFramework
             bool baseResult = base.OverrideStartCustom();
             if (!mBaseAi.gameObject.TryGetComponent<AiCougar>(out mCougar))
             {
-                LogError($"Could not fetch AiCougar from cougar!");
+                this.LogErrorInstanced($"Could not fetch AiCougar from cougar!");
             }
             return baseResult;
         }
@@ -76,7 +76,7 @@ namespace ExpandedAiFramework
                 MaybePlayerDropsWeapon();
                 if (mCougar.m_SwipeSideTimelineAssets == null || attackSide >= mCougar.m_SwipeSideTimelineAssets.Count)
                 {
-                    LogError($"attackSide index out of range");
+                    this.LogErrorInstanced($"attackSide index out of range");
                     return false;
                 }
                 mCougar.PlayTimelineAnimation(mCougar.m_SwipeSideTimelineAssets[attackSide], new System.Action(() => { /* maybe cleanup here?? All I see in decompile is a type initializer for an action... */ }));
@@ -115,30 +115,30 @@ namespace ExpandedAiFramework
             PlayerManager playerManager = GameManager.m_PlayerManager;
             if (playerManager.IsNullOrDestroyed())
             {
-                LogError("Null playermanager in BaseCougar.MaybePlayerDropsWeapon!");
+                this.LogErrorInstanced("Null playermanager in BaseCougar.MaybePlayerDropsWeapon!");
                 return;
             }
             if (playerManager.m_ItemInHandsInternal.IsNullOrDestroyed())
             {
-                LogTrace($"Item in hands null or destroyed, not dropping...");
+                this.LogTraceInstanced($"Item in hands null or destroyed, not dropping...");
                 return;
             }
             GearItem itemInHands = playerManager.m_ItemInHandsInternal;
             if (!itemInHands.IsWeapon())
             {
-                LogTrace($"Item in hands is not weapon, not dropping...");
+                this.LogTraceInstanced($"Item in hands is not weapon, not dropping...");
                 return;
             }
             if (!itemInHands.m_GunItem.IsNullOrDestroyed() && itemInHands.m_GunItem.m_GunType == GunType.Camera)
             {
-                LogTrace($"doing some weird force immediate drop for cameras");
+                this.LogTraceInstanced($"doing some weird force immediate drop for cameras");
                 playerManager.UnequipImmediate(false);
                 return;
             }
             GameManager.m_vpFPSCamera.MaybeResetCurrentWeapon();
             if (!itemInHands.m_BowItem.IsNullOrDestroyed())
             {
-                LogTrace($"Force unequiping bow item");
+                this.LogTraceInstanced($"Force unequiping bow item");
                 itemInHands.m_BowItem.OnDequip();
             }
             itemInHands.Drop(1, true, true, true);

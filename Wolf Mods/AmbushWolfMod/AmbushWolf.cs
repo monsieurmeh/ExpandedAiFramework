@@ -24,7 +24,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
 proxy)
         {
             base.Initialize(ai, timeOfDay, spawnRegion, proxy);
-            LogTrace($"Initializing AmbushWolf at {spawnRegion.transform.position}");
+            this.LogTraceInstanced($"Initializing AmbushWolf at {spawnRegion.transform.position}");
             mBaseAi.m_DefaultMode = (AiMode)AmbushWolfAiMode.Hide;
             mBaseAi.m_StartMode = (AiMode)AmbushWolfAiMode.Hide;
         }
@@ -36,21 +36,21 @@ proxy)
                 || proxy.CustomData == null
                 || proxy.CustomData.Length == 0)
             {
-                LogTrace($"Null proxy, null proxy custom data or no length to proxy custom data");
+                this.LogTraceInstanced($"Null proxy, null proxy custom data or no length to proxy custom data");
                 return false;
             }
             Guid spotGuid = new Guid(proxy.CustomData[0]);
             if (spotGuid == Guid.Empty)
             {
-                LogTrace($"Proxy spot guid is empty");
+                this.LogTraceInstanced($"Proxy spot guid is empty");
                 return false;
             }
             if (!mManager.DataManager.AvailableHidingSpots.TryGetValue(spotGuid, out HidingSpot hidingSpot))
             {
-                LogTrace($"Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary");
+                this.LogTraceInstanced($"Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary");
                 return false;
             }
-            LogTrace($"Found saved hiding spot with guid <<<{spotGuid}>>>");
+            this.LogTraceInstanced($"Found saved hiding spot with guid <<<{spotGuid}>>>");
             AttachHidingSpot(hidingSpot);
             return true;
         }
@@ -65,15 +65,15 @@ proxy)
 
             if (mHidingSpot == null)
             {
-                LogTrace("FirstFrameCustom: No hiding spot assigned");
+                this.LogTraceInstanced("FirstFrameCustom: No hiding spot assigned");
                 if (!TryGetSavedHidingSpot(mModDataProxy))
                 {
-                    LogTrace("FirstFrameCustom: Getting new hiding spot");
+                    this.LogTraceInstanced("FirstFrameCustom: Getting new hiding spot");
                     mManager.DataManager.GetNearestHidingSpotAsync(mBaseAi.transform.position, AttachHidingSpot, 3);
                 }
             }
 
-            LogTrace($"FirstFrameCustom: Warping to hiding spot at {mHidingSpot.Position} and setting hide mode");
+            this.LogTraceInstanced($"FirstFrameCustom: Warping to hiding spot at {mHidingSpot.Position} and setting hide mode");
             mBaseAi.m_MoveAgent.transform.position = mHidingSpot.Position;
             mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 2.0f, true, -1);
 
@@ -86,20 +86,20 @@ proxy)
         {
             if (hidingSpot == null)
             {
-                LogWarning("Received NULL hiding spot, creating fallback spot");
+                this.LogWarningInstanced("Received NULL hiding spot, creating fallback spot");
                 mHidingSpot = new HidingSpot("FALLBACK_SPOT", mBaseAi.transform.position, mBaseAi.transform.rotation,
 mManager.CurrentScene, true);
             }
             else
             {
-                LogTrace($"Attached hiding spot: {hidingSpot}");
+                this.LogTraceInstanced($"Attached hiding spot: {hidingSpot}");
                 mHidingSpot = hidingSpot;
             }
 
             if (mModDataProxy != null)
             {
                 mModDataProxy.CustomData = [mHidingSpot.Guid.ToString()];
-                LogTrace($"Saved spot {mHidingSpot} to proxy data");
+                this.LogTraceInstanced($"Saved spot {mHidingSpot} to proxy data");
             }
             hidingSpot.Claim();
         }
@@ -117,15 +117,15 @@ mManager.CurrentScene, true);
             switch (CurrentMode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessHiding.");
+                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessHiding.");
                     ProcessHiding();
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessReturning.");
+                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessReturning.");
                     ProcessReturning();
                     return false;
                 default:
-                    LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
+                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
                     return base.ProcessCustom();
             }
         }
@@ -136,15 +136,15 @@ mManager.CurrentScene, true);
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    LogVerbose($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Paused.");
+                    this.LogVerboseInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Paused.");
                     overrideState = AiAnimationState.Paused;
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    LogVerbose($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Wander.");
+                    this.LogVerboseInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Wander.");
                     overrideState = AiAnimationState.Wander;
                     return false;
                 default:
-                    LogVerbose($"GetAiAnimationStateCustom: mode is {mode}, deffering");
+                    this.LogVerboseInstanced($"GetAiAnimationStateCustom: mode is {mode}, deffering");
                     overrideState = AiAnimationState.Invalid;
                     return true;
             }
@@ -156,15 +156,15 @@ mManager.CurrentScene, true);
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    LogVerbose($"IsMoveStateCustom: mode is {mode}, setting isMoveState false.");
+                    this.LogVerboseInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState false.");
                     isMoveState = false;
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    LogVerbose($"IsMoveStateCustom: mode is {mode}, setting isMoveState true.");
+                    this.LogVerboseInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState true.");
                     isMoveState = true;
                     return false;
                 default:
-                    LogVerbose($"IsMoveStateCustom: mode is {mode}, deferring.");
+                    this.LogVerboseInstanced($"IsMoveStateCustom: mode is {mode}, deferring.");
                     isMoveState = false;
                     return true;
             }
@@ -176,15 +176,15 @@ mManager.CurrentScene, true);
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    LogVerbose($"EnterAiModeCustom: mode is {mode}, routing to EnterHiding");
+                    this.LogVerboseInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterHiding");
                     EnterHiding();
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    LogVerbose($"EnterAiModeCustom: mode is {mode}, routing to EnterReturning.");
+                    this.LogVerboseInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterReturning.");
                     EnterReturning();
                     return false;
                 default:
-                    LogVerbose($"EnterAiModeCustom: mode is {mode}, deferring.");
+                    this.LogVerboseInstanced($"EnterAiModeCustom: mode is {mode}, deferring.");
                     return true;
             }
         }
@@ -195,7 +195,7 @@ mManager.CurrentScene, true);
             if (mHidingSpot == null)
             {
                 //Dont do anythign yet till you have a hiding spot
-                //LogError("ProcessHiding called but no hiding spot assigned!");
+                //this.LogErrorInstanced("ProcessHiding called but no hiding spot assigned!");
                 return;
             }
 
@@ -215,7 +215,7 @@ mManager.CurrentScene, true);
         {
             if (mHidingSpot == null)
             {
-                LogError("EnterHiding called but no hiding spot assigned!");
+                this.LogErrorInstanced("EnterHiding called but no hiding spot assigned!");
                 return;
             }
             mBaseAi.MoveAgentStop();
@@ -230,10 +230,10 @@ mManager.CurrentScene, true);
             float hidingSpotDistance = Vector3.Distance(mBaseAi.transform.position, mHidingSpot.Position);
             if (hidingSpotDistance >= 2.0f) //todo: eliminate sqrt check, move to simple squared distance as a cached value from a "hiding spot distance" setting
             {
-                LogVerbose($"ProcessReturning: To far from hiding spot ({hidingSpotDistance}, continuing.");
+                this.LogVerboseInstanced($"ProcessReturning: To far from hiding spot ({hidingSpotDistance}, continuing.");
                 return;
             }
-            LogVerbose($"ProcessReturning: Close enough to hiding spot, hiding.");
+            this.LogVerboseInstanced($"ProcessReturning: Close enough to hiding spot, hiding.");
             SetAiMode((AiMode)AmbushWolfAiMode.Hide);
         }
 
@@ -252,16 +252,16 @@ mManager.CurrentScene, true);
         {
             if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsMoose())
             {
-                LogVerbose($"Ambush wolves run from larger threats!");
+                this.LogVerboseInstanced($"Ambush wolves run from larger threats!");
                 SetAiMode(AiMode.Flee);
                 return false;
             }
             if (!CurrentTarget.IsPlayer())
             {
-                LogVerbose($"ChangeModeWhenTargetDetectedCustom: target is not player, IGNORING. Ambush wolves want YOU!");
+                this.LogVerboseInstanced($"ChangeModeWhenTargetDetectedCustom: target is not player, IGNORING. Ambush wolves want YOU!");
                 return false;
             }
-            LogVerbose($"ChangeModeWhenTargetDetectedCustom: Attacking player target!");
+            this.LogVerboseInstanced($"ChangeModeWhenTargetDetectedCustom: Attacking player target!");
             SetAiMode(AiMode.Attack);
             return false;
         }

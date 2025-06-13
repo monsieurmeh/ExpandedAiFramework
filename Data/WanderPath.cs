@@ -27,13 +27,6 @@ namespace ExpandedAiFramework
         {
             mPathPoints = pathPoints;
             mWanderPathType = wanderPathType;
-            UpdateCachedString();
-        }
-
-        public override void UpdateCachedString()
-        {
-            mAnchorPosition = mPathPoints[0]; //REMOVE THIS!!!
-            base.UpdateCachedString();
             mCachedString += $" with type {WanderPathType}";
         }
     }

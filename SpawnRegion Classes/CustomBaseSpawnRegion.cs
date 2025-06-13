@@ -18,15 +18,17 @@ using static Il2Cpp.UITweener;
 
 namespace ExpandedAiFramework
 {
-    public class CustomBaseSpawnRegion 
+    public class CustomBaseSpawnRegion : ILogInfoProvider
     {
         protected SpawnRegion mSpawnRegion;
         protected TimeOfDay mTimeOfDay;
-        protected EAFManager mManager;
+        protected SpawnRegionManager mManager;
         protected SpawnRegionModDataProxy mModDataProxy;
 
         public SpawnRegion VanillaSpawnRegion { get { return mSpawnRegion; } }
         public SpawnRegionModDataProxy ModDataProxy { get { return mModDataProxy; } }
+        public virtual string InstanceInfo { get { return !VanillaSpawnRegion.IsNullOrDestroyed() ? VanillaSpawnRegion.GetHashCode().ToString() : "NULL"; } }
+        public virtual string TypeInfo { get { return GetType().Name; } }
 
 
         public CustomBaseSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy dataProxy, TimeOfDay timeOfDay)
@@ -39,20 +41,18 @@ namespace ExpandedAiFramework
         {
             if (spawnRegion.IsNullOrDestroyed())
             {
-                LogError($"Null SpawnRegion");
-                return;
-            }
-            if (spawnRegion.m_Registered)
-            {
-                LogTrace($"SpawnRegion already registered");
+                this.LogErrorInstanced($"Null SpawnRegion");
                 return;
             }
             mSpawnRegion = spawnRegion;
-            //GameManager.m_SpawnRegionManager.Add(mSpawnRegion);
-            mSpawnRegion.m_Registered = true;
             mModDataProxy = dataProxy;
             mTimeOfDay = timeOfDay;
-            mManager = Manager;
+            mManager = Manager.SpawnRegionManager;
+            if (!spawnRegion.m_Registered)
+            {
+                GameManager.m_SpawnRegionManager.Add(mSpawnRegion);
+                mSpawnRegion.m_Registered = true;
+            }
         }
 
 
@@ -69,47 +69,46 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
-                LogTrace($"Disabled by aurora, aborting");
+                this.LogVerboseInstanced($"Disabled by aurora, aborting");
                 return;
             }
             if (!SpawnRegionCloseEnoughForSpawning())
             {
-                LogTrace($"Too far for spawning, aborting");
+                this.LogVerboseInstanced($"Too far for spawning, aborting");
                 return;
             }
             if (numToActivate <= 0)
             {
-                LogTrace($"numToActivate (!_{numToActivate}_!) invalid, aborting");
+                this.LogVerboseInstanced($"numToActivate (!_{numToActivate}_!) invalid, aborting");
                 return;
             }
-            LogTrace($"AddActiveSpawns -> Spawn");
             Spawn(wildlifeMode);
         }
 
 
-        public void AdjustActiveSpawnRegionPopulation()
+        private void AdjustActiveSpawnRegionPopulation()
         {
-            int targetPopulation = CalculateTargetPopulation();
             WildlifeMode currentMode = mSpawnRegion.m_WildlifeMode;
             WildlifeMode oppositeMode = currentMode == WildlifeMode.Normal ? WildlifeMode.Aurora : WildlifeMode.Normal;
-
-            int oppositeActive = GetCurrentActivePopulation(oppositeMode);
-            if (oppositeActive > 0)
+            int targetPop = CalculateTargetPopulation();
+            int currentActivePopulation = GetCurrentActivePopulation(currentMode);
+            int otherModeActivePopulation = GetCurrentActivePopulation(oppositeMode);
+            if (otherModeActivePopulation > 0)
             {
-                LogTrace($"!_{oppositeActive}_! active wildlife of opposite type, removing");
-                RemoveActiveSpawns(oppositeActive, oppositeMode, true);
+                this.LogTraceInstanced($"{otherModeActivePopulation} active wildlife of opposite type, removing");
+                RemoveActiveSpawns(otherModeActivePopulation, currentMode, true);
             }
-
-            int currentActive = GetCurrentActivePopulation(currentMode);
-            int deficit = targetPopulation - currentActive;
-
-            if (deficit < 0)
+            int targetDelta = targetPop - currentActivePopulation;
+            if (targetDelta > 0)
             {
-                LogTrace($"!_{-deficit}_! excess active wildlife of current type, removing");
-                RemoveActiveSpawns(-deficit, currentMode, false);
-                return;
+                this.LogTraceInstanced($"{targetDelta} ({currentActivePopulation} vs {targetPop}) missing active wildlife of current type, adding");
+                AddActiveSpawns(targetDelta, currentMode);
             }
-            AddActiveSpawns(deficit, currentMode);
+            else if (targetDelta < 0)
+            {
+                this.LogTraceInstanced($"{-targetDelta} ({currentActivePopulation} vs {targetPop}) excess active wildlife of current type, removing");
+                RemoveActiveSpawns(-targetDelta, currentMode, false);
+            }
         }
 
 
@@ -117,23 +116,23 @@ namespace ExpandedAiFramework
         {
             if (pendingSerializedRespawnInfo == null)
             {
-                LogWarning($"null PendingSerializedRespawnInfo!");
+                this.LogWarningInstanced($"null PendingSerializedRespawnInfo!");
                 return null;
             }
             if (pendingSerializedRespawnInfo.m_SaveData == null)
             {
-                LogWarning($"null PendingSerializedRespawnInfo.m_SaveData!");
+                this.LogWarningInstanced($"null PendingSerializedRespawnInfo.m_SaveData!");
                 return null;
             }
             if (!PositionValidForSpawn(pendingSerializedRespawnInfo.m_SaveData.m_Position))
             {
-                LogWarning($"invalid spawn location!");
+                this.LogWarningInstanced($"invalid spawn location!");
                 return null;
             }
             PlayerManager playerManager = GameManager.m_PlayerManager;
             if (playerManager == null)
             {
-                LogError($"null PlayerManager");
+                this.LogErrorInstanced($"null PlayerManager");
                 return null;
             }
             playerManager.GetTeleportTransformAfterSceneLoad(out Vector3 position, out Quaternion rotation);
@@ -141,14 +140,14 @@ namespace ExpandedAiFramework
             Il2Cpp.SpawnRegionManager spawnRegionManager = GameManager.m_SpawnRegionManager;
             if (spawnRegionManager == null)
             {
-                LogError($"null Il2Cpp.SpawnRegionManager");
+                this.LogErrorInstanced($"null Il2Cpp.SpawnRegionManager");
                 return null;
             }
             float minSpawnDist = spawnRegionManager.m_ClosestSpawnDistanceToPlayerAfterSceneTransition;
             ExperienceModeManager experienceModeManager = GameManager.m_ExperienceModeManager;
             if (experienceModeManager == null)
             {
-                LogError($"null ExperienceModEmanager");
+                this.LogErrorInstanced($"null ExperienceModEmanager");
                 return null;
             }
             ExperienceMode currentExperienceMode = experienceModeManager.GetCurrentExperienceMode();
@@ -159,7 +158,7 @@ namespace ExpandedAiFramework
             }
             if (distanceToPlayer < minSpawnDist * closestSpawnDistanceAfterTransitionScale)
             {
-                LogTrace($"Player is too close, aborting");
+                this.LogTraceInstanced($"Player is too close, aborting");
                 return null;
             }
             return InstantiateSpawnFromSaveData(pendingSerializedRespawnInfo.m_SaveData, wildlifeMode);
@@ -168,28 +167,18 @@ namespace ExpandedAiFramework
 
         private int CalculateTargetPopulation()
         {
-            if (mSpawnRegion.m_SpawnLevel == 0)
+            if (SpawningSuppressedByExperienceMode())
             {
-                LogTrace($"SpawnLevel is zero, aborting");
                 return 0;
-            }
-
-            if (mSpawnRegion.m_AiTypeSpawned == 0 && !mSpawnRegion.m_ForcePredatorOverride)
-            {
-                if (GetCurrentTimelinePoint() < Il2Cpp.SpawnRegionManager.m_NoPredatorSpawningInVoyageurHours)
-                {
-                    LogTrace($"Voyager mode, no predator spawning, aborting");
-                    return 0;
-                }
             }
             if (!SpawnRegionCloseEnoughForSpawning())
             {
-                LogTrace($"Too far for spawning, returning active population to prevent changes");
+                this.LogVerboseInstanced($"Too far for spawning, returning active population to prevent changes");
                 return GetCurrentActivePopulation(mSpawnRegion.m_WildlifeMode);
             }
             if (!mSpawnRegion.m_CanSpawnInBlizzard && GameManager.m_Weather.IsBlizzard())
             {
-                LogTrace($"Cannot spawn in blizzard");
+                this.LogVerboseInstanced($"Cannot spawn in blizzard");
                 return 0;
             }
             int maxSimultaneousSpawns = GameManager.m_TimeOfDay.IsDay()
@@ -232,49 +221,56 @@ namespace ExpandedAiFramework
 
         public void Deserialize(string text)
         {
-            if (string.IsNullOrEmpty(text))
+            try
             {
-                LogError($"Null or empty text, cannot deserialize");
-                return;
-            }
-            Start();
-            SpawnRegionDataProxy proxy = Utils.DeserializeObject<SpawnRegionDataProxy>(text);
-            mSpawnRegion.gameObject.SetActive(true);
-            mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = proxy.m_ElapsedHoursAtLastActiveReRoll;
-            mSpawnRegion.m_NumRespawnsPending = proxy.m_NumRespawnsPending;
-            mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = proxy.m_ElapasedHoursNextRespawnAllowed;
-            mSpawnRegion.m_NumTrapped = proxy.m_NumTrapped;
-            mSpawnRegion.m_HoursNextTrapReset = proxy.m_HoursNextTrapReset;
-            mSpawnRegion.m_SpawnGuidCounter = proxy.m_SpawnGuidCounter;
-            mSpawnRegion.m_CurrentWaypointPathIndex = proxy.m_CurrentWaypointPathIndex;
-            mSpawnRegion.m_WildlifeMode = proxy.m_WildlifeMode;
-            mSpawnRegion.m_HasBeenDisabledByAurora = proxy.m_HasBeenDisabledByAurora;
-            mSpawnRegion.m_WasActiveBeforeAurora = proxy.m_WasActiveBeforeAurora;
-            SetBoundingSphereBasedOnWaypoints(proxy.m_CurrentWaypointPathIndex);
-            mSpawnRegion.m_CooldownTimerHours = Il2Cpp.SpawnRegion.m_SpawnRegionDataProxy.m_CooldownTimerHours;
-            mSpawnRegion.m_DeferredSpawnWildlifeMode = proxy.m_WildlifeMode;
-            if (GetCurrentTimelinePoint() - proxy.m_HoursPlayed < GameManager.m_SpawnRegionManager.m_RandomizeRestoredSpawnsAfterHoursInside)
-            {
-                foreach (SpawnDataProxy spawnProxy in proxy.m_ActiveSpawns)
+                if (string.IsNullOrEmpty(text))
                 {
-                    mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Add(spawnProxy);
-                }
-                mSpawnRegion.m_DeferredSpawnWildlifeMode = proxy.m_WildlifeMode;
-            }
-            else
-            {
-                MaybeReRollActive();
-                if (!mSpawnRegion.gameObject.activeInHierarchy)
-                {
-                    UpdateDeferredDeserialize();
+                    this.LogErrorInstanced($"Null or empty text, cannot deserialize");
                     return;
                 }
-                foreach (SpawnDataProxy spawnProxy in proxy.m_ActiveSpawns)
+                Start();
+                SpawnRegionDataProxy proxy = Utils.DeserializeObject<SpawnRegionDataProxy>(text);
+                mSpawnRegion.gameObject.SetActive(true);
+                mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = proxy.m_ElapsedHoursAtLastActiveReRoll;
+                mSpawnRegion.m_NumRespawnsPending = proxy.m_NumRespawnsPending;
+                mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = proxy.m_ElapasedHoursNextRespawnAllowed;
+                mSpawnRegion.m_NumTrapped = proxy.m_NumTrapped;
+                mSpawnRegion.m_HoursNextTrapReset = proxy.m_HoursNextTrapReset;
+                mSpawnRegion.m_SpawnGuidCounter = proxy.m_SpawnGuidCounter;
+                mSpawnRegion.m_CurrentWaypointPathIndex = proxy.m_CurrentWaypointPathIndex;
+                mSpawnRegion.m_WildlifeMode = proxy.m_WildlifeMode;
+                mSpawnRegion.m_HasBeenDisabledByAurora = proxy.m_HasBeenDisabledByAurora;
+                mSpawnRegion.m_WasActiveBeforeAurora = proxy.m_WasActiveBeforeAurora;
+                SetBoundingSphereBasedOnWaypoints(proxy.m_CurrentWaypointPathIndex);
+                mSpawnRegion.m_CooldownTimerHours = Il2Cpp.SpawnRegion.m_SpawnRegionDataProxy.m_CooldownTimerHours;
+                mSpawnRegion.m_DeferredSpawnWildlifeMode = proxy.m_WildlifeMode;
+                if (GetCurrentTimelinePoint() - proxy.m_HoursPlayed < GameManager.m_SpawnRegionManager.m_RandomizeRestoredSpawnsAfterHoursInside)
                 {
-                    mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Add(spawnProxy);
+                    foreach (SpawnDataProxy spawnProxy in proxy.m_ActiveSpawns)
+                    {
+                        mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Add(spawnProxy);
+                    }
+                    mSpawnRegion.m_DeferredSpawnWildlifeMode = proxy.m_WildlifeMode;
                 }
+                else
+                {
+                    MaybeReRollActive();
+                    if (!mSpawnRegion.gameObject.activeInHierarchy)
+                    {
+                        UpdateDeferredDeserialize();
+                        return;
+                    }
+                    foreach (SpawnDataProxy spawnProxy in proxy.m_ActiveSpawns)
+                    {
+                        mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Add(spawnProxy);
+                    }
+                }
+                UpdateDeferredDeserialize();
             }
-            UpdateDeferredDeserialize();
+            catch (Exception e)
+            {
+                this.LogErrorInstanced($"Deserialize error SpawnRegion with hash code {VanillaSpawnRegion.GetHashCode()}: {e}");
+            }
         }
 
 
@@ -327,24 +323,24 @@ namespace ExpandedAiFramework
             CustomExperienceMode customMode = GameManager.GetCustomMode();
             if (customMode.IsNullOrDestroyed())
             {
-                LogError($"No custom mode found");
+                this.LogErrorInstanced($"No custom mode found");
                 return 1.0f;
             }
             CustomExperienceModeTunableLookupTable lookupTable = customMode.m_LookupTable;
             if (lookupTable.IsNullOrDestroyed())
             {
-                LogError($"No custom mode lookup table found");
+                this.LogErrorInstanced($"No custom mode lookup table found");
                 return 1.0f;
             }
             Il2CppSystem.Collections.Generic.List<ExperienceMode> experienceModes = lookupTable.m_BaseExperienceModes;
             if (experienceModes.IsNullOrDestroyed())
             {
-                LogError($"No base experience mode table found");
+                this.LogErrorInstanced($"No base experience mode table found");
                 return 1.0f;
             }
             if (experienceModes.Count < 4)
             {
-                LogError($"Cannot fetch all base experience modes");
+                this.LogErrorInstanced($"Cannot fetch all base experience modes");
                 return 1.0f;
             }
             ExperienceMode pilgrimExperienceMode = experienceModes[0];
@@ -405,7 +401,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_Den.IsNullOrDestroyed())
             {
-                LogTrace($"No den, no sleep duration");
+                this.LogTraceInstanced($"No den, no sleep duration");
                 return 0.0f;
             }
             return GameManager.m_TimeOfDay.IsDay()
@@ -418,7 +414,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
-                LogError($"Null mSpawnRegion.m_DifficultySettings");
+                this.LogErrorInstanced($"Null mSpawnRegion.m_DifficultySettings");
                 return 0;
             }
             return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay;
@@ -429,7 +425,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
-                LogTrace($"Null mSpawnRegion.m_DifficultySettings");
+                this.LogTraceInstanced($"Null mSpawnRegion.m_DifficultySettings");
                 return 0;
             }
             return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsNight;
@@ -440,17 +436,17 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.gameObject.IsNullOrDestroyed())
             {
-                LogError($"Null mSpawnRegion.gameObject");
+                this.LogErrorInstanced($"Null mSpawnRegion.gameObject");
                 return 0;
             }    
             if (!mSpawnRegion.gameObject.activeSelf)
             {
-                LogError($"Inactive mSpawnRegion.gameObject");
+                this.LogErrorInstanced($"Inactive mSpawnRegion.gameObject");
                 return 0;
             }
             if (mSpawnRegion.m_Spawns.IsNullOrDestroyed())
             {
-                LogError($"Null mSpawnRegion.m_Spawns");
+                this.LogErrorInstanced($"Null mSpawnRegion.m_Spawns");
                 return 0;
             }
             int count = 0;
@@ -496,14 +492,14 @@ namespace ExpandedAiFramework
             {
                 if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
                 {
-                    LogTrace($"null spawnable prefab on spawn region, fetching...");
+                    this.LogTraceInstanced($"null spawnable prefab on spawn region, fetching...");
                     AssetReferenceAnimalPrefab animalReferencePrefab = mSpawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(WildlifeMode.Normal);
                     mSpawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
                     animalReferencePrefab.ReleaseAsset();
                 }
                 if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
                 {
-                    LogError($"Could not fetch spawnable prefab");
+                    this.LogErrorInstanced($"Could not fetch spawnable prefab");
                     return string.Empty;
                 }
             }
@@ -533,29 +529,29 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_PathManagers == null)
             {
-                LogError($"Null mSpawnRegion.m_PathManagers");
+                this.LogErrorInstanced($"Null mSpawnRegion.m_PathManagers");
                 return null;
             }
             if (mSpawnRegion.m_PathManagers.Length == 0)
             {
-                LogError($"Empty mSpawnRegion.m_PathManagers");
+                this.LogErrorInstanced($"Empty mSpawnRegion.m_PathManagers");
                 return null;
             }
             if (mSpawnRegion.m_CurrentWaypointPathIndex >= mSpawnRegion.m_PathManagers.Length)
             {
-                LogError($"mSpawnRegion.m_CurrentWaypointIndex >= mSpawnRegion.m_PathManagers.Length");
+                this.LogErrorInstanced($"mSpawnRegion.m_CurrentWaypointIndex >= mSpawnRegion.m_PathManagers.Length");
                 return null;
             }
             if (mSpawnRegion.m_PathManagers[mSpawnRegion.m_CurrentWaypointPathIndex].IsNullOrDestroyed())
             {
-                LogError($"Path manager for current waypoint index is null");
+                this.LogErrorInstanced($"Path manager for current waypoint index is null");
                 return null;
             }
             foreach (WanderRegion wanderRegion in mSpawnRegion.m_PathManagers[mSpawnRegion.m_CurrentWaypointPathIndex].gameObject.GetComponentsInChildren<WanderRegion>())
             {
                 if (wanderRegion.IsNullOrDestroyed())
                 {
-                    LogError($"Null wander region found in pathmanager");
+                    this.LogErrorInstanced($"Null wander region found in pathmanager");
                     return null;
                 }
             }
@@ -568,22 +564,22 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_DeferredSpawnsWithRandomPosition == null)
             {
-                LogError($"Null mSpawnRegion.m_DeferredSpawnsWithRandomPosition");
+                this.LogErrorInstanced($"Null mSpawnRegion.m_DeferredSpawnsWithRandomPosition");
                 return false;
             }
             if (mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Count != 0)
             {
-                LogTrace($"Remaining deferred spawns with random position");
+                this.LogTraceInstanced($"Remaining deferred spawns with random position");
                 return false;
             }
             if (mSpawnRegion.m_DeferredSpawnsWithSavedPosition == null)
             {
-                LogError($"Null mSpawnRegion.m_DeferredSpawnsWithSavedPosition");
+                this.LogErrorInstanced($"Null mSpawnRegion.m_DeferredSpawnsWithSavedPosition");
                 return false;
             }
             if (mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Count != 0)
             {
-                LogTrace($"Remaining deferred spawns with saved position");
+                this.LogTraceInstanced($"Remaining deferred spawns with saved position");
                 return false;
             }
             return true;
@@ -594,7 +590,7 @@ namespace ExpandedAiFramework
         {
             if (baseAi.IsNullOrDestroyed())
             {
-                LogError($"Null baseAi");
+                this.LogErrorInstanced($"Null baseAi");
                 return false;
             }
             return baseAi.m_WildlifeMode == mSpawnRegion.m_WildlifeMode;
@@ -605,7 +601,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_PendingSerializedRespawnInfoQueue.IsNullOrDestroyed())
             {
-                LogError($"Null mSpawnRegion.m_PendingSerializedRespawnInfoQueue");
+                this.LogErrorInstanced($"Null mSpawnRegion.m_PendingSerializedRespawnInfoQueue");
                 return false;
             }
             return mSpawnRegion.m_PendingSerializedRespawnInfoQueue.Count != 0;
@@ -616,7 +612,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Cougar && GetCurrentTimelinePoint() < mSpawnRegion.m_CooldownTimerHours)
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Cougar timer has not expired, aborting");
+                this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Cougar timer has not expired, aborting");
                 return null;
             }
             AssetReferenceAnimalPrefab animalReferencePrefab = null;
@@ -624,28 +620,28 @@ namespace ExpandedAiFramework
             Quaternion spawnRotation = Quaternion.identity;
             if (mSpawnRegion.m_SpawnablePrefab == null)
             {
-                LogTrace($"[{nameof(InstantiateAndPlaceSpawn)}.{nameof(InstantiateAndPlaceSpawn)}] Null spawnable prefab on spawn region, fetching...");
+                this.LogTraceInstanced($"[{nameof(InstantiateAndPlaceSpawn)}.{nameof(InstantiateAndPlaceSpawn)}] Null spawnable prefab on spawn region, fetching...");
                 animalReferencePrefab = mSpawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(wildlifeMode);
                 mSpawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
                 animalReferencePrefab.ReleaseAsset();
             }
             if (TryGetSpawnPositionAndRotation(ref spawnPosition, ref spawnRotation))
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Potential error: Could not get spawn position and rotation. Aborting");
+                this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Potential error: Could not get spawn position and rotation. Aborting");
                 return null;
             }
             if (!PositionValidForSpawn(spawnPosition))
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Potential error: Invalid spawn placement. Aborting");
+                this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Potential error: Invalid spawn placement. Aborting");
                 return null;
             }
             AiMode aiMode = AiMode.FollowWaypoints;
             if (mSpawnRegion.m_PathManagers == null || mSpawnRegion.m_PathManagers.Count == 0)
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Path manager null or zero count, setting mode to wander");
+                this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] Path manager null or zero count, setting mode to wander");
                 aiMode = AiMode.Wander;
             }
-            LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] success!");
+            this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateAndPlaceSpawn)}] success!");
             return InstantiateSpawn(mSpawnRegion.m_SpawnablePrefab, animalReferencePrefab, spawnPosition, spawnRotation, aiMode, wildlifeMode);
         }
 
@@ -655,7 +651,7 @@ namespace ExpandedAiFramework
             BaseAi baseAi = InstantiateSpawnInternal(spawnablePrefab, wildlifeMode, spawnPos, spawnRot);
             if (baseAi == null)
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawn)}] Null BaseAi received from InstantiateSpawnInternal, cascading");
+                this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawn)}] Null BaseAi received from InstantiateSpawnInternal, cascading");
                 return null;
             }
             baseAi.transform.position = spawnPos;
@@ -663,7 +659,7 @@ namespace ExpandedAiFramework
             Transform transform = mSpawnRegion.transform;
             if (mSpawnRegion.m_WanderRegion != null)
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawn)}] Wander region found, setting move agent transform to wander region?");
+                this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawn)}] Wander region found, setting move agent transform to wander region?");
                 transform = mSpawnRegion.m_WanderRegion.transform;
             }
             if (BaseAiManager.CreateMoveAgent(transform, baseAi, spawnPos))
@@ -678,7 +674,7 @@ namespace ExpandedAiFramework
             ObjectGuid.MaybeAttachObjectGuidAndRegister(baseAi.gameObject, PdidTable.GenerateNewID());
             mSpawnRegion.m_Spawns.Add(baseAi);
             mSpawnRegion.m_SpawnsPrefabReferences.Add(assetRef);
-            LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawn)}] success!");
+            this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawn)}] success!");
             return baseAi;
         }
 
@@ -687,19 +683,19 @@ namespace ExpandedAiFramework
         {
             if (spawnData.IsNullOrDestroyed())
             {
-                LogError($"Null spawnData, aborting");
+                this.LogErrorInstanced($"Null spawnData, aborting");
                 return null;
             }
             if (!AiUtils.IsNavmeshPosValid(spawnData.m_Position, 0.5f, 1.0f))
             {
-                LogWarning($"Invalid spawn position, aborting");
+                this.LogWarningInstanced($"Invalid spawn position, aborting");
                 return null;
             }
             AssetReferenceAnimalPrefab assetRef = null;
             GameObject spawnablePrefab = mSpawnRegion.m_SpawnablePrefab;
             if (spawnablePrefab.IsNullOrDestroyed())
             {
-                LogTrace($"Null spawnable prefab on spawn region, fetching...");
+                this.LogTraceInstanced($"Null spawnable prefab on spawn region, fetching...");
                 assetRef = mSpawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(wildlifeMode);
                 mSpawnRegion.m_SpawnablePrefab = assetRef.GetOrLoadAsset();
                 assetRef.ReleaseAsset();
@@ -708,20 +704,21 @@ namespace ExpandedAiFramework
             BaseAi baseAi = InstantiateSpawnInternal(spawnablePrefab, wildlifeMode, spawnData.m_Position, spawnData.m_Rotation);
             if (baseAi.IsNullOrDestroyed())
             {
-                LogWarning($"InstantiateSpawnInternal returned null BaseAi, aborting");
+                this.LogWarningInstanced($"InstantiateSpawnInternal returned null BaseAi, aborting");
                 return null;
             }
             if (baseAi.transform == null)
             {
-                LogError($"BaseAi has null transform, aborting");
+                this.LogErrorInstanced($"BaseAi has null transform, aborting");
                 return null;
             }
-            baseAi.transform.position = spawnData.m_Position;
-            baseAi.transform.rotation = spawnData.m_Rotation;
+            //This should be handled by InstantiateSpawnInternal!
+            //baseAi.transform.position = spawnData.m_Position;
+            //baseAi.transform.rotation = spawnData.m_Rotation;
             Transform transform = mSpawnRegion.transform;
             if (mSpawnRegion.m_WanderRegion != null)
             {
-                LogTrace($"Wander region found, setting move agent transform to wander region?");
+                this.LogTraceInstanced($"Wander region found, setting move agent transform to wander region?");
                 transform = mSpawnRegion.m_WanderRegion.transform;
             }
             if (BaseAiManager.CreateMoveAgent(transform, baseAi, spawnData.m_Position))
@@ -732,18 +729,18 @@ namespace ExpandedAiFramework
             AiDifficultySettings aiDifficultySettings = GameManager.m_AiDifficultySettings;
             if (aiDifficultySettings.IsNullOrDestroyed())
             {
-                LogError($"Null AiDifficultySettings, aborting");
+                this.LogErrorInstanced($"Null AiDifficultySettings, aborting");
                 return null;
             }
             AiDifficultySetting aiDifficultySetting = aiDifficultySettings.GetSetting(mSpawnRegion.m_AiDifficulty, baseAi.m_AiSubType);
             if (aiDifficultySetting.IsNullOrDestroyed())
             {
-                LogError($"ull AiDifficultySetting, aborting");
+                this.LogErrorInstanced($"ull AiDifficultySetting, aborting");
                 return null;
             }
             if (spawnData.m_Guid == null || spawnData.m_Guid.Length == 0)
             {
-                LogTrace($"Generating new PDID");
+                this.LogTraceInstanced($"Generating new PDID");
                 spawnData.m_Guid = PdidTable.GenerateNewID();
             }
             ObjectGuid.MaybeAttachObjectGuidAndRegister(baseAi.gameObject, spawnData.m_Guid);
@@ -758,23 +755,23 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawnInternal)}] Disabled by aurora, aborting");
+                this.LogTraceInstanced($"Disabled by aurora, aborting");
                 return null;
             }
             if (mSpawnRegion.m_AuroraSpawnablePrefab != null && wildlifeMode == WildlifeMode.Aurora)
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawnInternal)}] Wildlife mode is aurora and aurora spawnable prefab available, overriding param prefab");
+                this.LogTraceInstanced($"Wildlife mode is aurora and aurora spawnable prefab available, overriding param prefab");
                 spawnablePrefab = mSpawnRegion.m_AuroraSpawnablePrefab;
             }
             if (!UnityEngine.AI.NavMesh.SamplePosition(new Vector3(spawnPos.x, spawnPos.y + 0.2f, spawnPos.z), out UnityEngine.AI.NavMeshHit hitLoc, float.MaxValue, 0x3f800000))
             {
-                LogError($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawnInternal)}] Could not get valid navmesh result!");
+                this.LogErrorInstanced($"Could not get valid navmesh result!");
                 return null;
             }
             GameObject newInstance = GameObject.Instantiate(spawnablePrefab, spawnPos, spawnRot);
             if (!newInstance.TryGetComponent<BaseAi>(out BaseAi newBaseAi))
             {
-                LogError($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawnInternal)}] Cannot extract BaseAi component from newly instantiated BaseAi spawnable prefab!");
+                this.LogErrorInstanced($"Cannot extract BaseAi component from newly instantiated BaseAi spawnable prefab!");
                 return null;
             }
             newInstance.name = spawnablePrefab.name + $"_{mSpawnRegion.m_AutoCloneIndex}";
@@ -783,7 +780,8 @@ namespace ExpandedAiFramework
             {
                 newPackAnimal.gameObject.tag = mSpawnRegion.m_PackGroupId;
             }
-            LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(InstantiateSpawnInternal)}] Success!");
+            mManager.TryInterceptSpawn(newBaseAi, VanillaSpawnRegion);
+            this.LogTraceInstanced($"Success!");
             return newBaseAi;
         }
 
@@ -813,7 +811,7 @@ namespace ExpandedAiFramework
             }
             if (GameManager.m_SpawnRegionManager == null)
             {
-                LogError($"Null SpawnRegionManager");
+                this.LogErrorInstanced($"Null SpawnRegionManager");
                 return;
             }
             GameManager.m_SpawnRegionManager.Add(mSpawnRegion);
@@ -825,32 +823,32 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
-                LogTrace($"Disabled by aurora, aborting");
+                this.LogVerboseInstanced($"Disabled by aurora, aborting");
                 return;
             }
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Cougar)
             {
-                LogTrace($"Cougar override");
+                this.LogVerboseInstanced($"Cougar override");
                 return;
             }
             if (mSpawnRegion.m_WasForceDisabled)
             {
-                LogTrace($"Force disabled");
+                this.LogVerboseInstanced($"Force disabled");
                 return;
             }
             if (mSpawnRegion.m_HoursReRollActive <= 0.0001f)
             {
-                LogError($"Effectively zero mSpawnRegion.m_HoursReRollActive, aborting to prevent div by near zero");
+                this.LogVerboseInstanced($"Effectively zero mSpawnRegion.m_HoursReRollActive, aborting to prevent div by near zero");
                 return;
             }
             if (GetCurrentTimelinePoint() - mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll < mSpawnRegion.m_HoursReRollActive)
             {
-                LogTrace($"Not yet time");
+                this.LogVerboseInstanced($"Not yet time");
                 return;
             }
             if (!CanDoReRoll())
             {
-                LogTrace($"Ineligible for ReRoll");
+                this.LogVerboseInstanced($"Ineligible for ReRoll");
                 return;
             }
             mSpawnRegion.gameObject.SetActive(Utils.RollChance(GameManager.m_ExperienceModeManager.GetSpawnRegionChanceActiveScale()));
@@ -873,25 +871,25 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_PendingSerializedRespawnInfoQueue.Count == 0)
             {
-                LogTrace($"No pending serialized respawn info, aborting");
+                this.LogTraceInstanced($"No pending serialized respawn info, aborting");
                 return null;
             }
             PendingSerializedRespawnInfo pendingSerializedRespawnInfo = mSpawnRegion.m_PendingSerializedRespawnInfoQueue.Dequeue();
             BaseAi respawnedAi = AttemptInstantiateAndPlaceSpawnFromSave(wildlifeMode, pendingSerializedRespawnInfo);
             if (respawnedAi != null)
             {
-                LogTrace($"Successfully respawned AI from pending serialized respawn info!");
+                this.LogTraceInstanced($"Successfully respawned AI from pending serialized respawn info!");
                 return respawnedAi;
             }
             pendingSerializedRespawnInfo.m_TrySpawnCount += 1;
             if (pendingSerializedRespawnInfo.m_TrySpawnCount < 0x3d)
             {
-                LogTrace($"Failed to respawn Ai from pending serialized respawn info {pendingSerializedRespawnInfo.m_TrySpawnCount} times, re-queueing");
+                this.LogTraceInstanced($"Failed to respawn Ai from pending serialized respawn info {pendingSerializedRespawnInfo.m_TrySpawnCount} times, re-queueing");
                 mSpawnRegion.m_PendingSerializedRespawnInfoQueue.Enqueue(pendingSerializedRespawnInfo);
             }
             else
             {
-                LogWarning($"Failed to respawn Ai from pending serialized respawn info {pendingSerializedRespawnInfo.m_TrySpawnCount} times, disposing");
+                this.LogWarningInstanced($"Failed to respawn Ai from pending serialized respawn info {pendingSerializedRespawnInfo.m_TrySpawnCount} times, disposing");
             }
             return null;
         }
@@ -901,7 +899,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Cougar)
             {
-                LogTrace($"Cougar override");
+                this.LogTraceInstanced($"Cougar override");
                 return;
             }
             mSpawnRegion.m_WasActiveBeforeAurora = mSpawnRegion.gameObject.activeInHierarchy;
@@ -914,7 +912,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_WildlifeMode == (enabled ? WildlifeMode.Aurora : WildlifeMode.Normal))
             {
-                LogTrace($"WildlifeMode match, ignoring");
+                this.LogVerboseInstanced($"WildlifeMode match, ignoring");
                 return;
             }
 
@@ -922,7 +920,7 @@ namespace ExpandedAiFramework
             {
                 if (mSpawnRegion.m_AiTypeSpawned != AiType.Predator)
                 {
-                    LogTrace($"Aurora enabled, maybe suspending ambient spawn region");
+                    this.LogVerboseInstanced($"Aurora enabled, maybe suspending ambient spawn region");
                     MaybeSuspendForAurora();
                 }
             }
@@ -930,7 +928,7 @@ namespace ExpandedAiFramework
             {
                 if (mSpawnRegion.m_WasActiveBeforeAurora)
                 {
-                    LogTrace($"Aurora enabled, activating previously active spawn region");
+                    this.LogVerboseInstanced($"Aurora enabled, activating previously active spawn region");
                     mSpawnRegion.gameObject.SetActive(true);
                 }
                 mSpawnRegion.m_HasBeenDisabledByAurora = false;
@@ -939,7 +937,7 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_WildlifeMode = enabled ? WildlifeMode.Aurora : WildlifeMode.Normal;
         }
 
-
+        //not yet hooked up, looks lilke
         private void OnDestroy()
         {
             GameManager.m_SpawnRegionManager.m_SpawnRegions.Remove(mSpawnRegion);
@@ -950,22 +948,22 @@ namespace ExpandedAiFramework
         {
             if (!GameManager.m_SpawnRegionManager.PointInsideNoSpawnRegion(spawnPosition))
             {
-                LogTrace($"Encountered NoSpawn region");
+                this.LogTraceInstanced($"Encountered NoSpawn region");
                 return false;
             }
             if (GameManager.m_Weather.IsIndoorEnvironment())
             {
-                LogTrace($"Encountered indoor environment... why does this automatically return true???");
+                this.LogTraceInstanced($"Encountered indoor environment... why does this automatically return true???");
                 return true;
             }
             if (SpawnPositionOnScreenTooClose(spawnPosition))
             {
-                LogTrace($"Spawn position on screen too close");
+                this.LogTraceInstanced($"Spawn position on screen too close");
                 return false;
             }
             if (SpawnPositionTooCloseToCamera(spawnPosition))
             {
-                LogTrace($"Spawn position too close to camera");
+                this.LogTraceInstanced($"Spawn position too close to camera");
                 return false;
             }
             return true;
@@ -984,7 +982,7 @@ namespace ExpandedAiFramework
         private void RemoveActiveSpawns(int numToDeactivate, WildlifeMode wildlifeMode, bool isAdjustingOtherWildlifeMode)
         {
             bool playerGhost = GameManager.m_PlayerManager.m_Ghost;
-            for (int i = 0, iMax = mSpawnRegion.m_Spawns.Count; i < iMax || numToDeactivate == 0; i++)
+            for (int i = 0, iMax = mSpawnRegion.m_Spawns.Count; i < iMax && numToDeactivate > 0; i++)
             {
                 BaseAi spawn = mSpawnRegion.m_Spawns[i];
                 if (spawn.IsNullOrDestroyed() || !spawn.gameObject.activeSelf)
@@ -996,65 +994,65 @@ namespace ExpandedAiFramework
                 bool canDespawn = false;
                 if (isAdjustingOtherWildlifeMode && HasSameWildlifeMode(spawn, wildlifeMode))
                 {
-                    LogTrace($"Adjusting other wildlife mode and spawn mode matches called mode, wildlifeMode matched for despawn");
+                    this.LogTraceInstanced($"Adjusting other wildlife mode and spawn mode matches called mode, wildlifeMode matched for despawn");
                     canDespawn = true;
                 }
                 if (!canDespawn && !HasSameWildlifeMode(spawn, wildlifeMode))
                 {
-                    LogTrace($"NOT adjusting other wildlife mode and spawn mode does NOT match called mode, wildlifeMode matched for despawn");
+                    this.LogTraceInstanced($"NOT adjusting other wildlife mode and spawn mode does NOT match called mode, wildlifeMode matched for despawn");
                     canDespawn = true;
                 }
                 if (canDespawn
                     && spawn.GetAiMode() != AiMode.Flee
                     && spawn.GetAiMode() != AiMode.Dead)
                 {
-                    LogTrace($"Can despawn && and spawn is not fleeing or dead, setting flee");
+                    this.LogTraceInstanced($"Can despawn && and spawn is not fleeing or dead, setting flee");
                     spawn.SetAiMode(AiMode.Flee);
                 }
                 Vector3 spawnPos = spawn.m_CachedTransform.position;
                 bool canDespawnDueToProximity = playerGhost;
                 if (canDespawnDueToProximity)
                 {
-                    LogTrace($"Ghost, proximity check passed");
+                    this.LogTraceInstanced($"Ghost, proximity check passed");
                 }
                 if (!canDespawnDueToProximity
                     && Utils.DistanceToMainCamera(spawnPos) >= GameManager.GetSpawnRegionManager().m_DisallowDespawnBelowDistance
                     && (!Utils.PositionIsOnscreen(spawnPos) || Utils.DistanceToMainCamera(spawnPos) >= GameManager.GetSpawnRegionManager().m_AllowDespawnOnscreenDistance)
                     && !Utils.PositionIsInLOSOfPlayer(spawnPos)) //Why is this last one needed...?
                 {
-                    LogTrace($"Ai is not visible, proximity check passed");
+                    this.LogTraceInstanced($"Ai is not visible, proximity check passed");
                     canDespawnDueToProximity = true;
                 }
                 if (!canDespawnDueToProximity)
                 {
-                    LogTrace($"Proximity check failed, cannot despawn");
+                    this.LogTraceInstanced($"Proximity check failed, cannot despawn");
                     continue;
                 }
                 if (!canDespawn)
                 {
                     if (!spawn.m_CurrentTarget.IsNullOrDestroyed() && spawn.m_CurrentTarget.IsPlayer())
                     {
-                        LogTrace($"Failed to match wildlifeMode for forced removal and spawn is targetting player, cannot despawn");
+                        this.LogTraceInstanced($"Failed to match wildlifeMode for forced removal and spawn is targetting player, cannot despawn");
                         continue;
                     }
                     if (spawn.m_CurrentMode == AiMode.Feeding)
                     {
-                        LogTrace($"Failed to match wildlifeMode for forced removal and spawn is eating, cannot despawn");
+                        this.LogTraceInstanced($"Failed to match wildlifeMode for forced removal and spawn is eating, cannot despawn");
                         continue;
                     }
                     if (spawn.m_CurrentMode == AiMode.Sleep)
                     {
-                        LogTrace($"Failed to match wildlifeMode for forced removal and spawn is sleeping, cannot despawn");
+                        this.LogTraceInstanced($"Failed to match wildlifeMode for forced removal and spawn is sleeping, cannot despawn");
                         continue;
                     }
                     if (spawn.IsBleedingOut())
                     {
-                        LogTrace($"Failed to match wildlifeMode for forced removal and spawn is bleeding, cannot despawn");
+                        this.LogTraceInstanced($"Failed to match wildlifeMode for forced removal and spawn is bleeding, cannot despawn");
                         continue;
                     }
                     if (!spawn.NormalWolf.IsNullOrDestroyed() && spawn.m_CurrentMode == AiMode.WanderPaused)
                     {
-                        LogTrace($"Failed to match wildlifeMode for forced removal and spawn is normal wolf in AiMode.WanderPaused, cannot despawn");
+                        this.LogTraceInstanced($"Failed to match wildlifeMode for forced removal and spawn is normal wolf in AiMode.WanderPaused, cannot despawn");
                         continue;
                     }
                     spawn.Despawn();
@@ -1068,18 +1066,18 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_Spawns.IsNullOrDestroyed())
             {
-                LogError($"Null m_Spawns");
+                this.LogErrorInstanced($"Null m_Spawns");
                 return;
             }
             if (mSpawnRegion.m_Spawns.Contains(baseAi))
             {
-                LogTrace($"BaseAI not found in m_Spawns");
+                this.LogTraceInstanced($"BaseAI not found in m_Spawns");
                 return;
             }
             int removeIndex = mSpawnRegion.m_Spawns.IndexOf(baseAi);
             if (mSpawnRegion.m_Spawns.Count <= removeIndex || mSpawnRegion.m_SpawnsPrefabReferences.Count <= removeIndex)
             {
-                LogError($"Remove index out of range");
+                this.LogErrorInstanced($"Remove index out of range");
                 return;
             }
             mSpawnRegion.m_Spawns.RemoveAt(removeIndex);
@@ -1093,12 +1091,12 @@ namespace ExpandedAiFramework
         {
             if (!Spawn(wildlifeMode))
             {
-                LogTrace($"Spawn failed, aborting");
+                this.LogTraceInstanced($"Spawn failed, aborting");
                 return;
             }
             mSpawnRegion.m_NumRespawnsPending--;
             mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = GetCurrentTimelinePoint() + GetNumHoursBetweenRespawns();
-            LogTrace($"Respawn successful; pending respawns: !_{mSpawnRegion.m_NumRespawnsPending}_! next respawn time: !_{mSpawnRegion.m_ElapasedHoursNextRespawnAllowed}_! hours");
+            this.LogTraceInstanced($"Respawn successful; pending respawns: !_{mSpawnRegion.m_NumRespawnsPending}_! next respawn time: !_{mSpawnRegion.m_ElapasedHoursNextRespawnAllowed}_! hours");
         }
 
 
@@ -1106,15 +1104,15 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_NumRespawnsPending < 1)
             {
-                LogTrace($"No pending respawns, no respawn allowed");
+                this.LogVerboseInstanced($"No pending respawns, no respawn allowed");
                 return false;
             }
             if (mSpawnRegion.m_ElapasedHoursNextRespawnAllowed >= GetCurrentTimelinePoint())
             {
-                LogTrace($"Not yet time, no respawn allowed");
+                this.LogVerboseInstanced($"Not yet time, no respawn allowed");
                 return false;
             }
-            LogTrace($"Respawn allowed");
+            this.LogVerboseInstanced($"Respawn allowed");
             return true;
         }
 
@@ -1123,47 +1121,61 @@ namespace ExpandedAiFramework
         //Since it's just a transfer container, makes some sense for garbage collector optimization
         public string Serialize()
         {
-            SpawnRegionDataProxy regionProxy = Il2Cpp.SpawnRegion.m_SpawnRegionDataProxy;
-            regionProxy.m_HoursPlayed = GetCurrentTimelinePoint();
-            regionProxy.m_ElapsedHoursAtLastActiveReRoll = mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll;
-            regionProxy.m_IsActive = mSpawnRegion.gameObject.activeSelf;
-            regionProxy.m_NumRespawnsPending = mSpawnRegion.m_NumRespawnsPending;
-            if (mSpawnRegion.m_OnlyOneChance)
+            try
             {
-                mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = float.MaxValue;
+                SpawnRegionDataProxy regionProxy = Il2Cpp.SpawnRegion.m_SpawnRegionDataProxy;
+                regionProxy.m_HoursPlayed = GetCurrentTimelinePoint();
+                regionProxy.m_ElapsedHoursAtLastActiveReRoll = mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll;
+                regionProxy.m_IsActive = mSpawnRegion.gameObject.activeSelf;
+                regionProxy.m_NumRespawnsPending = mSpawnRegion.m_NumRespawnsPending;
+                if (mSpawnRegion.m_OnlyOneChance)
+                {
+                    mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = float.MaxValue;
+                }
+                regionProxy.m_ElapasedHoursNextRespawnAllowed = mSpawnRegion.m_OnlyOneChance ? float.MaxValue : mSpawnRegion.m_ElapasedHoursNextRespawnAllowed;
+                regionProxy.m_NumTrapped = mSpawnRegion.m_NumTrapped;
+                regionProxy.m_HoursNextTrapReset = mSpawnRegion.m_HoursNextTrapReset;
+                regionProxy.m_ActiveSpawns.Clear();
+                regionProxy.m_SpawnGuidCounter = mSpawnRegion.m_SpawnGuidCounter;
+                regionProxy.m_CurrentWaypointPathIndex = mSpawnRegion.m_CurrentWaypointPathIndex;
+                regionProxy.m_WildlifeMode = mSpawnRegion.m_WildlifeMode;
+                regionProxy.m_HasBeenDisabledByAurora = mSpawnRegion.m_HasBeenDisabledByAurora;
+                regionProxy.m_WasActiveBeforeAurora = mSpawnRegion.m_WasActiveBeforeAurora;
+                regionProxy.m_CooldownTimerHours = mSpawnRegion.m_CooldownTimerHours;
+                for (int i = 0, iMax = mSpawnRegion.m_Spawns.Count; i < iMax; i++)
+                {
+                    try
+                    {
+                        if (mSpawnRegion.m_Spawns[i].IsNullOrDestroyed())
+                        {
+                            this.LogWarningInstanced($"Null BaseAI, skipping");
+                            continue;
+                        }
+                        if (!mSpawnRegion.m_Spawns[i].gameObject.activeSelf)
+                        {
+                            this.LogTraceInstanced($"Inactive BaseAi, skipping");
+                            continue;
+                        }
+                        SpawnDataProxy spawnProxy = i < 0x80 ? Il2Cpp.SpawnRegion.m_SpawnDataProxyPool[i] : new SpawnDataProxy();
+                        spawnProxy.m_Position = mSpawnRegion.m_Spawns[i].transform.position;
+                        spawnProxy.m_Rotation = mSpawnRegion.m_Spawns[i].transform.rotation;
+                        spawnProxy.m_Guid = ObjectGuid.GetGuidFromGameObject(mSpawnRegion.m_Spawns[i].gameObject);
+                        //spawnProxy.m_AssetReferenceGUID = mSpawnRegion.m_SpawnsPrefabReferences[i].AssetGUID;
+                        spawnProxy.m_BaseAiSerialized = mSpawnRegion.m_Spawns[i].Serialize();
+                        regionProxy.m_ActiveSpawns.Add(spawnProxy);
+                    }
+                    catch (Exception e)
+                    {
+                        this.LogErrorInstanced($"Serialization failure on spawn #{i} on Spawn Region with hash code {VanillaSpawnRegion.GetHashCode()}: {e}");
+                    }
+                }
+                return SerializationUtils.SerializeObject(regionProxy);
             }
-            regionProxy.m_ElapasedHoursNextRespawnAllowed = mSpawnRegion.m_OnlyOneChance ? float.MaxValue : mSpawnRegion.m_ElapasedHoursNextRespawnAllowed;
-            regionProxy.m_NumTrapped = mSpawnRegion.m_NumTrapped;
-            regionProxy.m_HoursNextTrapReset = mSpawnRegion.m_HoursNextTrapReset;
-            regionProxy.m_ActiveSpawns.Clear();
-            regionProxy.m_SpawnGuidCounter = mSpawnRegion.m_SpawnGuidCounter;
-            regionProxy.m_CurrentWaypointPathIndex =  mSpawnRegion.m_CurrentWaypointPathIndex; 
-            regionProxy.m_WildlifeMode =  mSpawnRegion.m_WildlifeMode;
-            regionProxy.m_HasBeenDisabledByAurora = mSpawnRegion. m_HasBeenDisabledByAurora;
-            regionProxy.m_WasActiveBeforeAurora = mSpawnRegion.m_WasActiveBeforeAurora;   
-            regionProxy.m_CooldownTimerHours = mSpawnRegion. m_CooldownTimerHours;
-            for (int i = 0, iMax = mSpawnRegion.m_Spawns.Count; i < iMax; i++)
+            catch (Exception e)
             {
-                if (mSpawnRegion.m_Spawns[i].IsNullOrDestroyed())
-                {
-                    LogWarning($"Null BaseAI, skipping");
-                    continue;
-                }
-                if (!mSpawnRegion.m_Spawns[i].gameObject.activeSelf)
-                {
-                    LogTrace($"Inactive BaseAi, skipping");
-                    continue;
-                }
-                SpawnDataProxy spawnProxy = i < 0x80 ? Il2Cpp.SpawnRegion.m_SpawnDataProxyPool[i] : new SpawnDataProxy();
-                spawnProxy.m_Position = mSpawnRegion.m_Spawns[i].transform.position;
-                spawnProxy.m_Rotation = mSpawnRegion.m_Spawns[i].transform.rotation;
-                spawnProxy.m_Guid = ObjectGuid.GetGuidFromGameObject(mSpawnRegion.m_Spawns[i].gameObject);
-
-                spawnProxy.m_AssetReferenceGUID = mSpawnRegion.m_SpawnsPrefabReferences[i].AssetGUID;
-                spawnProxy.m_BaseAiSerialized = mSpawnRegion.m_Spawns[i].Serialize();
-                regionProxy.m_ActiveSpawns.Add(spawnProxy);
+                this.LogErrorInstanced($"Serialization error on spawn region with hash code {VanillaSpawnRegion.GetHashCode()}: {e}");
+                return string.Empty;
             }
-            return SerializationUtils.SerializeObject(regionProxy);
         }
 
 
@@ -1171,12 +1183,12 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Cougar)
             {
-                LogTrace($"Cougar Override");
+                this.LogTraceInstanced($"Cougar Override");
                 return;
             }
             if (mSpawnRegion.m_WasForceDisabled && active)
             {
-                LogTrace($"WasForceDisabled, cannot activate");
+                this.LogTraceInstanced($"WasForceDisabled, cannot activate");
                 return;
             }
             if (!active)
@@ -1187,7 +1199,7 @@ namespace ExpandedAiFramework
                     spawn = mSpawnRegion.m_Spawns[i];
                     if (spawn == null)
                     {
-                        LogWarning($"Null spawn");
+                        this.LogWarningInstanced($"Null spawn");
                         continue;
                     }
                     if (!spawn.gameObject.activeSelf)
@@ -1205,14 +1217,14 @@ namespace ExpandedAiFramework
         {
             if (waypointIndex < 0 || waypointIndex >= mSpawnRegion.m_PathManagers.Length)
             {
-                LogError($"Invalid waypoint index !_{waypointIndex}_! (waypoints available: !_{mSpawnRegion.m_PathManagers.Length}_!)");
+                this.LogErrorInstanced($"Invalid waypoint index !_{waypointIndex}_! (waypoints available: !_{mSpawnRegion.m_PathManagers.Length}_!)");
                 return;
             }
             Vector3[] pathPoints = mSpawnRegion.m_PathManagers[mSpawnRegion.m_CurrentWaypointPathIndex].GetPathPoints();
             BoundingSphereFromPoints.Calculate(pathPoints, pathPoints.Length, 0, 0);
             mSpawnRegion.m_Radius = BoundingSphereFromPoints.m_Radius;
             mSpawnRegion.m_Center = BoundingSphereFromPoints.m_Center;
-            LogTrace($"Set bounding sphere to center !_{mSpawnRegion.m_Center}_! and radius !_{mSpawnRegion.m_Radius}_!");
+            this.LogTraceInstanced($"Set bounding sphere to center !_{mSpawnRegion.m_Center}_! and radius !_{mSpawnRegion.m_Radius}_!");
         }
 
 
@@ -1220,18 +1232,18 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_PathManagers.Count <= 0)
             {
-                LogTrace($"No pathmanagers, cannot set waypoint circuit");
+                this.LogTraceInstanced($"No pathmanagers, cannot set waypoint circuit");
                 return;
             }
             mSpawnRegion.m_CurrentWaypointPathIndex = UnityEngine.Random.Range(0, mSpawnRegion.m_PathManagers.Count);
-            LogTrace($"mSpawnRegion.m_CurrentWaypointIndex set to !_{mSpawnRegion.m_CurrentWaypointPathIndex}_!");
+            this.LogTraceInstanced($"mSpawnRegion.m_CurrentWaypointIndex set to !_{mSpawnRegion.m_CurrentWaypointPathIndex}_!");
         }
 
 
         private void SetRespawnCooldownTimer(float cooldownHours)
         {
             mSpawnRegion.m_CooldownTimerHours = GetCurrentTimelinePoint() + cooldownHours;
-            LogTrace($"Setting cooldown time to !_{mSpawnRegion.m_CooldownTimerHours}_!");
+            this.LogTraceInstanced($"Setting cooldown time to !_{mSpawnRegion.m_CooldownTimerHours}_!");
         }
 
 
@@ -1239,14 +1251,14 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_Den.IsNullOrDestroyed())
             {
-                LogTrace($"Null den, no sleep");
+                this.LogTraceInstanced($"Null den, no sleep");
                 return false;
             }
             float sleepChance = GameManager.m_TimeOfDay.IsDay()
                 ? mSpawnRegion.m_Den.m_ChanceSleepAfterWaypointsLoopDay
                 : mSpawnRegion.m_Den.m_ChanceSleepAfterWaypointsLoopNight;
             bool shouldSleep = Utils.RollChance(sleepChance);
-            LogTrace($"Rolling against chance to sleep of !_{sleepChance}_!: !_{shouldSleep}_!");
+            this.LogTraceInstanced($"Rolling against chance to sleep of !_{sleepChance}_!: !_{shouldSleep}_!");
             return shouldSleep;
         }
 
@@ -1255,17 +1267,17 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
-                LogTrace($"[{nameof(CustomBaseSpawnRegion)}.{nameof(Spawn)}] Spawn region disabled by aurora, skipping");
+                this.LogTraceInstanced($"[{nameof(CustomBaseSpawnRegion)}.{nameof(Spawn)}] Spawn region disabled by aurora, skipping");
                 return false;
             }
             if (GameManager.m_IsPaused)
             {
-                LogVerbose($"Paused");
+                this.LogVerboseInstanced($"Paused");
                 return false;
             }
             if (mSpawnRegion.m_Spawns == null)
             {
-                LogError($"Spawn region with null spawn list!");
+                this.LogErrorInstanced($"Spawn region with null spawn list!");
                 return false;
             }
             int skipCount = 0;
@@ -1273,22 +1285,22 @@ namespace ExpandedAiFramework
             {
                 if (spawn == null)
                 {
-                    LogTrace($"Null spawn in m_Spawns, skipping");
+                    this.LogTraceInstanced($"Null spawn in m_Spawns, skipping");
                     continue;
                 }
                 if (spawn.gameObject == null)
                 {
-                    LogTrace($"Null game object in m_Spawns, skipping");
+                    this.LogTraceInstanced($"Null game object in m_Spawns, skipping");
                     continue;
                 }
                 if (spawn.gameObject.activeSelf)
                 {
-                    LogTrace($"Spawn is active in m_Spawns, skipping");
+                    this.LogTraceInstanced($"Spawn is active in m_Spawns, skipping");
                     continue;
                 }
                 if (spawn.m_WildlifeMode != mSpawnRegion.m_WildlifeMode)
                 {
-                    LogTrace($"Spawn wildlife mode <<<{spawn.m_WildlifeMode}>>> does not match region wildlife mode <<<{mSpawnRegion.m_WildlifeMode}>>>, skipping");
+                    this.LogTraceInstanced($"Spawn wildlife mode <<<{spawn.m_WildlifeMode}>>> does not match region wildlife mode <<<{mSpawnRegion.m_WildlifeMode}>>>, skipping");
                     continue;
                 }
 
@@ -1297,7 +1309,7 @@ namespace ExpandedAiFramework
                 if (SpawnPositionOnScreenTooClose(position) ||
                     SpawnPositionTooCloseToCamera(position))
                 {
-                    LogTrace($"Spawn position on screen or too close to camera, skipping");
+                    this.LogTraceInstanced($"Spawn position on screen or too close to camera, skipping");
                     skipCount++;
                     continue;
                 }
@@ -1308,7 +1320,7 @@ namespace ExpandedAiFramework
             }
             if (skipCount != 0)
             {
-                LogTrace($"Skipped at least one instantiated spawn without activating any, aborting");
+                this.LogTraceInstanced($"Skipped at least one instantiated spawn without activating any, aborting");
                 return false;
             }
             BaseAi newAi = mSpawnRegion.m_PendingSerializedRespawnInfoQueue.Count < 1 ? InstantiateAndPlaceSpawn(wildlifeMode) : MaybeSpawnPendingSerializedRespawn(wildlifeMode);
@@ -1320,30 +1332,30 @@ namespace ExpandedAiFramework
         { 
             if (mSpawnRegion.m_SpawnLevel == 0)
             {
-                LogTrace($"Suppressed by zero spawn level");
+                this.LogVerboseInstanced($"Suppressed by zero spawn level");
                 return true;
             }
             if (!ExperienceModeManager.s_CurrentGameMode.m_XPMode.m_NoPredatorsFirstDay)
             {
-                LogTrace($"No predator grace period, not suppressed");
+                this.LogVerboseInstanced($"No predator grace period, not suppressed");
                 return false;
             }
             if (mSpawnRegion.m_AiTypeSpawned != AiType.Predator)
             {
-                LogTrace($"Non-predator spawn region, not suppressed");
+                this.LogVerboseInstanced($"Non-predator spawn region, not suppressed");
                 return false;
             }
             if (mSpawnRegion.m_ForcePredatorOverride)
             {
-                LogTrace($"Forced predator override, not suppressed");
+                this.LogVerboseInstanced($"Forced predator override, not suppressed");
                 return false;
             }
             if (GetCurrentTimelinePoint() >= Il2Cpp.SpawnRegionManager.m_NoPredatorSpawningInVoyageurHours)
             {
-                LogTrace($"Past grace period, not suppressed");
+                this.LogVerboseInstanced($"Past grace period, not suppressed");
                 return false;
             }
-            LogTrace($"Predator spawn region suppressed during predator grace period");
+            this.LogVerboseInstanced($"Predator spawn region suppressed during predator grace period");
             return true;
         }
 
@@ -1353,22 +1365,22 @@ namespace ExpandedAiFramework
             PlayerManager playerManager = GameManager.m_PlayerManager;
             if (playerManager.m_Ghost)
             {
-                LogTrace($"Ghost, not too close");
+                this.LogTraceInstanced($"Ghost, not too close");
                 return false;
             }
             if (Utils.PositionIsOnscreen(spawnPos) 
                 && Utils.DistanceToMainCamera(spawnPos) < GameManager.m_SpawnRegionManager.m_AllowSpawnOnscreenDistance
                 && !mSpawnRegion.m_OverrideDistanceToCamera)
             {
-                LogTrace($"Position is on screen and dist to main camera within allowSpawnOnScreenDistance and spawnRegion.m_OverrideDistanceToCamera is false, too close for spawn");
+                this.LogTraceInstanced($"Position is on screen and dist to main camera within allowSpawnOnScreenDistance and spawnRegion.m_OverrideDistanceToCamera is false, too close for spawn");
                 return true;
             }
             if (Utils.PositionIsInLOSOfPlayer(spawnPos) && !mSpawnRegion.m_OverrideCameraLineOfSight)
             {
-                LogTrace($"Position in LOS of player and no camera LOS override, too close to spawn");
+                this.LogTraceInstanced($"Position in LOS of player and no camera LOS override, too close to spawn");
                 return true;
             }
-            LogTrace($"ScreenPos not too close to spawn!");
+            this.LogTraceInstanced($"ScreenPos not too close to spawn!");
             return false;
         }
 
@@ -1378,7 +1390,7 @@ namespace ExpandedAiFramework
             PlayerManager playerManager = GameManager.m_PlayerManager;
             if (playerManager.m_Ghost)
             {
-                LogTrace($"Ghost, not too close");
+                this.LogTraceInstanced($"Ghost, not too close");
                 return false;
             }
 
@@ -1389,10 +1401,10 @@ namespace ExpandedAiFramework
             }
             if (Vector3.Distance(GameManager.m_vpFPSCamera.transform.position, spawnPos) <= closestDistToPlayer)
             {
-                LogTrace($"Too close to spawn");
+                this.LogTraceInstanced($"Too close to spawn");
                 return true;
             }
-            LogTrace($"NOT Too close to spawn");
+            this.LogTraceInstanced($"NOT Too close to spawn");
             return false;
         }
 
@@ -1407,18 +1419,18 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
-                LogError($"Null DifficultySettings");
+                this.LogErrorInstanced($"Null DifficultySettings");
                 return;
             }
             if (mSpawnRegion.m_DifficultySettings.Length <= (int)mSpawnRegion.m_SpawnLevel)
             {
-                LogError($"Not enough entries in DifficultySettings for spawn level");
+                this.LogErrorInstanced($"Not enough entries in DifficultySettings for spawn level");
                 return;
             }
             SpawnRegion.DifficultyProperties difficultyProperty = mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel];
             if (difficultyProperty.IsNullOrDestroyed())
             {
-                LogError($"Null DifficultyProperty");
+                this.LogErrorInstanced($"Null DifficultyProperty");
                 return;
             }
             int spawnCount = 0;
@@ -1426,7 +1438,7 @@ namespace ExpandedAiFramework
             {
                 if (spawn.IsNullOrDestroyed())
                 {
-                    LogWarning($"Null SpawnDataProxy");
+                    this.LogWarningInstanced($"Null SpawnDataProxy");
                     continue;
                 }
                 if (spawnCount < difficultyProperty.m_MaxSimultaneousSpawnsDay)
@@ -1444,7 +1456,7 @@ namespace ExpandedAiFramework
                 }
                 if (spawnCount >= difficultyProperty.m_MaxSimultaneousSpawnsDay)
                 {
-                    LogTrace($"Maximum spawns reached");
+                    this.LogTraceInstanced($"Maximum spawns reached");
                     return;
                 }
             }
@@ -1457,7 +1469,7 @@ namespace ExpandedAiFramework
             {
                 if (spawn.IsNullOrDestroyed())
                 {
-                    LogWarning($"Null SpawnDataProxy");
+                    this.LogWarningInstanced($"Null SpawnDataProxy");
                     continue;
                 }
                 QueueSerializedRespawnPending(spawn);
@@ -1475,25 +1487,25 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_AiTypeSpawned = AiType.Ambient;
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
-                LogTrace($"null spawnable prefab on spawn region, fetching...");
+                this.LogTraceInstanced($"null spawnable prefab on spawn region, fetching...");
                 AssetReferenceAnimalPrefab animalReferencePrefab = mSpawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(WildlifeMode.Normal);
                 mSpawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
                 animalReferencePrefab.ReleaseAsset();
             }
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
-                LogError($"Could not fetch spawnable prefab!");
+                this.LogErrorInstanced($"Could not fetch spawnable prefab!");
                 return;
             }
 
             if (!mSpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi baseAi))
             {
-                LogError($"Could not fetch baseai script from spawnable prefab");
+                this.LogErrorInstanced($"Could not fetch baseai script from spawnable prefab");
                 return;
             }
             if (GetSpawnablePrefabName() == string.Empty)
             {
-                LogError($"Could not set spawnable prefab name!");
+                this.LogErrorInstanced($"Could not set spawnable prefab name!");
                 return;
             }
 
@@ -1512,19 +1524,19 @@ namespace ExpandedAiFramework
             GameModeConfig gameModeConfig = ExperienceModeManager.s_CurrentGameMode;
             if (gameModeConfig.IsNullOrDestroyed())
             {
-                LogError($"null GameModeConfig");
+                this.LogErrorInstanced($"null GameModeConfig");
                 return;
             }
             ExperienceMode currentExperienceMode = gameModeConfig.m_XPMode;
             if (currentExperienceMode.IsNullOrDestroyed())
             {
-                LogError($"null ExperienceMode");
+                this.LogErrorInstanced($"null ExperienceMode");
                 return;
             }
             ExperienceModeManager experienceModeManager = GameManager.m_ExperienceModeManager;
             if (experienceModeManager.IsNullOrDestroyed())
             {
-                LogError($"null ExperienceModeManager");
+                this.LogErrorInstanced($"null ExperienceModeManager");
                 return;
             }
             mSpawnRegion.m_SpawnLevel = currentExperienceMode.GetSpawnRegionLevel(baseAi.m_AiTag);
@@ -1535,7 +1547,7 @@ namespace ExpandedAiFramework
                 CustomExperienceMode customMode = experienceModeManager.GetCustomMode();
                 if (customMode.IsNullOrDestroyed())
                 {
-                    LogError($"Null CustomMode");
+                    this.LogErrorInstanced($"Null CustomMode");
                     return;
                 }
                 mSpawnRegion.m_NumHoursBetweenRespawns *= customMode.m_LookupTable.m_WildlifeRespawnTimeModifierList.GetValue(customMode.m_WildlifeSpawnFrequency);
@@ -1545,7 +1557,7 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_Center = mSpawnRegion.transform.position;
             if (mSpawnRegion.m_PathManagers == null)
             {
-                LogError($"Could not construct mSpawnRegion.m_PathManagers");
+                this.LogErrorInstanced($"Could not construct mSpawnRegion.m_PathManagers");
                 return;
             }
 
@@ -1573,6 +1585,7 @@ namespace ExpandedAiFramework
                     Il2Cpp.SpawnRegion.m_SpawnDataProxyPool[i] = new SpawnDataProxy();
                 }
             }
+            mManager.QueueNewSpawns(this);
         }
 
 
@@ -1587,13 +1600,13 @@ namespace ExpandedAiFramework
             AreaMarkupManager areaMarkupManager = GameManager.m_AreaMarkupManager;
             if (areaMarkupManager.IsNullOrDestroyed())
             {
-                LogError($"null AreaMarkupManager");
+                this.LogErrorInstanced($"null AreaMarkupManager");
                 return false;
             }
             AreaMarkup areaMarkup = areaMarkupManager.GetRandomSpawnAreaMarkupGivenSpawnRegion(mSpawnRegion);
             if (!areaMarkup.IsNullOrDestroyed())
             {
-                LogTrace($"Found AreaMarkup");
+                this.LogTraceInstanced($"Found AreaMarkup");
                 spawnPos = areaMarkup.transform.position;
                 return true;
             }
@@ -1605,10 +1618,10 @@ namespace ExpandedAiFramework
                                                 mSpawnRegion.m_Radius,
                                                 AiUtils.GetNavmeshArea(mSpawnRegion.transform.position)))
             {
-                LogTrace($"Found Random navmesh point");
+                this.LogTraceInstanced($"Found Random navmesh point");
                 return true;
             }
-            LogTrace($"Couldnt get a valid position and rotation");
+            this.LogTraceInstanced($"Couldnt get a valid position and rotation");
             return false;
         }
 
@@ -1617,13 +1630,13 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Count > 0)
             {
-                LogTrace($"Found deferred spawns with random position, spawning immediately");
+                this.LogTraceInstanced($"Found deferred spawns with random position, spawning immediately");
                 SpawnWithRandomPositions(mSpawnRegion.m_DeferredSpawnsWithRandomPosition, mSpawnRegion.m_DeferredSpawnWildlifeMode);
                 mSpawnRegion.m_DeferredSpawnsWithRandomPosition.Clear();
             }
             if (mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Count > 0)
             {
-                LogTrace($"Found deferred spawns with saved position, Queueing");
+                this.LogTraceInstanced($"Found deferred spawns with saved position, Queueing");
                 for (int i = 0, iMax = mSpawnRegion.m_DeferredSpawnsWithSavedPosition.Count; i < iMax; i++)
                 {
                     QueueSerializedRespawnPending(mSpawnRegion.m_DeferredSpawnsWithSavedPosition[i]);
@@ -1646,7 +1659,7 @@ namespace ExpandedAiFramework
         {
             if (!HasDeferredDeserializeCompleted())
             {
-                LogTrace($"Awaiting HasDeferredDeserializeCompleted");
+                this.LogTraceInstanced($"Awaiting HasDeferredDeserializeCompleted");
                 return;
             }
             if (mSpawnRegion.m_HasBeenDisabledByAurora)

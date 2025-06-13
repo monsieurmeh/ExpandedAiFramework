@@ -11,8 +11,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion sr)
         {
-            LogTrace($"Intercepting SpawnRegionManager.Add(SpawnRegion sr)!");
-            SpawnRegionManager_AddSpawnRegion(sr);
+            //SpawnRegionManager_AddSpawnRegion(sr);
             return false;
         }
     }
@@ -23,7 +22,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(NoSpawnRegion nsr)
         {
-            LogTrace($"Intercepting SpawnRegionManager.Add(NoSpawnRegion nsr)!");
             SpawnRegionManager_AddNoSpawnRegion(nsr);
             return false;
         }
@@ -35,7 +33,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(string text)
         {
-            LogTrace($"Intercepting SpawnRegionManager.Deserialize(string text)!");
             SpawnRegionManager_Deserialize(text);
             return false;
         }
@@ -47,7 +44,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(string guid, ref SpawnRegion __result)
         {
-            LogTrace($"Intercepting SpawnRegionManager.FindSpawnRegionByGuid(string text)!");
             __result = SpawnRegionManager_FindSpawnRegionByGuid(guid);
             return false;
         }
@@ -59,7 +55,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegionSaveData saveData, ref SpawnRegion __result)
         {
-            LogTrace($"Intercepting SpawnRegionManager.FindSpawnRegionByPosition(SpawnRegionSaveData saveData)!");
             __result = SpawnRegionManager_FindSpawnRegionByPosition(saveData);
             return false;
         }
@@ -71,7 +66,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref GameObject __result)
         {
-            LogTrace($"Intercepting SpawnRegionManager.GetClosestActiveSpawn(Vector3 pos, string filterSpawnablePrefabName)!");
             __result = SpawnRegionManager_GetClosestActiveSpawn(pos, filterSpawnablePrefabName);
             return false;
         }
@@ -83,7 +77,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion otherSpawnRegion, float range, bool enable)
         {
-            LogTrace($"Intercepting SpawnRegionManager.MaybeEnableSpawnRegionsInRange(SpawnRegion otherSpawnRegion, float range, bool enable)!");
             SpawnRegionManager_MaybeEnableSpawnRegionsInRange(otherSpawnRegion, range, enable);
             return false;
         }
@@ -95,7 +88,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(bool enabled)
         {
-            LogTrace($"Intercepting SpawnRegionManager.OnAuroraEnabled(bool enabled)!");
             SpawnRegionManager_OnAuroraEnabled(enabled);
             return false;
         }
@@ -107,7 +99,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref SpawnRegion __result)
         {
-            LogTrace($"Intercepting SpawnRegionManager.PointInsideActiveSpawnRegion(Vector3 pos, string filterSpawnablePrefabName)!");
             __result = SpawnRegionManager_PointInsideActiveSpawnRegion(pos, filterSpawnablePrefabName);
             return false;
         }
@@ -121,7 +112,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref SpawnRegion __result)
         {
-            LogTrace($"Intercepting SpawnRegionManager.PointInsideSpawnRegion(Vector3 pos, string filterSpawnablePrefabName)!");
             __result = SpawnRegionManager_PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
             return false;
         }
@@ -133,7 +123,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(Vector3 pos, ref bool __result)
         {
-            LogTrace($"Intercepting SpawnRegionManager.PointInsideNoSpawnRegion(Vector3 pos)!");
             __result = SpawnRegionManager_PointInsideNoSpawnRegion(pos);
             return false;
         }
@@ -147,8 +136,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion sr)
         {
-            LogTrace($"Intercepting SpawnRegionManager.Remove(SpawnRegion sr)!");
-            SpawnRegionManager_Remove(sr);
+            //SpawnRegionManager_Remove(sr);
             return false;
         }
     }
@@ -160,7 +148,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(ref string __result)
         {
-            LogTrace($"Intercepting SpawnRegionManager.Serialize()!");
             __result = SpawnRegionManager_Serialize();
             return false;
         }
@@ -172,7 +159,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix()
         {
-            LogTrace($"Intercepting SpawnRegionManager.Start()!");
             SpawnRegionManager_Start();
             return false;
         }

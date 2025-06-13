@@ -33,28 +33,28 @@ namespace ExpandedAiFramework.WanderingWolfMod
         {
             if (proxy == null)
             {
-                LogTrace("Null Proxy, getting new wander path");
+                this.LogTraceInstanced("Null Proxy, getting new wander path");
                 return false;
             }
             if (proxy.CustomData == null)
             {
-                LogTrace($"Null custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
+                this.LogTraceInstanced($"Null custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
                 return false;
             }
             if (proxy.CustomData.Length == 0) 
             {
-                LogTrace($"Zero-length custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
+                this.LogTraceInstanced($"Zero-length custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
                 return false;
             }
             Guid spotGuid = new Guid(proxy.CustomData[0]);
             if (spotGuid == Guid.Empty) 
             {
-                LogTrace($"Empty GUID on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
+                this.LogTraceInstanced($"Empty GUID on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
                 return false;
             }
             if (!mManager.DataManager.AvailableWanderPaths.TryGetValue(spotGuid, out WanderPath wanderPath))
             {
-                LogTrace($"Could not fetch WanderPath with guid {spotGuid} from proxy with guid <<{proxy.Guid}>>>, getting new wander path");
+                this.LogTraceInstanced($"Could not fetch WanderPath with guid {spotGuid} from proxy with guid <<{proxy.Guid}>>>, getting new wander path");
                 return false;
             }
             AttachWanderPath(wanderPath);
@@ -105,10 +105,10 @@ namespace ExpandedAiFramework.WanderingWolfMod
             switch (CurrentMode)
             {
                 case AiMode.FollowWaypoints:
-                    LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessFollowWaypointsCustom.");
+                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessFollowWaypointsCustom.");
                     return ProcessFollowWaypointsCustom();
                 default:
-                    LogVerbose($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
+                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
                     return base.ProcessCustom();
             }
         }

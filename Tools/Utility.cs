@@ -235,13 +235,17 @@ namespace ExpandedAiFramework
 
         private static string GetLastCallerType()
         {
-            Type type = new System.Diagnostics.StackTrace().GetFrame(2)?.GetMethod()?.DeclaringType;
-            if (type == null)
+            StackTrace stackTrace = new StackTrace();
+            for (int i = 2, iMax = stackTrace.FrameCount; i < iMax; i++)
             {
-                return "UNKNOWN";
+                Type type = new StackTrace().GetFrame(i)?.GetMethod()?.DeclaringType;
+                if (type == typeof(Utility))
+                {
+                    continue;
+                }
+                return type == null ? "UNKNOWN" : GetFriendlyTypeName(type);
             }
-            return GetFriendlyTypeName(type);
-
+            return "ERROR";
         }
 
 
@@ -274,7 +278,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public static void LogDebug(string message,[CallerMemberName] string memberName = "")
+        public static void LogDebug(string message, [CallerMemberName] string memberName = "")
         {
             Manager.Log(message, FlaggedLoggingLevel.Debug, false, GetLastCallerType(), memberName);
         }
@@ -282,7 +286,7 @@ namespace ExpandedAiFramework
 
         public static void LogVerbose(string message, [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Verbose, false, GetLastCallerType(), memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Verbose, false,GetLastCallerType(), memberName);
         }
 
 
