@@ -173,14 +173,9 @@ namespace ExpandedAiFramework.CompanionWolfMod
             LogVerbose($"Reparenting...");
             baseAi.ReparentBaseAi(wolfContainer.transform);
             LogVerbose($"Wrapping...");
-            if (!mManager.TryInjectCustomAi(baseAi, typeof(CompanionWolf), null))
+            if (!mManager.AiManager.TryInjectCustomAi(baseAi, typeof(CompanionWolf), null, out CustomBaseAi wrapper))
             {
-                return;
-            }
-            LogVerbose($"re-grabbing wrapper..");
-            if (!mManager.CustomAis.TryGetValue(baseAi.GetHashCode(), out CustomBaseAi wrapper))
-            {
-                LogError("Did not find new wrapper for new base ai!");
+                LogError("Could not re-inject CompanionWolf!");
                 return;
             }
             LogVerbose($"Grabbing Instance..");

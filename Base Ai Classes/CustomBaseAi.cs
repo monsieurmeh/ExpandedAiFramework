@@ -302,20 +302,20 @@ namespace ExpandedAiFramework
         {
             if (!PreprocesSetAiModeCustom(mode, out mode))
             {
-                this.LogTraceInstanced($"ProcessSetAiModeCustom injection, routing mode to {mode}");
+                this.LogVerboseInstanced($"ProcessSetAiModeCustom injection, routing mode to {mode}");
                 return mode;
             }
             if (mode > AiMode.Disabled)
             {
                 //Vanilla logic does not know how to pre-process new ai modes, return early here with current mode
-                this.LogTraceInstanced($"Custom AI mode {mode} not handled by custom implementation, deferring to current mode as a fallback");
+                this.LogVerboseInstanced($"Custom AI mode {mode} not handled by custom implementation, deferring to current mode as a fallback");
                 return mode;
             }
             if (mode == AiMode.Flee)
             {
                 if (CurrentMode == AiMode.Flee && mBaseAi.m_FleeReason == AiFleeReason.AfterPassingAttack)
                 {
-                    this.LogTraceInstanced($"Ai is fleeign after passing attack, preventing change mode to {mode}");
+                    this.LogVerboseInstanced($"Ai is fleeign after passing attack, preventing change mode to {mode}");
                     return AiMode.None;
                 }
             }
@@ -323,7 +323,7 @@ namespace ExpandedAiFramework
             {
                 if (mBaseAi.IsTooScaredToAttack())
                 {
-                    this.LogTraceInstanced($"Ai is too scared to attack, preventing change mode to {mode}");
+                    this.LogVerboseInstanced($"Ai is too scared to attack, preventing change mode to {mode}");
                     return AiMode.None;
                 }
                 bool skip = false;
@@ -333,20 +333,20 @@ namespace ExpandedAiFramework
                     {
                         if (CurrentMode == AiMode.Attack)
                         {
-                            this.LogTraceInstanced($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}");
+                            this.LogVerboseInstanced($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}");
                             return AiMode.None;
                         }
                         if (PackManager.InPack(mBaseAi.m_PackAnimal))
                         {
                             if (!GameManager.m_PackManager.CanAttack(mBaseAi.m_PackAnimal, false))
                             {
-                                this.LogTraceInstanced($"Ai is timberwolf that can't attack due to pack mechanics, changing {mode} to HoldGround");
+                                this.LogVerboseInstanced($"Ai is timberwolf that can't attack due to pack mechanics, changing {mode} to HoldGround");
                                 mode = AiMode.HoldGround;
                             }
                         }
                         else
                         {
-                            this.LogTraceInstanced($"AI is timberwolf without a pack, routing {mode} to Flee");
+                            this.LogVerboseInstanced($"AI is timberwolf without a pack, routing {mode} to Flee");
                             mode = AiMode.Flee;
                         }
                         skip = true;
@@ -356,12 +356,12 @@ namespace ExpandedAiFramework
                 {
                     if (MaybeHoldGround())
                     {
-                        this.LogTraceInstanced($"MaybeHoldGround returned true and set aimode itself, preventing mode change to {mode}");
+                        this.LogVerboseInstanced($"MaybeHoldGround returned true and set aimode itself, preventing mode change to {mode}");
                         return AiMode.None;
                     }
                     if (!mBaseAi.CanPathfindToPosition(mBaseAi.m_CurrentTarget?.transform?.position ?? Vector3.positiveInfinity, MoveAgent.PathRequirement.FullPath))
                     {
-                        this.LogTraceInstanced($"Can't reach target, changing {mode} to {mBaseAi.m_DefaultMode}");
+                        this.LogVerboseInstanced($"Can't reach target, changing {mode} to {mBaseAi.m_DefaultMode}");
                         mBaseAi.CantReachTarget();
                         return mBaseAi.m_DefaultMode;
                     }
@@ -369,7 +369,7 @@ namespace ExpandedAiFramework
             }
             else if (mode == AiMode.Wander && mBaseAi.Timberwolf != null && PackManager.InPack(mBaseAi.m_PackAnimal) && GameManager.m_PackManager.IsPackCombatRestricted(mBaseAi.m_PackAnimal))
             {
-                this.LogTraceInstanced($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}");
+                this.LogVerboseInstanced($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}");
                 mode = AiMode.HoldGround;
             }
             if (mode == AiMode.Wander || mode == AiMode.Flee)
@@ -381,7 +381,7 @@ namespace ExpandedAiFramework
             }
             else if (mode == AiMode.None)
             {
-                this.LogTraceInstanced($"Mode change of AiMode.None not caught during preprocessing, changing to idle");
+                this.LogVerboseInstanced($"Mode change of AiMode.None not caught during preprocessing, changing to idle");
                 mode = AiMode.Idle;
             }
             /* weird HL bug catch?
@@ -413,7 +413,7 @@ namespace ExpandedAiFramework
             }
             if (CurrentMode == AiMode.Stunned && mBaseAi.IsStunTimerActive() && mode != AiMode.Dead && mode != AiMode.ScriptedSequence)
             {
-                this.LogTraceInstanced($"Trying to set AiMode to mode {mode} while stunned and stun timer is active, triggering early out");
+                this.LogVerboseInstanced($"Trying to set AiMode to mode {mode} while stunned and stun timer is active, triggering early out");
                 return AiMode.None;
             }
             return mode;
@@ -425,7 +425,7 @@ namespace ExpandedAiFramework
             mode = PreprocessNewAiMode(mode);
             if (mode == AiMode.None)
             {
-                this.LogTraceInstanced($"ProcessNewAiMode returned AiMode.None, early-outting setAiMode");
+                this.LogVerboseInstanced($"ProcessNewAiMode returned AiMode.None, early-outting setAiMode");
                 return;
             }
             ExitAiMode(CurrentMode);
@@ -603,7 +603,7 @@ namespace ExpandedAiFramework
 
             if (holdingGround)
             {
-                this.LogTraceInstanced($"Holding ground!");
+                this.LogVerboseInstanced($"Holding ground!");
                 SetAiMode(AiMode.HoldGround);
             }
             return holdingGround;
@@ -790,7 +790,7 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            this.LogTraceInstanced($"Scanning for new target...");
+            this.LogVerboseInstanced($"Scanning for new target...");
             mBaseAi.m_TimeForNextTargetScan = Time.time + UnityEngine.Random.Range(0.1f, 0.5f); //todo: yoink out the hard coded values
             Vector3 eyePosition = mBaseAi.GetEyePos();
             float distanceToNearestTarget = float.MaxValue;
@@ -829,11 +829,11 @@ namespace ExpandedAiFramework
 
             if (nearestTarget == null)
             {
-                this.LogTraceInstanced($"No possible additional candidates during scan for new targets");
+                this.LogVerboseInstanced($"No possible additional candidates during scan for new targets");
                 return;
             }
 
-            this.LogTraceInstanced($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
+            this.LogVerboseInstanced($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
             AiTarget previousTarget = mBaseAi.m_CurrentTarget;
             mBaseAi.m_CurrentTarget = nearestTarget;
 
@@ -848,7 +848,7 @@ namespace ExpandedAiFramework
                 {
                     if (!mBaseAi.CanPlayerBeReached(mBaseAi.m_CurrentTarget.transform.position, MoveAgent.PathRequirement.FullPath) || !CanSeeTarget(false))
                     {
-                        this.LogTraceInstanced($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
+                        this.LogVerboseInstanced($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
                         mBaseAi.m_CurrentTarget = null;
                         return;
                     }
@@ -866,7 +866,7 @@ namespace ExpandedAiFramework
             GameManager.m_PackManager.MaybeAlertMembers(mBaseAi.m_PackAnimal);
             if (!packForming)
             {
-                this.LogTraceInstanced($"Target detected, running ChangeModeWhenTargetDetected");
+                this.LogVerboseInstanced($"Target detected, running ChangeModeWhenTargetDetected");
                 ChangeModeWhenTargetDetected(); 
             }
 
@@ -936,7 +936,7 @@ namespace ExpandedAiFramework
                 Feat_MasterHunter bigCatKillerFeat = FeatsManager.m_Feat_MasterHunter;
                 if (bigCatKillerFeat.IsUnlockedAndEnabled())
                 {
-                    this.LogTraceInstanced($"Master hunter feat enabled! AiSightRangeScale is {bigCatKillerFeat.m_AiSightRangeScale} and SightScale is {bigCatKillerFeat.m_SightScale}");
+                    this.LogVerboseInstanced($"Master hunter feat enabled! AiSightRangeScale is {bigCatKillerFeat.m_AiSightRangeScale} and SightScale is {bigCatKillerFeat.m_SightScale}");
                     bigCatKillerScalar = bigCatKillerFeat.m_AiSightRangeScale;
                 }
                 else
@@ -1368,7 +1368,7 @@ namespace ExpandedAiFramework
 
         protected void SetDefaultAiMode()
         {
-            this.LogTraceInstanced($"For whatever reason, ai mode is being set to default by the mod!");
+            this.LogVerboseInstanced($"For whatever reason, ai mode is being set to default by the mod!");
             SetAiMode(mBaseAi.m_DefaultMode);
         }
 

@@ -21,7 +21,6 @@ namespace ExpandedAiFramework.AmbushWolfMod
         protected bool Initialize()
         {
             AmbushWolfManager manager = new AmbushWolfManager();
-            manager.Initialize(EAFManager.Instance);
             EAFManager.Instance.RegisterSubmanager(typeof(AmbushWolf), manager);
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(AmbushWolf), AmbushWolf.AmbushWolfSettings))
             {

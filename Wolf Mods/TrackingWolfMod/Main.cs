@@ -19,6 +19,8 @@ namespace ExpandedAiFramework.TrackingWolfMod
 
         protected bool Initialize()
         {
+            TrackingWolfManager manager = new TrackingWolfManager();
+            EAFManager.Instance.RegisterSubmanager(typeof(TrackingWolf), manager);
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(TrackingWolf), TrackingWolf.TrackingWolfSettings))
             {
                 Utility.LogError("Could not register TrackingWolf spawning!");

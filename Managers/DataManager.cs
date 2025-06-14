@@ -27,7 +27,7 @@ namespace ExpandedAiFramework
         private bool mProxyDataLoaded = false;
         private bool mSpawnRegionModDataProxiesUncached = false;
         private bool mSpawnModDataProxiesUncached = false;
-        private string mLastSceneName = string.Empty;
+        private string mLastValidGameplaySceneName = string.Empty;
 #if DEV_BUILD
         private ModDataManager mModData = new ModDataManager(ModName, true);
 #else
@@ -48,6 +48,7 @@ namespace ExpandedAiFramework
         public WanderPathManager WanderPathManager { get { return mWanderPathManager; } }
         public Dictionary<Guid, WanderPath> AvailableWanderPaths { get { return mWanderPathManager.AvailableData; } }
         public Dictionary<string, List<WanderPath>> WanderPaths { get { return mWanderPathManager.Data; } }
+        public string LastValidGameplaySceneName { get { return mLastValidGameplaySceneName; } }
         public bool TryRegisterActiveSpawnModDataProxy(SpawnModDataProxy newProxy) => mActiveSpawnModDataProxies.TryAdd(newProxy.Guid, newProxy);
         public bool TryRegisterActiveSpawnRegionModDataProxy(SpawnRegionModDataProxy newProxy) => mActiveSpawnRegionModDataProxies.TryAdd(newProxy.Guid, newProxy);
         public void GetNearestHidingSpotAsync(Vector3 position, Action<HidingSpot> callback, int extraNearestCandidatesToMaybePickFrom = 0) => mHidingSpotManager.GetNearestMapDataAsync(position, callback, extraNearestCandidatesToMaybePickFrom);
@@ -66,6 +67,8 @@ namespace ExpandedAiFramework
             mapDataManager = matchedMapDataManager;
             return true;
         }
+        public bool TryGetActiveSpawnRegionModDataProxy(Guid guid, out SpawnRegionModDataProxy proxy) => mActiveSpawnRegionModDataProxies.TryGetValue(guid, out proxy);
+        public bool TryGetActiveSpawnModDataProxy(Guid guid, out SpawnModDataProxy proxy) => mActiveSpawnModDataProxies.TryGetValue(guid, out proxy);
         #endregion
 
 
@@ -127,7 +130,24 @@ namespace ExpandedAiFramework
             mSpawnModDataProxiesUncached = false;
             mProxyDataLoaded = false;
             mSpawnRegionModDataProxiesUncached = false;
+            mLastValidGameplaySceneName = string.Empty;
         }
+
+
+        private void RefreshLastValidGameplaySceneName()
+        {
+            if (!string.IsNullOrEmpty(mManager.CurrentScene))
+            {
+                mLastValidGameplaySceneName = mManager.CurrentScene;
+                return;
+            }
+            else if (GameManager.m_ActiveScene != null && IsValidGameplayScene(GameManager.m_ActiveScene, out mLastValidGameplaySceneName))
+            {
+                return;
+            }
+            LogWarning($"Cannot resolve valid gameplay scene for data loading!");
+        }
+
 
         public override void OnLoadScene(string sceneName)
         {
@@ -154,8 +174,8 @@ namespace ExpandedAiFramework
 
         public override void OnInitializedScene(string sceneName)
         {
-            mLastSceneName = mManager.CurrentScene;
-            RefreshAvailableMapData(mLastSceneName);
+            RefreshLastValidGameplaySceneName();
+            RefreshAvailableMapData(mLastValidGameplaySceneName);
         }
 
 
@@ -166,9 +186,11 @@ namespace ExpandedAiFramework
         }
 
 
+
         public void LoadProxies()
         {
-            if (!mProxyDataLoaded && GameManager.m_ActiveScene != null && Utility.IsValidGameplayScene(GameManager.m_ActiveScene, out string parsedSceneName))
+            RefreshLastValidGameplaySceneName();
+            if (!mProxyDataLoaded)
             {
                 mProxyDataLoaded = true;
                 LogTrace($"Loading SpawnRegionModProxyData and SpawnModProxyData library for current save...");
@@ -187,19 +209,19 @@ namespace ExpandedAiFramework
         
         public void UncacheProxies()
         {
-            UncacheSpawnRegionModDataProxies(mLastSceneName);
-            UncacheSpawnModDataProxies(mLastSceneName);
+            UncacheSpawnRegionModDataProxies(mLastValidGameplaySceneName);
+            UncacheSpawnModDataProxies(mLastValidGameplaySceneName);
         }
 
 
         public void RefreshAvailableMapData(string sceneName)
         {
-            if (!mMapDataInitialized)
+            if (mMapDataInitialized)
             {
-
+                return;
             }
-
-            LogVerbose($"[{nameof(DataManager)}.{nameof(RefreshAvailableMapData)}] Loading EAF map data for scene {sceneName}");
+            mMapDataInitialized = true;
+            LogVerbose($"Loading EAF map data for scene {sceneName}");
             foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.RefreshData(sceneName);
@@ -209,7 +231,7 @@ namespace ExpandedAiFramework
 
         public void SaveMapData()
         {
-            LogVerbose($"[{nameof(DataManager)}.{nameof(SaveMapData)}] Saving");
+            LogVerbose($"Saving");
             foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.Save();
@@ -219,7 +241,7 @@ namespace ExpandedAiFramework
 
         public void LoadMapData()
         {
-            LogVerbose($"[{nameof(DataManager)}.{nameof(LoadMapData)}] Loading");
+            LogVerbose($"Loading");
             foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.Load();
@@ -229,7 +251,7 @@ namespace ExpandedAiFramework
 
         public void ClearMapData()
         {
-            LogVerbose($"[{nameof(DataManager)}.{nameof(ClearMapData)}] Clearing");
+            LogVerbose($"Clearing");
             foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.Clear();
@@ -321,12 +343,12 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            if (mLastSceneName == string.Empty)
+            if (mLastValidGameplaySceneName == string.Empty)
             {
                 return;
             }
-            LogTrace($"Caching spawn region mod data proxies to scene {mLastSceneName}!");
-            List<SpawnRegionModDataProxy> cachedProxies = GetCachedSpawnRegionModDataProxies(mLastSceneName);
+            LogTrace($"Caching spawn region mod data proxies to scene {mLastValidGameplaySceneName}!");
+            List<SpawnRegionModDataProxy> cachedProxies = GetCachedSpawnRegionModDataProxies(mLastValidGameplaySceneName);
             cachedProxies.Clear();
             foreach (SpawnRegionModDataProxy proxy in mActiveSpawnRegionModDataProxies.Values)
             {
@@ -387,10 +409,10 @@ namespace ExpandedAiFramework
             }
             if (!mUnmatchedSpawnRegionModDataProxies.TryGetValue(guid, out matchedProxy))
             {
-                LogTrace($"Couldnt find unmached spawn region mod data proxy with guid {guid}");
+                LogVerbose($"Couldnt find unmached spawn region mod data proxy with guid {guid}");
                 return false;
             }
-            LogTrace($"Matched against spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}, uncaching and wrapping");
+            LogVerbose($"Matched against spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}, uncaching and wrapping");
             if (!mActiveSpawnRegionModDataProxies.TryAdd(guid, matchedProxy))
             {
                 LogError($"Guid collision while trying to activate unmatched spawn region mod data proxy with guid {guid}!");
@@ -489,12 +511,12 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            if (mLastSceneName == string.Empty)
+            if (mLastValidGameplaySceneName == string.Empty)
             {
                 return;
             }
-            LogTrace($"Caching spawn mod data proxies to scene {mLastSceneName}!");
-            List<SpawnModDataProxy> cachedProxies = GetCachedSpawnModDataProxies(mLastSceneName);
+            LogTrace($"Caching spawn mod data proxies to scene {mLastValidGameplaySceneName}!");
+            List<SpawnModDataProxy> cachedProxies = GetCachedSpawnModDataProxies(mLastValidGameplaySceneName);
             cachedProxies.Clear();
             foreach (SpawnModDataProxy proxy in mActiveSpawnModDataProxies.Values)
             {
@@ -593,7 +615,7 @@ namespace ExpandedAiFramework
             }
             if (availableProxies.Count == 0)
             {
-                LogTrace($"No available proxies queued, generate a new one.");
+                EAFManager.LogWithStackTrace($"No available proxies queued, generate a new one.");
                 return false;
             }
             if (!mActiveSpawnModDataProxies.TryGetValue(availableProxies[0], out proxy))

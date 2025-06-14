@@ -22,15 +22,17 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public void Update() { }
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
+            LogVerbose($"proxy with guid <<<{proxy.Guid}>>> has custom data: {proxy.CustomData != null} with length: {proxy.CustomData?.Length ?? 0}");
             if (proxy.CustomData == null || proxy.CustomData.Length == 0 || !mManager.DataManager.AvailableWanderPaths.ContainsKey(new Guid(proxy.CustomData[0])))
             {
+                LogVerbose($"No custom data, short custom data or no available wanderpath using packed GUID for proxy with guid <<<{proxy.Guid}>>>, dispatching request for new");
                 proxy.AsyncProcessing = true;
                 mManager.DataManager.GetNearestWanderPathAsync(proxy.CurrentPosition, WanderPathTypes.IndividualPath, new Action<WanderPath>((spot) =>
                 {
                     proxy.AsyncProcessing = false;
                     if (spot != null)
                     {
-                        LogDebug($"Attaching wanderpath with guid <<<{spot.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>");
+                        LogVerbose($"Attaching wanderpath with guid <<<{spot.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>");
                         proxy.CustomData = [spot.Guid.ToString()];
                         spot.Claim();
                     }

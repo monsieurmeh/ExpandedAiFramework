@@ -20,6 +20,7 @@ namespace ExpandedAiFramework
         public AiSubType AiSubType;
         public float LastDespawnTime;
         public string VariantSpawnTypeString;
+        public bool ForceSpawn;
 
         public Type VariantSpawnType { get { return mVariantSpawnType; } }
 

@@ -109,8 +109,9 @@ namespace ExpandedAiFramework
         }
 
 
-        public bool TryInjectRandomCustomAi(BaseAi baseAi, SpawnRegion region)
+        public bool TryInjectRandomCustomAi(BaseAi baseAi, SpawnRegion region, out CustomBaseAi newCustomBaseAi)
         {
+            newCustomBaseAi = null;
             if (baseAi == null)
             {
                 LogTrace($"Null base ai, can't augment.");
@@ -140,15 +141,15 @@ namespace ExpandedAiFramework
             if (spawnType == typeof(void))
             {
                 LogTrace($"No spawn type available from type picker or manager overrides for base ai {baseAi.gameObject.name}, defaulting to fallback...");
-                return TryInjectCustomBaseAi(baseAi, region);
+                return TryInjectCustomBaseAi(baseAi, region, out newCustomBaseAi);
             }
-            return TryInjectCustomAi(baseAi, spawnType, region);
+            return TryInjectCustomAi(baseAi, spawnType, region, out newCustomBaseAi);
         }
 
 
-        public bool TryInjectCustomBaseAi(BaseAi baseAi)
+        public bool TryInjectCustomBaseAi(BaseAi baseAi, out CustomBaseAi newCustomBaseAi)
         {
-            return TryInjectCustomBaseAi(baseAi, baseAi.m_SpawnRegionParent);
+            return TryInjectCustomBaseAi(baseAi, baseAi.m_SpawnRegionParent, out newCustomBaseAi);
         }
 
 
@@ -169,15 +170,15 @@ namespace ExpandedAiFramework
         }
 
 
-        public bool TryInjectCustomBaseAi(BaseAi baseAi, SpawnRegion spawnRegion, SpawnModDataProxy proxy = null)
+        public bool TryInjectCustomBaseAi(BaseAi baseAi, SpawnRegion spawnRegion, out CustomBaseAi newCustomBaseAi, SpawnModDataProxy proxy = null)
         {
-            return TryInjectCustomAi(baseAi, GetFallbackBaseSpawnableType(baseAi), spawnRegion, proxy);
+            return TryInjectCustomAi(baseAi, GetFallbackBaseSpawnableType(baseAi), spawnRegion, out newCustomBaseAi, proxy);
         }
 
 
-        public bool TryInjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion region, SpawnModDataProxy proxy = null)
+        public bool TryInjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion region, out CustomBaseAi newCustomBaseAi, SpawnModDataProxy proxy = null)
         {
-            InjectCustomAi(baseAi, spawnType, region, proxy);
+            InjectCustomAi(baseAi, spawnType, region, out newCustomBaseAi, proxy);
             return true;
         }
 
@@ -194,7 +195,7 @@ namespace ExpandedAiFramework
                 LogTrace("Already wrapped this ai, no need for a second on transition to carcass state.");
                 return false;
             }
-            InjectCustomAi(baseAi, GetFallbackBaseSpawnableType(baseAi), null, null, true);
+            InjectCustomAi(baseAi, GetFallbackBaseSpawnableType(baseAi), null, out _, null, true);
             return true;
         }
 
@@ -295,15 +296,16 @@ namespace ExpandedAiFramework
         }
 
 
-        private void InjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion spawnRegion, SpawnModDataProxy proxy, bool bypassProxy = false)
+        private void InjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion spawnRegion, out CustomBaseAi newCustomBaseAi, SpawnModDataProxy proxy, bool bypassProxy = false)
         {
+            newCustomBaseAi = null;
             try
             {
                 if (!bypassProxy)
                 {
                     if (proxy == null)
                     {
-                        proxy = GenerateNewSpawnModDataProxy(mManager.CurrentScene, spawnRegion, spawnType);
+                        proxy = GenerateNewSpawnModDataProxy(mManager.DataManager.LastValidGameplaySceneName, spawnRegion, spawnType);
                     }
                     if (proxy.ParentGuid == Guid.Empty)
                     {
@@ -343,7 +345,7 @@ namespace ExpandedAiFramework
                     }
                     mDataManager.TryRegisterActiveSpawnModDataProxy(proxy);
                 }
-                CustomBaseAi newCustomBaseAi = (CustomBaseAi)baseAi.gameObject.AddComponent(Il2CppType.From(spawnType));
+                newCustomBaseAi = (CustomBaseAi)baseAi.gameObject.AddComponent(Il2CppType.From(spawnType));
                 mCustomAis.Add(baseAi.GetHashCode(), newCustomBaseAi);
                 if (newCustomBaseAi.ModDataProxy != null)
                 {

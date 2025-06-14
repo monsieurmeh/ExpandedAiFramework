@@ -20,6 +20,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
+            //LogTrace($"Intercepting Start!");
             return SpawnRegion_Start(__instance);
         }
     }
@@ -163,20 +164,6 @@ namespace ExpandedAiFramework
         internal static bool Prefix(SpawnRegion __instance)
         {
             return SpawnRegion_MaybeReRollActive(__instance);
-        }
-    }
-
-
-    [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.InstantiateSpawnInternal), new Type[] { typeof(GameObject), typeof(WildlifeMode), typeof(Vector3), typeof(Quaternion) })]
-    internal class SpawnRegionPatches_InstantiateSpawnInternal
-    {
-        private static void Postfix(BaseAi __result, SpawnRegion __instance)
-        {
-            LogVerbose($"[SpawnRegionPatches_InstantiateSpawnInternal.Postfix]: SpawnRegion.InstantiateSpawnInternal on {__result.gameObject.name} at {__result?.transform?.position ?? Vector3.zero}");
-            if (!Manager.SpawnRegionManager.TryInterceptSpawn(__result, __instance))
-            {
-                LogError("[SpawnRegionPatches_InstantiateSpawnInternal.Postfix]: Spawn intercept error!");
-            }
         }
     }
 

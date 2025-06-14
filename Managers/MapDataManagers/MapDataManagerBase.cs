@@ -52,7 +52,7 @@ namespace ExpandedAiFramework
         }
     }
 
-    public class MapDataManager<T> : MapDataManagerBase where T : MapData, new()
+    public class MapDataManager<T> : MapDataManagerBase, ILogInfoProvider where T : MapData, new()
     {
 
         private readonly object mQueueLock = new object();
@@ -66,6 +66,8 @@ namespace ExpandedAiFramework
 
         public Dictionary<string, List<T>> Data { get { return mData; } }
         public Dictionary<Guid, T> AvailableData { get { return mAvailableData; } }
+        public virtual string InstanceInfo { get { return string.Empty; } }
+        public string TypeInfo { get { return $"MapDataManager<{typeof(T).Name}>"; } }
 
 
         public override void StartWorker()
@@ -75,7 +77,7 @@ namespace ExpandedAiFramework
                 return;
             }
             mKeepTaskRunning = true;
-            LogTrace($"Starting worker thread");
+            this.LogVerboseInstanced($"Starting worker thread");
             mTask = Task.Run(Worker);
         }
 
@@ -93,7 +95,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"Error stopping MapDataManagerBase<{nameof(T)}>: {e}");
+                this.LogErrorInstanced($"Error stopping MapDataManagerBase<{nameof(T)}>: {e}");
             }
         }
 
@@ -108,7 +110,7 @@ namespace ExpandedAiFramework
                     if (mRequests.Count > 0)
                     {
                         request = mRequests.Dequeue();
-                        LogTrace($"(Queue count: {mRequests.Count + 1} -> {mRequests.Count}) Processing {request}");
+                        this.LogVerboseInstanced($"(Queue count: {mRequests.Count + 1} -> {mRequests.Count}) Processing {request}");
                     }
                 }
 
@@ -136,7 +138,7 @@ namespace ExpandedAiFramework
         {
             lock (mQueueLock)
             {
-                LogTrace($"(Queue count: {mRequests.Count} -> {mRequests.Count + 1}");
+                this.LogVerboseInstanced($"(Queue count: {mRequests.Count} -> {mRequests.Count + 1}");
                 mRequests.Enqueue(new MapDataRequest<T>(position, callback, extraNearestCandidatesToMaybePickFrom, args));
             }
         }
@@ -148,7 +150,7 @@ namespace ExpandedAiFramework
             {
                 if (mAvailableData.Count == 0)
                 {
-                    LogTrace($"No available dictionary entries for {typeof(T).Name}");
+                    this.LogVerboseInstanced($"No available dictionary entries for {typeof(T).Name}");
                     return null;
                 }
 
@@ -184,7 +186,7 @@ namespace ExpandedAiFramework
                 {
                     if (!mAvailableData.TryAdd(tItem.Guid, tItem))
                     {
-                        LogError($"Guid collision while trying to add {tItem}!");
+                        this.LogErrorInstanced($"Guid collision while trying to add {tItem}!");
                     }
                 }
             }
@@ -212,7 +214,7 @@ namespace ExpandedAiFramework
             catch (Exception e)
             {
 
-                LogError($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Save)}] {e}");
+                this.LogErrorInstanced($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Save)}] {e}");
             }
         }
 
@@ -231,6 +233,7 @@ namespace ExpandedAiFramework
                     {
                         canAdd = true;
                         T newData = spotJSON.Make<T>();
+                        newData.UpdateCachedString();
                         if (!mData.TryGetValue(newData.Scene, out List<T> sceneData))
                         {
                             sceneData = new List<T>();
@@ -240,14 +243,13 @@ namespace ExpandedAiFramework
                         {
                             if (sceneData[i] == newData)
                             {
-                                LogWarning($"Can't add duplicate {newData}!");
+                                //this.LogWarningInstanced($"Can't add duplicate {newData} (existing: {sceneData[i]})");
                                 canAdd = false;
                             }
                         }
                         if (canAdd)
                         {
-                            newData.UpdateCachedString();
-                            LogTrace($"Found and adding {newData}");
+                            this.LogVerboseInstanced($"Found and adding {newData}");
                             sceneData.Add(newData);
                         }
                     }
@@ -255,7 +257,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Load)}] {e}");
+                this.LogErrorInstanced($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Load)}] {e}");
             }
         }
 

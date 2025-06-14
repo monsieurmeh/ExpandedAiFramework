@@ -20,37 +20,37 @@ namespace ExpandedAiFramework
     {
         public static void LogTraceInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Trace, false, provider.TypeInfo, provider.InstanceInfo, memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Trace, provider.TypeInfo, provider.InstanceInfo, memberName);
         }
 
 
         public static void LogDebugInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Debug, false, provider.TypeInfo, provider.InstanceInfo, memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Debug, provider.TypeInfo, provider.InstanceInfo, memberName);
         }
 
 
         public static void LogVerboseInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Verbose, false, provider.TypeInfo, provider.InstanceInfo, memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Verbose, provider.TypeInfo, provider.InstanceInfo, memberName);
         }
 
 
-        public static void LogWarningInstanced(this ILogInfoProvider provider, string message, bool toUConsole = true, [CallerMemberName] string memberName = "")
+        public static void LogWarningInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Warning, toUConsole, provider.TypeInfo, provider.InstanceInfo, memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Warning, provider.TypeInfo, provider.InstanceInfo, memberName);
         }
 
 
         public static void LogErrorInstanced(this ILogInfoProvider provider, string message, FlaggedLoggingLevel additionalFlags = 0U, [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Error, true, provider.TypeInfo, provider.InstanceInfo, memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Error | additionalFlags, provider.TypeInfo, provider.InstanceInfo, memberName);
         }
 
 
         public static void LogAlwaysInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Always, true, provider.TypeInfo, provider.InstanceInfo, memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Always, provider.TypeInfo, provider.InstanceInfo, memberName);
         }
     }
 }

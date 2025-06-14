@@ -223,6 +223,7 @@ namespace ExpandedAiFramework
                 return;
             }
             LogAlways($"Registering SubManager for type {type}");
+            subManager.Initialize(this);
             mSubManagerDict.Add(type, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);
             mSubManagers[^1] = subManager;
@@ -232,13 +233,6 @@ namespace ExpandedAiFramework
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
         public void ClearCustomAis() => mAiManager.ClearCustomAis();
-        public bool TryInjectRandomCustomAi(BaseAi baseAi, SpawnRegion region) => mAiManager.TryInjectRandomCustomAi(baseAi, region);
-        public bool TryInjectCustomBaseAi(BaseAi baseAi, SpawnRegion spawnRegion) => mAiManager.TryInjectCustomBaseAi(baseAi, spawnRegion);
-        public bool TryInjectCustomAi(BaseAi baseAi, Type spawnType, SpawnRegion region) => mAiManager.TryInjectCustomAi(baseAi, spawnType, region);
-        public bool TryRemoveCustomAi(BaseAi baseAi) => mAiManager.TryRemoveCustomAi(baseAi);
-        public bool TryStart(BaseAi baseAi) => mAiManager.TryStart(baseAi);
-        public bool TryStart(SpawnRegion spawnRegion) => mSpawnRegionManager.TryStart(spawnRegion);
-        public bool InterceptAwake(SpawnRegion spawnRegion) => mSpawnRegionManager.TryAwake(spawnRegion);
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode) => mAiManager.TrySetAiMode(baseAi, aiMode);
         public bool TryApplyDamage(BaseAi baseAi, float damage, float bleedOutTime, DamageSource damageSource) => mAiManager.TryApplyDamage(baseAi, damage, bleedOutTime, damageSource);
        
@@ -312,18 +306,39 @@ namespace ExpandedAiFramework
         public void Console_OnCommand() => mConsoleCommandManager.Console_OnCommand();
 
         private ComplexLogger<Main> mLogger;
+        public ComplexLogger<Main> Logger => mLogger;
         private void InitializeLogger() => mLogger = new ComplexLogger<Main>();
+
+        public FlaggedLoggingLevel CurrentLogLevel => ComplexLogger.Main.CurrentLevel;
+
+
+        public static void LogWithStackTrace(string message, int offsetStart = 1, int offsetEnd = 0)
+        {
+            StackTrace stackTrace = new StackTrace();
+            for (int i = offsetStart, iMax = stackTrace.FrameCount - offsetEnd; i < iMax; i++)
+            {
+                var method = stackTrace.GetFrame(i).GetMethod();
+                if (method != null)
+                {
+                    message = $"[{method.DeclaringType}.{method.Name}]\n" + message;
+                }
+                else
+                {
+                    message = $"[NULL]\n" + message;
+                }
+            }
+            Manager.Logger.Log(message, FlaggedLoggingLevel.Warning);
+        }
 
         public void Log(
             string message, 
-            FlaggedLoggingLevel logLevel, 
-            bool toUConsole,
+            FlaggedLoggingLevel logLevel,
             string callerType,
             string callerInstanceInfo = "",
             [CallerMemberName] string callerName = "")
         {
             callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
-            mLogger.Log($"[{callerType}.{callerName}{callerInstanceInfo}] {message}", logLevel, toUConsole ? LoggingSubType.uConsole : LoggingSubType.Normal);
+            mLogger.Log($"[{callerType}.{callerName}{callerInstanceInfo}] {message}", logLevel, LoggingSubType.Normal);
         }
 #endregion
 

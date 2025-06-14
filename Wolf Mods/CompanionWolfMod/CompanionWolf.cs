@@ -315,7 +315,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 {
                     this.LogVerboseInstanced("Tamd wolf affection reached zero and it ran away! How could you let this happen... :( :( :(");
                     mSubManager.Data.Disconnect();
-                    mManager.TryRemoveCustomAi(mBaseAi);
+                    mManager.AiManager.TryRemoveCustomAi(mBaseAi);
                     GameObject.Destroy(mBaseAi.transform.parent.gameObject);
                     return;
                 }
@@ -337,7 +337,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 //turn into "disconnect" method
                 this.LogVerboseInstanced("Disappear! go away! until next time :-(");
                 mSubManager.Data.Disconnect();
-                mManager.TryRemoveCustomAi(mBaseAi);
+                mManager.AiManager.TryRemoveCustomAi(mBaseAi);
                 return false;
             }
             if (mSubManager.Data.Tamed && Time.time - mCheckTamedStateDebugResetTime < CheckTamedStateDebugFrequency)
@@ -360,7 +360,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 this.LogVerboseInstanced("Entered AiMode.Dead and DIED! How could you let this happen... :( :( :(");
                 mSubManager.Data.Disconnect();
-                mManager.TryRemoveCustomAi(mBaseAi);
+                mManager.AiManager.TryRemoveCustomAi(mBaseAi);
                 return false;
             }
             if (!mSubManager.Data.Tamed)

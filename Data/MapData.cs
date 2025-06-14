@@ -44,7 +44,7 @@ namespace ExpandedAiFramework
             {
                 mGuid = Guid.NewGuid();
             }
-            mCachedString = mClaimed ? "Claimed " : "Unclaimed " + $"{GetType().Name} {Name} anchored at {AnchorPosition} in scene {Scene} with Guid {Guid}";
+            mCachedString = (mClaimed ? "Claimed " : "Unclaimed ") + $"{GetType().Name} {Name} anchored at {AnchorPosition} in scene {Scene} with Guid {Guid}";
         }
 
 

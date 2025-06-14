@@ -233,13 +233,22 @@ namespace ExpandedAiFramework
 
         public static EAFManager Manager { get { return EAFManager.Instance; } }
 
-        private static string GetLastCallerType()
+        private static string GetLastCallerType(FlaggedLoggingLevel logLevel)
         {
+            if (!Manager.CurrentLogLevel.IsSet(logLevel))
+            {
+                return string.Empty;
+            }
             StackTrace stackTrace = new StackTrace();
             for (int i = 2, iMax = stackTrace.FrameCount; i < iMax; i++)
             {
-                Type type = new StackTrace().GetFrame(i)?.GetMethod()?.DeclaringType;
+                MethodBase method = stackTrace.GetFrame(i).GetMethod();
+                Type type = stackTrace.GetFrame(i)?.GetMethod()?.DeclaringType;
                 if (type == typeof(Utility))
+                {
+                    continue;
+                }
+                if (method.Name.Contains("Log"))
                 {
                     continue;
                 }
@@ -272,39 +281,39 @@ namespace ExpandedAiFramework
         }
 
 
-        public static void LogTrace(string message, [CallerMemberName] string memberName = "")
+        public static void LogTrace(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Trace, false, GetLastCallerType(), memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Trace, GetLastCallerType(FlaggedLoggingLevel.Trace), callerInstanceInfo, memberName);
         }
 
 
-        public static void LogDebug(string message, [CallerMemberName] string memberName = "")
+        public static void LogDebug(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Debug, false, GetLastCallerType(), memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Debug, GetLastCallerType(FlaggedLoggingLevel.Debug), callerInstanceInfo, memberName);
         }
 
 
-        public static void LogVerbose(string message, [CallerMemberName] string memberName = "")
+        public static void LogVerbose(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Verbose, false,GetLastCallerType(), memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Verbose, GetLastCallerType(FlaggedLoggingLevel.Verbose), callerInstanceInfo, memberName);
         }
 
 
-        public static void LogWarning(string message, bool toUConsole = true, [CallerMemberName] string memberName = "")
+        public static void LogWarning(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Warning, toUConsole, GetLastCallerType(), memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Warning, GetLastCallerType(FlaggedLoggingLevel.Warning), callerInstanceInfo, memberName);
         }
 
 
-        public static void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U, [CallerMemberName] string memberName = "")
+        public static void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Error | additionalFlags, true, GetLastCallerType(), memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Error | additionalFlags, GetLastCallerType(FlaggedLoggingLevel.Error), callerInstanceInfo, memberName);
         }
 
 
-        public static void LogAlways(string message, [CallerMemberName] string memberName = "")
+        public static void LogAlways(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Always, true, GetLastCallerType(), memberName);
+            Manager.Log(message, FlaggedLoggingLevel.Always, GetLastCallerType(FlaggedLoggingLevel.Always), callerInstanceInfo, memberName);
         }
 
 
