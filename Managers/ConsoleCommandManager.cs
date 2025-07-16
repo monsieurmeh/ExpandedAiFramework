@@ -1119,7 +1119,7 @@ namespace ExpandedAiFramework
             {
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"ExpandedAiFramework.WanderPaths.json");
+                    mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"{typeof(WanderPath)}s.json");
                 }
                 // Clear any existing state
                 CleanUpPaintMarker();
@@ -1165,7 +1165,7 @@ namespace ExpandedAiFramework
             {
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"ExpandedAiFramework.HidingSpots.json");
+                    mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"{typeof(HidingSpot)}s.json");
                 }
                 // Clear any existing state
                 CleanUpPaintMarker();
