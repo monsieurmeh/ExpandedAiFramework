@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using UnityEngine;
 using Il2Cpp;
 using System.Xml.Linq;
+using System.Buffers.Text;
 
 namespace ExpandedAiFramework
 {
@@ -17,9 +18,11 @@ namespace ExpandedAiFramework
         }
 
         private PaintMode mCurrentPaintMode = PaintMode.COUNT;
+        private string mCurrentPaintFilePath = string.Empty;
         private bool mSelectingHidingSpotRotation = false;
         private Vector3 mPendingHidingSpotPosition;
-        private string mCurrentWanderPathName = string.Empty;
+        private string mCurrentDataNameIterated = string.Empty;
+        private string mCurrentDataNameBase = string.Empty;
         private List<Vector3> mCurrentWanderPathPoints = new List<Vector3>();
         private List<GameObject> mCurrentWanderPathPointMarkers = new List<GameObject>();
         private GameObject mPaintMarker = null;
@@ -37,7 +40,7 @@ namespace ExpandedAiFramework
         {
             base.OnLoadScene(sceneName);
             mCurrentPaintMode = PaintMode.COUNT;
-            mCurrentWanderPathName = string.Empty;
+            mCurrentDataNameIterated = string.Empty;
             mCurrentWanderPathPoints.Clear();
             for (int i = 0, iMax = mCurrentWanderPathPointMarkers.Count; i < iMax; i++)
             {
@@ -124,6 +127,14 @@ namespace ExpandedAiFramework
                 }
             }
         }
+
+
+        public void AttachMarker(Transform transform, Vector3 localPosition, Color color, string name, float height, float diameter = 5f)
+        {
+            GameObject marker = CreateMarker(localPosition, color, name, height, diameter);
+            marker.transform.SetParent(transform, false);
+        }
+
 
         public GameObject CreateMarker(Vector3 position, Color color, string name, float height, float diameter = 5f)
         {
@@ -261,13 +272,18 @@ namespace ExpandedAiFramework
         {
             if (mCurrentPaintMode != PaintMode.WanderPath)
             {
-                LogWarning($"Can't start recording path because path {mCurrentWanderPathName} is still active! enter command '{CommandString} {CommandString_Finish} {CommandString_WanderPath}' to finish current wander path.");
+                LogWarning($"Can't start recording path because path {mCurrentDataNameIterated} is still active! enter command '{CommandString} {CommandString_Finish} {CommandString_WanderPath}' to finish current wander path.");
                 return;
             }
             string name = uConsole.GetString();
             if (!IsNameProvided(name))
             {
                 return;
+            }
+            mCurrentPaintFilePath = uConsole.GetString();
+            if (!IsNameProvided(mCurrentPaintFilePath, false))
+            {
+                mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"ExpandedAiFramework.WanderPaths.json");
             }
             string scene = GameManager.m_ActiveScene;
             if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
@@ -284,7 +300,7 @@ namespace ExpandedAiFramework
                 }
             }
             mCurrentPaintMode = PaintMode.WanderPath;
-            mCurrentWanderPathName = name;
+            mCurrentDataNameIterated = name;
             Console_AddToCurrentWanderPath();
             LogAlways($"Started wander path with name {name} at {mCurrentWanderPathPoints[0]}. Use command '{CommandString} {CommandString_AddTo} {CommandString_WanderPath}' to add more points, and '{CommandString} {CommandString_Finish} {CommandString_WanderPath} to finish the path.");
         }
@@ -297,6 +313,11 @@ namespace ExpandedAiFramework
             if (!IsNameProvided(name))
             {
                 return;
+            }
+            mCurrentPaintFilePath = uConsole.GetString();
+            if (!IsNameProvided(mCurrentPaintFilePath, false))
+            {
+                mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"ExpandedAiFramework.HidingSpots.json");
             }
             string scene = GameManager.m_ActiveScene;
             if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
@@ -316,7 +337,7 @@ namespace ExpandedAiFramework
             Quaternion rot = GameManager.m_vpFPSCamera.transform.rotation;
 
             AiUtils.GetClosestNavmeshPos(out Vector3 actualPos, pos, pos);
-            HidingSpots[scene].Add(new HidingSpot(name, actualPos, rot, GameManager.m_ActiveScene));
+            HidingSpots[scene].Add(new HidingSpot(name, actualPos, rot, mCurrentPaintFilePath, GameManager.m_ActiveScene));
             mDebugShownHidingSpots.Add(CreateMarker(actualPos, Color.yellow, $"Hiding spot: {name}", 100.0f));
             LogAlways($"Generated hiding spot {name} at {actualPos} with rotation {rot} in scene {scene}!");
             SaveMapData();
@@ -481,12 +502,12 @@ namespace ExpandedAiFramework
             }
             AiUtils.GetClosestNavmeshPos(out Vector3 actualPos, pos, pos);
             mCurrentWanderPathPoints.Add(actualPos);
-            mCurrentWanderPathPointMarkers.Add(CreateMarker(actualPos, Color.blue, $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker", 100));
+            mCurrentWanderPathPointMarkers.Add(CreateMarker(actualPos, Color.blue, $"{mCurrentDataNameIterated}.Position {mCurrentWanderPathPoints.Count} Marker", 100));
             if (mCurrentWanderPathPoints.Count > 1)
             {
-                mCurrentWanderPathPointMarkers.Add(ConnectMarkers(actualPos, mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], Color.blue, $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 100));
+                mCurrentWanderPathPointMarkers.Add(ConnectMarkers(actualPos, mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], Color.blue, $"{mCurrentDataNameIterated}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 100));
             }
-            LogAlways($"Added wanderpath point at {actualPos} to wanderpath {mCurrentWanderPathName}");
+            LogAlways($"Added wanderpath point at {actualPos} to wanderpath {mCurrentDataNameIterated}");
         }
 
         #endregion
@@ -517,11 +538,11 @@ namespace ExpandedAiFramework
                 return;
             }
             mCurrentPaintMode = PaintMode.COUNT;
-            WanderPaths[GameManager.m_ActiveScene].Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), GameManager.m_ActiveScene));
-            LogAlways($"Generated wander path {mCurrentWanderPathName} starting at {mCurrentWanderPathPoints[0]}.");
-            mCurrentWanderPathPointMarkers.Add(ConnectMarkers(mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], mCurrentWanderPathPoints[0], Color.blue, $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 100));
+            WanderPaths[GameManager.m_ActiveScene].Add(new WanderPath(mCurrentDataNameIterated, mCurrentWanderPathPoints.ToArray(), mCurrentPaintFilePath, GameManager.m_ActiveScene));
+            LogAlways($"Generated wander path {mCurrentDataNameIterated} starting at {mCurrentWanderPathPoints[0]}.");
+            mCurrentWanderPathPointMarkers.Add(ConnectMarkers(mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], mCurrentWanderPathPoints[0], Color.blue, $"{mCurrentDataNameIterated}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 100));
             mCurrentWanderPathPoints.Clear();
-            mCurrentWanderPathName = string.Empty;
+            mCurrentDataNameIterated = string.Empty;
             mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
             mCurrentWanderPathPointMarkers.Clear();
             SaveMapData();
@@ -646,6 +667,7 @@ namespace ExpandedAiFramework
                 case CommandString_HidingSpot: Console_ShowHidingSpot(); return;
                 case CommandString_NavMesh: Console_ShowNavMesh(); return;
                 case CommandString_SpawnRegion: Console_ShowNavMesh(); return;
+                case CommandString_Ai: Console_ShowAi(); return;
                 default: LogAlways($"{type} is supported per debug constants, but not routed! Report this please."); return;
             }
         }
@@ -742,6 +764,35 @@ namespace ExpandedAiFramework
         }
 
 
+        private void Console_ShowAi()
+        {
+            string name = uConsole.GetString();
+            if (!IsNameProvided(name, false))
+            {
+                Console_ShowAllAis();
+            }
+            else
+            {
+                foreach (CustomBaseAi baseAi in mManager.AiManager.CustomAis.Values)
+                {
+                    if ($"{baseAi.BaseAi.GetHashCode()}" == name || $"{baseAi.ModDataProxy.Guid}" == name)
+                    {
+                        AttachMarker(baseAi.transform, Vector3.zero, baseAi.DebugHighlightColor, "AiDebugMarker", 100);
+                    }
+                }
+            }
+        }
+
+
+        private void Console_ShowAllAis()
+        {
+            foreach (CustomBaseAi baseAi in mManager.AiManager.CustomAis.Values)
+            {
+                AttachMarker(baseAi.transform, Vector3.zero, baseAi.DebugHighlightColor, "AiDebugMarker", 100);
+            }
+        }
+
+
         private void Console_ShowSpawnRegion()
         {
             Console_ShowAllSpawnRegions();
@@ -793,6 +844,7 @@ namespace ExpandedAiFramework
                 case CommandString_HidingSpot: Console_HideHidingSpot(); return;
                 case CommandString_NavMesh: Console_HideNavMesh(); return;
                 case CommandString_SpawnRegion: Console_HideSpawnRegion(); return;
+                case CommandString_Ai: Console_HideAi(); return;
                 default: LogAlways($"{type} is supported per debug constants, but not routed! Report this please."); return;
             }
         }
@@ -885,6 +937,51 @@ namespace ExpandedAiFramework
             mDebugShownSpawnRegions.Clear();
         }
 
+
+
+        private void Console_HideAi()
+        {
+            string name = uConsole.GetString();
+            if (!IsNameProvided(name, false))
+            {
+                Console_HideAllAis();
+            }
+            else
+            {
+                foreach (CustomBaseAi baseAi in mManager.AiManager.CustomAis.Values)
+                {
+                    if ($"{baseAi.BaseAi.GetHashCode()}" == name || $"{baseAi.ModDataProxy.Guid}" == name)
+                    {
+                        foreach (Transform child in baseAi.GetComponentsInChildren<Transform>(true))
+                        {
+                            if (child.name.Contains("AiDebugMarker"))
+                            {
+                                GameObject.Destroy(child.gameObject);
+                                break;
+                            }
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
+
+        private void Console_HideAllAis()
+        {
+            foreach (CustomBaseAi baseAi in mManager.AiManager.CustomAis.Values)
+            {
+                foreach (Transform child in baseAi.GetComponentsInChildren<Transform>(true))
+                {
+                    if (child.name.Contains("AiDebugMarker"))
+                    {
+                        GameObject.Destroy(child.gameObject);
+                        break;
+                    }
+                }
+            }
+        }
+
         #endregion
 
 
@@ -953,36 +1050,37 @@ namespace ExpandedAiFramework
                 return;
             }
 
-            string name = uConsole.GetString();
-            if (!IsNameProvided(name, false))
+            mCurrentDataNameBase = uConsole.GetString();
+            if (!IsNameProvided(mCurrentDataNameBase, false))
             {
-                name = null; // Auto-generate name if not provided
+                mCurrentDataNameBase = null; // Auto-generate name if not provided
             }
+            mCurrentPaintFilePath = uConsole.GetString();
+            
 
             if (type == CommandString_HidingSpot)
             {
-                if (!InitializePaintHidingSpot(name ?? GetUniqueHidingSpotName()))
+                if (!InitializePaintHidingSpot(GetUniqueHidingSpotName(mCurrentDataNameBase)))
                 {
                     LogWarning("Failed to initialize paint mode");
                     return;
                 }
-                LogAlways($"Entered hiding spot paint mode. Left click to select position, then left click again to set rotation.");
+                LogAlways($"Entered hiding spot paint mode. Left click to select position, then left click again to set rotation. Right click to exit mode.");
             }
             else if (type == CommandString_WanderPath)
             {
-                if (!InitializePaintWanderPath(name ?? GetUniqueWanderPathName()))
+                if (!InitializePaintWanderPath(GetUniqueWanderPathName(mCurrentDataNameBase)))
                 {
                     LogWarning("Failed to initialize paint mode");
                     return;
                 }
-                LogAlways($"Entered wander path paint mode for {name}. Left click to place points, right click to finish.");
+                LogAlways($"Entered wander path paint mode. Left click to place points, right click to finish a path, right click twice to exit mode.");
             }
         }
 
 
-        private string GetUniqueWanderPathName()
+        private string GetUniqueWanderPathName(string baseName = "ExpressWanderPath")
         {
-            string baseName = "ExpressWanderPath";
             int counter = 1;
             string scene = GameManager.m_ActiveScene;
             
@@ -998,9 +1096,8 @@ namespace ExpandedAiFramework
             return $"{baseName}_{counter}";
         }
 
-        private string GetUniqueHidingSpotName()
+        private string GetUniqueHidingSpotName(string baseName = "ExpressHidingSpot")
         {
-            string baseName = "ExpressHidingSpot";
             int counter = 1;
             string scene = GameManager.m_ActiveScene;
             
@@ -1020,6 +1117,10 @@ namespace ExpandedAiFramework
         {
             try
             {
+                if (!IsNameProvided(mCurrentPaintFilePath, false))
+                {
+                    mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"ExpandedAiFramework.WanderPaths.json");
+                }
                 // Clear any existing state
                 CleanUpPaintMarker();
                 mCurrentWanderPathPoints.Clear();
@@ -1037,7 +1138,7 @@ namespace ExpandedAiFramework
                 }
 
                 // Set new state
-                mCurrentWanderPathName = name;
+                mCurrentDataNameIterated = name;
 
                 // Create initial marker
                 mPaintMarker = CreateMarker(Vector3.zero, Color.green, "PaintMarker", 50f, 2f);
@@ -1062,6 +1163,10 @@ namespace ExpandedAiFramework
         {
             try
             {
+                if (!IsNameProvided(mCurrentPaintFilePath, false))
+                {
+                    mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"ExpandedAiFramework.HidingSpots.json");
+                }
                 // Clear any existing state
                 CleanUpPaintMarker();
                 mCurrentWanderPathPoints.Clear();
@@ -1079,7 +1184,7 @@ namespace ExpandedAiFramework
                 }
 
                 // Set new state
-                mCurrentWanderPathName = name;
+                mCurrentDataNameIterated = name;
                 
                 // Create initial marker
                 mPaintMarker = CreateMarker(Vector3.zero, Color.green, "PaintMarker", 50f, 2f);
@@ -1261,7 +1366,7 @@ namespace ExpandedAiFramework
                     var marker = CreateMarker(
                         mPaintMarkerPosition,
                         Color.blue,
-                        $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker",
+                        $"{mCurrentDataNameIterated}.Position {mCurrentWanderPathPoints.Count} Marker",
                         100);
                     if (marker != null)
                     {
@@ -1275,7 +1380,7 @@ namespace ExpandedAiFramework
                     var marker = CreateMarker(
                         mPaintMarkerPosition,
                         Color.blue,
-                        $"{mCurrentWanderPathName}.Position {mCurrentWanderPathPoints.Count} Marker",
+                        $"{mCurrentDataNameIterated}.Position {mCurrentWanderPathPoints.Count} Marker",
                         100);
                     if (marker != null)
                     {
@@ -1288,7 +1393,7 @@ namespace ExpandedAiFramework
                             mPaintMarkerPosition,
                             mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2],
                             Color.blue,
-                            $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}",
+                            $"{mCurrentDataNameIterated}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}",
                             100);
                         if (connector != null)
                         {
@@ -1310,7 +1415,7 @@ namespace ExpandedAiFramework
                 {
                     // Regular Right click - finish current path
                     ExitPaintMode();
-                    InitializePaintWanderPath(GetUniqueWanderPathName());
+                    InitializePaintWanderPath(GetUniqueWanderPathName(mCurrentDataNameBase));
                 }
                 else
                 {
@@ -1343,19 +1448,18 @@ namespace ExpandedAiFramework
                             HidingSpots.Add(scene, spots);
                         }
 
-                        string name = $"HidingSpot_{spots.Count + 1}";
-                        HidingSpot newSpot = new HidingSpot(name, mPendingHidingSpotPosition, rotation, scene);
+                        HidingSpot newSpot = new HidingSpot(mCurrentDataNameIterated, mPendingHidingSpotPosition, rotation, scene, mCurrentPaintFilePath);
                         spots.Add(newSpot);
                             
                         // Show marker
-                        mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {name}", 100.0f));
-                        LogAlways($"Created hiding spot {name} at {newSpot.Position} with rotation {newSpot.Rotation}");
+                        mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {mCurrentDataNameIterated}", 100.0f));
+                        LogAlways($"Created hiding spot {mCurrentDataNameIterated} at {newSpot.Position} with rotation {newSpot.Rotation}");
 
                         // Exit paint mode
                         mSelectingHidingSpotRotation = false;
                         RefreshPaintMode();
                         SaveMapData();
-                        InitializePaintHidingSpot(GetUniqueHidingSpotName());
+                        InitializePaintHidingSpot(GetUniqueHidingSpotName(mCurrentDataNameBase));
                     }
                 }
                 else
@@ -1398,7 +1502,7 @@ namespace ExpandedAiFramework
         private void RefreshPaintMode()
         {
             CleanUpPaintMarker();
-            mCurrentWanderPathName = string.Empty;
+            mCurrentDataNameIterated = string.Empty;
         }
 
 
@@ -1411,7 +1515,7 @@ namespace ExpandedAiFramework
                     mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1],
                     mCurrentWanderPathPoints[0],
                     Color.blue,
-                    $"{mCurrentWanderPathName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}",
+                    $"{mCurrentDataNameIterated}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}",
                     100));
 
                 // Save the path
@@ -1421,7 +1525,7 @@ namespace ExpandedAiFramework
                     paths = new List<WanderPath>();
                     WanderPaths.Add(scene, paths);
                 }
-                paths.Add(new WanderPath(mCurrentWanderPathName, mCurrentWanderPathPoints.ToArray(), scene));
+                paths.Add(new WanderPath(mCurrentDataNameIterated, mCurrentWanderPathPoints.ToArray(), scene, mCurrentPaintFilePath));
                 SaveMapData();
             }
             mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);

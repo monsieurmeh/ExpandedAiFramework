@@ -22,6 +22,7 @@ namespace ExpandedAiFramework
         public SpawnModDataProxy ModDataProxy { get { return mModDataProxy; } }
         public virtual string InstanceInfo { get { return mBaseAi.GetHashCode().ToString(); } }
         public virtual string TypeInfo { get { return GetType().Name; } }
+        public virtual Color DebugHighlightColor { get { return Color.white; } }
 
         //ML is fighting me on dependency injection, doesn't want to "support" injecting my manager class for whatever reason. Feh
         // Occasionally the spawn region is needed during initial setup, and it doesn't always seem to set itself until after the spawn process, so it's being passed here just in case

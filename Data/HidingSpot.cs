@@ -13,7 +13,7 @@ namespace ExpandedAiFramework
         public Vector3 Position { get { return mAnchorPosition; } }
         public HidingSpot() { }
 
-        public HidingSpot(string name, Vector3 pos, Quaternion rot, string scene, bool transient = false) : base(name, scene, pos, transient)
+        public HidingSpot(string name, Vector3 pos, Quaternion rot, string scene, string filePath, bool transient = false) : base(name, scene, pos, filePath, transient)
         {
             mRotation = rot;
         }

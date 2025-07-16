@@ -12,6 +12,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
         protected float m_TimeSinceLastStruggle = 0.0f;
 
         public TrackingWolf(IntPtr ptr) : base(ptr) { }
+        public override Color DebugHighlightColor { get { return Color.red; } }
 
         protected override bool ProcessCustom()
         {
@@ -94,9 +95,9 @@ namespace ExpandedAiFramework.TrackingWolfMod
                 mBaseAi.MoveAgentStop();
             }
             ScanForNewTarget();
-            if (mBaseAi.CanSeeTarget())
+            if (mBaseAi.CanSeeTarget() && mBaseAi.m_CurrentTarget.IsPlayer())
             {
-                this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: Can see target, attacking!");
+                this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: Can see PLAYER target, attacking!");
                 SetAiMode(AiMode.Attack);
             }
         }

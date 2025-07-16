@@ -22,6 +22,7 @@ namespace ExpandedAiFramework
         public abstract void RefreshData(string sceneName);
         public abstract void Save();
         public abstract void Load();
+        public abstract void LoadAdditional(string pathFromModsFolder);
         public abstract void Clear();
     }
 
@@ -198,24 +199,30 @@ namespace ExpandedAiFramework
         {
             try
             {
-                List<T> allDatas = new List<T>();
+                Dictionary<string, List<T>> allDatas = new Dictionary<string, List<T>>();
                 foreach (string key in mData.Keys)
                 {
                     foreach (T tItem in mData[key])
                     {
                         if (!tItem.Transient)
                         {
-                            allDatas.Add(tItem);
+                            if (!allDatas.TryGetValue(tItem.FilePath, out List<T> subDatas))
+                            {
+                                subDatas = new List<T>();
+                                allDatas.Add(tItem.FilePath, subDatas);
+                            }
+                            subDatas.Add(tItem);
                         }
                     }
-                    allDatas.AddRange(mData[key]);
                 }
-                File.WriteAllText(Path.Combine(MelonEnvironment.ModsDirectory, $"{typeof(T)}s.json"), JSON.Dump(allDatas, EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints), System.Text.Encoding.UTF8);
+                foreach (string key in allDatas.Keys)
+                {
+                    File.WriteAllText(Path.Combine(MelonEnvironment.ModsDirectory, key), JSON.Dump(allDatas[key], EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints), System.Text.Encoding.UTF8);
+                }
             } 
             catch (Exception e)
             {
-
-                this.LogErrorInstanced($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Save)}] {e}");
+                this.LogErrorInstanced(e.Message);
             }
         }
 
@@ -226,7 +233,7 @@ namespace ExpandedAiFramework
             bool canAdd;
             try
             {
-                string hidingSpots = File.ReadAllText(Path.Combine(MelonEnvironment.ModsDirectory, $"{typeof(T)}s.json"), System.Text.Encoding.UTF8);
+                string hidingSpots = File.ReadAllText(Path.Combine(MelonEnvironment.ModsDirectory, "EAF", $"{typeof(T)}s.json"), System.Text.Encoding.UTF8);
                 if (hidingSpots != null)
                 {
                     Variant hidingSpotsVariant = JSON.Load(hidingSpots);
@@ -235,6 +242,7 @@ namespace ExpandedAiFramework
                         canAdd = true;
                         T newData = spotJSON.Make<T>();
                         newData.UpdateCachedString();
+                        newData.FilePath = Path.Combine("EAF", $"{typeof(T)}s.json");
                         if (!mData.TryGetValue(newData.Scene, out List<T> sceneData))
                         {
                             sceneData = new List<T>();
@@ -258,7 +266,50 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced($"[{nameof(MapDataRequest<T>)}<{typeof(T)}>.{nameof(Load)}] {e}");
+                this.LogErrorInstanced(e.Message);
+            }
+        }
+
+
+        public override void LoadAdditional(string pathFromModsFolder)
+        {
+            bool canAdd;
+            try
+            {
+                string hidingSpots = File.ReadAllText(Path.Combine(MelonEnvironment.ModsDirectory, pathFromModsFolder), System.Text.Encoding.UTF8);
+                if (hidingSpots != null)
+                {
+                    Variant hidingSpotsVariant = JSON.Load(hidingSpots);
+                    foreach (var spotJSON in hidingSpotsVariant as ProxyArray)
+                    {
+                        canAdd = true;
+                        T newData = spotJSON.Make<T>();
+                        newData.UpdateCachedString();
+                        newData.FilePath = pathFromModsFolder;
+                        if (!mData.TryGetValue(newData.Scene, out List<T> sceneData))
+                        {
+                            sceneData = new List<T>();
+                            mData.Add(newData.Scene, sceneData);
+                        }
+                        for (int i = 0, iMax = sceneData.Count; i < iMax; i++)
+                        {
+                            if (sceneData[i] == newData)
+                            {
+                                //this.LogWarningInstanced($"Can't add duplicate {newData} (existing: {sceneData[i]})");
+                                canAdd = false;
+                            }
+                        }
+                        if (canAdd)
+                        {
+                            this.LogVerboseInstanced($"Found and adding {newData}");
+                            sceneData.Add(newData);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                this.LogErrorInstanced(e.Message);
             }
         }
 

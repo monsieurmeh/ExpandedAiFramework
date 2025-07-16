@@ -85,6 +85,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         protected bool mFollowing = false;
 
         public CompanionWolfData PersistentData { get { return mSubManager.Data; } }
+        public override Color DebugHighlightColor { get { return Color.cyan; } }
 
 
         public CompanionWolf(IntPtr ptr) : base(ptr) { }

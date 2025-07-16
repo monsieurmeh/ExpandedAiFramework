@@ -164,26 +164,39 @@ namespace ExpandedAiFramework
 
         public void PreSpawn()
         {
-            bool closeEnoughForPreSpawning = mSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance >= Vector3.Distance(mManager.PlayerStartPos, mSpawnRegion.m_Center);
-            if (!closeEnoughForPreSpawning)
-            {
-                return;
-            }
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
                 return;
             }
             WildlifeMode currentMode = mSpawnRegion.m_WildlifeMode;
             int targetPop = CalculateTargetPopulation();
-            int currentActivePopulation = GetCurrentActivePopulation(currentMode);
-            int iterationCount = 0;
-            while (currentActivePopulation < targetPop)
+            List<SpawnModDataProxy> spawnableProxies = new List<SpawnModDataProxy>();
+            foreach (Guid guid in mManager.Manager.DataManager.GetQueuedSpawnModDataProxiesByParentGuid(mModDataProxy.Guid, mSpawnRegion.m_WildlifeMode))
             {
-                this.LogAlwaysInstanced($"PRE spawning!");
-                Spawn(currentMode, true);
-                currentActivePopulation = GetCurrentActivePopulation(currentMode);
-                if (iterationCount > 10)
+                if (!mManager.Manager.DataManager.TryGetActiveSpawnModDataProxy(guid, out SpawnModDataProxy proxy))
                 {
+                    this.LogWarningInstanced($"Can't get what should be a queued active spawn mod data proxy at guid {guid}!");
+                    continue;
+                }
+                float proxyDist = Vector3.Distance(mManager.PlayerStartPos, proxy.CurrentPosition);
+                if (mSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance < proxyDist)
+                {
+                    this.LogTraceInstanced($"Spawn proxy with guid at {proxy.CurrentPosition} is {proxyDist} away which is too far for pre-spawning");
+                    continue;
+                }
+                this.LogTraceInstanced($"Adding Spawn proxy with guid at {proxy.CurrentPosition} is {proxyDist} away for prespawning");
+                spawnableProxies.Add(proxy);
+            }
+            foreach (SpawnModDataProxy proxy in spawnableProxies)
+            {
+                if (!SpawnInternal(proxy, true))
+                {
+                    this.LogErrorInstanced($"Could not force pre-spawn nearby guid {proxy.Guid} at {proxy.CurrentPosition}!");
+                    continue;
+                }
+                if (targetPop <= GetCurrentActivePopulation(currentMode))
+                {
+                    this.LogTraceInstanced("Max active population reached, aborting prespawning");
                     return;
                 }
             }

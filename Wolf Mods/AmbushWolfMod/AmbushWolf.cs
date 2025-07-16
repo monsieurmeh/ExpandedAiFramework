@@ -18,6 +18,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
         protected HidingSpot mHidingSpot;
 
         public AmbushWolf(IntPtr ptr) : base(ptr) { }
+        public override Color DebugHighlightColor { get { return Color.yellow; } }
 
 
         public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy
@@ -88,7 +89,7 @@ proxy)
             {
                 this.LogWarningInstanced("Received NULL hiding spot, creating fallback spot");
                 mHidingSpot = new HidingSpot("FALLBACK_SPOT", mBaseAi.transform.position, mBaseAi.transform.rotation,
-mManager.CurrentScene, true);
+mManager.CurrentScene, string.Empty, true);
             }
             else
             {

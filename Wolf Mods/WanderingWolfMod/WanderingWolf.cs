@@ -15,7 +15,8 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public WanderingWolf(IntPtr ptr) : base(ptr) { }
         protected override float m_MinWaypointDistance { get { return 100.0f; } }
         protected override float m_MaxWaypointDistance { get { return 1000.0f; } }
-        
+        public override Color DebugHighlightColor { get { return Color.green; } }
+
 
         public override void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy proxy)//, EAFManager manager)
         {

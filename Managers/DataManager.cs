@@ -321,6 +321,7 @@ namespace ExpandedAiFramework
             {
                 mapDataManager.Load();
             }
+            WanderPathManager.LoadAdditional("EAF/ExpandedAiFramework.WanderPathsEXTRA.json");
         }
 
 

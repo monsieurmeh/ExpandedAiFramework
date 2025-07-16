@@ -9,6 +9,7 @@ namespace ExpandedAiFramework
     {
         [NonSerialized] protected bool mTransient = false;
         [NonSerialized] protected string mCachedString;
+        [NonSerialized] protected string mFilePath;
         [Include] protected Guid mGuid;
         [Include] protected string mName;
         [Include] protected string mScene;
@@ -22,11 +23,12 @@ namespace ExpandedAiFramework
         public bool Transient { get { return mTransient; } }
         public Vector3 AnchorPosition { get { return mAnchorPosition; } }
         public bool Claimed { get { return mClaimed; } }
+        public string FilePath {  get { return mFilePath; } set { mFilePath = value; } }
 
 
         public MapData() { }
 
-        public MapData(string name, string scene, Vector3 anchorPostion, bool transient)
+        public MapData(string name, string scene, Vector3 anchorPostion, string filePath, bool transient)
         {
             mGuid = Guid.NewGuid();
             mName = name;
@@ -34,6 +36,7 @@ namespace ExpandedAiFramework
             mScene = scene;
             mAnchorPosition = anchorPostion;
             mClaimed = false;
+            mFilePath = filePath;
             UpdateCachedString();
         }
 
