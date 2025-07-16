@@ -220,10 +220,10 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        public override void Despawn(float despawnTime)
+        public override void Save()
         {
-            mSubManager.Data.LastDespawnTime = despawnTime;
-            base.Despawn(despawnTime);
+            mSubManager.Data.LastDespawnTime = GetCurrentTimelinePoint();
+            base.Save();
         }
 
 

@@ -4,45 +4,68 @@ using UnityEngine;
 
 namespace ExpandedAiFramework
 {
-    //adding guid since I plan to allow people to stack these on spawn regions, which I will be using as dictionary keys to store these on deserialize scene
     [Serializable]
-    public class SpawnRegionModDataProxy
+    public class SpawnRegionModDataProxy : ModDataProxyBase
     {
-        //[NonSerialized] public SpawnRegion SpawnRegion;
-        public Guid Guid = Guid.Empty;
-        public string Scene; //might be able to get rid of this?
-        public Vector3 OriginalPosition;
+        //Temporal Data
+        [NonSerialized] public bool Connected = false;
+        [NonSerialized] public bool PendingForceSpawns = false;
+
+        //Mod Data
         public Vector3 CurrentPosition;
         public AiType AiType; 
         public AiSubType AiSubType;
         public float LastDespawnTime;
 
+        //Vanilla Data
+        public float HoursPlayed;
+        public float ElapsedHoursAtLastActiveReRoll;
+        public bool IsActive;
+        public int NumRespawnsPending;
+        public float ElapasedHoursNextRespawnAllowed;
+        public int NumTrapped;
+        public float HoursNextTrapReset;
+        public int CurrentWaypointPathIndex;
+        public WildlifeMode WildlifeMode;
+        public bool HasBeenDisabledByAurora;
+        public bool WasActiveBeforeAurora;
+        public float CooldownTimerHours;
 
         public SpawnRegionModDataProxy() { }
 
 
+        //Only constructs mod data; it is on managers to serialize in vanilla data later
         public SpawnRegionModDataProxy(Guid guid, string scene, SpawnRegion spawnRegion)
         {
             Guid = guid;
             Scene = scene;
             CurrentPosition = spawnRegion.transform.position;
-            OriginalPosition = CurrentPosition;
             AiType = spawnRegion.m_AiTypeSpawned;
             AiSubType = spawnRegion.m_AiSubTypeSpawned;
             LastDespawnTime = GetCurrentTimelinePoint();
-            //SpawnRegion = spawnRegion;
         }
 
 
-        public void Despawn()
+        public void Save(CustomBaseSpawnRegion spawnRegion)
         {
             LastDespawnTime = GetCurrentTimelinePoint();
+            ElapsedHoursAtLastActiveReRoll = spawnRegion.VanillaSpawnRegion.m_ElapsedHoursAtLastActiveReRoll;
+            NumRespawnsPending = spawnRegion.VanillaSpawnRegion.m_NumRespawnsPending;
+            ElapasedHoursNextRespawnAllowed = spawnRegion.VanillaSpawnRegion.m_ElapasedHoursNextRespawnAllowed;
+            NumTrapped = spawnRegion.VanillaSpawnRegion.m_NumTrapped;
+            HoursNextTrapReset = spawnRegion.VanillaSpawnRegion.m_HoursNextTrapReset;
+            CurrentWaypointPathIndex = spawnRegion.VanillaSpawnRegion.m_CurrentWaypointPathIndex;
+            WildlifeMode = spawnRegion.VanillaSpawnRegion.m_WildlifeMode;
+            HasBeenDisabledByAurora = spawnRegion.VanillaSpawnRegion.m_HasBeenDisabledByAurora;
+            WasActiveBeforeAurora = spawnRegion.VanillaSpawnRegion.m_WasActiveBeforeAurora;
+            CooldownTimerHours = spawnRegion.VanillaSpawnRegion.m_CooldownTimerHours;
+            CurrentPosition = spawnRegion.VanillaSpawnRegion.m_Center;
         }
 
 
         public override string ToString()
         {
-            return $"SpawnRegionModDataProxy with guid {Guid} at {CurrentPosition} [original: {OriginalPosition}] of type {AiType}.{AiSubType} in scene {Scene}";
+            return $"SpawnRegionModDataProxy with guid {Guid} at {CurrentPosition} of type {AiType}.{AiSubType} in scene {Scene}";
         }
 
 

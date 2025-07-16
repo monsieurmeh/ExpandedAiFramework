@@ -13,7 +13,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             mManager = manager;  
             LogDebug("AmbushWolfManager initialized!"); 
         }
-        public bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region) => false;
+        public bool ShouldInterceptSpawn(CustomBaseSpawnRegion region) => false;
         public void Shutdown() { }
         public void OnStartNewGame() { }
         public void OnLoadGame() { }
@@ -25,7 +25,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
             LogVerbose($"proxy with guid <<<{proxy.Guid}>>> has custom data: {proxy.CustomData != null} with length: {proxy.CustomData?.Length ?? 0}");
-            if (proxy.CustomData == null || proxy.CustomData.Length == 0 || !mManager.DataManager.AvailableHidingSpots.ContainsKey(new Guid(proxy.CustomData[0])))
+            if (proxy.CustomData == null || proxy.CustomData.Length == 0 || !mManager.DataManager.AvailableHidingSpots.ContainsKey(new Guid((string)proxy.CustomData[0])))
             {
                 LogVerbose($"No custom data, short custom data or no available hiding spot using packed GUID for proxy with guid <<<{proxy.Guid}>>>, dispatching request for new");
                 proxy.AsyncProcessing = true;

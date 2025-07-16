@@ -11,7 +11,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion sr)
         {
-            //SpawnRegionManager_AddSpawnRegion(sr);
+            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
             return false;
         }
     }
@@ -78,6 +78,7 @@ namespace ExpandedAiFramework
         internal static bool Prefix(SpawnRegion otherSpawnRegion, float range, bool enable)
         {
             SpawnRegionManager_MaybeEnableSpawnRegionsInRange(otherSpawnRegion, range, enable);
+            //EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF IS GOING TO cut this method off, expect malfunction from calling mod SOON!");
             return false;
         }
     }
@@ -100,6 +101,7 @@ namespace ExpandedAiFramework
         internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref SpawnRegion __result)
         {
             __result = SpawnRegionManager_PointInsideActiveSpawnRegion(pos, filterSpawnablePrefabName);
+            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF IS GOING TO cut this method off, expect malfunction from calling mod SOON!");
             return false;
         }
     }
@@ -113,6 +115,7 @@ namespace ExpandedAiFramework
         internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref SpawnRegion __result)
         {
             __result = SpawnRegionManager_PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
+            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF IS GOING TO cut this method off, expect malfunction from calling mod SOON!");
             return false;
         }
     }
@@ -124,6 +127,7 @@ namespace ExpandedAiFramework
         internal static bool Prefix(Vector3 pos, ref bool __result)
         {
             __result = SpawnRegionManager_PointInsideNoSpawnRegion(pos);
+            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF IS GOING TO cut this method off, expect malfunction from calling mod SOON!");
             return false;
         }
     }
@@ -136,7 +140,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion sr)
         {
-            //SpawnRegionManager_Remove(sr);
+            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
             return false;
         }
     }
@@ -148,7 +152,8 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(ref string __result)
         {
-            __result = SpawnRegionManager_Serialize();
+            // Serialization no longer happens on vanilla terms. EAF only!
+            //__result = SpawnRegionManager_Serialize();
             return false;
         }
     }
@@ -165,12 +170,12 @@ namespace ExpandedAiFramework
     }
 
 
-    //Updating now happens on EAF schedule ;)
     [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.Update))]
     internal class SpawnRegionManagerPatches_Update
     {
         internal static bool Prefix()
         {
+            //EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
             return false;
         }
     }

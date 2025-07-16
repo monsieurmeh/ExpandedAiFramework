@@ -39,7 +39,7 @@ proxy)
                 this.LogTraceInstanced($"Null proxy, null proxy custom data or no length to proxy custom data");
                 return false;
             }
-            Guid spotGuid = new Guid(proxy.CustomData[0]);
+            Guid spotGuid = new Guid((string)proxy.CustomData[0]);
             if (spotGuid == Guid.Empty)
             {
                 this.LogTraceInstanced($"Proxy spot guid is empty");

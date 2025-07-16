@@ -40,12 +40,11 @@ namespace ExpandedAiFramework
 
 
         //Override this if you need to handle any kind of longer term tracking
-        public virtual void Despawn(float despawnTime) 
+        public virtual void Save() 
         {
             if (mModDataProxy != null)
             {
-                mModDataProxy.CurrentPosition = mBaseAi.transform.position;
-                mModDataProxy.LastDespawnTime = Utility.GetCurrentTimelinePoint();
+                mModDataProxy.Save(this);
             }
         } 
 
@@ -447,14 +446,7 @@ namespace ExpandedAiFramework
             switch (mode)
             {
                 case AiMode.Attack: mBaseAi.EnterAttack(); break;
-                case AiMode.Dead:
-                    mBaseAi.EnterDead(); 
-                    if (mModDataProxy != null)
-                    {
-                        //This should only occur if the carcass has been around long enough. We'll need to add a catch here for that eventually, for now this plugs the "sitting corpse" issue again
-                        //mModDataProxy.Disconnected = true;
-                    }
-                    break;
+                case AiMode.Dead: mBaseAi.EnterDead(); break;
                 case AiMode.Feeding: mBaseAi.EnterFeeding(); break;
                 case AiMode.Flee: mBaseAi.EnterFlee(); break;
                 case AiMode.FollowWaypoints: mBaseAi.EnterFollowWaypoints(); break;

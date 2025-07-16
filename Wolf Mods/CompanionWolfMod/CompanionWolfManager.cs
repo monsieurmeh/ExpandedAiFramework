@@ -38,9 +38,9 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
 
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { } //Do nothing yet
-        
 
-        public bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region) => false;
+
+        public bool ShouldInterceptSpawn(CustomBaseSpawnRegion region) => false;
 
 
         public void Shutdown() { }

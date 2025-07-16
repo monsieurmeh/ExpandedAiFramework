@@ -9,6 +9,7 @@ namespace ExpandedAiFramework
         //Include a field name named "Enable"!
         public abstract bool CanSpawn(BaseAi baseAi);
         public abstract int GetSpawnWeight();
+        public virtual bool ForceSpawningEnabled() { return false; }
         protected override void OnChange(FieldInfo field, object oldValue, object newValue)
         {
             ShowSettingsIfEnabled();

@@ -1,26 +1,30 @@
-﻿using UnityEngine;
+﻿using Il2Cpp;
+using UnityEngine;
 
 
 namespace ExpandedAiFramework
 { 
     [Serializable]
-    public class SpawnModDataProxy
+    public class SpawnModDataProxy : ModDataProxyBase
     {
         [NonSerialized] private Type mVariantSpawnType;
         [NonSerialized] public bool Disconnected = false;
         [NonSerialized] public bool AsyncProcessing = false;
-        public string[] CustomData;
-        public Guid Guid = Guid.Empty;
+        [NonSerialized] public bool Available = true;
         public Guid ParentGuid = Guid.Empty;
-        public string Scene;
-        public Vector3 OriginalPosition;
         public Vector3 CurrentPosition;
-        public Quaternion OriginalRotation;
         public Quaternion CurrentRotation;
         public AiSubType AiSubType;
+        public WildlifeMode WildlifeMode;
         public float LastDespawnTime;
         public string VariantSpawnTypeString;
         public bool ForceSpawn;
+
+        //Vanilla data
+        public AiMode AiMode;
+        string AssetReferenceGUID;
+        public string BaseAiSerialized;
+
 
         public Type VariantSpawnType { get { return mVariantSpawnType; } }
 
@@ -65,68 +69,33 @@ namespace ExpandedAiFramework
         }
 
 
-        public SpawnModDataProxy(Guid guid, string scene, BaseAi ai, Type variantSpawnType)
+        //Only constructs mod data; it is on managers to serialize in vanilla data later
+        public SpawnModDataProxy(Guid guid, string scene, Vector3 originalPosition, Quaternion originalRotation, AiSubType subTypeSpawned, WildlifeMode wildlifeMode, Type variantSpawnType)
         {
             Guid = guid;
             Scene = scene;
-            OriginalPosition = ai.transform.position;
-            CurrentPosition = OriginalPosition;
-            OriginalRotation = ai.transform.rotation;
-            CurrentRotation = OriginalRotation;
-            AiSubType = ai.m_AiSubType;
-            mVariantSpawnType = variantSpawnType;
-            VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
-            LastDespawnTime = GetCurrentTimelinePoint();
-        }
-
-
-        public SpawnModDataProxy(Guid guid, string scene, SpawnRegion spawnRegion, Type variantSpawnType)
-        {
-            Guid = guid;
-            Scene = scene;
-            OriginalPosition = Vector3.zero;
-            OriginalRotation = Quaternion.identity;
-            spawnRegion.TryGetSpawnPositionAndRotation(ref OriginalPosition, ref OriginalRotation);
-            CurrentPosition = OriginalPosition;
-            CurrentRotation = OriginalRotation;
-            AiSubType = spawnRegion.m_AiSubTypeSpawned;
-            mVariantSpawnType = variantSpawnType;
-            VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
-            LastDespawnTime = GetCurrentTimelinePoint();
-        }
-
-
-        public SpawnModDataProxy(Guid guid, string scene, Vector3 originalPosition, Quaternion originalRotation, AiSubType subTypeSpawned, Type variantSpawnType)
-        {
-            Guid = guid;
-            Scene = scene;
-            OriginalPosition = originalPosition;
-            OriginalRotation = originalRotation;
-            CurrentPosition = OriginalPosition;
-            CurrentRotation = OriginalRotation;
+            CurrentPosition = originalPosition;
+            CurrentRotation = originalRotation;
             AiSubType = subTypeSpawned;
             mVariantSpawnType = variantSpawnType;
+            WildlifeMode = wildlifeMode;
             VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
             LastDespawnTime = GetCurrentTimelinePoint();
         }
 
         //eventually we'll use this in a cascade from the spawn region wrapper, but the code is a bit too tight right now for it to be fast.
         // I can optimize later, I'd like to get this running first so I have a baseline, however buggy, to test features on.
-        public virtual void Despawn()
+        public virtual void Save(CustomBaseAi baseAi)
         {
             LastDespawnTime = GetCurrentTimelinePoint();
-        }
-
-
-        public virtual void Respawn(BaseAi baseAi)
-        {
-
+            AiUtils.GetClosestNavmeshPos(out CurrentPosition, baseAi.transform.position, baseAi.transform.position, 5, 5);
+            CurrentRotation = baseAi.transform.rotation;
         }
 
 
         public override string ToString()
         {
-            return $"SpawnModDataProxy with guid {Guid} at {OriginalPosition} of variant spawn type {VariantSpawnTypeString} in scene {Scene} belonging to spawn region with wrapper guid {ParentGuid}";
+            return $"SpawnModDataProxy with guid {Guid} at {CurrentPosition} of variant spawn type {VariantSpawnTypeString} in scene {Scene} belonging to spawn region with wrapper guid {ParentGuid}";
         }
 
 

@@ -46,7 +46,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
                 this.LogTraceInstanced($"Zero-length custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
                 return false;
             }
-            Guid spotGuid = new Guid(proxy.CustomData[0]);
+            Guid spotGuid = new Guid((string)proxy.CustomData[0]);
             if (spotGuid == Guid.Empty) 
             {
                 this.LogTraceInstanced($"Empty GUID on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");

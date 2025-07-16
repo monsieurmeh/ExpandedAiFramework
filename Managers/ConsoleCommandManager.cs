@@ -33,8 +33,9 @@ namespace ExpandedAiFramework
         public ConsoleCommandManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
 
 
-        public override void OnInitializedScene(string sceneName)
+        public override void OnLoadScene(string sceneName)
         {
+            base.OnLoadScene(sceneName);
             mCurrentPaintMode = PaintMode.COUNT;
             mCurrentWanderPathName = string.Empty;
             mCurrentWanderPathPoints.Clear();
@@ -49,6 +50,7 @@ namespace ExpandedAiFramework
                 mPaintMarker = null;
             }
         }
+
 
         public override void Update()
         {

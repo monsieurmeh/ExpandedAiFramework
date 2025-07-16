@@ -49,6 +49,8 @@ namespace ExpandedAiFramework
         private ISubManager[] mSubManagers = new ISubManager[0];
         private float mLastPlayerStruggleTime = 0.0f;
         private string mCurrentScene = string.Empty;
+        private bool mGameLoaded = false;
+        private bool mPendingSceneLoadRequest = false;
 
 
 
@@ -85,6 +87,7 @@ namespace ExpandedAiFramework
         public ISubManager[] SubManagerArray => mSubManagers;
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } } //should be encapsulated elsewhere, datamanager maybe? or maybe some sort of timeline manager.
         public string CurrentScene => mCurrentScene;
+        public bool GameLoaded { get { return mGameLoaded; } set { mGameLoaded = value; } }
         public DataManager DataManager => mDataManager;
         public SpawnRegionManager SpawnRegionManager => mSpawnRegionManager;
         public AiManager AiManager => mAiManager;
@@ -135,6 +138,7 @@ namespace ExpandedAiFramework
 
         public void OnLoadGame()
         {
+            mGameLoaded = true;
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnLoadGame();
@@ -143,12 +147,17 @@ namespace ExpandedAiFramework
             {
                 mSubManagers[i].OnLoadGame();
             }
+            if (mPendingSceneLoadRequest)
+            {
+                mPendingSceneLoadRequest = false;
+                OnLoadScene(mCurrentScene);
+            }
         }
 
 
         public void OnSaveGame()
         {
-            for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
+            for (int i = mBaseSubManagers.Length - 1, iMin = 0; i >= iMin; i--)
             {
                 mBaseSubManagers[i].OnSaveGame();
             }
@@ -161,10 +170,24 @@ namespace ExpandedAiFramework
 
         public void OnLoadScene(string sceneName)
         {
-            mCurrentScene = string.Empty;
             if (sceneName.Contains("MainMenu"))
             {
+                mCurrentScene = string.Empty;
+                LogTrace($"OnQuitToMainMenu");
                 OnQuitToMainMenu();
+                return;
+            }
+            if (!IsValidGameplayScene(sceneName, out string parsedSceneName))
+            {
+                LogTrace($"{sceneName} invalid, ignoreing");
+                return;
+            }
+            LogTrace($"OnLoadScene {parsedSceneName} valid!");
+            mCurrentScene = parsedSceneName;
+            if (!mGameLoaded)
+            {
+                LogTrace($"Scene loaded without game loaded, queueing load scene request for after game loaded...");
+                mPendingSceneLoadRequest = true;
                 return;
             }
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
@@ -184,26 +207,21 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            if (IsValidGameplayScene(sceneName, out string newCurrentScene))
-            { 
-                if (mCurrentScene == string.Empty)
-                {
-                    mCurrentScene = newCurrentScene;
-                }
-                for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
-                {
-                    mBaseSubManagers[i].OnInitializedScene(sceneName);
-                }
-                for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
-                {
-                    mSubManagers[i].OnInitializedScene(sceneName);
-                }
+            for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
+            {
+                mBaseSubManagers[i].OnInitializedScene(sceneName);
+            }
+            for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
+            {
+                mSubManagers[i].OnInitializedScene(sceneName);
             }
         }
 
 
         public void OnQuitToMainMenu()
         {
+            mGameLoaded = false;
+            mPendingSceneLoadRequest = false;
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnQuitToMainMenu();
@@ -229,10 +247,10 @@ namespace ExpandedAiFramework
             mSubManagers[^1] = subManager;
         }
 
+
         public void SaveData(string data, string suffix) => mDataManager.ModData.Save(data, suffix);
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
-        public void ClearCustomAis() => mAiManager.ClearCustomAis();
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode) => mAiManager.TrySetAiMode(baseAi, aiMode);
         public bool TryApplyDamage(BaseAi baseAi, float damage, float bleedOutTime, DamageSource damageSource) => mAiManager.TryApplyDamage(baseAi, damage, bleedOutTime, damageSource);
        
@@ -327,7 +345,7 @@ namespace ExpandedAiFramework
                     message = $"[NULL]\n" + message;
                 }
             }
-            Manager.Logger.Log(message, FlaggedLoggingLevel.Warning);
+            Manager.Logger.Log(message, FlaggedLoggingLevel.Always);
         }
 
         public void Log(

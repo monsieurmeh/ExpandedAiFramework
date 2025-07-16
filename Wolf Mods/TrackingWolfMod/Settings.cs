@@ -28,6 +28,14 @@ namespace ExpandedAiFramework.TrackingWolfMod
         public float PostStruggleFleePeriodSeconds = 60.0f;
 
 
+        [Name("Enable Force Spawning")]
+        [Description("Ensures that tracking wolves will ALWAYS spawn, even if they are across the map. Limited by global force spawn count.")]
+        public bool ForceSpawn = true;
+
+
+        public override bool ForceSpawningEnabled() => ForceSpawn;
+
+
         public override bool CanSpawn(BaseAi ai)
         {
             return Enable

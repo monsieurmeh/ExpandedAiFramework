@@ -7,38 +7,82 @@ namespace ExpandedAiFramework
     internal class Patches
     {
         #region Save/Load/ModData
-        
+
 
         [HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.CreateSlot), new Type[] { typeof(string), typeof(SaveSlotType), typeof(uint), typeof(Episode) })]
-        private static class SaveGameSlotsPatches_CreateSlow
+        private static class SaveGameSlotsPatches_CreateSlot
         {
             private static void Postfix()
             {
-                LogVerbose("OnStartNewGame");
+                LogTrace("OnStartNewGame");
                 Manager.OnStartNewGame();
             }
         }
-        
-        
+
+
 
         [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSaveGameSlot), new Type[] { typeof(string), typeof(int) })]
         private static class GameManagerPatches_LoadSaveGameSlot
         {
             private static void Postfix()
             {
-                LogVerbose("OnLoadGame");
+                LogTrace("OnLoadGame");
                 Manager.OnLoadGame();
             }
         }
 
+
         //[HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.WriteSlotToDisk), new Type[] { typeof(string) })]
         [HarmonyPatch(typeof(SaveGameSlots), nameof(SaveGameSlots.WriteSlotToDisk), new Type[] { typeof(SlotData), typeof(Timestamp) })]
-        private static class ModData_SaveGameSlots_WriteSlotToDisk_Postfix
+        private static class SaveGameSlotsPatches_WriteSlotToDisk
         {
             private static void Prefix()
             {
-                LogVerbose("OnSaveGame");
+                LogTrace("OnSaveGame");
                 Manager.OnSaveGame();
+            }
+        }
+
+
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadSceneWithLoadingScreen), new Type[] { typeof(string) })]
+        private static class GameManagerPatches_LoadSceneWithLoadingScreen
+        {
+            private static void Prefix(string sceneName)
+            {
+                Manager.OnLoadScene(sceneName);
+            }
+        }
+
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.DoExitToMainMenu))]
+        [HarmonyPatch(typeof(GameManager), nameof(GameManager.LoadMainMenu))]
+        private static class GameManagerPatches_ToMainMenu
+        {
+            private static void Prefix()
+            {
+                Manager.OnLoadScene("MainMenu");
+            }
+        }
+
+        #endregion
+
+
+        #region ExtendingLoadScreenTest
+
+
+        [HarmonyPatch(typeof(Panel_Loading), nameof(Panel_Loading.Enable), new Type[] { typeof(bool) })]
+        private static class Panel_LoadingPatches_Enable
+        {
+            private static int RefuseCount = 0;
+            private static readonly int RefuseLimit = 5;
+            private static bool Prefix(ref bool enable)
+            {
+                if (!enable && EAFManager.Instance.SpawnRegionManager.PreLoading && RefuseCount <= RefuseLimit)
+                {
+                    LogVerbose($"Preventing load screen from dropping until preloading is complete! Refusals left: {RefuseLimit - (RefuseCount++)}");
+                    return false;
+                }
+                RefuseCount = 0;
+                return true;
             }
         }
 
@@ -131,7 +175,7 @@ namespace ExpandedAiFramework
 
         #region CarcassSite
 
-        [HarmonyPatch(typeof(CarcassSite.Manager), nameof(CarcassSite.Manager.TryInstanciateCarcassSite), new Type[] { typeof(GameObject), typeof(Vector3), typeof(GameObject)})]
+        [HarmonyPatch(typeof(CarcassSite.Manager), nameof(CarcassSite.Manager.TryInstanciateCarcassSite), new Type[] { typeof(GameObject), typeof(Vector3), typeof(GameObject) })]
         internal class CarcassSitePatches_TryInstanciateCarcassSite
         {
             private static void Postfix(GameObject carcassSitePrefab, Vector3 position, GameObject originCorpse)

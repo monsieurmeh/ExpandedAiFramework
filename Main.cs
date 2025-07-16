@@ -34,12 +34,6 @@ namespace ExpandedAiFramework
         }
 
 
-        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
-        {
-            mManager.OnLoadScene(sceneName);
-        }
-
-
         protected bool Initialize()
         {
             mManager = EAFManager.Instance;

@@ -7,5 +7,6 @@ namespace ExpandedAiFramework
     {
         int SpawnWeight();
         bool CanSpawn(BaseAi baseAi);
+        bool ForceSpawningEnabled();
     }
 }

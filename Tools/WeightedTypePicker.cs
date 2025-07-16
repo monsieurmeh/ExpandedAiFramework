@@ -24,11 +24,13 @@ namespace ExpandedAiFramework
         private List<(Type Type, int Weight)> validEntries = new();
         private float totalValidWeight = 0;
         private Func<T, Type> mGetFallbackTypeFunction;
+        private Action<T, Type> mOnPick;
 
 
-        public WeightedTypePicker(Func<T, Type> fallbackFunction)
+        public WeightedTypePicker(Func<T, Type> fallbackFunction, Action<T, Type> onPick)
         {
             mGetFallbackTypeFunction = fallbackFunction;
+            mOnPick = onPick;
         }
 
 
@@ -45,6 +47,7 @@ namespace ExpandedAiFramework
         {
             lock (validEntries)
             {
+                Type returnType = null;
                 validEntries.Clear();
                 totalValidWeight = 0;
 
@@ -80,11 +83,16 @@ namespace ExpandedAiFramework
                     if (roll <= cumulative)
                     {
                         //LogDebug($"Cumulative weight {cumulative} >=roll {roll}, picking type {type}!");
-                        return type;
+                        returnType = type;
+                        break;
                     }
                 }
-
-                return validEntries[0].Type; // fallback
+                if (returnType == null)
+                {
+                    returnType = validEntries[0].Type;
+                }
+                mOnPick.Invoke(t, returnType);
+                return returnType; // fallback
             }
         }
 

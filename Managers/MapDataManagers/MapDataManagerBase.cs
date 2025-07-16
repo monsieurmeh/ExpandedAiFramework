@@ -127,6 +127,7 @@ namespace ExpandedAiFramework
             }
         }
 
+
         public override void Clear()
         {
             mData.Clear();

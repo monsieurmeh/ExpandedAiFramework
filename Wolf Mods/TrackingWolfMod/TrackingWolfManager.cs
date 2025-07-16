@@ -11,7 +11,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
             mManager = manager;
             LogDebug("TrackingWolfManager initialized!");
         }
-        public bool ShouldInterceptSpawn(BaseAi baseAi, SpawnRegion region) => false;
+        public bool ShouldInterceptSpawn(CustomBaseSpawnRegion region) => false;
         public void Shutdown() { }
         public void OnStartNewGame() { }
         public void OnLoadGame() { }
@@ -22,7 +22,10 @@ namespace ExpandedAiFramework.TrackingWolfMod
         public void Update() { }
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
-            proxy.ForceSpawn = true;
+            if (TrackingWolf.TrackingWolfSettings.ForceSpawn)
+            {
+                proxy.ForceSpawn = true;
+            }
         }
         public Type SpawnType { get { return typeof(TrackingWolf); } }
     }
