@@ -6,6 +6,7 @@ using Il2Cpp;
 using Il2CppRewired.Utils;
 using Il2CppTLD.PDID;
 using MelonLoader.Utils;
+using Il2CppTLD.AI;
 
 namespace ExpandedAiFramework
 {
@@ -241,6 +242,13 @@ namespace ExpandedAiFramework
 
         public void Deserialize(string text)
         {
+            DeserializeInternal(text);
+            PostDeserialize();
+        }
+
+
+        private void DeserializeInternal(string text)
+        {
             try
             {
                 GameManager.GetPlayerManagerComponent().GetTeleportTransformAfterSceneLoad(out mPlayerStartPos, out _);
@@ -252,7 +260,7 @@ namespace ExpandedAiFramework
                 }
                 if (string.IsNullOrEmpty(text))
                 {
-                    LogError($"Null or empty deserialize text");
+                    LogTrace($"Null or empty deserialize text");
                     return;
                 }
                 SpawnRegionSaveList spawnRegionSaveList = Utils.DeserializeObject<SpawnRegionSaveList>(text);
@@ -285,10 +293,14 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"SpawnRegionManager.Deserialize error");
-                LogError($"The error: {e}");
+                LogError($"{e}");
             }
-            finally
+        }
+
+
+        private void PostDeserialize()
+        {
+            try
             {
                 LogTrace($"Processing caught spawn regions");
                 foreach (SpawnRegion spawnRegion in mSpawnRegionCatcher)
@@ -312,15 +324,20 @@ namespace ExpandedAiFramework
                 LogAlways($"Prequeuing. We have {mCustomSpawnRegions.Values.Count} values in mCustomSpawnRegions!");
                 foreach (CustomBaseSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
                 {
-                    customSpawnRegion.ForceSpawnIfAvailable(); 
+                    customSpawnRegion.ForceSpawnIfAvailable();
                     customSpawnRegion.PreSpawn();
                 }
-
+            }
+            catch (Exception e)
+            {
+                LogError($"{e}");
+            }
+            finally
+            {
                 mReadyToProcessSpawnRegions = true;
                 mPreLoading = false;
                 InterfaceManager.GetPanel<Panel_Loading>().Enable(false);
             }
-
         }
 
 
@@ -867,7 +884,7 @@ namespace ExpandedAiFramework
                 LogVerbose($"No spawn region mod data proxy matched to spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}. creating then wrapping");
                 proxy = GenerateNewSpawnRegionModDataProxy(mManager.DataManager.LastValidGameplaySceneName, spawnRegion, guid);
             }
-            CustomBaseSpawnRegion newSpawnRegionWrapper = new CustomBaseSpawnRegion(spawnRegion, proxy, mTimeOfDay);
+            CustomBaseSpawnRegion newSpawnRegionWrapper = GenerateCustomBaseSpawnRegion(spawnRegion, proxy);
             mCustomSpawnRegions.Add(spawnRegion.GetHashCode(), newSpawnRegionWrapper);
             mCustomSpawnRegionsByGuid.Add(proxy.Guid, newSpawnRegionWrapper);
             mCustomSpawnRegionsByIndex.Add(newSpawnRegionWrapper);
@@ -876,6 +893,32 @@ namespace ExpandedAiFramework
                 mVanillaManager.m_SpawnRegions.Add(spawnRegion);
             }
             return newSpawnRegionWrapper;
+        }
+
+
+        private CustomBaseSpawnRegion GenerateCustomBaseSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy proxy)
+        {
+            //A lot of this was in / is repeated still in CustomBaseSpawnRegion.Initialize(); may be wiser to use an actual parent top object and delegate some logic to smaller serviec objects.
+            if (spawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
+            {
+                LogVerbose($"null spawnable prefab on spawn region, fetching...");
+                AssetReferenceAnimalPrefab animalReferencePrefab = spawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(WildlifeMode.Normal);
+                spawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
+                animalReferencePrefab.ReleaseAsset();
+            }
+            if (!spawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi baseAi))
+            {
+                LogError($"Could not get base ai from spawn region!");
+                return null;
+            }
+            if (baseAi.m_AiSubType == AiSubType.Wolf && !baseAi.NormalWolf.IsNullOrDestroyed())
+            {
+                return new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay);
+            }
+            else
+            {
+                return new CustomBaseSpawnRegion(spawnRegion, proxy, mTimeOfDay);
+            }
         }
 
 

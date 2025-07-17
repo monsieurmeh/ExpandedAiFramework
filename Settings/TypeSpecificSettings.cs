@@ -7,6 +7,9 @@ namespace ExpandedAiFramework
     public abstract class TypeSpecificSettings : JsonModSettings, ISpawnTypePickerCandidate
     {
         //Include a field name named "Enable"!
+
+        public TypeSpecificSettings(string path) : base(path) { }
+
         public abstract bool CanSpawn(BaseAi baseAi);
         public abstract int GetSpawnWeight();
         public virtual bool ForceSpawningEnabled() { return false; }

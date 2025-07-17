@@ -18,6 +18,10 @@ namespace ExpandedAiFramework
         public int SpawnWeight = 100;
 
 
+        public BaseTimberwolfSettings(string path) : base(path) { }
+
+
+
         public override bool CanSpawn(BaseAi ai)
         {
             //LogDebug($"[BaseTimberwolfSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | BaseWolf is null: {ai.BaseWolf == null} | Timberwolf is null: {ai.Timberwolf == null}");

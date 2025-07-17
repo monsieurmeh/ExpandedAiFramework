@@ -10,7 +10,7 @@ namespace ExpandedAiFramework
         public int MaxForceSpawns = 10;
 
 
-        public ExpandedAiFrameworkSettings()
+        public ExpandedAiFrameworkSettings(string path) : base(path)
         {
             Initialize();
         }

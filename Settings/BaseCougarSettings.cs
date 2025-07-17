@@ -16,6 +16,9 @@ namespace ExpandedAiFramework
         public int SpawnWeight = 100;
 
 
+        public BaseCougarSettings(string path) : base(path) { }
+
+
         public override bool CanSpawn(BaseAi ai)
         {
             //LogDebug($"[BaseCougarSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | Cougar is null: {ai.Cougar == null}");

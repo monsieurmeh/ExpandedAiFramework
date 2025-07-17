@@ -7,7 +7,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
     [RegisterTypeInIl2Cpp]
     public class WanderingWolf : BaseWolf
     {
-        internal static WanderingWolfSettings WanderingWolfSettings = new WanderingWolfSettings();
+        internal static WanderingWolfSettings WanderingWolfSettings = new WanderingWolfSettings(Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(WanderingWolf)}"));
 
         protected WanderPath mWanderPath;
         protected bool mWanderPathConnected = false;

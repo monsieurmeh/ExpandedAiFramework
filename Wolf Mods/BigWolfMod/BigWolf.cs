@@ -6,7 +6,7 @@ namespace ExpandedAiFramework.BigWolfMod
     [RegisterTypeInIl2Cpp]
     public class BigWolf : BaseWolf
     {
-        internal static BigWolfSettings BigWolfSettings = new BigWolfSettings();
+        internal static BigWolfSettings BigWolfSettings = new BigWolfSettings(Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(BigWolf)}"));
 
 
         public BigWolf(IntPtr ptr) : base(ptr) { }

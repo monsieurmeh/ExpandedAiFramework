@@ -37,7 +37,7 @@ namespace ExpandedAiFramework
         protected bool Initialize()
         {
             mManager = EAFManager.Instance;
-            mManager?.Initialize(new ExpandedAiFrameworkSettings());
+            mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"EAF.Settings")));
             return mManager != null;
         }
 

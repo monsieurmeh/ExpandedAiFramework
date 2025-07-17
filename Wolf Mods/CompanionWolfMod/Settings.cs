@@ -6,7 +6,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
     {
         private CompanionWolfManager mManager;
 
-        public CompanionWolfSettings(CompanionWolfManager manager)
+        public CompanionWolfSettings(CompanionWolfManager manager, string path) : base(path)
         {
             mManager = manager;
         }

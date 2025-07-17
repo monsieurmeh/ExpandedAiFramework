@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
         public const float SecondsToHours = 1f / 3600f;
         public const float HoursToSeconds = 3600;
         public const string ModName = "Expanded Ai Framework";
-        public const string MapDataFolder = "EAF";
+        public const string DataFolderPath = "EAF";
         public const string CommandString = "eaf";
         public const string CommandString_Help = "help";
         public const string CommandString_Create = "create";

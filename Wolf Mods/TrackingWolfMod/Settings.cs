@@ -33,6 +33,9 @@ namespace ExpandedAiFramework.TrackingWolfMod
         public bool ForceSpawn = true;
 
 
+        public TrackingWolfSettings(string path) : base(path) { }
+
+
         public override bool ForceSpawningEnabled() => ForceSpawn;
 
 

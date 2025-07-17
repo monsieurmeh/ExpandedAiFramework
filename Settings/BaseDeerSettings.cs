@@ -14,7 +14,10 @@ namespace ExpandedAiFramework
         [Slider(0.0f, 100.0f)]
         [Description("Adjust spawn weight for base deer. Higher numbers increase relative spawn chance. If no other deer mods are included, this will have no effect.")]
         public int SpawnWeight = 100;
-        
+
+
+        public BaseDeerSettings(string path) : base(path) { }
+
 
         public override bool CanSpawn(BaseAi ai)
         {

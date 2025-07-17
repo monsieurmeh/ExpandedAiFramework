@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
         private WanderPathManager mWanderPathManager;
         private SpawnRegionModDataProxyManager mSpawnRegionModDataProxyManager;
         private SpawnModDataProxyManager[] mSpawnModDataProxyManagers = new SpawnModDataProxyManager[(int)WildlifeMode.Aurora + 1];
-        private Dictionary<Type, MapDataManagerBase> mMapDataManagers = new Dictionary<Type, MapDataManagerBase>();
+        private Dictionary<Type, SubDataManagerBase> mMapDataManagers = new Dictionary<Type, SubDataManagerBase>();
 
         private string mLastScene = string.Empty;
         private bool mProxyDataLoaded = false;
@@ -46,7 +46,7 @@ namespace ExpandedAiFramework
         public bool TryGetMapDataManager<T>(out MapDataManager<T> mapDataManager) where T : MapData, new()
         {
             mapDataManager = null;
-            if (!mMapDataManagers.TryGetValue(typeof(T), out MapDataManagerBase baseMapDataManager))
+            if (!mMapDataManagers.TryGetValue(typeof(T), out SubDataManagerBase baseMapDataManager))
             {
                 return false;
             }
@@ -192,7 +192,7 @@ namespace ExpandedAiFramework
 
         private void StartSubManagers()
         { 
-            foreach(MapDataManagerBase mapDataManager in mMapDataManagers.Values)
+            foreach(SubDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.StartWorker();
             }
@@ -201,7 +201,7 @@ namespace ExpandedAiFramework
 
         private void StopSubManagers()
         {
-            foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
+            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.StopWorker();
             }
@@ -297,7 +297,7 @@ namespace ExpandedAiFramework
         public void RefreshAvailableMapData(string sceneName)
         {
             LogVerbose($"Loading EAF map data for scene {sceneName}");
-            foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
+            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.RefreshData(sceneName);
             }
@@ -307,7 +307,7 @@ namespace ExpandedAiFramework
         public void SaveMapData()
         {
             LogVerbose($"Saving");
-            foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
+            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.Save();
             }
@@ -317,7 +317,7 @@ namespace ExpandedAiFramework
         public void LoadMapData()
         {
             LogVerbose($"Loading");
-            foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
+            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.Load();
             }
@@ -328,7 +328,7 @@ namespace ExpandedAiFramework
         public void ClearMapData()
         {
             LogVerbose($"Clearing");
-            foreach (MapDataManagerBase mapDataManager in mMapDataManagers.Values)
+            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.Clear();
             }

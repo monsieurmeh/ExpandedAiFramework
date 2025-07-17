@@ -283,7 +283,7 @@ namespace ExpandedAiFramework
             mCurrentPaintFilePath = uConsole.GetString();
             if (!IsNameProvided(mCurrentPaintFilePath, false))
             {
-                mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"ExpandedAiFramework.WanderPaths.json");
+                mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"ExpandedAiFramework.WanderPaths.json");
             }
             string scene = GameManager.m_ActiveScene;
             if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
@@ -317,7 +317,7 @@ namespace ExpandedAiFramework
             mCurrentPaintFilePath = uConsole.GetString();
             if (!IsNameProvided(mCurrentPaintFilePath, false))
             {
-                mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"ExpandedAiFramework.HidingSpots.json");
+                mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"ExpandedAiFramework.HidingSpots.json");
             }
             string scene = GameManager.m_ActiveScene;
             if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
@@ -1119,7 +1119,7 @@ namespace ExpandedAiFramework
             {
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"{typeof(WanderPath)}s.json");
+                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{typeof(WanderPath)}s.json");
                 }
                 // Clear any existing state
                 CleanUpPaintMarker();
@@ -1165,7 +1165,7 @@ namespace ExpandedAiFramework
             {
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(MapDataFolder, $"{typeof(HidingSpot)}s.json");
+                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{typeof(HidingSpot)}s.json");
                 }
                 // Clear any existing state
                 CleanUpPaintMarker();

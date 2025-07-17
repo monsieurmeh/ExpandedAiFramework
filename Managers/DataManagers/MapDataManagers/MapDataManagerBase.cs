@@ -1,59 +1,10 @@
-﻿using Il2CppRewired.Utils;
-using Il2CppVoice;
-using MelonLoader.TinyJSON;
+﻿using MelonLoader.TinyJSON;
 using MelonLoader.Utils;
-using ModData;
 using UnityEngine;
-using static Il2Cpp.CarcassSite;
 
 namespace ExpandedAiFramework
 {
-    public abstract class MapDataManagerBase 
-    {
-        protected DataManager mManager;
-
-        public MapDataManagerBase(DataManager manager)
-        {
-            mManager = manager;
-        }
-
-        public abstract void StartWorker();
-        public abstract void StopWorker();
-        public abstract void RefreshData(string sceneName);
-        public abstract void Save();
-        public abstract void Load();
-        public abstract void LoadAdditional(string pathFromModsFolder);
-        public abstract void Clear();
-    }
-
-    public class MapDataRequest<T>
-    {
-        public Vector3 Position;
-        public Action<T> Callback;
-        public int ExtraCandidates;
-        private string mCachedString;
-        public object[] Args;
-
-        public MapDataRequest(Vector3 position, Action<T> callback, int extraCandidates, params object[] args)
-        {
-            Position = position;
-            Callback = callback;
-            ExtraCandidates = extraCandidates;
-            Args = args;
-            mCachedString = $"{nameof(MapDataRequest<T>)}.<{typeof(T)}> at {Position} with {ExtraCandidates} extra candidates";
-            for (int i = 0, iMax = args?.Length ?? 0; i < iMax; i++)
-            {
-                mCachedString += $" (Arg{i}: {args[i]})";
-            }
-        }
-
-        public override string ToString()
-        {
-            return mCachedString;
-        }
-    }
-
-    public class MapDataManager<T> : MapDataManagerBase, ILogInfoProvider where T : MapData, new()
+    public class MapDataManager<T> : SubDataManagerBase, ILogInfoProvider where T : MapData, new()
     {
 
         private readonly object mQueueLock = new object();

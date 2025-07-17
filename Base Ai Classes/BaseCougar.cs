@@ -1,23 +1,14 @@
-﻿
-
-using HarmonyLib;
-using Il2Cpp;
-using Il2CppRewired;
-using Il2CppRewired.Utils;
-using Il2CppRewired.Utils.Classes.Data;
-using Il2CppTLD.AddressableAssets;
+﻿using Il2CppRewired.Utils;
 using Il2CppTLD.AI;
 using UnityEngine;
-using static Il2Cpp.UITweener;
-using static Il2CppSystem.Linq.Expressions.Interpreter.CastInstruction.CastInstructionNoT;
-using static UnityEngine.GraphicsBuffer;
+
 
 namespace ExpandedAiFramework
 {
     [RegisterTypeInIl2Cpp]
     public class BaseCougar : CustomBaseAi
     {
-        public static BaseCougarSettings BaseCougarSettings = new BaseCougarSettings();
+        public static BaseCougarSettings BaseCougarSettings = new BaseCougarSettings(Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(BaseCougar)}"));
 
         protected AiCougar mCougar;
 

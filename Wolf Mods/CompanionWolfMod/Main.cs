@@ -21,7 +21,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             EAFManager.Instance.LoadData("CompanionWolfMod");
             CompanionWolfManager manager = new CompanionWolfManager();
-            CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager);
+            CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager, Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(CompanionWolf)}"));
             EAFManager.Instance.RegisterSubmanager(typeof(CompanionWolf), manager);
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.CompanionWolfSettings))
             {

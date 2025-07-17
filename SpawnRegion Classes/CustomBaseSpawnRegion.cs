@@ -39,13 +39,7 @@ namespace ExpandedAiFramework
             mTimeOfDay = timeOfDay;
             mManager = Manager.SpawnRegionManager;
             mSpawnRegion.m_Registered = true;
-            if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
-            {
-                this.LogVerboseInstanced($"null spawnable prefab on spawn region, fetching...");
-                AssetReferenceAnimalPrefab animalReferencePrefab = mSpawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(WildlifeMode.Normal);
-                mSpawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
-                animalReferencePrefab.ReleaseAsset();
-            }
+
 
             mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = mModDataProxy.ElapsedHoursAtLastActiveReRoll;
             mSpawnRegion.m_NumRespawnsPending = mModDataProxy.NumRespawnsPending;
@@ -196,7 +190,7 @@ namespace ExpandedAiFramework
                 }
                 if (targetPop <= GetCurrentActivePopulation(currentMode))
                 {
-                    this.LogTraceInstanced("Max active population reached, aborting prespawning");
+                    this.LogTraceInstanced($"Max active population ({targetPop}) reached, aborting prespawning");
                     return;
                 }
             }
@@ -584,15 +578,16 @@ namespace ExpandedAiFramework
         }
 
 
-        private int CalculateTargetPopulation()
+        protected  int CalculateTargetPopulation()
         {
             if (SpawningSuppressedByExperienceMode())
             {
+                this.LogTraceInstanced($"Spawning suppressed by experience mode");
                 return 0;
             }
             if (!mSpawnRegion.m_CanSpawnInBlizzard && GameManager.m_Weather.IsBlizzard())
             {
-                this.LogVerboseInstanced($"Cannot spawn in blizzard");
+                this.LogTraceInstanced($"Cannot spawn in blizzard");
                 return 0;
             }
             return CalculateTargetPopulationInternal();
@@ -609,12 +604,10 @@ namespace ExpandedAiFramework
             {
                 return 0;
             }
-            if (mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay < adjustedMaxSimultaneousSpawns)
-            {
-                return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay;
-            }
-            return adjustedMaxSimultaneousSpawns;
+            return Math.Min(adjustedMaxSimultaneousSpawns, mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay + AdditionalSimultaneousSpawnAllowance());
         }
+
+        protected virtual int AdditionalSimultaneousSpawnAllowance() => 0;
 
 
         private int GetCurrentActivePopulation(WildlifeMode wildlifeMode)
@@ -636,7 +629,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private int GetMaxSimultaneousSpawnsDay()
+        protected virtual int GetMaxSimultaneousSpawnsDay()
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
@@ -647,7 +640,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private int GetMaxSimultaneousSpawnsNight()
+        protected virtual int GetMaxSimultaneousSpawnsNight()
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
@@ -958,6 +951,7 @@ namespace ExpandedAiFramework
 
 
         // Handles vanilla data generated before mod was installed; no other real use, other data is engaged at wrapper instantiation.
+        // Edit: This is probably completely broken now. Yay for no tests! lmao
         public void Deserialize(string text)
         {
             try

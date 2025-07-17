@@ -14,7 +14,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
             COUNT
         }
 
-        internal static AmbushWolfSettings AmbushWolfSettings = new AmbushWolfSettings();
+        internal static AmbushWolfSettings AmbushWolfSettings = new AmbushWolfSettings(Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(AmbushWolf)}"));
         protected HidingSpot mHidingSpot;
 
         public AmbushWolf(IntPtr ptr) : base(ptr) { }

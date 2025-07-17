@@ -16,6 +16,8 @@ namespace ExpandedAiFramework
         public int SpawnWeight = 100;
 
 
+        public BaseBearSettings(string path) : base(path) { }
+
 
         public override bool CanSpawn(BaseAi ai)
         {
