@@ -822,7 +822,7 @@ namespace ExpandedAiFramework
                     LogTrace($"No spawn region mod data proxy matched to spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}. creating then wrapping");
                     proxy = GenerateNewSpawnRegionModDataProxy(mManager.CurrentScene, spawnRegion, guid);
                 }
-                CustomSpawnRegion newSpawnRegionWrapper = GenerateCustomBaseSpawnRegion(spawnRegion, proxy);
+                CustomSpawnRegion newSpawnRegionWrapper = GenerateCustomSpawnRegion(spawnRegion, proxy);
                 mCustomSpawnRegions.Add(spawnRegion.GetHashCode(), newSpawnRegionWrapper);
                 mCustomSpawnRegionsByGuid.Add(proxy.Guid, newSpawnRegionWrapper);
                 mCustomSpawnRegionsByIndex.Add(newSpawnRegionWrapper);
@@ -839,7 +839,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private CustomSpawnRegion GenerateCustomBaseSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy proxy)
+        private CustomSpawnRegion GenerateCustomSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy proxy)
         {
             //A lot of this was in / is repeated still in CustomBaseSpawnRegion.Initialize(); may be wiser to use an actual parent top object and delegate some logic to smaller serviec objects.
             if (spawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())

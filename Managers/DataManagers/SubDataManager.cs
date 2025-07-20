@@ -124,11 +124,11 @@ namespace ExpandedAiFramework
                     {
                         if (mActiveRequest.ThreadSafe)
                         {
-                            mDispatcher.Dispatch(mActiveRequest.Callback);
+                            mActiveRequest.Callback();
                         }
                         else
                         {
-                            mActiveRequest.Callback();
+                            mDispatcher.Dispatch(mActiveRequest.Callback);
                         }
                     }
                 }
