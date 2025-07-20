@@ -20,9 +20,10 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
-            return SpawnRegion_Start(__instance);
+            return false;
         }
     }
+
 
     [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.GetClosestActiveSpawn), new Type[] { typeof(Vector3) })]
     internal class SpawnRegionPatches_GetClosestActiveSpawn

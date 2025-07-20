@@ -75,12 +75,6 @@ namespace ExpandedAiFramework
         }
 
 
-        public static bool SpawnRegion_Start(SpawnRegion __instance)
-        {
-            return !Manager.SpawnRegionManager.TryStart(__instance);
-        }
-
-
         public static bool SpawnRegion_SetRandomWaypointCircuit(SpawnRegion __instance)
         {
             return !Manager.SpawnRegionManager.TrySetRandomWaypointCircuit(__instance);

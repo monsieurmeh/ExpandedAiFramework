@@ -25,6 +25,7 @@ namespace ExpandedAiFramework
         private List<SpawnRegion> mSpawnRegionCatcher = new List<SpawnRegion>();
         private bool mReadyToProcessSpawnRegions = false;
         private Vector3 mPlayerStartPos;
+        private HashSet<Guid> mPendingWrapOperations = new HashSet<Guid>();
 
         private Il2Cpp.SpawnRegionManager safeVanillaManager
         {
@@ -280,20 +281,20 @@ namespace ExpandedAiFramework
                 LogTrace($"Processing caught spawn regions");
                 foreach (SpawnRegion spawnRegion in mSpawnRegionCatcher)
                 {
-                    try
+                    ProcessCaughtSpawnRegion(spawnRegion);
+                }
+                bool canContinue = false;
+                int timeoutCount = -1;
+                while (!canContinue && timeoutCount++ < 10000)
+                {
+                    lock(mPendingWrapOperations)
                     {
-                        ProcessCaughtSpawnRegion(spawnRegion, out CustomSpawnRegion customSpawnRegion);
-                        if (customSpawnRegion == null)
-                        {
-                            LogError($"Null customspawnregion found during post-serialize processing");
-                            continue;
-                        }
-                        customSpawnRegion.Start();
+                        canContinue = mPendingWrapOperations.Count == 0;
                     }
-                    catch (Exception e)
-                    {
-                        LogError($"Error processing caught spawn region: {e}");
-                    }
+                }
+                if (!canContinue)
+                {
+                    LogError($"Timeout on post deserialize waiting for spawn region processing!");
                 }
                 mSpawnRegionCatcher.Clear();
                 LogAlways($"Prequeuing. We have {mCustomSpawnRegions.Values.Count} values in mCustomSpawnRegions!");
@@ -308,7 +309,6 @@ namespace ExpandedAiFramework
             }
             finally
             {
-                // We may want 
                 mReadyToProcessSpawnRegions = true;
                 mPreLoading = false;
                 InterfaceManager.GetPanel<Panel_Loading>().Enable(false);
@@ -688,6 +688,7 @@ namespace ExpandedAiFramework
             return true;
         }
 
+
         public bool TryMaybeReRollActive(SpawnRegion __instance)
         {
             if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
@@ -695,32 +696,6 @@ namespace ExpandedAiFramework
                 return false;
             }
             customSpawnRegion.MaybeReRollActive();
-            return true;
-        }
-
-
-        public bool TryStart(SpawnRegion __instance)
-        {
-            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
-            {
-                if (!mReadyToProcessSpawnRegions)
-                {
-                    if (mSpawnRegionCatcher.Contains(__instance))
-                    {
-                        LogTrace($"Already caught {__instance.GetHashCode()}, skipping");
-                        return true;
-                    }
-                    LogVerbose($"Caught spawn region with hash {__instance.GetHashCode()}, queueing for post-deserialize processing");
-                    mSpawnRegionCatcher.Add(__instance);
-                    return true;
-                }
-                if (!TryInjectCustomSpawnRegion(__instance, out customSpawnRegion))
-                {
-                    LogError($"Could not match OR create new wrapper for spawn region with hash code {__instance.GetHashCode()} after regular deserialization!");
-                    return true;
-                }
-            }
-            customSpawnRegion.Start();
             return true;
         }
 
@@ -772,20 +747,18 @@ namespace ExpandedAiFramework
         }
 
 
-        private bool TryInjectCustomSpawnRegion(SpawnRegion spawnRegion, out CustomSpawnRegion customSpawnRegion)
+        private bool TryInjectCustomSpawnRegion(SpawnRegion spawnRegion)
         {
-            customSpawnRegion = null;
             if (spawnRegion == null)
             {
                 LogWarning($"Null spawn region. cannot inject custom spawn region");
                 return false;
             }
-            if (mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out customSpawnRegion))
+            if (mCustomSpawnRegions.ContainsKey(spawnRegion.GetHashCode()))
             {
-                //LogTrace($"Previously matched spawn region with hash code {spawnRegion.GetHashCode()} and guid {customSpawnRegion.ModDataProxy.Guid}, skipping.");
+                LogTrace($"Previously matched spawn region with hash code {spawnRegion.GetHashCode()}, skipping.");
                 return false;
             }
-            //NOTE: This SHOULD already be in place from vanilla! we never added this, and I dont see anything in spawnregion itself that adds this!
             if (!spawnRegion.TryGetComponent<ObjectGuid>(out ObjectGuid guid))
             {
                 LogError($"Could not find ObjectGuid on spawn region with hashcode {spawnRegion.GetHashCode()}!");
@@ -797,21 +770,13 @@ namespace ExpandedAiFramework
         }
 
 
-        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion,out CustomSpawnRegion customSpawnRegion)
+        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion)
         {
-            int hashcode = spawnRegion.GetHashCode();
-            customSpawnRegion = null;
-            if (mCustomSpawnRegions.TryGetValue(hashcode, out customSpawnRegion))
+            if (!TryInjectCustomSpawnRegion(spawnRegion))
             {
-                LogVerbose($"Already started spawn region with hash code {hashcode}, returning immediately");
                 return false;
             }
-            if (!TryInjectCustomSpawnRegion(spawnRegion, out customSpawnRegion))
-            {
-                LogError($"Could not inject custom base spawn region to wrap spawn region with hashcode {hashcode}!");
-                return false;
-            }
-            LogVerbose($"Successfully wrapped custom spawn region with hash code {hashcode}!");
+            LogTrace($"Successfully wrapped custom spawn region with hash code {spawnRegion.GetHashCode()}!");
             return true;
         }
 
@@ -830,17 +795,24 @@ namespace ExpandedAiFramework
             mReadyToProcessSpawnRegions = false;
         }
 
-        // use 1: creating a new wrapper on deserialize, probably for existing vanilla data. Probably wont matter, but we'll progam it in anwyways. Just needs a callback for deserialize on the region after.
-        // use 2:
+
         private void WrapSpawnRegion(SpawnRegion spawnRegion, Guid guid)
         {
+            lock (mPendingWrapOperations)
+            {
+                mPendingWrapOperations.Add(guid);
+            }
             mDataManager.ScheduleSpawnRegionModDataProxyRequest(new GetDataByGuidRequest<SpawnRegionModDataProxy>(guid, mManager.CurrentScene, (proxy, result) =>
             {
                 if (result == RequestResult.Succeeded)
                 {
                     if (proxy.Connected)
                     {
-                        EAFManager.LogWithStackTrace($"Trying to connect to an already-connected SpawnRegionModDataProxy with guid {guid}!");
+                        EAFManager.LogWithStackTrace($"Trying to connect to an already-connected SpawnRegionModDataProxy with guid {guid}!"); 
+                        lock (mPendingWrapOperations)
+                        {
+                            mPendingWrapOperations.Remove(guid);
+                        }
                         return;
                     }
                     LogVerbose($"Matched existing spawn region mod data proxy with guid {guid} against found spawn region!");
@@ -858,6 +830,11 @@ namespace ExpandedAiFramework
                 {
                     mVanillaManager.m_SpawnRegions.Add(spawnRegion);
                 }
+                lock (mPendingWrapOperations)
+                {
+                    mPendingWrapOperations.Remove(guid);
+                }
+                newSpawnRegionWrapper.Start();
             }));
         }
 
