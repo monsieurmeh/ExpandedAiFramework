@@ -19,9 +19,6 @@ namespace ExpandedAiFramework
         private Dictionary<Type, IMapDataManager> mMapDataManagers = new Dictionary<Type, IMapDataManager>();
 
         private string mLastScene = string.Empty;
-        private bool mProxyDataLoaded = false;
-        private bool mSpawnRegionModDataProxiesUncached = false;
-        private bool mSpawnModDataProxiesUncached = false;
 
 #if DEV_BUILD
         private ModDataManager mModData = new ModDataManager(ModName, true);
@@ -150,6 +147,11 @@ namespace ExpandedAiFramework
             {
                 mapDataManager.StartWorker();
             }
+            foreach (SpawnModDataProxyManager manager in mSpawnModDataProxyManagers)
+            {
+                manager.StartWorker();
+            }
+            mSpawnRegionModDataProxyManager.StartWorker();
         }
 
 
@@ -159,6 +161,11 @@ namespace ExpandedAiFramework
             {
                 mapDataManager.StopWorker();
             }
+            foreach (SpawnModDataProxyManager manager in mSpawnModDataProxyManagers)
+            {
+                manager.StopWorker();
+            }
+            mSpawnRegionModDataProxyManager.StopWorker();
         }
 
 

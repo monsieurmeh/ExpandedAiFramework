@@ -22,6 +22,7 @@ namespace ExpandedAiFramework
         protected DataManager mManager;
         protected DispatchManager mDispatcher;
         protected IRequest mActiveRequest;
+        protected Action mActiveAction;
         protected Task mTask;
         protected bool mLoaded;
         protected bool mKeepTaskRunning = false;
@@ -73,9 +74,9 @@ namespace ExpandedAiFramework
         }
         public void ScheduleRequest(IRequest request)
         {
+            request.Preprocess(this);
             lock (mRequestQueueLock)
             {
-                request.Preprocess(this);
                 mRequests.Enqueue(request);
             }
         }
@@ -101,17 +102,13 @@ namespace ExpandedAiFramework
             while (mKeepTaskRunning)
             {
                 mActive = true;
-                lock (mInternalActionQueue)
-                {
-                    while (mInternalActionQueue.Count > 0)
-                    {
-                        mInternalActionQueue.Dequeue().Invoke();
-                    }
-                }
-
+                HandleInternalActions();
                 lock (mRequestQueueLock)
                 {
-                    mActiveRequest = mRequests.Count > 0 ? mRequests.Dequeue() : null;
+                    if (mRequests.Count > 0)
+                    {
+                        mActiveRequest = mRequests.Dequeue();
+                    }
                 }
                 if (mActiveRequest != null)
                 {
@@ -121,7 +118,7 @@ namespace ExpandedAiFramework
                         lock (mRequestQueueLock)
                         {
                             mRequests.Enqueue(mActiveRequest);
-                        }
+                        }   
                     }
                     else
                     {
@@ -136,10 +133,31 @@ namespace ExpandedAiFramework
                     }
                 }
                 else
-                {
-                    Thread.Sleep(50);
+                { 
+                    Thread.Sleep(250);
                 }
                 mActive = false;
+            }
+        }
+
+
+        private void HandleInternalActions()
+        {
+            int requestCount = 0;
+            lock (mRequestQueueLock)
+            {
+                requestCount = mInternalActionQueue.Count;
+            }
+            while (requestCount > 0)
+            {
+                lock (mRequestQueueLock)
+                {
+                    mActiveAction = mInternalActionQueue.Dequeue();
+                }
+                mActiveAction.Invoke();
+                {
+                    requestCount = mInternalActionQueue.Count;
+                }
             }
         }
 

@@ -283,9 +283,9 @@ namespace ExpandedAiFramework
                 {
                     ProcessCaughtSpawnRegion(spawnRegion);
                 }
+                long startTime = DateTime.Now.Ticks;
                 bool canContinue = false;
-                int timeoutCount = -1;
-                while (!canContinue && timeoutCount++ < 10000)
+                while (!canContinue && DateTime.Now.Ticks <= startTime + 10000000)
                 {
                     lock(mPendingWrapOperations)
                     {
@@ -815,11 +815,11 @@ namespace ExpandedAiFramework
                         }
                         return;
                     }
-                    LogVerbose($"Matched existing spawn region mod data proxy with guid {guid} against found spawn region!");
+                    LogTrace($"Matched existing spawn region mod data proxy with guid {guid} against found spawn region!");
                 }
                 else
                 {
-                    LogVerbose($"No spawn region mod data proxy matched to spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}. creating then wrapping");
+                    LogTrace($"No spawn region mod data proxy matched to spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}. creating then wrapping");
                     proxy = GenerateNewSpawnRegionModDataProxy(mManager.CurrentScene, spawnRegion, guid);
                 }
                 CustomSpawnRegion newSpawnRegionWrapper = GenerateCustomBaseSpawnRegion(spawnRegion, proxy);
