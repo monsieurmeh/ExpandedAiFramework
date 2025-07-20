@@ -1,8 +1,10 @@
 ﻿
 
+using Il2CppRewired.Utils.Classes.Utility;
+
 namespace ExpandedAiFramework
 {
-    public class WeightedTypePicker<T>
+    public class WeightedTypePicker<T> : IDisposable
     {
         private class Entry
         {
@@ -20,17 +22,71 @@ namespace ExpandedAiFramework
 
         private readonly List<Entry> allEntries = new();
         private readonly Random random = new();
+        private readonly object mLock = new object();
 
         private List<(Type Type, int Weight)> validEntries = new();
         private float totalValidWeight = 0;
         private Func<T, Type> mGetFallbackTypeFunction;
         private Action<T, Type> mOnPick;
+        private bool mRunWorker = true;
+        private Task mTask;
+        private Queue<Action> mQueue = new Queue<Action>();
+        private Action mCurrentAction;
 
 
         public WeightedTypePicker(Func<T, Type> fallbackFunction, Action<T, Type> onPick)
         {
             mGetFallbackTypeFunction = fallbackFunction;
             mOnPick = onPick;
+            StartWorker();
+        }
+
+
+        void IDisposable.Dispose()
+        {
+            StopWorker();
+        }
+
+
+        private void StartWorker()
+        {
+            LogVerbose($"Starting TypePicker worker thread");
+            mTask = Task.Run(Worker);
+        }
+
+
+        private void StopWorker()
+        {
+            LogVerbose($"Stopping TypePicker worker thread");
+            mRunWorker = false;
+            try
+            {
+                mTask?.Wait();
+            }
+            catch (Exception e)
+            {
+                LogError($"Error stopping worker thread: {e}");
+            }
+        }
+
+
+        private void Worker()
+        {
+            while (mRunWorker)
+            {
+                lock (mLock)
+                {
+                    mCurrentAction = mQueue.Dequeue();
+                }
+                if (mCurrentAction != null)
+                {
+                    mCurrentAction.Invoke();
+                }
+                else
+                {  
+                    Thread.Sleep(50);
+                }
+            }
         }
 
 
@@ -45,7 +101,7 @@ namespace ExpandedAiFramework
 
         public Type PickType(T t)
         {
-            lock (validEntries)
+            lock (mLock)
             {
                 Type returnType = null;
                 validEntries.Clear();
@@ -99,27 +155,33 @@ namespace ExpandedAiFramework
 
         public void PickTypeAsync(T t, Action<Type> callback)
         {
-            Task.Run(() =>
+            lock (mLock)
             {
-                try
-                {
-                    Type spawnType = PickType(t);
-                    DispatchManager.Instance.Dispatch(() => callback.Invoke(spawnType));
-                }
-                catch (Exception e)
-                {
-                    LogError($"ASYNC exception during WeightedTypePicker.PickTypeAsync<T>: {e}");
-                    return;
-                }
-            });
+                mQueue.Enqueue(() =>
+                { 
+                    try
+                    {
+                        Type spawnType = PickType(t);
+                        DispatchManager.Instance.Dispatch(() => callback.Invoke(spawnType));
+                    }
+                    catch (Exception e)
+                    {
+                        LogError($"ASYNC exception during WeightedTypePicker.PickTypeAsync<T>: {e}");
+                        return;
+                    }
+                });
+            }
         }
 
 
         public void Clear()
         {
-            allEntries.Clear();
-            validEntries.Clear();
-            totalValidWeight = 0;
+            lock (mLock)
+            {
+                allEntries.Clear();
+                validEntries.Clear();
+                totalValidWeight = 0;
+            }
         }
     }
 }

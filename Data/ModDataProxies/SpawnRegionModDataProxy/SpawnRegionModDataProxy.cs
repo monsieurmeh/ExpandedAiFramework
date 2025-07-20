@@ -1,18 +1,16 @@
 ﻿using System.Xml.Linq;
 using UnityEngine;
-
+using MelonLoader.TinyJSON;
 
 namespace ExpandedAiFramework
 {
-    [Serializable]
-    public class SpawnRegionModDataProxy : ModDataProxyBase
+    public class SpawnRegionModDataProxy : ModDataProxy
     {
         //Temporal Data
-        [NonSerialized] public bool Connected = false;
-        [NonSerialized] public bool PendingForceSpawns = false;
+        [Exclude] public bool Connected = false;
+        [Exclude] public bool PendingForceSpawns = false;
 
         //Mod Data
-        public Vector3 CurrentPosition;
         public AiType AiType; 
         public AiSubType AiSubType;
         public float LastDespawnTime;
@@ -31,22 +29,32 @@ namespace ExpandedAiFramework
         public bool WasActiveBeforeAurora;
         public float CooldownTimerHours;
 
-        public SpawnRegionModDataProxy() { }
+        public SpawnRegionModDataProxy() : base() { }
 
 
-        //Only constructs mod data; it is on managers to serialize in vanilla data later
-        public SpawnRegionModDataProxy(Guid guid, string scene, SpawnRegion spawnRegion)
+        public SpawnRegionModDataProxy(Guid guid, string scene, SpawnRegion spawnRegion) : base(guid, scene, spawnRegion.transform.position)
         {
-            Guid = guid;
-            Scene = scene;
-            CurrentPosition = spawnRegion.transform.position;
             AiType = spawnRegion.m_AiTypeSpawned;
             AiSubType = spawnRegion.m_AiSubTypeSpawned;
             LastDespawnTime = GetCurrentTimelinePoint();
+            BuildCachedStringSegment();
         }
 
 
-        public void Save(CustomBaseSpawnRegion spawnRegion)
+        public override void UpdateCachedString()
+        {
+            base.UpdateCachedString();
+            BuildCachedStringSegment();
+        }
+
+
+        private void BuildCachedStringSegment()
+        {
+            mCachedString += $" of type {AiType}.{AiSubType}";
+        }
+
+
+        public void Save(CustomSpawnRegion spawnRegion)
         {
             LastDespawnTime = GetCurrentTimelinePoint();
             ElapsedHoursAtLastActiveReRoll = spawnRegion.VanillaSpawnRegion.m_ElapsedHoursAtLastActiveReRoll;
@@ -61,40 +69,5 @@ namespace ExpandedAiFramework
             CooldownTimerHours = spawnRegion.VanillaSpawnRegion.m_CooldownTimerHours;
             CurrentPosition = spawnRegion.VanillaSpawnRegion.m_Center;
         }
-
-
-        public override string ToString()
-        {
-            return $"SpawnRegionModDataProxy with guid {Guid} at {CurrentPosition} of type {AiType}.{AiSubType} in scene {Scene}";
-        }
-
-
-        public override int GetHashCode() => Guid.GetHashCode();
-
-        public override bool Equals(object obj) => this.Equals(obj as SpawnRegionModDataProxy);
-
-        public bool Equals(SpawnRegionModDataProxy proxy)
-        {
-            if (proxy is null)
-            {
-                return false;
-            }
-
-            return Guid == proxy.Guid;
-        }
-
-        public static bool operator ==(SpawnRegionModDataProxy lhs, SpawnRegionModDataProxy rhs)
-        {
-            if (lhs is null)
-            {
-                if (rhs is null)
-                {
-                    return true;
-                }
-                return false;
-            }
-            return lhs.Equals(rhs);
-        }
-        public static bool operator !=(SpawnRegionModDataProxy lhs, SpawnRegionModDataProxy rhs) => !(lhs == rhs);
     }
 }

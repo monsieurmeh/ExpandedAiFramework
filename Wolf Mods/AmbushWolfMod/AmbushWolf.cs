@@ -16,6 +16,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
 
         internal static AmbushWolfSettings AmbushWolfSettings = new AmbushWolfSettings(Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(AmbushWolf)}"));
         protected HidingSpot mHidingSpot;
+        protected bool mFetchingHidingSpot;
 
         public AmbushWolf(IntPtr ptr) : base(ptr) { }
         public override Color DebugHighlightColor { get { return Color.yellow; } }
@@ -31,8 +32,49 @@ proxy)
         }
 
 
+        protected override bool FirstFrameCustom()
+        {
+            if (mModDataProxy != null && mModDataProxy.AsyncProcessing)
+            {
+                return false;
+            }
+
+            if (mHidingSpot == null)
+            {
+                if (!mFetchingHidingSpot)
+                {
+                    GetHidingSpot(mModDataProxy);
+                }
+                return false;
+            }
+
+            this.LogTraceInstanced($"FirstFrameCustom: Warping to hiding spot at {mHidingSpot.Position} and setting hide mode");
+            mBaseAi.m_MoveAgent.transform.position = mHidingSpot.Position;
+            mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 2.0f, true, -1);
+
+            SetAiMode((AiMode)AmbushWolfAiMode.Hide);
+            return true;
+        }
+
+
+        private void GetHidingSpot(SpawnModDataProxy proxy)
+        {
+            if (TryGetSavedHidingSpot(proxy))
+            {
+                return;
+            }
+            mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetNearestMapDataRequest<HidingSpot>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
+            {
+                this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
+                AttachHidingSpot(nearestSpot);
+            }, 3));
+            
+        }
+
+
         private bool TryGetSavedHidingSpot(SpawnModDataProxy proxy)
         {
+            mFetchingHidingSpot = true;
             if (proxy == null 
                 || proxy.CustomData == null
                 || proxy.CustomData.Length == 0)
@@ -46,56 +88,38 @@ proxy)
                 this.LogTraceInstanced($"Proxy spot guid is empty");
                 return false;
             }
-            if (!mManager.DataManager.AvailableHidingSpots.TryGetValue(spotGuid, out HidingSpot hidingSpot))
+            mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetDataByGuidRequest<HidingSpot>(spotGuid, proxy.Scene, (spot, result) =>
             {
-                this.LogTraceInstanced($"Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary");
-                return false;
-            }
-            this.LogTraceInstanced($"Found saved hiding spot with guid <<<{spotGuid}>>>");
-            AttachHidingSpot(hidingSpot);
-            return true;
-        }
-
-
-        protected override bool FirstFrameCustom()
-        {
-            if (mModDataProxy != null && mModDataProxy.AsyncProcessing)
-            {
-                return false;
-            }
-
-            if (mHidingSpot == null)
-            {
-                this.LogTraceInstanced("FirstFrameCustom: No hiding spot assigned");
-                if (!TryGetSavedHidingSpot(mModDataProxy))
+                if (result != RequestResult.Succeeded)
                 {
-                    this.LogTraceInstanced("FirstFrameCustom: Getting new hiding spot");
-                    mManager.DataManager.GetNearestHidingSpotAsync(mBaseAi.transform.position, AttachHidingSpot, 3);
+                    this.LogTraceInstanced($"Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...");
+                    mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetNearestMapDataRequest<HidingSpot>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
+                    {
+                        this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
+                        AttachHidingSpot(nearestSpot);
+                    }, 3));
                 }
-            }
-
-            this.LogTraceInstanced($"FirstFrameCustom: Warping to hiding spot at {mHidingSpot.Position} and setting hide mode");
-            mBaseAi.m_MoveAgent.transform.position = mHidingSpot.Position;
-            mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 2.0f, true, -1);
-
-            SetAiMode((AiMode)AmbushWolfAiMode.Hide);
+                else
+                {
+                    this.LogTraceInstanced($"Found saved hiding spot with guid <<<{spotGuid}>>>");
+                    AttachHidingSpot(spot);
+                }
+            }));
             return true;
         }
 
 
         public void AttachHidingSpot(HidingSpot hidingSpot)
         {
+
+            mFetchingHidingSpot = false;
             if (hidingSpot == null)
             {
-                this.LogWarningInstanced("Received NULL hiding spot, creating fallback spot");
-                mHidingSpot = new HidingSpot("FALLBACK_SPOT", mBaseAi.transform.position, mBaseAi.transform.rotation,
-mManager.CurrentScene, string.Empty, true);
+                this.LogWarningInstanced("Received NULL hiding spot, aborting!");
+                return;
             }
-            else
-            {
-                this.LogTraceInstanced($"Attached hiding spot: {hidingSpot}");
-                mHidingSpot = hidingSpot;
-            }
+            this.LogTraceInstanced($"Attached hiding spot: {hidingSpot}");
+            mHidingSpot = hidingSpot;
 
             if (mModDataProxy != null)
             {

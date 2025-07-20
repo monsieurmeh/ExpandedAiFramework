@@ -11,7 +11,9 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         protected WanderPath mWanderPath;
         protected bool mWanderPathConnected = false;
-            
+        protected bool mFetchingWanderPath = false;
+
+
         public WanderingWolf(IntPtr ptr) : base(ptr) { }
         protected override float m_MinWaypointDistance { get { return 100.0f; } }
         protected override float m_MaxWaypointDistance { get { return 1000.0f; } }
@@ -29,40 +31,6 @@ namespace ExpandedAiFramework.WanderingWolfMod
             mBaseAi.m_TargetWaypointIndex = 0;
         }
 
-
-        private bool TryGetSavedWanderPath(SpawnModDataProxy proxy)
-        {
-            if (proxy == null)
-            {
-                this.LogTraceInstanced("Null Proxy, getting new wander path");
-                return false;
-            }
-            if (proxy.CustomData == null)
-            {
-                this.LogTraceInstanced($"Null custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
-                return false;
-            }
-            if (proxy.CustomData.Length == 0) 
-            {
-                this.LogTraceInstanced($"Zero-length custom data on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
-                return false;
-            }
-            Guid spotGuid = new Guid((string)proxy.CustomData[0]);
-            if (spotGuid == Guid.Empty) 
-            {
-                this.LogTraceInstanced($"Empty GUID on proxy with guid <<<{proxy.Guid}>>>, getting new wander path");
-                return false;
-            }
-            if (!mManager.DataManager.AvailableWanderPaths.TryGetValue(spotGuid, out WanderPath wanderPath))
-            {
-                this.LogTraceInstanced($"Could not fetch WanderPath with guid {spotGuid} from proxy with guid <<{proxy.Guid}>>>, getting new wander path");
-                return false;
-            }
-            AttachWanderPath(wanderPath);
-            return true;
-        }
-
-
         protected override bool FirstFrameCustom()
         {
             if (mModDataProxy != null && mModDataProxy.AsyncProcessing)
@@ -72,11 +40,13 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
             if (!mWanderPathConnected)
             {
-                if (!TryGetSavedWanderPath(mModDataProxy))
+                if (!mFetchingWanderPath)
                 {
-                    mManager.DataManager.GetNearestWanderPathAsync(mBaseAi.transform.position, WanderPathTypes.IndividualPath, AttachWanderPath, 3);
+                    GetWanderpath(mModDataProxy);
                 }
+                return false;
             }
+
             mBaseAi.m_MoveAgent.transform.position = mWanderPath.PathPoints[0];
             mBaseAi.m_MoveAgent.Warp(mWanderPath.PathPoints[0], 2.0f, true, -1);
             SetDefaultAiMode();
@@ -84,9 +54,63 @@ namespace ExpandedAiFramework.WanderingWolfMod
         }
 
 
+        private void GetWanderpath(SpawnModDataProxy proxy)
+        {
+            if (TryGetSavedWanderPath(proxy))
+            {
+                return;
+            }
+            mManager.DataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
+            {
+                this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
+                AttachWanderPath(nearestSpot);
+            }, 3));
+
+        }
+
+
+        private bool TryGetSavedWanderPath(SpawnModDataProxy proxy)
+        {
+            mFetchingWanderPath = true;
+            if (proxy == null
+                || proxy.CustomData == null
+                || proxy.CustomData.Length == 0)
+            {
+                this.LogTraceInstanced($"Null proxy, null proxy custom data or no length to proxy custom data");
+                return false;
+            }
+            Guid spotGuid = new Guid((string)proxy.CustomData[0]);
+            if (spotGuid == Guid.Empty)
+            {
+                this.LogTraceInstanced($"Proxy spot guid is empty");
+                return false;
+            }
+            mManager.DataManager.ScheduleMapDataRequest<WanderPath>(new GetDataByGuidRequest<WanderPath>(spotGuid, proxy.Scene, (spot, result) =>
+            {
+                if (result != RequestResult.Succeeded)
+                {
+                    this.LogTraceInstanced($"Can't get WanderPath with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...");
+                    mManager.DataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
+                    {
+                        this.LogTraceInstanced($"Found NEW nearest WanderPath with guid <<<{nearestSpot}>>>");
+                        AttachWanderPath(nearestSpot);
+                    }, 3));
+                }
+                else
+                {
+                    this.LogTraceInstanced($"Found saved WanderPath with guid <<<{spotGuid}>>>");
+                    AttachWanderPath(spot);
+                }
+            }));
+            return true;
+        }
+
+
+
         public void AttachWanderPath(WanderPath path)
         {
-            mWanderPath = path; 
+            mWanderPath = path;
+            mFetchingWanderPath = false;
             if (mModDataProxy != null)
             {
                 mModDataProxy.CustomData = [path.Guid.ToString()];

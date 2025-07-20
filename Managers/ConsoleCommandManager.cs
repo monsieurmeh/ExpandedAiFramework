@@ -5,11 +5,121 @@ using UnityEngine;
 using Il2Cpp;
 using System.Xml.Linq;
 using System.Buffers.Text;
+using static Il2CppRewired.Demos.SimpleControlRemapping;
 
 namespace ExpandedAiFramework
 {
     public sealed class ConsoleCommandManager : BaseSubManager
     {
+        private class ForEachMapDataRequest<T> : DataRequest<T> where T : IMapData, new()
+        {
+            protected Action<T> mForEachCallback;
+            protected string mScene; 
+
+            public override string TypeInfo { get { return $"ForEachMapDataRequest{typeof(T)}"; } }
+
+            public ForEachMapDataRequest(string scene, Action<T> forEachCallback) : base(null, false)
+            {
+                mForEachCallback = forEachCallback;
+                mScene = scene;
+            }
+
+
+
+            protected override bool Validate()
+            {
+                if (mForEachCallback == null)
+                {
+                    this.LogTraceInstanced($"null foreach callback");
+                    return false;
+                }
+                return true;
+            }
+
+
+            protected override RequestResult PerformRequestInternal()
+            {
+                try
+                {
+                    foreach (T data in mDataContainer.GetSceneData(mScene).Values)
+                    {
+                        mForEachCallback.Invoke(data);
+                    }
+                    return RequestResult.Succeeded;
+                }
+                catch (Exception e)
+                {
+                    this.LogErrorInstanced(e.Message);
+                    return RequestResult.Failed;
+                }
+            }
+        }
+
+        private class GetUniqueMapDataName<T> : Request<T> where T : IMapData, new()
+        {
+            protected string mScene;
+            protected string mBaseName;
+            protected Action<string> mFoundNameCallback;
+
+            public override string TypeInfo { get { return $"GetUniqueMapDataName{typeof(T)}"; } }
+            
+            public GetUniqueMapDataName(string scene, string baseName, Action<string> callback) : base(null, false)
+            {
+                mBaseName = baseName;
+                mFoundNameCallback = callback;
+                mScene = scene;
+            }
+
+
+
+            protected override bool Validate()
+            {
+                if (mFoundNameCallback == null)
+                {
+                    this.LogTraceInstanced($"null foundname callback");
+                    return false;
+                }
+                if (string.IsNullOrEmpty(mScene))
+                {
+                    this.LogTraceInstanced($"null or emoty scene");
+                    return false;
+                }
+                if (string.IsNullOrEmpty(mBaseName))
+                {
+                    this.LogTraceInstanced($"null or emoty mBaseName");
+                    return false;
+                }
+                return true;
+            }
+
+
+            protected override RequestResult PerformRequestInternal()
+            {
+                try
+                {
+                    int counter = 1;
+
+                    while (counter < 1000)
+                    {
+                        if (mDataContainer.GetSceneData(mScene).Values.Any(s => s.Name == $"{mBaseName}_{counter}"))
+                        {
+                            counter++;
+                            continue;
+                        }
+                        mFoundNameCallback.Invoke($"{mBaseName}_{counter}");
+                        return RequestResult.Succeeded;
+                    }
+                    return RequestResult.Failed;
+                }
+                catch (Exception e)
+                {
+                    this.LogErrorInstanced(e.Message);
+                    return RequestResult.Failed;
+                }
+            }
+        }
+
+
         private enum PaintMode : int
         {
             WanderPath = 0,
@@ -34,6 +144,8 @@ namespace ExpandedAiFramework
         private List<GameObject> mDebugShownSpawnRegions = new List<GameObject>();
 
         public ConsoleCommandManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        
+        private DataManager DataManager { get { return mManager.DataManager; } }
 
 
         public override void OnLoadScene(string sceneName)
@@ -64,10 +176,6 @@ namespace ExpandedAiFramework
 
         private void SaveMapData() => mManager.DataManager.SaveMapData();
         private void LoadMapData() => mManager.DataManager.LoadMapData();
-        private Dictionary<string, List<HidingSpot>> HidingSpots => mManager.DataManager.HidingSpotManager.Data;
-        private Dictionary<string, List<WanderPath>> WanderPaths => mManager.DataManager.WanderPathManager.Data;
-        private Dictionary<Guid, HidingSpot> AvailableHidingSpots => mManager.DataManager.HidingSpotManager.AvailableData;
-        private Dictionary<Guid, WanderPath> AvailableWanderPaths => mManager.DataManager.WanderPathManager.AvailableData;
 
 
         public GameObject CreateDirectionArrow(Vector3 startPos, Vector3 targetPos, Color color, string name)
@@ -267,7 +375,6 @@ namespace ExpandedAiFramework
         }
 
 
-
         private void Console_CreateWanderPath()
         {
             if (mCurrentPaintMode != PaintMode.WanderPath)
@@ -285,24 +392,22 @@ namespace ExpandedAiFramework
             {
                 mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"ExpandedAiFramework.WanderPaths.json");
             }
-            string scene = GameManager.m_ActiveScene;
-            if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
+            string scene = mManager.CurrentScene;
+            GetMapDataByNameRequest<WanderPath> tryStartNewWanderPath = new GetMapDataByNameRequest<WanderPath>(name, scene, (path, result) =>
             {
-                paths = new List<WanderPath>();
-                WanderPaths.Add(scene, paths);
-            }
-            for (int i = 0, iMax = paths.Count; i < iMax; i++)
-            {
-                if (paths[i].Name == name)
+                if (result != RequestResult.Succeeded)
+                {
+                    mCurrentPaintMode = PaintMode.WanderPath;
+                    mCurrentDataNameIterated = name;
+                    Console_AddToCurrentWanderPath();
+                    LogAlways($"Started wander path with name {name} at {mCurrentWanderPathPoints[0]}. Use command '{CommandString} {CommandString_AddTo} {CommandString_WanderPath}' to add more points, and '{CommandString} {CommandString_Finish} {CommandString_WanderPath} to finish the path.");
+                }
+                else
                 {
                     LogWarning($"Can't start recording path because a path with this name exists in this scene!");
-                    return;
-                }
-            }
-            mCurrentPaintMode = PaintMode.WanderPath;
-            mCurrentDataNameIterated = name;
-            Console_AddToCurrentWanderPath();
-            LogAlways($"Started wander path with name {name} at {mCurrentWanderPathPoints[0]}. Use command '{CommandString} {CommandString_AddTo} {CommandString_WanderPath}' to add more points, and '{CommandString} {CommandString_Finish} {CommandString_WanderPath} to finish the path.");
+                }                
+            });
+            DataManager.ScheduleMapDataRequest<WanderPath>(tryStartNewWanderPath);
         }
 
 
@@ -319,30 +424,42 @@ namespace ExpandedAiFramework
             {
                 mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"ExpandedAiFramework.HidingSpots.json");
             }
-            string scene = GameManager.m_ActiveScene;
-            if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
+            string scene = mManager.CurrentScene;
+
+            GetMapDataByNameRequest<HidingSpot> tryCreateNewHidingSpot = new GetMapDataByNameRequest<HidingSpot>(name, scene, (path, result) =>
             {
-                spots = new List<HidingSpot>();
-                HidingSpots.Add(scene, spots);
-            }
-            for (int i = 0, iMax = spots.Count; i < iMax; i++)
-            {
-                if (spots[i].Name == name)
+                if (result == RequestResult.Failed)
+                {
+                    Vector3 pos = GameManager.m_vpFPSCamera.transform.position;
+                    Quaternion rot = GameManager.m_vpFPSCamera.transform.rotation;
+                    AiUtils.GetClosestNavmeshPos(out Vector3 actualPos, pos, pos);
+                    HidingSpot newSpot = new HidingSpot(name, actualPos, rot, mManager.CurrentScene);
+                    TryRegisterNewHidingSpot(newSpot, mCurrentPaintFilePath);
+                }
+                else
                 {
                     LogWarning($"Can't generate hiding spot {name} another spot with that name exists in this scene!");
-                    return;
                 }
-            }
-            Vector3 pos = GameManager.m_vpFPSCamera.transform.position;
-            Quaternion rot = GameManager.m_vpFPSCamera.transform.rotation;
-
-            AiUtils.GetClosestNavmeshPos(out Vector3 actualPos, pos, pos);
-            HidingSpots[scene].Add(new HidingSpot(name, actualPos, rot, mCurrentPaintFilePath, GameManager.m_ActiveScene));
-            mDebugShownHidingSpots.Add(CreateMarker(actualPos, Color.yellow, $"Hiding spot: {name}", 100.0f));
-            LogAlways($"Generated hiding spot {name} at {actualPos} with rotation {rot} in scene {scene}!");
-            SaveMapData();
+            });
+            DataManager.ScheduleMapDataRequest<HidingSpot>(tryCreateNewHidingSpot);
         }
 
+
+        private void TryRegisterNewHidingSpot(HidingSpot hidingSpot, string dataPath)
+        {
+            RegisterDataRequest<HidingSpot> tryRegisterNewHidingSpot = new RegisterDataRequest<HidingSpot>(hidingSpot, dataPath, (path, result) =>
+            {
+                if (result != RequestResult.Succeeded)
+                {
+                    LogWarning($"Failed to register new hiding spot!!!!");
+                    return;
+                }
+                mDebugShownHidingSpots.Add(CreateMarker(hidingSpot.Position, Color.yellow, $"Hiding spot: {hidingSpot.Name}", 100.0f));
+                LogAlways($"Generated hiding spot {hidingSpot.Name} at {hidingSpot.Position} with rotation {hidingSpot.Rotation} in scene {hidingSpot.Scene}!");
+                SaveMapData();
+            });
+            DataManager.ScheduleMapDataRequest<HidingSpot>(tryRegisterNewHidingSpot);
+        }
 
         #endregion
 
@@ -358,64 +475,37 @@ namespace ExpandedAiFramework
             }
             switch (type)
             {
-                case CommandString_WanderPath: Console_DeleteWanderPath(); return;
-                case CommandString_HidingSpot: Console_DeleteHidingSpot(); return;
+                case CommandString_WanderPath: Console_DeleteMapData<WanderPath>(); return;
+                case CommandString_HidingSpot: Console_DeleteMapData<HidingSpot>(); return;
                 default: LogAlways($"{type} is supported per debug constants, but not routed! Report this please."); return;
             }
         }
 
-
-        private void Console_DeleteWanderPath()
+        private void Console_DeleteMapData<T>() where T : IMapData, new()
         {
-            string name = uConsole.GetString();
-            if (!IsNameProvided(name))
             {
-                return;
-            }
-            string scene = GameManager.m_ActiveScene;
-            if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
-            {
-                LogWarning($"No paths found in scene!");
-                return;
-            }
-            for (int i = 0, iMax = paths.Count; i < iMax; i++)
-            {
-                if (paths[i].Name == name)
+                string name = uConsole.GetString();
+                if (!IsNameProvided(name))
                 {
-                    LogAlways($"Deleting wander path {name} in scene {scene}.");
-                    WanderPaths[scene].RemoveAt(i);
-                    SaveMapData();
                     return;
                 }
+                string scene = mManager.CurrentScene;
+                DataManager.ScheduleMapDataRequest<T>(new GetMapDataByNameRequest<T>(name, scene, (path, result) =>
+                {
+                    if (result != RequestResult.Succeeded)
+                    {
+                        LogWarning($"No such path {path} in scene {scene}!");
+                        return;
+                    }
+                    DataManager.ScheduleMapDataRequest<T>(new DeleteDataRequest<T>(path.Guid, scene, (deletedPath, deleteResult) =>
+                    {
+                        LogAlways($"Deleted wander path {name} in scene {scene}.");
+                        SaveMapData();
+                    }));
+                }));
             }
-            LogWarning($"No path matching name {name} found in scene {scene}!");
         }
 
-        private void Console_DeleteHidingSpot()
-        {
-            string name = uConsole.GetString();
-            if (!IsNameProvided(name))
-            {
-                return;
-            }
-            string scene = GameManager.m_ActiveScene;
-            if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
-            {
-                LogWarning($"No paths found in scene!");
-                return;
-            }
-            for (int i = 0, iMax = spots.Count; i < iMax; i++)
-            {
-                if (spots[i].Name == name)
-                {
-                    LogAlways($"Deleting hiding spot {name} in scene {scene}.");
-                    HidingSpots[scene].RemoveAt(i);
-                    SaveMapData();
-                    return;
-                }
-            }
-            LogWarning($"No spot matching name {name} found in scene {scene}!");
-        }
 
         #endregion
 
@@ -538,14 +628,22 @@ namespace ExpandedAiFramework
                 return;
             }
             mCurrentPaintMode = PaintMode.COUNT;
-            WanderPaths[GameManager.m_ActiveScene].Add(new WanderPath(mCurrentDataNameIterated, mCurrentWanderPathPoints.ToArray(), mCurrentPaintFilePath, GameManager.m_ActiveScene));
-            LogAlways($"Generated wander path {mCurrentDataNameIterated} starting at {mCurrentWanderPathPoints[0]}.");
-            mCurrentWanderPathPointMarkers.Add(ConnectMarkers(mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], mCurrentWanderPathPoints[0], Color.blue, $"{mCurrentDataNameIterated}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 100));
-            mCurrentWanderPathPoints.Clear();
-            mCurrentDataNameIterated = string.Empty;
-            mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
-            mCurrentWanderPathPointMarkers.Clear();
-            SaveMapData();
+            WanderPath newPath = new WanderPath(mCurrentDataNameIterated, mCurrentWanderPathPoints.ToArray(), mManager.CurrentScene);
+            DataManager.ScheduleMapDataRequest<WanderPath>(new RegisterDataRequest<WanderPath>(newPath, mCurrentPaintFilePath, (registeredPath, result) =>
+            {
+                if (result != RequestResult.Succeeded)
+                {
+                    LogError($"Couldnt register new wander path!");
+                    return;
+                }
+                LogAlways($"Generated wander path {mCurrentDataNameIterated} starting at {mCurrentWanderPathPoints[0]}.");
+                mCurrentWanderPathPointMarkers.Add(ConnectMarkers(mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], mCurrentWanderPathPoints[0], Color.blue, $"{mCurrentDataNameIterated}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 100));
+                mCurrentWanderPathPoints.Clear();
+                mCurrentDataNameIterated = string.Empty;
+                mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
+                mCurrentWanderPathPointMarkers.Clear();
+                SaveMapData();
+            }));
         }
 
         #endregion
@@ -572,80 +670,56 @@ namespace ExpandedAiFramework
 
         private void Console_GoToHidingSpot()
         {
-            if (!HidingSpots.TryGetValue(GameManager.m_ActiveScene, out List<HidingSpot> spots))
+            string name = uConsole.GetString();
+            DataManager.ScheduleMapDataRequest<HidingSpot>(new GetMapDataByNameRequest<HidingSpot>(name, mManager.CurrentScene, (data, result) =>
             {
-                LogWarning("No hiding spots in active scene!");
-                return;
-            }
-            int spotIndex = -1;
-            string spotName = uConsole.GetString();
-            for (int i = 0, iMax = spots.Count; i < iMax; i++)
-            {
-                if (spots[i].Name == spotName)
+                if (result != RequestResult.Succeeded)
                 {
-                    spotIndex = i;
-                    break;
+                    LogError($"No data found with name {name}!");
+                    return;
                 }
-            }
-            if (spotIndex == -1)
-            {
-                LogWarning($"Could not locate hiding spot with name {spotName}!");
-                return;
-            }
-            Teleport(spots[spotIndex].Position, spots[spotIndex].Rotation);
-            LogAlways($"Teleported to {spots[spotIndex]}! Watch out for ambush wolves...");
+                Teleport(data.Position, data.Rotation);
+                LogAlways($"Teleported to {data}! Watch out for ambush wolves...");
+            }));
         }
 
 
         private void Console_GoToWanderPath()
         {
-            if (!WanderPaths.TryGetValue(GameManager.m_ActiveScene, out List<WanderPath> paths))
-            {
-                LogWarning("No wander paths in active scene!");
-                return;
-            }
-            int pathIndex = -1;
-            string pathName = uConsole.GetString();
-            for (int i = 0, iMax = paths.Count; i < iMax; i++)
-            {
-                if (paths[i].Name == pathName)
-                {
-                    pathIndex = i;
-                    break;
-                }
-            }
-            if (pathIndex == -1)
-            {
-                LogWarning($"Could not locate wander path with name {pathName}!");
-                return;
-            }
+            string name = uConsole.GetString();
             int pathPointIndex = 0;
-
             try
             {
                 pathPointIndex = uConsole.GetInt();
             }
-            catch (Exception e)
+            catch
             {
-                LogError(e.ToString());
+                pathPointIndex = 0;
             }
-
-            if (pathPointIndex >= paths[pathIndex].PathPoints.Length)
+            DataManager.ScheduleMapDataRequest<WanderPath>(new GetMapDataByNameRequest<WanderPath>(name, mManager.CurrentScene, (data, result) =>
             {
-                LogWarning($"{paths[pathIndex]} has {paths[pathIndex].PathPoints.Length} path points, please select one in that range!");
-                return;
-            }
-            Quaternion lookDir = Quaternion.identity;
-            if (pathPointIndex == paths[pathIndex].PathPoints.Length - 1)
-            {
-                lookDir = Quaternion.LookRotation(paths[pathIndex].PathPoints[0] - paths[pathIndex].PathPoints[pathPointIndex]);
-            }
-            else
-            {
-                lookDir = Quaternion.LookRotation(paths[pathIndex].PathPoints[pathPointIndex + 1] - paths[pathIndex].PathPoints[pathPointIndex]);
-            }
-            Teleport(paths[pathIndex].PathPoints[pathPointIndex], lookDir);
-            LogAlways($"Teleported to WanderPath {paths[pathIndex].Name} point #{pathPointIndex} at {paths[pathIndex].PathPoints[pathPointIndex]}! Watch out for wandering wolves...");
+                if (result != RequestResult.Succeeded)
+                {
+                    LogError($"No data found with name {name}!");
+                    return;
+                }
+                if (pathPointIndex >= data.PathPoints.Length)
+                {
+                    LogWarning($"{data} has {data.PathPoints.Length} path points, please select one in that range!");
+                    return;
+                }
+                Quaternion lookDir = Quaternion.identity;
+                if (pathPointIndex == data.PathPoints.Length - 1)
+                {
+                    lookDir = Quaternion.LookRotation(data.PathPoints[0] - data.PathPoints[pathPointIndex]);
+                }
+                else
+                {
+                    lookDir = Quaternion.LookRotation(data.PathPoints[pathPointIndex + 1] - data.PathPoints[pathPointIndex]);
+                }
+                Teleport(data.PathPoints[pathPointIndex], lookDir);
+                LogAlways($"Teleported to WanderPath {data.Name} point #{pathPointIndex} at {data.PathPoints[pathPointIndex]}! Watch out for wandering wolves...");
+            }));
         }
 
 
@@ -672,14 +746,9 @@ namespace ExpandedAiFramework
             }
         }
 
-
+        
         private void Console_ShowHidingSpot()
         {
-            if (!HidingSpots.TryGetValue(GameManager.m_ActiveScene, out List<HidingSpot> spots))
-            {
-                LogWarning("No hiding spots found in active scene!");
-                return;
-            }
             string name = uConsole.GetString();
             if (!IsNameProvided(name, false))
             {
@@ -687,80 +756,80 @@ namespace ExpandedAiFramework
             }
             else
             {
-                foreach (HidingSpot spot in spots)
+                DataManager.ScheduleMapDataRequest<HidingSpot>(new GetMapDataByNameRequest<HidingSpot>(name, mManager.CurrentScene, (data, result) =>
                 {
-                    if (spot.Name == name)
+                    if (result != RequestResult.Succeeded)
                     {
-                        mDebugShownHidingSpots.Add(CreateMarker(spot.Position, Color.yellow, spot.Name, 100));
-                        return;
+                        LogError($"No hiding spot with name {name}!");
                     }
-                }
+                    lock (mDebugShownHidingSpots)
+                    {
+                        mDebugShownHidingSpots.Add(CreateMarker(data.Position, Color.yellow, data.Name, 100));
+                    }
+                }));
             }
         }
 
 
         private void Console_ShowAllHidingSpots()
         {
-            if (!HidingSpots.TryGetValue(GameManager.m_ActiveScene, out List<HidingSpot> spots))
+            DataManager.ScheduleMapDataRequest<HidingSpot>(new ForEachMapDataRequest<HidingSpot>(mManager.CurrentScene, (data) =>
             {
-                return;
-            }
-            foreach (HidingSpot spot in spots)
-            {
-                mDebugShownHidingSpots.Add(CreateMarker(spot.Position, Color.yellow, spot.Name, 100));
-            }
+                lock (mDebugShownHidingSpots)
+                {
+                    mDebugShownHidingSpots.Add(CreateMarker(data.Position, Color.yellow, data.Name, 100));
+                }
+            }));
         }
 
 
         private void Console_ShowWanderPath()
         {
-            if (!WanderPaths.TryGetValue(GameManager.m_ActiveScene, out List<WanderPath> paths))
-            {
-                LogWarning("No wander paths found in active scene!");
-                return;
-            }
             string name = uConsole.GetString();
             if (!IsNameProvided(name, false))
             {
-                Console_ShowAllWanderPaths();
+                Console_ShowAllHidingSpots();
             }
             else
             {
-                foreach (WanderPath path in paths)
+                DataManager.ScheduleMapDataRequest<WanderPath>(new GetMapDataByNameRequest<WanderPath>(name, mManager.CurrentScene, (data, result) =>
                 {
-                    if (path.Name == name)
+                    if (result != RequestResult.Succeeded)
                     {
-                        for (int i = 0, iMax = path.PathPoints.Length; i < iMax; i++)
+                        LogError($"No hiding spot with name {name}!");
+                    }
+                    for (int i = 0, iMax = data.PathPoints.Length; i < iMax; i++)
+                    {
+                        lock (mDebugShownWanderPaths)
                         {
-                            mDebugShownWanderPaths.Add(CreateMarker(path.PathPoints[i], Color.blue, path.Name, 100));
+                            mDebugShownWanderPaths.Add(CreateMarker(data.PathPoints[i], Color.blue, data.Name, 100));
                             if (i > 0)
                             {
-                                mDebugShownWanderPaths.Add(ConnectMarkers(path.PathPoints[i], path.PathPoints[i - 1], Color.blue, path.Name, 100));
+                                mDebugShownWanderPaths.Add(ConnectMarkers(data.PathPoints[i], data.PathPoints[i - 1], Color.blue, data.Name, 100));
                             }
                         }
                     }
-                }
+                }));
             }
         }
 
 
         private void Console_ShowAllWanderPaths()
         {
-            if (!WanderPaths.TryGetValue(GameManager.m_ActiveScene, out List<WanderPath> paths))
+            DataManager.ScheduleMapDataRequest<WanderPath>(new ForEachMapDataRequest<WanderPath>(mManager.CurrentScene, (data) =>
             {
-                return;
-            }
-            foreach (WanderPath path in paths)
-            {
-                for (int i = 0, iMax = path.PathPoints.Length; i < iMax; i++)
+                for (int i = 0, iMax = data.PathPoints.Length; i < iMax; i++)
                 {
-                    mDebugShownWanderPaths.Add(CreateMarker(path.PathPoints[i], Color.blue, path.Name, 100));
-                    if (i > 0)
+                    lock (mDebugShownWanderPaths)
                     {
-                        mDebugShownWanderPaths.Add(ConnectMarkers(path.PathPoints[i], path.PathPoints[i - 1], Color.blue, path.Name, 100));
+                        mDebugShownWanderPaths.Add(CreateMarker(data.PathPoints[i], Color.blue, data.Name, 100));
+                        if (i > 0)
+                        {
+                            mDebugShownWanderPaths.Add(ConnectMarkers(data.PathPoints[i], data.PathPoints[i - 1], Color.blue, data.Name, 100));
+                        }
                     }
                 }
-            }
+            }));
         }
 
 
@@ -807,7 +876,10 @@ namespace ExpandedAiFramework
                 {
                     continue;
                 }
-                mDebugShownSpawnRegions.Add(CreateMarker(spawnRegion.transform.position, GetSpawnRegionColor(spawnRegion), $"{spawnRegion.m_AiSubTypeSpawned} SpawnRegion Marker at {spawnRegion.transform.position}", 1000, 10));
+                lock (mDebugShownSpawnRegions)
+                {
+                    mDebugShownSpawnRegions.Add(CreateMarker(spawnRegion.transform.position, GetSpawnRegionColor(spawnRegion), $"{spawnRegion.m_AiSubTypeSpawned} SpawnRegion Marker at {spawnRegion.transform.position}", 1000, 10));
+                }
             }
         }
 
@@ -852,11 +924,6 @@ namespace ExpandedAiFramework
 
         private void Console_HideHidingSpot()
         {
-            if (!HidingSpots.TryGetValue(GameManager.m_ActiveScene, out List<HidingSpot> spots))
-            {
-                LogWarning("No hiding spots found in active scene!");
-                return;
-            }
             string name = uConsole.GetString();
             if (!IsNameProvided(name, false))
             {
@@ -864,12 +931,15 @@ namespace ExpandedAiFramework
             }
             else
             {
-                foreach (GameObject obj in mDebugShownHidingSpots)
+                lock (mDebugShownHidingSpots)
                 {
-                    if (obj != null && obj.name != null && obj.name.Contains(name))
+                    foreach (GameObject obj in mDebugShownHidingSpots)
                     {
-                        mDebugShownHidingSpots.Remove(obj);
-                        GameObject.Destroy(obj);
+                        if (obj != null && obj.name != null && obj.name.Contains(name))
+                        {
+                            mDebugShownHidingSpots.Remove(obj);
+                            GameObject.Destroy(obj);
+                        }
                     }
                 }
             }
@@ -878,21 +948,19 @@ namespace ExpandedAiFramework
 
         private void Console_HideAllHidingSpots()
         {
-            foreach (GameObject obj in mDebugShownHidingSpots)
+            lock (mDebugShownHidingSpots)
             {
-                UnityEngine.Object.Destroy(obj);
+                foreach (GameObject obj in mDebugShownHidingSpots)
+                {
+                    UnityEngine.Object.Destroy(obj);
+                }
+                mDebugShownHidingSpots.Clear();
             }
-            mDebugShownHidingSpots.Clear();
         }
 
 
         private void Console_HideWanderPath()
         {
-            if (!WanderPaths.TryGetValue(GameManager.m_ActiveScene, out List<WanderPath> paths))
-            {
-                LogWarning("No wander paths found in active scene!");
-                return;
-            }
             string name = uConsole.GetString();
             if (!IsNameProvided(name, false))
             {
@@ -900,12 +968,18 @@ namespace ExpandedAiFramework
             }
             else
             {
-                foreach (GameObject obj in mDebugShownWanderPaths)
+                lock (mDebugShownWanderPaths)
                 {
-                    if (obj != null && obj.name != null && obj.name.Contains(name))
+                    foreach (GameObject obj in mDebugShownWanderPaths)
                     {
-                        mDebugShownWanderPaths.Remove(obj);
-                        GameObject.Destroy(obj);
+                        if (obj != null && obj.name != null && obj.name.Contains(name))
+                        {
+                            lock (mDebugShownWanderPaths)
+                            {
+                                mDebugShownWanderPaths.Remove(obj);
+                            }
+                            GameObject.Destroy(obj);
+                        }
                     }
                 }
             }
@@ -914,11 +988,15 @@ namespace ExpandedAiFramework
 
         private void Console_HideAllWanderPaths()
         {
-            foreach (GameObject obj in mDebugShownWanderPaths)
+            lock (mDebugShownWanderPaths)
             {
-                UnityEngine.Object.Destroy(obj);
+                foreach (GameObject obj in mDebugShownWanderPaths)
+                {
+                    UnityEngine.Object.Destroy(obj);
+                }
+                mDebugShownWanderPaths.Clear();
+                
             }
-            mDebugShownWanderPaths.Clear();
         }
 
 
@@ -930,11 +1008,14 @@ namespace ExpandedAiFramework
 
         private void Console_HideAllSpawnRegions()
         {
-            foreach (GameObject obj in mDebugShownSpawnRegions)
+            lock (mDebugShownSpawnRegions)
             {
-                UnityEngine.Object.Destroy(obj);
+                foreach (GameObject obj in mDebugShownSpawnRegions)
+                {
+                    UnityEngine.Object.Destroy(obj);
+                }
+                mDebugShownSpawnRegions.Clear();
             }
-            mDebugShownSpawnRegions.Clear();
         }
 
 
@@ -1005,35 +1086,19 @@ namespace ExpandedAiFramework
 
         private void Console_ListHidingSpots()
         {
-            if (!HidingSpots.TryGetValue(GameManager.m_ActiveScene, out List<HidingSpot> spots))
+            DataManager.ScheduleMapDataRequest<HidingSpot>(new ForEachMapDataRequest<HidingSpot>(mManager.CurrentScene, (spot) =>
             {
-                LogAlways("No hiding spots found in active scene.");
-                return;
-            }
-            foreach (HidingSpot spot in HidingSpots[GameManager.m_ActiveScene])
-            {
-                if (spot.Scene == GameManager.m_ActiveScene)
-                {
-                    LogAlways($"Found {spot}. Occupied: {spot.Claimed}");
-                }
-            }
+                LogAlways($"Found {spot}. Occupied: {spot.Claimed}");
+            }));
         }
 
 
         private void Console_ListWanderPaths()
         {
-            if (!WanderPaths.TryGetValue(GameManager.m_ActiveScene, out List<WanderPath> paths))
+            DataManager.ScheduleMapDataRequest<HidingSpot>(new ForEachMapDataRequest<WanderPath>(mManager.CurrentScene, (spot) =>
             {
-                LogAlways("No wander paths found in active scene.");
-                return;
-            }
-            foreach (WanderPath path in WanderPaths[GameManager.m_ActiveScene])
-            {
-                if (path.Scene == GameManager.m_ActiveScene)
-                {
-                    LogAlways($"Found {path}. Occupied: {path.Claimed}");
-                }
-            }
+                LogAlways($"Found {spot}. Occupied: {spot.Claimed}");
+            }));
         }
 
         #endregion
@@ -1056,62 +1121,36 @@ namespace ExpandedAiFramework
                 mCurrentDataNameBase = null; // Auto-generate name if not provided
             }
             mCurrentPaintFilePath = uConsole.GetString();
-            
 
             if (type == CommandString_HidingSpot)
             {
-                if (!InitializePaintHidingSpot(GetUniqueHidingSpotName(mCurrentDataNameBase)))
+                DataManager.ScheduleMapDataRequest<HidingSpot>(new GetUniqueMapDataName<HidingSpot>(mManager.CurrentScene, mCurrentDataNameBase, (uniqueName) =>
                 {
-                    LogWarning("Failed to initialize paint mode");
-                    return;
-                }
-                LogAlways($"Entered hiding spot paint mode. Left click to select position, then left click again to set rotation. Right click to exit mode.");
+                    if (!InitializePaintHidingSpot(uniqueName))
+                    {
+                        LogWarning("Failed to initialize paint mode");
+                        return;
+                    }
+                    LogAlways($"Entered hiding spot paint mode. Left click to select position, then left click again to set rotation. Right click to exit mode.");
+                }));
             }
             else if (type == CommandString_WanderPath)
             {
-                if (!InitializePaintWanderPath(GetUniqueWanderPathName(mCurrentDataNameBase)))
+                DataManager.ScheduleMapDataRequest<WanderPath>(new GetUniqueMapDataName<WanderPath>(mManager.CurrentScene, mCurrentDataNameBase, (uniqueName) =>
                 {
-                    LogWarning("Failed to initialize paint mode");
-                    return;
-                }
-                LogAlways($"Entered wander path paint mode. Left click to place points, right click to finish a path, right click twice to exit mode.");
+                    if (!InitializePaintWanderPath(uniqueName))
+                    {
+                        LogWarning("Failed to initialize paint mode");
+                        return;
+                    }
+                    LogAlways($"Entered wander path paint mode. Left click to place points, right click to finish a path, right click twice to exit mode.");
+                }));
             }
         }
 
 
-        private string GetUniqueWanderPathName(string baseName = "ExpressWanderPath")
-        {
-            int counter = 1;
-            string scene = GameManager.m_ActiveScene;
-            
-            if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
-            {
-                return $"{baseName}_{counter}";
-            }
 
-            while (paths.Any(p => p.Name == $"{baseName}_{counter}"))
-            {
-                counter++;
-            }
-            return $"{baseName}_{counter}";
-        }
 
-        private string GetUniqueHidingSpotName(string baseName = "ExpressHidingSpot")
-        {
-            int counter = 1;
-            string scene = GameManager.m_ActiveScene;
-            
-            if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
-            {
-                return $"{baseName}_{counter}";
-            }
-
-            while (spots.Any(s => s.Name == $"{baseName}_{counter}"))
-            {
-                counter++;
-            }
-            return $"{baseName}_{counter}";
-        }
 
         private bool InitializePaintWanderPath(string name)
         {
@@ -1414,8 +1453,15 @@ namespace ExpandedAiFramework
                 else if (mCurrentWanderPathPoints.Count > 0)
                 {
                     // Regular Right click - finish current path
-                    ExitPaintMode();
-                    InitializePaintWanderPath(GetUniqueWanderPathName(mCurrentDataNameBase));
+                    ExitPaintMode(); 
+                    DataManager.ScheduleMapDataRequest<WanderPath>(new GetUniqueMapDataName<WanderPath>(mManager.CurrentScene, mCurrentDataNameBase, (uniqueName) =>
+                    {
+                        if (!InitializePaintWanderPath(uniqueName))
+                        {
+                            LogWarning("Failed to initialize paint mode");
+                            return;
+                        }
+                    }));
                 }
                 else
                 {
@@ -1441,25 +1487,28 @@ namespace ExpandedAiFramework
                         Quaternion rotation = Quaternion.LookRotation(direction.normalized);
 
                         // Create the hiding spot
-                        string scene = GameManager.m_ActiveScene;
-                        if (!HidingSpots.TryGetValue(scene, out List<HidingSpot> spots))
+                        string scene = mManager.CurrentScene;
+                        HidingSpot newSpot = new HidingSpot(mCurrentDataNameIterated, mPendingHidingSpotPosition, rotation, scene);
+
+                        DataManager.ScheduleMapDataRequest<HidingSpot>(new RegisterDataRequest<HidingSpot>(newSpot, mCurrentPaintFilePath, (spot, result) =>
                         {
-                            spots = new List<HidingSpot>();
-                            HidingSpots.Add(scene, spots);
-                        }
+                            // Show marker
+                            mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {mCurrentDataNameIterated}", 100.0f));
+                            LogAlways($"Created hiding spot {mCurrentDataNameIterated} at {newSpot.Position} with rotation {newSpot.Rotation}");
 
-                        HidingSpot newSpot = new HidingSpot(mCurrentDataNameIterated, mPendingHidingSpotPosition, rotation, scene, mCurrentPaintFilePath);
-                        spots.Add(newSpot);
-                            
-                        // Show marker
-                        mDebugShownHidingSpots.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {mCurrentDataNameIterated}", 100.0f));
-                        LogAlways($"Created hiding spot {mCurrentDataNameIterated} at {newSpot.Position} with rotation {newSpot.Rotation}");
-
-                        // Exit paint mode
-                        mSelectingHidingSpotRotation = false;
-                        RefreshPaintMode();
-                        SaveMapData();
-                        InitializePaintHidingSpot(GetUniqueHidingSpotName(mCurrentDataNameBase));
+                            // Exit paint mode
+                            mSelectingHidingSpotRotation = false;
+                            RefreshPaintMode();
+                            SaveMapData();
+                            DataManager.ScheduleMapDataRequest<HidingSpot>(new GetUniqueMapDataName<HidingSpot>(mManager.CurrentScene, mCurrentDataNameBase, (uniqueName) =>
+                            {
+                                if (!InitializePaintHidingSpot(uniqueName))
+                                {
+                                    LogWarning("Failed to initialize paint mode");
+                                    return;
+                                }
+                            }));
+                        }));
                     }
                 }
                 else
@@ -1519,22 +1568,31 @@ namespace ExpandedAiFramework
                     100));
 
                 // Save the path
-                string scene = GameManager.m_ActiveScene;
-                if (!WanderPaths.TryGetValue(scene, out List<WanderPath> paths))
-                {
-                    paths = new List<WanderPath>();
-                    WanderPaths.Add(scene, paths);
-                }
-                paths.Add(new WanderPath(mCurrentDataNameIterated, mCurrentWanderPathPoints.ToArray(), scene, mCurrentPaintFilePath));
-                SaveMapData();
-            }
-            mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
+                string scene = mManager.CurrentScene;
+                WanderPath newPath = new WanderPath(mCurrentDataNameIterated, mCurrentWanderPathPoints.ToArray(), scene);
 
-            mCurrentWanderPathPoints.Clear();
-            if (mCurrentWanderPathPointMarkers != null)
-            {
-                mCurrentWanderPathPointMarkers.Clear();
+
+                DataManager.ScheduleMapDataRequest<WanderPath>(new RegisterDataRequest<WanderPath>(newPath, mCurrentPaintFilePath, (spot, result) =>
+                {
+                    mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
+                    mCurrentWanderPathPoints.Clear();
+                    if (mCurrentWanderPathPointMarkers != null)
+                    {
+                        mCurrentWanderPathPointMarkers.Clear();
+                    }
+                    SaveMapData();
+                    DataManager.ScheduleMapDataRequest<WanderPath>(new GetUniqueMapDataName<WanderPath>(mManager.CurrentScene, mCurrentDataNameBase, (uniqueName) =>
+                    {
+                        if (!InitializePaintWanderPath(uniqueName))
+                        {
+                            LogWarning("Failed to initialize paint mode");
+                            return;
+                        }
+                    }));
+                }));
+
             }
+
             CleanUpPaintMode();
         }
 

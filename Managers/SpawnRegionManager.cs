@@ -18,9 +18,9 @@ namespace ExpandedAiFramework
         private bool mPreLoading = false;
         private Il2Cpp.SpawnRegionManager mVanillaManager;
 
-        private Dictionary<int, CustomBaseSpawnRegion> mCustomSpawnRegions = new Dictionary<int, CustomBaseSpawnRegion>();
-        private Dictionary<Guid, CustomBaseSpawnRegion> mCustomSpawnRegionsByGuid = new Dictionary<Guid, CustomBaseSpawnRegion>();
-        private List<CustomBaseSpawnRegion> mCustomSpawnRegionsByIndex = new List<CustomBaseSpawnRegion>();
+        private Dictionary<int, CustomSpawnRegion> mCustomSpawnRegions = new Dictionary<int, CustomSpawnRegion>();
+        private Dictionary<Guid, CustomSpawnRegion> mCustomSpawnRegionsByGuid = new Dictionary<Guid, CustomSpawnRegion>();
+        private List<CustomSpawnRegion> mCustomSpawnRegionsByIndex = new List<CustomSpawnRegion>();
         private DataManager mDataManager;
         private List<SpawnRegion> mSpawnRegionCatcher = new List<SpawnRegion>();
         private bool mReadyToProcessSpawnRegions = false;
@@ -39,8 +39,8 @@ namespace ExpandedAiFramework
         }
 
         public SpawnRegionManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
-        public Dictionary<int, CustomBaseSpawnRegion> CustomSpawnRegions { get { return mCustomSpawnRegions; } }
-        public Dictionary<Guid, CustomBaseSpawnRegion> CustomSpawnRegionsByGuid { get { return mCustomSpawnRegionsByGuid; } }
+        public Dictionary<int, CustomSpawnRegion> CustomSpawnRegions { get { return mCustomSpawnRegions; } }
+        public Dictionary<Guid, CustomSpawnRegion> CustomSpawnRegionsByGuid { get { return mCustomSpawnRegionsByGuid; } }
         public bool ReadyToProcessSpawnRegions { get { return mReadyToProcessSpawnRegions; } }
         public bool PreLoading => mPreLoading;
         public Vector3 PlayerStartPos => mPlayerStartPos;
@@ -71,28 +71,7 @@ namespace ExpandedAiFramework
                 Task.Delay(1000).Wait();
                 DispatchManager.Instance.Dispatch(() =>
                 {
-                    LogTrace($"Processing caught spawn regions");
-                    foreach (SpawnRegion spawnRegion in mSpawnRegionCatcher)
-                    {
-                        try
-                        {
-                            ProcessCaughtSpawnRegion(spawnRegion, out CustomBaseSpawnRegion customSpawnRegion);
-                            if (customSpawnRegion == null)
-                            {
-                                LogError($"Null customspawnregion found during post-serialize processing");
-                                continue;
-                            }
-                            customSpawnRegion.Start();
-                        }
-                        catch (Exception e)
-                        {
-                            LogError($"Error processing caught spawn region: {e}");
-                        }
-                    }
-                    mSpawnRegionCatcher.Clear();
-                    mReadyToProcessSpawnRegions = true;
-                    mPreLoading = false;
-                    InterfaceManager.GetPanel<Panel_Loading>().Enable(false);
+                    PostDeserialize();
                 });
             });
         }
@@ -116,7 +95,7 @@ namespace ExpandedAiFramework
         public override void OnSaveGame()
         {
             base.OnSaveGame();
-            foreach (CustomBaseSpawnRegion region in mCustomSpawnRegions.Values)
+            foreach (CustomSpawnRegion region in mCustomSpawnRegions.Values)
             {
                 region.Save();
             }
@@ -142,10 +121,6 @@ namespace ExpandedAiFramework
 
         #region API
 
-
- 
-
-
         public bool TryWrapNewSpawn(BaseAi baseAi, SpawnRegion spawnRegion, out CustomBaseAi newCustomBaseAi, SpawnModDataProxy proxy)
         {
             newCustomBaseAi = null;
@@ -170,7 +145,7 @@ namespace ExpandedAiFramework
             {
                 return false;
             }
-            if (!mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out CustomBaseSpawnRegion customSpawnRegion))
+            if (!mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -272,7 +247,7 @@ namespace ExpandedAiFramework
                 Il2Cpp.SpawnRegionManager.m_NoPredatorSpawningInVoyageurHours = spawnRegionSaveList.m_NoPredatorSpawningInVoyageurHours;
                 foreach (SpawnRegionSaveData data in spawnRegionSaveList.m_SerializedSpawnRegions)
                 {
-                    if (!mCustomSpawnRegionsByGuid.TryGetValue(new Guid(data.m_Guid), out CustomBaseSpawnRegion customSpawnRegion))
+                    if (!mCustomSpawnRegionsByGuid.TryGetValue(new Guid(data.m_Guid), out CustomSpawnRegion customSpawnRegion))
                     {
                         SpawnRegion spawnRegion = FindSpawnRegionByGuid(data.m_Guid);
 
@@ -286,9 +261,9 @@ namespace ExpandedAiFramework
                             LogError($"Could not fetch spawn region by guid OR position, skipping");
                             continue;
                         }
-                        customSpawnRegion = InjectCustomSpawnRegion(spawnRegion, new Guid(data.m_Guid));
+                        LogTrace($"Wrapping spawn region during deserialize!");
+                        WrapSpawnRegion(spawnRegion, new Guid(data.m_Guid));
                     }
-                    customSpawnRegion.Deserialize(data.m_SearializedSpawnRegion);
                 }
             }
             catch (Exception e)
@@ -307,7 +282,7 @@ namespace ExpandedAiFramework
                 {
                     try
                     {
-                        ProcessCaughtSpawnRegion(spawnRegion, out CustomBaseSpawnRegion customSpawnRegion);
+                        ProcessCaughtSpawnRegion(spawnRegion, out CustomSpawnRegion customSpawnRegion);
                         if (customSpawnRegion == null)
                         {
                             LogError($"Null customspawnregion found during post-serialize processing");
@@ -322,9 +297,8 @@ namespace ExpandedAiFramework
                 }
                 mSpawnRegionCatcher.Clear();
                 LogAlways($"Prequeuing. We have {mCustomSpawnRegions.Values.Count} values in mCustomSpawnRegions!");
-                foreach (CustomBaseSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
+                foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
                 {
-                    customSpawnRegion.ForceSpawnIfAvailable();
                     customSpawnRegion.PreSpawn();
                 }
             }
@@ -334,6 +308,7 @@ namespace ExpandedAiFramework
             }
             finally
             {
+                // We may want 
                 mReadyToProcessSpawnRegions = true;
                 mPreLoading = false;
                 InterfaceManager.GetPanel<Panel_Loading>().Enable(false);
@@ -348,7 +323,7 @@ namespace ExpandedAiFramework
                 LogVerbose("Can't get vanilla SpawnRegionManager");
                 return null;
             }
-            if (mCustomSpawnRegionsByGuid.TryGetValue(new Guid(guid), out CustomBaseSpawnRegion value) && !value.VanillaSpawnRegion.IsNullOrDestroyed())
+            if (mCustomSpawnRegionsByGuid.TryGetValue(new Guid(guid), out CustomSpawnRegion value) && !value.VanillaSpawnRegion.IsNullOrDestroyed())
             {
                 LogVerbose($"Found EAF custom region");
                 return value.VanillaSpawnRegion;
@@ -426,7 +401,7 @@ namespace ExpandedAiFramework
                 return;
             }
             range *= range;
-            foreach (CustomBaseSpawnRegion customBaseSpawnRegion in mCustomSpawnRegionsByIndex)
+            foreach (CustomSpawnRegion customBaseSpawnRegion in mCustomSpawnRegionsByIndex)
             {
                 if (customBaseSpawnRegion.VanillaSpawnRegion.IsNullOrDestroyed())
                 {
@@ -463,7 +438,7 @@ namespace ExpandedAiFramework
                 LogTrace("Can't get vanilla SpawnRegionManager");
                 return;
             }
-            foreach (CustomBaseSpawnRegion customSpawnRegion in mCustomSpawnRegionsByIndex)
+            foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegionsByIndex)
             {
                 if (customSpawnRegion.VanillaSpawnRegion.IsNullOrDestroyed())
                 {
@@ -498,7 +473,7 @@ namespace ExpandedAiFramework
                 return null;
             }
             bool shouldFilterByName = !string.IsNullOrEmpty(filterSpawnablePrefabName);
-            foreach (CustomBaseSpawnRegion customSpawnRegion in mCustomSpawnRegionsByIndex)
+            foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegionsByIndex)
             {
                 if (customSpawnRegion.VanillaSpawnRegion.IsNullOrDestroyed())
                 {
@@ -606,7 +581,7 @@ namespace ExpandedAiFramework
                 mVanillaManager.m_NextSpawnRegionIndexToUpdate = 0;
             }
             //LogTrace($"Current index: {mVanillaManager.m_NextSpawnRegionIndexToUpdate} of {mVanillaManager.m_SpawnRegions.Count} total");
-            CustomBaseSpawnRegion spawnRegion = mCustomSpawnRegionsByIndex[mVanillaManager.m_NextSpawnRegionIndexToUpdate];
+            CustomSpawnRegion spawnRegion = mCustomSpawnRegionsByIndex[mVanillaManager.m_NextSpawnRegionIndexToUpdate];
             if (spawnRegion.VanillaSpawnRegion.IsNullOrDestroyed())
             {
                 LogTrace($"NullOrDestroyed SpawnRegion");
@@ -640,7 +615,7 @@ namespace ExpandedAiFramework
 
         public bool TryGetClosestActiveSpawn(SpawnRegion __instance, Vector3 pos, ref GameObject __result)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -651,7 +626,7 @@ namespace ExpandedAiFramework
 
         public bool TryGetNumActiveSpawns(SpawnRegion __instance, ref int __result)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -662,7 +637,7 @@ namespace ExpandedAiFramework
 
         public bool TryGetWanderRegion(SpawnRegion __instance, Vector3 pos, ref WanderRegion __result)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -672,7 +647,7 @@ namespace ExpandedAiFramework
         
         public bool TryGetWaypointCircuit(SpawnRegion __instance, ref Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3> __result)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -683,7 +658,7 @@ namespace ExpandedAiFramework
 
         public bool TrySetActive(SpawnRegion __instance, bool active)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -694,7 +669,7 @@ namespace ExpandedAiFramework
 
         public bool TryRemoveFromSpawnRegion(SpawnRegion __instance, BaseAi baseAi)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -705,7 +680,7 @@ namespace ExpandedAiFramework
 
         public bool TryOnAuroraEnabled(SpawnRegion __instance, bool enabled)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -715,7 +690,7 @@ namespace ExpandedAiFramework
 
         public bool TryMaybeReRollActive(SpawnRegion __instance)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -726,7 +701,7 @@ namespace ExpandedAiFramework
 
         public bool TryStart(SpawnRegion __instance)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 if (!mReadyToProcessSpawnRegions)
                 {
@@ -760,21 +735,9 @@ namespace ExpandedAiFramework
         }
 
 
-
-        public bool TryDeserialize(SpawnRegion __instance, string text)
-        {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
-            {
-                return false;
-            }
-            customSpawnRegion.Deserialize(text);
-            return true;
-        }
-
-
         public bool TrySetRandomWaypointCircuit(SpawnRegion __instance)
         {
-            if (!TryMatchSpawnRegion(__instance, out CustomBaseSpawnRegion customSpawnRegion))
+            if (!TryMatchSpawnRegion(__instance, out CustomSpawnRegion customSpawnRegion))
             {
                 return false;
             }
@@ -803,13 +766,13 @@ namespace ExpandedAiFramework
         }
 
 
-        private bool TryMatchSpawnRegion(SpawnRegion spawnRegion, out CustomBaseSpawnRegion customSpawnRegion)
+        private bool TryMatchSpawnRegion(SpawnRegion spawnRegion, out CustomSpawnRegion customSpawnRegion)
         {
             return mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out customSpawnRegion);
         }
 
 
-        private bool TryInjectCustomSpawnRegion(SpawnRegion spawnRegion, out CustomBaseSpawnRegion customSpawnRegion)
+        private bool TryInjectCustomSpawnRegion(SpawnRegion spawnRegion, out CustomSpawnRegion customSpawnRegion)
         {
             customSpawnRegion = null;
             if (spawnRegion == null)
@@ -829,12 +792,12 @@ namespace ExpandedAiFramework
                 return false;
             }
             Guid wrapperGuid = new Guid(guid.PDID);
-            customSpawnRegion = InjectCustomSpawnRegion(spawnRegion, wrapperGuid);
+            WrapSpawnRegion(spawnRegion, wrapperGuid);
             return true;
         }
 
 
-        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion,out CustomBaseSpawnRegion customSpawnRegion)
+        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion,out CustomSpawnRegion customSpawnRegion)
         {
             int hashcode = spawnRegion.GetHashCode();
             customSpawnRegion = null;
@@ -856,7 +819,7 @@ namespace ExpandedAiFramework
         private void ClearCustomSpawnRegions()
         {
             LogTrace($"Clearing");
-            foreach (CustomBaseSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
+            foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
             {
                 TryRemoveCustomSpawnRegion(customSpawnRegion.VanillaSpawnRegion);
             }
@@ -867,36 +830,39 @@ namespace ExpandedAiFramework
             mReadyToProcessSpawnRegions = false;
         }
 
-
-        private CustomBaseSpawnRegion InjectCustomSpawnRegion(SpawnRegion spawnRegion, Guid guid)
+        // use 1: creating a new wrapper on deserialize, probably for existing vanilla data. Probably wont matter, but we'll progam it in anwyways. Just needs a callback for deserialize on the region after.
+        // use 2:
+        private void WrapSpawnRegion(SpawnRegion spawnRegion, Guid guid)
         {
-            if (mDataManager.TryGetActiveSpawnRegionModDataProxy(guid, out SpawnRegionModDataProxy proxy))
+            mDataManager.ScheduleSpawnRegionModDataProxyRequest(new GetDataByGuidRequest<SpawnRegionModDataProxy>(guid, mManager.CurrentScene, (proxy, result) =>
             {
-                if (proxy.Connected)
+                if (result == RequestResult.Succeeded)
                 {
-                    EAFManager.LogWithStackTrace($"Trying to connect to an already-connected SpawnRegionModDataProxy with guid {guid}!");
-                    return null;
+                    if (proxy.Connected)
+                    {
+                        EAFManager.LogWithStackTrace($"Trying to connect to an already-connected SpawnRegionModDataProxy with guid {guid}!");
+                        return;
+                    }
+                    LogVerbose($"Matched existing spawn region mod data proxy with guid {guid} against found spawn region!");
                 }
-                LogVerbose($"Matched existing spawn region mod data proxy with guid {guid} against found spawn region!");
-            }
-            else
-            {
-                LogVerbose($"No spawn region mod data proxy matched to spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}. creating then wrapping");
-                proxy = GenerateNewSpawnRegionModDataProxy(mManager.DataManager.LastValidGameplaySceneName, spawnRegion, guid);
-            }
-            CustomBaseSpawnRegion newSpawnRegionWrapper = GenerateCustomBaseSpawnRegion(spawnRegion, proxy);
-            mCustomSpawnRegions.Add(spawnRegion.GetHashCode(), newSpawnRegionWrapper);
-            mCustomSpawnRegionsByGuid.Add(proxy.Guid, newSpawnRegionWrapper);
-            mCustomSpawnRegionsByIndex.Add(newSpawnRegionWrapper);
-            if (!mVanillaManager.m_SpawnRegions.Contains(spawnRegion))
-            {
-                mVanillaManager.m_SpawnRegions.Add(spawnRegion);
-            }
-            return newSpawnRegionWrapper;
+                else
+                {
+                    LogVerbose($"No spawn region mod data proxy matched to spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}. creating then wrapping");
+                    proxy = GenerateNewSpawnRegionModDataProxy(mManager.CurrentScene, spawnRegion, guid);
+                }
+                CustomSpawnRegion newSpawnRegionWrapper = GenerateCustomBaseSpawnRegion(spawnRegion, proxy);
+                mCustomSpawnRegions.Add(spawnRegion.GetHashCode(), newSpawnRegionWrapper);
+                mCustomSpawnRegionsByGuid.Add(proxy.Guid, newSpawnRegionWrapper);
+                mCustomSpawnRegionsByIndex.Add(newSpawnRegionWrapper);
+                if (!mVanillaManager.m_SpawnRegions.Contains(spawnRegion))
+                {
+                    mVanillaManager.m_SpawnRegions.Add(spawnRegion);
+                }
+            }));
         }
 
 
-        private CustomBaseSpawnRegion GenerateCustomBaseSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy proxy)
+        private CustomSpawnRegion GenerateCustomBaseSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy proxy)
         {
             //A lot of this was in / is repeated still in CustomBaseSpawnRegion.Initialize(); may be wiser to use an actual parent top object and delegate some logic to smaller serviec objects.
             if (spawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
@@ -917,7 +883,7 @@ namespace ExpandedAiFramework
             }
             else
             {
-                return new CustomBaseSpawnRegion(spawnRegion, proxy, mTimeOfDay);
+                return new CustomSpawnRegion(spawnRegion, proxy, mTimeOfDay);
             }
         }
 
@@ -935,11 +901,7 @@ namespace ExpandedAiFramework
                 return null;
             }
             SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy(guid, scene, spawnRegion);
-            if (!mDataManager.TryRegisterSpawnRegionModDataProxy(newProxy))
-            {
-                LogError($"Couldnt register new spawn region mod data proxy with guid {newProxy.Guid} due to guid collision!");
-                return null;
-            }
+            mDataManager.ScheduleRegisterSpawnRegionModDataProxyRequest(newProxy, (proxy, result) => { });
             return newProxy;
         }
 

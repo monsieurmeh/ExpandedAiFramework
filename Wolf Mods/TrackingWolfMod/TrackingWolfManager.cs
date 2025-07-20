@@ -11,7 +11,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
             mManager = manager;
             LogDebug("TrackingWolfManager initialized!");
         }
-        public bool ShouldInterceptSpawn(CustomBaseSpawnRegion region) => false;
+        public bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
         public void Shutdown() { }
         public void OnStartNewGame() { }
         public void OnLoadGame() { }

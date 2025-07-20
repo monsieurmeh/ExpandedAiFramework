@@ -13,7 +13,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             mManager = manager;  
             LogDebug("AmbushWolfManager initialized!"); 
         }
-        public bool ShouldInterceptSpawn(CustomBaseSpawnRegion region) => false;
+        public bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
         public void Shutdown() { }
         public void OnStartNewGame() { }
         public void OnLoadGame() { }
@@ -22,26 +22,49 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public void OnSaveGame() { }
         public void OnQuitToMainMenu() { }
         public void Update() { }
+        public Type SpawnType { get { return typeof(AmbushWolf); } }
+
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
             LogVerbose($"proxy with guid <<<{proxy.Guid}>>> has custom data: {proxy.CustomData != null} with length: {proxy.CustomData?.Length ?? 0}");
-            if (proxy.CustomData == null || proxy.CustomData.Length == 0 || !mManager.DataManager.AvailableHidingSpots.ContainsKey(new Guid((string)proxy.CustomData[0])))
+
+            if (proxy.CustomData == null || proxy.CustomData.Length == 0)
             {
-                LogVerbose($"No custom data, short custom data or no available hiding spot using packed GUID for proxy with guid <<<{proxy.Guid}>>>, dispatching request for new");
-                proxy.AsyncProcessing = true;
-                mManager.DataManager.GetNearestHidingSpotAsync(proxy.CurrentPosition, new Action<HidingSpot>((spot) =>
+                mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetNearestMapDataRequest<HidingSpot>(proxy.CurrentPosition, proxy.Scene, (spot, result) =>
                 {
-                    proxy.AsyncProcessing = false;
-                    if (spot != null)
+                    if (result != RequestResult.Succeeded)
                     {
-                        LogVerbose($"Attaching spot with guid <<<{spot.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>");
-                        proxy.CustomData = [spot.Guid.ToString()];
-                        spot.Claim();
+                        EAFManager.LogWithStackTrace($"FAILED TO GET BY GUID!");
+                        return;
                     }
-                }), 3);
+                    ClaimHidingSpot(proxy, spot);
+                }, 3));
+            }
+            else
+            {
+                mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetDataByGuidRequest<HidingSpot>(new Guid(proxy.CustomData[0]), proxy.Scene, (spot, result) =>
+                {
+                    if (result != RequestResult.Succeeded)
+                    {
+                        EAFManager.LogWithStackTrace($"FAILED TO GET NEAREST!!!");
+                        return;
+                    }
+                    ClaimHidingSpot(proxy, spot);
+                }));
             }
         }
-        public Type SpawnType { get { return typeof(AmbushWolf); } }
+
+
+        private void ClaimHidingSpot(SpawnModDataProxy proxy, HidingSpot spot)
+        {
+            proxy.AsyncProcessing = false;
+            if (spot != null)
+            {
+                LogVerbose($"Attaching wanderpath with guid <<<{spot.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>");
+                proxy.CustomData = [spot.Guid.ToString()];
+                spot.Claim();
+            }
+        }
     }
 }
 

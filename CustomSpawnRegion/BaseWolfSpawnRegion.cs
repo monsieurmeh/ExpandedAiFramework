@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ExpandedAiFramework
 { 
-    public class BaseWolfSpawnRegion : CustomBaseSpawnRegion
+    public class BaseWolfSpawnRegion : CustomSpawnRegion
     {
         public BaseWolfSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy dataProxy, TimeOfDay timeOfDay) : base(spawnRegion, dataProxy, timeOfDay)
         {
 
         }
 
-        protected override int GetMaxSimultaneousSpawnsDay()
+        public override int GetMaxSimultaneousSpawnsDay()
         {
             int count = base.GetMaxSimultaneousSpawnsDay() + BaseWolf.BaseWolfSettings.MaxWolfSpawnCountIncrease;
             //EAFManager.LogWithStackTrace($"Overriding day spawn count: {count - BaseWolf.BaseWolfSettings.MaxWolfSpawnCountIncrease} -> {count}");
@@ -21,7 +21,7 @@ namespace ExpandedAiFramework
         }
 
 
-        protected override int GetMaxSimultaneousSpawnsNight()
+        public override int GetMaxSimultaneousSpawnsNight()
         {
             int count = base.GetMaxSimultaneousSpawnsNight() + BaseWolf.BaseWolfSettings.MaxWolfSpawnCountIncrease;
             //EAFManager.LogWithStackTrace($"Overriding day spawn count: {count - BaseWolf.BaseWolfSettings.MaxWolfSpawnCountIncrease} -> {count}");

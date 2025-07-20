@@ -10,15 +10,20 @@ using UnityEngine;
 
 namespace ExpandedAiFramework
 {
-    public class CustomBaseSpawnRegion : ILogInfoProvider
+    public class CustomSpawnRegion : ILogInfoProvider
     {
         protected SpawnRegion mSpawnRegion;
         protected TimeOfDay mTimeOfDay;
         protected SpawnRegionManager mManager;
         protected SpawnRegionModDataProxy mModDataProxy;
+        protected DataManager mDataManager;
         protected List<CustomBaseAi> mActiveSpawns = new List<CustomBaseAi>();
+        protected Queue<SpawnModDataProxy> mPendingSpawns = new Queue<SpawnModDataProxy>();
         protected int mProxiesUnderConstruction = 0;
+        protected int mProxiesBeingFetched = 0;
 
+        public SpawnRegionManager Manager { get { return mManager; } }
+        public DataManager DataManager { get { return mDataManager; } }
         public SpawnRegion VanillaSpawnRegion { get { return mSpawnRegion; } }
         public SpawnRegionModDataProxy ModDataProxy { get { return mModDataProxy; } }
         public virtual string InstanceInfo { get { return !VanillaSpawnRegion.IsNullOrDestroyed() ? VanillaSpawnRegion.GetHashCode().ToString() : "NULL"; } }
@@ -26,7 +31,7 @@ namespace ExpandedAiFramework
         public List<CustomBaseAi> ActiveSpawns { get { return mActiveSpawns; } }
 
 
-        public CustomBaseSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy dataProxy, TimeOfDay timeOfDay)
+        public CustomSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy dataProxy, TimeOfDay timeOfDay)
         {
             Initialize(spawnRegion, dataProxy, timeOfDay);
         }
@@ -37,7 +42,8 @@ namespace ExpandedAiFramework
             mSpawnRegion = spawnRegion;
             mModDataProxy = dataProxy;
             mTimeOfDay = timeOfDay;
-            mManager = Manager.SpawnRegionManager;
+            mManager = EAFManager.Instance.SpawnRegionManager;
+            mDataManager = mManager.Manager.DataManager;
             mSpawnRegion.m_Registered = true;
 
 
@@ -126,26 +132,17 @@ namespace ExpandedAiFramework
 
 
             SetBoundingSphereBasedOnWaypoints(mModDataProxy.CurrentWaypointPathIndex);
+            PreQueue();
+        }
 
+
+        protected virtual void PreQueue()
+        {
             bool closeEnoughForPrespawning = mSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance >= Vector3.Distance(mManager.PlayerStartPos, mSpawnRegion.m_Center);
-
-
-            List<Guid> normalSpawns = mManager.Manager.DataManager.GetQueuedSpawnModDataProxiesByParentGuid(mModDataProxy.Guid, WildlifeMode.Normal);
-            int preQueueCount = Math.Max(GetMaxSimultaneousSpawnsDay(), GetMaxSimultaneousSpawnsNight());
-            for (int i = normalSpawns.Count; i < preQueueCount; i++)
-            {
-                this.LogTraceInstanced($"Pre-queueing normal spawn #{i}");
-                GenerateNewRandomSpawnModDataProxy((proxy) => { }, !closeEnoughForPrespawning);
-            }
-
+            mDataManager.SchedulePreQueueRequest(this, WildlifeMode.Normal, closeEnoughForPrespawning);
             if (mSpawnRegion.m_AiTypeSpawned == AiType.Predator)
             {
-                List<Guid> auroraSpawns = mManager.Manager.DataManager.GetQueuedSpawnModDataProxiesByParentGuid(mModDataProxy.Guid, WildlifeMode.Aurora);
-                for (int i = normalSpawns.Count; i < preQueueCount; i++)
-                {
-                    this.LogTraceInstanced($"Pre-queueing Aurora spawn #{i}");
-                    GenerateNewRandomSpawnModDataProxy((proxy) => { }, !closeEnoughForPrespawning);
-                }
+                mDataManager.SchedulePreQueueRequest(this, WildlifeMode.Aurora, closeEnoughForPrespawning);
             }
         }
 
@@ -162,61 +159,7 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            WildlifeMode currentMode = mSpawnRegion.m_WildlifeMode;
-            int targetPop = CalculateTargetPopulation();
-            List<SpawnModDataProxy> spawnableProxies = new List<SpawnModDataProxy>();
-            foreach (Guid guid in mManager.Manager.DataManager.GetQueuedSpawnModDataProxiesByParentGuid(mModDataProxy.Guid, mSpawnRegion.m_WildlifeMode))
-            {
-                if (!mManager.Manager.DataManager.TryGetActiveSpawnModDataProxy(guid, out SpawnModDataProxy proxy))
-                {
-                    this.LogWarningInstanced($"Can't get what should be a queued active spawn mod data proxy at guid {guid}!");
-                    continue;
-                }
-                float proxyDist = Vector3.Distance(mManager.PlayerStartPos, proxy.CurrentPosition);
-                if (mSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance < proxyDist)
-                {
-                    this.LogTraceInstanced($"Spawn proxy with guid at {proxy.CurrentPosition} is {proxyDist} away which is too far for pre-spawning");
-                    continue;
-                }
-                this.LogTraceInstanced($"Adding Spawn proxy with guid at {proxy.CurrentPosition} is {proxyDist} away for prespawning");
-                spawnableProxies.Add(proxy);
-            }
-            foreach (SpawnModDataProxy proxy in spawnableProxies)
-            {
-                if (!SpawnInternal(proxy, true))
-                {
-                    this.LogErrorInstanced($"Could not force pre-spawn nearby guid {proxy.Guid} at {proxy.CurrentPosition}!");
-                    continue;
-                }
-                if (targetPop <= GetCurrentActivePopulation(currentMode))
-                {
-                    this.LogTraceInstanced($"Max active population ({targetPop}) reached, aborting prespawning");
-                    return;
-                }
-            }
-        }
-
-
-        public void ForceSpawnIfAvailable()
-        {
-            if (mSpawnRegion.m_HasBeenDisabledByAurora)
-            {
-                return;
-            }
-            WildlifeMode currentMode = mSpawnRegion.m_WildlifeMode;
-            int targetPop = CalculateTargetPopulation();
-            int currentActivePopulation = GetCurrentActivePopulation(currentMode);
-            this.LogTraceInstanced($"Checking region {mModDataProxy.Guid} for force spawns");
-            while (currentActivePopulation < targetPop && mManager.Manager.DataManager.TryGetNextAvailableSpawnModDataProxy(mModDataProxy.Guid, currentMode, true, out SpawnModDataProxy proxy))
-            {
-                this.LogAlwaysInstanced($"FORCE spawning guid {proxy.Guid} on region {mModDataProxy.Guid}");
-                if (!SpawnInternal(proxy, true))
-                {
-                    this.LogWarningInstanced($"Failed to spawninternal on forcespawn??? why??");
-                    proxy.Available = true;
-                }
-                currentActivePopulation = GetCurrentActivePopulation(currentMode);
-            }
+            mDataManager.ScheduleSpawnModDataProxyRequest(new PreSpawnRequest(this), mSpawnRegion.m_WildlifeMode);
         }
 
 
@@ -290,6 +233,7 @@ namespace ExpandedAiFramework
             {
                 mSpawnRegion.gameObject.SetActive(false);
             }
+            ProcessPendingSpawnQueue();
             MaybeReducePendingRespawns();
             MaybeReduceNumTrapped();
             AdjustActiveSpawnRegionPopulation();
@@ -347,31 +291,70 @@ namespace ExpandedAiFramework
      
         #region Spawning Method Chain
 
-        public void Spawn(WildlifeMode mode, bool force = false)
+
+        public void QueueImmediateSpawn(SpawnModDataProxy proxy)
         {
-            if (!mManager.Manager.DataManager.TryGetNextAvailableSpawnModDataProxy(mModDataProxy.Guid, mode, false, out SpawnModDataProxy queuedProxy))
+            lock(mPendingSpawns)
             {
-                if (mProxiesUnderConstruction > 0)
-                {
-                    this.LogAlwaysInstanced($"No queued spawns for spawn region with guid {mModDataProxy.Guid} for mode {mode}. Wait for pending proxies under construction.");
-                    return;
-                }
-                this.LogAlwaysInstanced($"No queued spawns for spawn region with guid {mModDataProxy.Guid} for mode {mode}. Sync queueing...");
-                GenerateNewRandomSpawnModDataProxy((s) => SpawnInternal(s, force), false);
-                return;
+                mPendingSpawns.Enqueue(proxy);
             }
-            SpawnInternal(queuedProxy, force);
         }
 
 
-        private bool SpawnInternal(SpawnModDataProxy queuedProxy, bool force)
+        private void ProcessPendingSpawnQueue()
+        {
+            lock (mPendingSpawns)
+            {
+                while (mPendingSpawns.Count > 0)
+                {
+                    SpawnInternal(mPendingSpawns.Dequeue(), true);
+                }
+            }
+        }
+
+
+        public void Spawn(WildlifeMode mode, bool force = false)
+        {
+            mProxiesBeingFetched++;
+            mDataManager.ScheduleSpawnModDataProxyRequest(new GetNextAvailableSpawnRequest(mModDataProxy.Guid, mModDataProxy.Scene, false, (availableProxy, result) =>
+            {
+                if (result == RequestResult.Succeeded)
+                {
+                    mProxiesBeingFetched--;
+                    SpawnInternal(availableProxy, force);
+                }
+                else
+                {
+                    /* this should be taken care of by including the proxy fetch/construction count in updateavailablespawns
+                    if (mProxiesUnderConstruction > 0)
+                    {
+                        this.LogTraceInstanced($"No queued spawns for spawn region with guid {mModDataProxy.Guid} for mode {mode}. Wait for pending proxies under construction.");
+                        return;
+                    }
+                    */
+                    this.LogTraceInstanced($"No queued spawns for spawn region with guid {mModDataProxy.Guid} for mode {mode}. Queueing request for new proxy and spawn...");
+                    mProxiesUnderConstruction++;
+                    GenerateNewRandomSpawnModDataProxy((s) =>
+                    {
+                        SpawnInternal(s, force);
+                        mProxiesUnderConstruction--;
+                        mProxiesBeingFetched--;
+                    }, true);
+                }
+            }), mode);
+        }
+
+
+        private void SpawnInternal(SpawnModDataProxy queuedProxy, bool force)
         {
             if (InstantiateSpawn(queuedProxy, force) != null)
             {
-                return mManager.Manager.DataManager.ClaimAvailableSpawnModDataProxy(queuedProxy);
+                mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(queuedProxy.Guid, queuedProxy.Scene, (proxy, result) => { }), queuedProxy.WildlifeMode);
             }
-            queuedProxy.Available = true;
-            return false;
+            else
+            {
+                queuedProxy.Available = true;
+            }
         }
 
 
@@ -447,7 +430,10 @@ namespace ExpandedAiFramework
             baseAi.m_AiDifficultySetting = aiDifficultySettings.GetSetting(mSpawnRegion.m_AiDifficulty, baseAi.m_AiSubType);
             ObjectGuid.MaybeAttachObjectGuidAndRegister(baseAi.gameObject, customBaseAi.ModDataProxy.Guid.ToString());
             baseAi.Deserialize(customBaseAi.ModDataProxy.BaseAiSerialized);
-            mActiveSpawns.Add(customBaseAi);
+            lock (mActiveSpawns)
+            {
+                mActiveSpawns.Add(customBaseAi);
+            }
             return true;
         }
 
@@ -504,7 +490,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, Vector3 position, Quaternion rotation)
+        private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, Vector3 position, Quaternion rotation)
         {
             if (variantSpawnType == null)
             {
@@ -513,23 +499,22 @@ namespace ExpandedAiFramework
             }
             SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.Manager.CurrentScene, position, rotation, mSpawnRegion.m_AiSubTypeSpawned, mSpawnRegion.m_WildlifeMode, variantSpawnType);
             newProxy.ParentGuid = mModDataProxy.Guid;
-            if (!mManager.Manager.DataManager.TryRegisterSpawnModDataProxy(newProxy))
+            mDataManager.ScheduleRegisterSpawnModDataProxyRequest(newProxy, (proxy, result) =>
             {
-                LogTrace($"Couldnt register new spawn mod data proxy with guid {newProxy.Guid} due to guid collision!");
-                return null;
-            }
-            if (mManager.Manager.SubManagers.TryGetValue(variantSpawnType, out ISubManager subManager))
-            {
-                subManager.PostProcessNewSpawnModDataProxy(newProxy);
-            }
-            if (newProxy.ForceSpawn)
-            {
-                this.LogAlwaysInstanced($"FORCE spawning on creation!");
-                mManager.Manager.DataManager.IncrementForceSpawnCount(mSpawnRegion.m_WildlifeMode);
-                SpawnInternal(newProxy, true);
-            }
+                if (mManager.Manager.SubManagers.TryGetValue(variantSpawnType, out ISubManager subManager))
+                {
+                    subManager.PostProcessNewSpawnModDataProxy(newProxy);
+                }
+                if (newProxy.ForceSpawn)
+                {
+                    this.LogAlwaysInstanced($"FORCE spawning on creation!");
+                    mManager.Manager.DataManager.IncrementForceSpawnCount(mSpawnRegion.m_WildlifeMode);
+                    QueueImmediateSpawn(newProxy);
+                }
+            });
             return newProxy;
         }
+
 
         #endregion
 
@@ -578,7 +563,7 @@ namespace ExpandedAiFramework
         }
 
 
-        protected  int CalculateTargetPopulation()
+        public  int CalculateTargetPopulation()
         {
             if (SpawningSuppressedByExperienceMode())
             {
@@ -599,7 +584,7 @@ namespace ExpandedAiFramework
             int maxSimultaneousSpawns = GameManager.m_TimeOfDay.IsDay()
                 ? GetMaxSimultaneousSpawnsDay()
                 : GetMaxSimultaneousSpawnsNight();
-            int adjustedMaxSimultaneousSpawns = maxSimultaneousSpawns - mSpawnRegion.m_NumTrapped - mSpawnRegion.m_NumRespawnsPending;
+            int adjustedMaxSimultaneousSpawns = maxSimultaneousSpawns - mSpawnRegion.m_NumTrapped - mSpawnRegion.m_NumRespawnsPending - mProxiesBeingFetched - mProxiesUnderConstruction;
             if (adjustedMaxSimultaneousSpawns < 0)
             {
                 return 0;
@@ -610,26 +595,29 @@ namespace ExpandedAiFramework
         protected virtual int AdditionalSimultaneousSpawnAllowance() => 0;
 
 
-        private int GetCurrentActivePopulation(WildlifeMode wildlifeMode)
+        public int GetCurrentActivePopulation(WildlifeMode wildlifeMode)
         {
             int count = 0;
-            for (int i = 0, iMax = mActiveSpawns.Count; i < iMax; i++)
+            lock (mActiveSpawns)
             {
-                if (mActiveSpawns[i].BaseAi.m_WildlifeMode != wildlifeMode)
+                for (int i = 0, iMax = mActiveSpawns.Count; i < iMax; i++)
                 {
-                    continue;
+                    if (mActiveSpawns[i].BaseAi.m_WildlifeMode != wildlifeMode)
+                    {
+                        continue;
+                    }
+                    if (!mActiveSpawns[i].gameObject.activeSelf)
+                    {
+                        continue;
+                    }
+                    count++;
                 }
-                if (!mActiveSpawns[i].gameObject.activeSelf)
-                {
-                    continue;
-                }
-                count++;
             }
             return count;
         }
 
 
-        protected virtual int GetMaxSimultaneousSpawnsDay()
+        public virtual int GetMaxSimultaneousSpawnsDay()
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
@@ -640,7 +628,7 @@ namespace ExpandedAiFramework
         }
 
 
-        protected virtual int GetMaxSimultaneousSpawnsNight()
+        public virtual int GetMaxSimultaneousSpawnsNight()
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
@@ -670,81 +658,84 @@ namespace ExpandedAiFramework
         private void RemoveActiveSpawns(int numToDeactivate, WildlifeMode wildlifeMode, bool isAdjustingOtherWildlifeMode)
         {
             bool playerGhost = GameManager.m_PlayerManager.m_Ghost;
-            for (int i = 0, iMax = mActiveSpawns.Count; i < iMax && numToDeactivate > 0; i++)
+            lock (mActiveSpawns)
             {
-                BaseAi spawn = mActiveSpawns[i].BaseAi;
-                if (spawn.IsNullOrDestroyed() || !spawn.gameObject.activeSelf)
+                for (int i = 0, iMax = mActiveSpawns.Count; i < iMax && numToDeactivate > 0; i++)
                 {
-                    continue;
-                }
-                GameManager.GetPackManager().UnregisterPackAnimal(spawn.m_PackAnimal, onDeath: false);
-                //force wildlife to run until they are eligible for removal
-                bool canDespawn = false;
-                if (isAdjustingOtherWildlifeMode && HasSameWildlifeMode(spawn, wildlifeMode))
-                {
-                    this.LogVerboseInstanced($"Adjusting other wildlife mode and spawn mode matches called mode, wildlifeMode matched for despawn");
-                    canDespawn = true;
-                }
-                if (!canDespawn && !HasSameWildlifeMode(spawn, wildlifeMode))
-                {
-                    this.LogVerboseInstanced($"NOT adjusting other wildlife mode and spawn mode does NOT match called mode, wildlifeMode matched for despawn");
-                    canDespawn = true;
-                }
-                if (canDespawn
-                    && spawn.GetAiMode() != AiMode.Flee
-                    && spawn.GetAiMode() != AiMode.Dead)
-                {
-                    this.LogVerboseInstanced($"Can despawn && and spawn is not fleeing or dead, setting flee");
-                    spawn.SetAiMode(AiMode.Flee);
-                }
-                Vector3 spawnPos = spawn.m_CachedTransform.position;
-                bool canDespawnDueToProximity = playerGhost;
-                if (canDespawnDueToProximity)
-                {
-                    this.LogVerboseInstanced($"Ghost, proximity check passed");
-                }
-                if (!canDespawnDueToProximity
-                    && Utils.DistanceToMainCamera(spawnPos) >= GameManager.GetSpawnRegionManager().m_DisallowDespawnBelowDistance
-                    && (!Utils.PositionIsOnscreen(spawnPos) || Utils.DistanceToMainCamera(spawnPos) >= GameManager.GetSpawnRegionManager().m_AllowDespawnOnscreenDistance)
-                    && !Utils.PositionIsInLOSOfPlayer(spawnPos)) //Why is this last one needed...?
-                {
-                    this.LogVerboseInstanced($"Ai is not visible, proximity check passed");
-                    canDespawnDueToProximity = true;
-                }
-                if (!canDespawnDueToProximity)
-                {
-                    this.LogVerboseInstanced($"Proximity check failed, cannot despawn");
-                    continue;
-                }
-                if (!canDespawn)
-                {
-                    if (!spawn.m_CurrentTarget.IsNullOrDestroyed() && spawn.m_CurrentTarget.IsPlayer())
+                    BaseAi spawn = mActiveSpawns[i].BaseAi;
+                    if (spawn.IsNullOrDestroyed() || !spawn.gameObject.activeSelf)
                     {
-                        this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is targetting player, cannot despawn");
                         continue;
                     }
-                    if (spawn.m_CurrentMode == AiMode.Feeding)
+                    GameManager.GetPackManager().UnregisterPackAnimal(spawn.m_PackAnimal, onDeath: false);
+                    //force wildlife to run until they are eligible for removal
+                    bool canDespawn = false;
+                    if (isAdjustingOtherWildlifeMode && HasSameWildlifeMode(spawn, wildlifeMode))
                     {
-                        this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is eating, cannot despawn");
+                        this.LogVerboseInstanced($"Adjusting other wildlife mode and spawn mode matches called mode, wildlifeMode matched for despawn");
+                        canDespawn = true;
+                    }
+                    if (!canDespawn && !HasSameWildlifeMode(spawn, wildlifeMode))
+                    {
+                        this.LogVerboseInstanced($"NOT adjusting other wildlife mode and spawn mode does NOT match called mode, wildlifeMode matched for despawn");
+                        canDespawn = true;
+                    }
+                    if (canDespawn
+                        && spawn.GetAiMode() != AiMode.Flee
+                        && spawn.GetAiMode() != AiMode.Dead)
+                    {
+                        this.LogVerboseInstanced($"Can despawn && and spawn is not fleeing or dead, setting flee");
+                        spawn.SetAiMode(AiMode.Flee);
+                    }
+                    Vector3 spawnPos = spawn.m_CachedTransform.position;
+                    bool canDespawnDueToProximity = playerGhost;
+                    if (canDespawnDueToProximity)
+                    {
+                        this.LogVerboseInstanced($"Ghost, proximity check passed");
+                    }
+                    if (!canDespawnDueToProximity
+                        && Utils.DistanceToMainCamera(spawnPos) >= GameManager.GetSpawnRegionManager().m_DisallowDespawnBelowDistance
+                        && (!Utils.PositionIsOnscreen(spawnPos) || Utils.DistanceToMainCamera(spawnPos) >= GameManager.GetSpawnRegionManager().m_AllowDespawnOnscreenDistance)
+                        && !Utils.PositionIsInLOSOfPlayer(spawnPos)) //Why is this last one needed...?
+                    {
+                        this.LogVerboseInstanced($"Ai is not visible, proximity check passed");
+                        canDespawnDueToProximity = true;
+                    }
+                    if (!canDespawnDueToProximity)
+                    {
+                        this.LogVerboseInstanced($"Proximity check failed, cannot despawn");
                         continue;
                     }
-                    if (spawn.m_CurrentMode == AiMode.Sleep)
+                    if (!canDespawn)
                     {
-                        this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is sleeping, cannot despawn");
-                        continue;
+                        if (!spawn.m_CurrentTarget.IsNullOrDestroyed() && spawn.m_CurrentTarget.IsPlayer())
+                        {
+                            this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is targetting player, cannot despawn");
+                            continue;
+                        }
+                        if (spawn.m_CurrentMode == AiMode.Feeding)
+                        {
+                            this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is eating, cannot despawn");
+                            continue;
+                        }
+                        if (spawn.m_CurrentMode == AiMode.Sleep)
+                        {
+                            this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is sleeping, cannot despawn");
+                            continue;
+                        }
+                        if (spawn.IsBleedingOut())
+                        {
+                            this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is bleeding, cannot despawn");
+                            continue;
+                        }
+                        if (!spawn.NormalWolf.IsNullOrDestroyed() && spawn.m_CurrentMode == AiMode.WanderPaused)
+                        {
+                            this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is normal wolf in AiMode.WanderPaused, cannot despawn");
+                            continue;
+                        }
+                        spawn.Despawn();
+                        numToDeactivate--;
                     }
-                    if (spawn.IsBleedingOut())
-                    {
-                        this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is bleeding, cannot despawn");
-                        continue;
-                    }
-                    if (!spawn.NormalWolf.IsNullOrDestroyed() && spawn.m_CurrentMode == AiMode.WanderPaused)
-                    {
-                        this.LogVerboseInstanced($"Failed to match wildlifeMode for forced removal and spawn is normal wolf in AiMode.WanderPaused, cannot despawn");
-                        continue;
-                    }
-                    spawn.Despawn();
-                    numToDeactivate--;
                 }
             }
         }
@@ -753,23 +744,26 @@ namespace ExpandedAiFramework
         public void RemoveFromSpawnRegion(BaseAi baseAi)
         {
             int removeIndex = -1;
-            for (int i = 0, iMax = mActiveSpawns.Count; i < iMax; i++)
+            lock (mActiveSpawns)
             {
-                if (mActiveSpawns[i].BaseAi == baseAi)
+                for (int i = 0, iMax = mActiveSpawns.Count; i < iMax; i++)
                 {
-                    removeIndex = i;
-                    break;
+                    if (mActiveSpawns[i].BaseAi == baseAi)
+                    {
+                        removeIndex = i;
+                        break;
+                    }
                 }
+                if (removeIndex == -1)
+                {
+                    this.LogErrorInstanced($"BaseAI not found in ActiveSpawns");
+                    return;
+                }
+                mActiveSpawns[removeIndex].ModDataProxy.Disconnected = true;
+                mActiveSpawns.RemoveAt(removeIndex);
+                mSpawnRegion.m_NumRespawnsPending++;
+                mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = GetCurrentTimelinePoint() + GetNumHoursBetweenRespawns();
             }
-            if (removeIndex == -1)
-            {
-                this.LogErrorInstanced($"BaseAI not found in ActiveSpawns");
-                return;
-            }
-            mActiveSpawns[removeIndex].ModDataProxy.Disconnected = true;
-            mActiveSpawns.RemoveAt(removeIndex);
-            mSpawnRegion.m_NumRespawnsPending++;
-            mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = GetCurrentTimelinePoint() + GetNumHoursBetweenRespawns();
         }
 
 
@@ -936,42 +930,6 @@ namespace ExpandedAiFramework
                 }
             }
             mSpawnRegion.gameObject.SetActive(active);
-        }
-
-        #endregion
-
-
-        #region Serialization/Deserialization
-
-        public void Despawn(float time)
-        {
-            mModDataProxy.LastDespawnTime = time;
-            mModDataProxy.CurrentPosition = mSpawnRegion.transform.position;
-        }
-
-
-        // Handles vanilla data generated before mod was installed; no other real use, other data is engaged at wrapper instantiation.
-        // Edit: This is probably completely broken now. Yay for no tests! lmao
-        public void Deserialize(string text)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(text))
-                {
-                    this.LogErrorInstanced($"Null or empty text, cannot deserialize");
-                    return;
-                }
-                Start();
-                Il2Cpp.SpawnRegion.m_SpawnRegionDataProxy = Utils.DeserializeObject<SpawnRegionDataProxy>(text);
-                SpawnRegionDataProxy proxy = Il2Cpp.SpawnRegion.m_SpawnRegionDataProxy;
-                mSpawnRegion.gameObject.SetActive(true);
-
-            }
-
-            catch (Exception e)
-            {
-                this.LogErrorInstanced($"Deserialize error SpawnRegion with hash code {VanillaSpawnRegion.GetHashCode()}: {e}");
-            }
         }
 
         #endregion

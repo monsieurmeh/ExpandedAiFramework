@@ -6,17 +6,14 @@ using System.Threading.Tasks;
 
 namespace ExpandedAiFramework
 {
-    public class SpawnRegionModDataProxyManager : ProxyManager<SpawnRegionModDataProxy>
+    public class SpawnRegionModDataProxyManager : ProxyManagerBase<SpawnRegionModDataProxy>
     {
-        private List<CustomBaseSpawnRegion> mUnmatchedCustomBaseSpawnRegions = new List<CustomBaseSpawnRegion>();
+        public SpawnRegionModDataProxyManager(DataManager manager, DispatchManager dispatcher, string dataLocation) : base(manager, dispatcher, dataLocation) { }
 
-
-        public SpawnRegionModDataProxyManager(DataManager manager, string dataLocation) : base(manager, dataLocation) { }
-
-
-        protected virtual void RefreshProxy(SpawnRegionModDataProxy proxy)
+        protected override void RefreshData(SpawnRegionModDataProxy data)
         {
-            proxy.Connected = false;
+            data.Connected = false;
+            base.RefreshData(data);
         }
     }
 }

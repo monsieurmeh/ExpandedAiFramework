@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
         private WanderPathManager mWanderPathManager;
         private SpawnRegionModDataProxyManager mSpawnRegionModDataProxyManager;
         private SpawnModDataProxyManager[] mSpawnModDataProxyManagers = new SpawnModDataProxyManager[(int)WildlifeMode.Aurora + 1];
-        private Dictionary<Type, SubDataManagerBase> mMapDataManagers = new Dictionary<Type, SubDataManagerBase>();
+        private Dictionary<Type, IMapDataManager> mMapDataManagers = new Dictionary<Type, IMapDataManager>();
 
         private string mLastScene = string.Empty;
         private bool mProxyDataLoaded = false;
@@ -41,107 +41,63 @@ namespace ExpandedAiFramework
         public string LastValidGameplaySceneName { get { return mManager.CurrentScene; } }
 
 
-        #region Map Data
+        #region MapData
 
-        public bool TryGetMapDataManager<T>(out MapDataManager<T> mapDataManager) where T : MapData, new()
+        public bool ScheduleMapDataRequest<T>(IRequest request) where T : IMapData, new()
         {
-            mapDataManager = null;
-            if (!mMapDataManagers.TryGetValue(typeof(T), out SubDataManagerBase baseMapDataManager))
+            if (!mMapDataManagers.TryGetValue(typeof(T), out IMapDataManager manager))
             {
                 return false;
             }
-            if (baseMapDataManager is not MapDataManager<T> matchedMapDataManager)
+            manager.ScheduleRequest(request);
+            return true;
+        }
+
+        #endregion
+
+
+        #region ModDataProxy
+
+        public void ScheduleSpawnRegionModDataProxyRequest(IRequest request) => mSpawnRegionModDataProxyManager.ScheduleRequest(request);
+
+
+        public bool ScheduleSpawnModDataProxyRequest(IRequest request, WildlifeMode wildlifeMode)
+        {
+            if (wildlifeMode < WildlifeMode.Normal || wildlifeMode > WildlifeMode.Aurora)
             {
+                LogError($"Invalid WildlifeMode: {wildlifeMode}");
                 return false;
             }
-            mapDataManager = matchedMapDataManager;
+            mSpawnModDataProxyManagers[(int)wildlifeMode].ScheduleRequest(request);
             return true;
         }
 
 
-        #region HidingSpot
-
-        public HidingSpotManager HidingSpotManager { get { return mHidingSpotManager; } }
-        public Dictionary<Guid, HidingSpot> AvailableHidingSpots { get { return mHidingSpotManager.AvailableData; } }
-        public Dictionary<string, List<HidingSpot>> HidingSpots { get { return mHidingSpotManager.Data; } }
-        public void GetNearestHidingSpotAsync(Vector3 position, Action<HidingSpot> callback, int extraNearestCandidatesToMaybePickFrom = 0) => mHidingSpotManager.GetNearestMapDataAsync(position, callback, extraNearestCandidatesToMaybePickFrom);
-
-        #endregion
-
-
-        #region WanderPath
-
-        public WanderPathManager WanderPathManager { get { return mWanderPathManager; } }
-        public Dictionary<Guid, WanderPath> AvailableWanderPaths { get { return mWanderPathManager.AvailableData; } }
-        public Dictionary<string, List<WanderPath>> WanderPaths { get { return mWanderPathManager.Data; } }
-        public void GetNearestWanderPathAsync(Vector3 position, WanderPathTypes type, Action<WanderPath> callback, int extraNearestCandidatesToMaybePickFrom = 0) => mWanderPathManager.GetNearestMapDataAsync(position, callback, extraNearestCandidatesToMaybePickFrom, [type]);
-
-        #endregion
-
-        #endregion
-
-
-        #region Proxy Management
-
-        public bool TryGetActiveSpawnRegionModDataProxy(Guid guid, out SpawnRegionModDataProxy proxy, string scene = null) => mSpawnRegionModDataProxyManager.TryGetProxy(guid, out proxy, scene);
-
-
-        public bool TryGetActiveSpawnModDataProxy(Guid guid, out SpawnModDataProxy proxy, string scene = null)
+        public bool SchedulePreQueueRequest(CustomSpawnRegion region, WildlifeMode mode, bool closeEnoughForPrespawning)
         {
-            for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
-            {
-                if (mSpawnModDataProxyManagers[i] == null)
-                {
-                    continue;
-                }
-                if (mSpawnModDataProxyManagers[i].TryGetProxy(guid, out proxy, scene))
-                {
-                    return true;
-                }
-            }
-            proxy = null;
-            return false;
+            return ScheduleSpawnModDataProxyRequest(new PreQueueRequest(region, mode, closeEnoughForPrespawning), mode);
         }
-
-
-        public bool TryGetActiveSpawnModDataProxy(Guid guid, WildlifeMode mode, out SpawnModDataProxy proxy, string scene = null) => mSpawnModDataProxyManagers[(int)mode].TryGetProxy(guid, out proxy, scene);
         
 
-        public List<Guid> GetQueuedSpawnModDataProxiesByParentGuid(Guid guid, WildlifeMode wildlifeMode)
+        public bool ScheduleRegisterSpawnModDataProxyRequest(SpawnModDataProxy proxy, Action<SpawnModDataProxy, RequestResult> callback)
         {
-            return mSpawnModDataProxyManagers[(int)wildlifeMode].GetQueuedSpawnModDataProxiesByParentGuid(guid);
-        }
-
-
-        public bool ClaimAvailableSpawnModDataProxy(SpawnModDataProxy proxy)
-        {
-            proxy.Available = true;
-            if ((int)proxy.WildlifeMode >= mSpawnModDataProxyManagers.Length)
+            if (proxy.WildlifeMode < WildlifeMode.Normal || proxy.WildlifeMode > WildlifeMode.Aurora)
             {
-                LogError($"Invalid wildlife mode: {proxy.WildlifeMode}!");
+                LogError($"Invalid WildlifeMode: {proxy.WildlifeMode}");
                 return false;
             }
-            return mSpawnModDataProxyManagers[(int)proxy.WildlifeMode].ClaimAvailableSpawnModDataProxy(proxy);
+            SpawnModDataProxyManager proxyManager = mSpawnModDataProxyManagers[(int)proxy.WildlifeMode];
+            proxyManager.ScheduleRequest(new RegisterDataRequest<SpawnModDataProxy>(proxy, proxyManager.DataLocation, callback));
+            return true;
+
         }
 
 
-        public bool TryGetNextAvailableSpawnModDataProxy(Guid spawnRegionModDataProxyGuid, WildlifeMode wildlifeMode, bool requireForceSpawn, out SpawnModDataProxy proxy)
+
+        public bool ScheduleRegisterSpawnRegionModDataProxyRequest(SpawnRegionModDataProxy proxy, Action<SpawnRegionModDataProxy, RequestResult> callback)
         {
-            return mSpawnModDataProxyManagers[(int)wildlifeMode].TryGetNextAvailableSpawnModDataProxy(spawnRegionModDataProxyGuid, requireForceSpawn, out proxy);
-        }
-
-
-        public bool TryRegisterSpawnRegionModDataProxy(SpawnRegionModDataProxy proxy) => mSpawnRegionModDataProxyManager.TryRegisterProxy(proxy);
-
-
-        public bool TryRegisterSpawnModDataProxy(SpawnModDataProxy proxy)
-        {
-            if ((int)proxy.WildlifeMode >= mSpawnModDataProxyManagers.Length)
-            {
-                LogError($"Invalid wildlife mode: {proxy.WildlifeMode}!");
-                return false;
-            }
-            return mSpawnModDataProxyManagers[(int)proxy.WildlifeMode].TryRegisterProxy(proxy);
+            mSpawnRegionModDataProxyManager.ScheduleRequest(new RegisterDataRequest<SpawnRegionModDataProxy>(proxy, mSpawnRegionModDataProxyManager.DataLocation, callback));
+            return true;
         }
 
 
@@ -165,9 +121,7 @@ namespace ExpandedAiFramework
             }
             mSpawnModDataProxyManagers[(int)wildlifeMode].IncrementForceSpawnCount();
         }
-        
-
-
+     
         #endregion
 
 
@@ -179,20 +133,20 @@ namespace ExpandedAiFramework
         public override void Initialize(EAFManager manager, ISubManager[] subManagers)
         {
             base.Initialize(manager, subManagers);
-            mWanderPathManager = new WanderPathManager(this);
-            mHidingSpotManager = new HidingSpotManager(this);
+            mWanderPathManager = new WanderPathManager(this, mManager.DispatchManager);
+            mHidingSpotManager = new HidingSpotManager(this, mManager.DispatchManager);
             mMapDataManagers.Add(typeof(WanderPath), mWanderPathManager);
             mMapDataManagers.Add(typeof(HidingSpot), mHidingSpotManager);
-            mSpawnModDataProxyManagers[(int)WildlifeMode.Normal] = new SpawnModDataProxyManager(this, "NormalSpawnModDataProxies");
-            mSpawnModDataProxyManagers[(int)WildlifeMode.Aurora] = new SpawnModDataProxyManager(this, "AuroraSpawnModDataProxies");
-            mSpawnRegionModDataProxyManager = new SpawnRegionModDataProxyManager(this, "SpawnRegionModDataProxies");
+            mSpawnModDataProxyManagers[(int)WildlifeMode.Normal] = new SpawnModDataProxyManager(this, mManager.DispatchManager, "NormalSpawnModDataProxies");
+            mSpawnModDataProxyManagers[(int)WildlifeMode.Aurora] = new SpawnModDataProxyManager(this, mManager.DispatchManager, "AuroraSpawnModDataProxies");
+            mSpawnRegionModDataProxyManager = new SpawnRegionModDataProxyManager(this, mManager.DispatchManager, "SpawnRegionModDataProxies");
             StartSubManagers();
             LoadMapData();
         }
 
         private void StartSubManagers()
         { 
-            foreach(SubDataManagerBase mapDataManager in mMapDataManagers.Values)
+            foreach(ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.StartWorker();
             }
@@ -201,7 +155,7 @@ namespace ExpandedAiFramework
 
         private void StopSubManagers()
         {
-            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
+            foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.StopWorker();
             }
@@ -233,9 +187,9 @@ namespace ExpandedAiFramework
                 {
                     continue;
                 }
-                mSpawnModDataProxyManagers[i].Clear();
+                mSpawnModDataProxyManagers[i].ScheduleClear();
             }
-            mSpawnRegionModDataProxyManager.Clear();
+            mSpawnRegionModDataProxyManager.ScheduleClear();
         }
 
 
@@ -248,91 +202,116 @@ namespace ExpandedAiFramework
                 return;
             }
 
-            mLastScene = sceneName; 
+            mLastScene = sceneName;
 
-            for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
-            {
-                if (mSpawnModDataProxyManagers[i] == null)
-                {
-                    continue;
-                }
-                mSpawnModDataProxyManagers[i].Refresh(mLastScene);
-            }
-            mSpawnRegionModDataProxyManager.Refresh(mLastScene);
-            RefreshAvailableMapData(mManager.CurrentScene);
+            RefreshModDataProxies();
+            RefreshAvailableMapData();
         }
 
 
         public override void OnLoadGame()
         {
             base.OnLoadGame();
-            for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
-            {
-                if (mSpawnModDataProxyManagers[i] == null)
-                {
-                    continue;
-                }
-                mSpawnModDataProxyManagers[i].Load();
-            }
-            mSpawnRegionModDataProxyManager.Load();
+            LoadModDataProxies();
         }
 
 
         public override void OnSaveGame()
         {
             base.OnSaveGame();
+            SaveModDataProxies();
+        }
+
+
+        #region ModDataProxies
+
+
+        private void RefreshModDataProxies()
+        {
             for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
             {
                 if (mSpawnModDataProxyManagers[i] == null)
                 {
                     continue;
                 }
-                mSpawnModDataProxyManagers[i].Save();
+                mSpawnModDataProxyManagers[i].ScheduleRefresh(mLastScene);
             }
-            mSpawnRegionModDataProxyManager.Save();
+            mSpawnRegionModDataProxyManager.ScheduleRefresh(mLastScene);
+        }
+
+        
+        private void LoadModDataProxies()
+        {
+            for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
+            {
+                if (mSpawnModDataProxyManagers[i] == null)
+                {
+                    continue;
+                }
+                mSpawnModDataProxyManagers[i].ScheduleLoad();
+            }
+            mSpawnRegionModDataProxyManager.ScheduleLoad();
         }
 
 
-
-        public void RefreshAvailableMapData(string sceneName)
+        private void SaveModDataProxies()
         {
-            LogVerbose($"Loading EAF map data for scene {sceneName}");
-            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
+            for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
             {
-                mapDataManager.RefreshData(sceneName);
+                if (mSpawnModDataProxyManagers[i] == null)
+                {
+                    continue;
+                }
+                mSpawnModDataProxyManagers[i].ScheduleSave();
+            }
+            mSpawnRegionModDataProxyManager.ScheduleSave();
+        }
+
+        #endregion
+
+
+        #region MapData
+
+        private void RefreshAvailableMapData()
+        {
+            LogVerbose($"Loading EAF map data for scene {mLastScene}");
+            foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
+            {
+                mapDataManager.ScheduleRefresh(mLastScene);
             }
         }
 
 
         public void SaveMapData()
         {
-            LogVerbose($"Saving");
-            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
+            LogVerbose($"Saving MapData");
+            foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
-                mapDataManager.Save();
+                mapDataManager.ScheduleSave();
             }
         }
 
 
         public void LoadMapData()
         {
-            LogVerbose($"Loading");
-            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
+            LogVerbose($"Loading MapData");
+            foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
-                mapDataManager.Load();
+                mapDataManager.ScheduleLoad();
             }
-            WanderPathManager.LoadAdditional("EAF/ExpandedAiFramework.WanderPathsEXTRA.json");
         }
 
 
         public void ClearMapData()
         {
-            LogVerbose($"Clearing");
-            foreach (SubDataManagerBase mapDataManager in mMapDataManagers.Values)
+            LogVerbose($"Clearing MapData");
+            foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
-                mapDataManager.Clear();
+                mapDataManager.ScheduleClear();
             }
         }
+
+        #endregion
 
         #endregion
     }

@@ -4,50 +4,42 @@ using MelonLoader.TinyJSON;
 
 namespace ExpandedAiFramework
 {
-    [Serializable]
-    public abstract class MapData
+    public abstract class MapData : SerializedData, IMapData
     {
-        [NonSerialized] protected bool mTransient = false;
-        [NonSerialized] protected string mCachedString;
-        [NonSerialized] protected string mFilePath;
-        [Include] protected Guid mGuid;
+        [Exclude] protected bool mTransient = false;
         [Include] protected string mName;
-        [Include] protected string mScene;
         [Include] protected Vector3 mAnchorPosition;
         [Include] protected bool mClaimed;
 
 
-        public Guid Guid { get { return mGuid; } }
         public string Name { get { return mName; } }
-        public string Scene { get { return mScene; } }
         public bool Transient { get { return mTransient; } }
         public Vector3 AnchorPosition { get { return mAnchorPosition; } }
         public bool Claimed { get { return mClaimed; } }
-        public string FilePath {  get { return mFilePath; } set { mFilePath = value; } }
 
 
-        public MapData() { }
+        public MapData() : base() { }
 
-        public MapData(string name, string scene, Vector3 anchorPostion, string filePath, bool transient)
+        public MapData(string name, string scene, Vector3 anchorPostion, bool transient) : base(Guid.NewGuid(), scene)
         {
-            mGuid = Guid.NewGuid();
             mName = name;
             mTransient = transient;
-            mScene = scene;
             mAnchorPosition = anchorPostion;
             mClaimed = false;
-            mFilePath = filePath;
-            UpdateCachedString();
+            BuildCachedStringSegment();
         }
 
 
-        public virtual void UpdateCachedString()
+        public override void UpdateCachedString()
         {
-            if (mGuid == Guid.Empty)
-            {
-                mGuid = Guid.NewGuid();
-            }
-            mCachedString = (mClaimed ? "Claimed " : "Unclaimed ") + $"{GetType().Name} {Name} anchored at {AnchorPosition} in scene {Scene} with Guid {Guid}";
+            base.UpdateCachedString();
+            BuildCachedStringSegment();
+        }
+
+
+        private void BuildCachedStringSegment()
+        {
+            mCachedString = (mClaimed ? "Claimed " : "Unclaimed ") + mCachedString + $" named {Name} anchored at {AnchorPosition}";
         }
 
 
@@ -55,6 +47,7 @@ namespace ExpandedAiFramework
         {
             return mCachedString ?? "UNINITIALIZED";
         }
+
 
         public virtual bool Claim()
         {
@@ -65,6 +58,7 @@ namespace ExpandedAiFramework
             mClaimed = true;
             return true;
         }
+
 
         public override int GetHashCode() => (Name, Scene).GetHashCode();
         public override bool Equals(object obj) => this.Equals(obj as MapData);

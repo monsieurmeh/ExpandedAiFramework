@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace ExpandedAiFramework
 {
-    public class SpawnModDataProxyManager : ProxyManager<SpawnModDataProxy>
+    public class SpawnModDataProxyManager : ProxyManagerBase<SpawnModDataProxy>,
+                                            ISerializedDataCrossReferenceProvider<SpawnRegionModDataProxy, SpawnModDataProxy>
     {
-        private object mLock = new object();
+        private object mForceSpawnLock = new object();
         private int mForceSpawnCount = 0;
         private Dictionary<Guid, List<Guid>> mQueuedSpawnModDataProxiesByParentGuid = new Dictionary<Guid, List<Guid>>();
 
+        public SpawnModDataProxyManager(DataManager manager, DispatchManager dispatcher, string dataLocation) : base(manager, dispatcher, dataLocation) { }
 
-
-        public SpawnModDataProxyManager(DataManager manager, string dataLocation) : base(manager, dataLocation) { }
-
-
-        public override void Clear()
+        protected override void Clear()
         {
             ClearQueuedSpawnModDataProxiesByParentGuid();
             base.Clear();
         }
 
 
-        public override void Refresh(string scene)
+        protected override void Refresh(string scene)
         {
-            lock (mLock)
+            lock (mForceSpawnLock)
             {
                 mForceSpawnCount = 0;
             }
@@ -45,18 +39,8 @@ namespace ExpandedAiFramework
         }
 
 
-        protected override void RefreshProxy(SpawnModDataProxy proxy)
+        protected override void RefreshData(SpawnModDataProxy proxy)
         {
-            if (!mQueuedSpawnModDataProxiesByParentGuid.TryGetValue(proxy.ParentGuid, out List<Guid> queuedGuids))
-            {
-                queuedGuids = new List<Guid>();
-                mQueuedSpawnModDataProxiesByParentGuid.Add(proxy.ParentGuid, queuedGuids);
-            }
-            if (queuedGuids.Contains(proxy.Guid))
-            {
-                this.LogErrorInstanced($"Guid collision in queued spawn guids for parent guid {proxy.ParentGuid}: {proxy}");
-                return;
-            }
             if (mManager.Manager.AiManager.SpawnSettingsDict.TryGetValue(proxy.VariantSpawnType, out ISpawnTypePickerCandidate settings))
             {
                 proxy.ForceSpawn = settings.ForceSpawningEnabled() && CanForceSpawn();
@@ -65,23 +49,39 @@ namespace ExpandedAiFramework
                     IncrementForceSpawnCount();
                 }
             }
-            this.LogTraceInstanced($"Queueing SpawnModDataProxy {proxy.Guid} against parent guid {proxy.ParentGuid}");
-            queuedGuids.Add(proxy.Guid);
+            base.RefreshData(proxy);
         }
 
 
-        protected override bool PostProcessProxyAfterLoad(SpawnModDataProxy proxy)
+        protected override bool PostProcessDataAfterLoad(SpawnModDataProxy proxy)
         {
             if (!proxy.InitializeType())
             {
                 this.LogErrorInstanced($"Type initialize error: {proxy}");
                 return false;
             }
-            return base.PostProcessProxyAfterLoad(proxy);
+            //Base method checks IsDataValid, which will fail if we run OnRegister first
+            if (!base.PostProcessDataAfterLoad(proxy))
+            {
+                return false;
+            }
+            OnRegister(proxy);
+            return true;
         }
 
 
-        protected override bool IsProxyValid(SpawnModDataProxy proxy)
+        protected override void OnRegister(SpawnModDataProxy proxy)
+        {
+            List<Guid> queuedGuids = GetQueuedSpawnModDataProxiesByParentGuid(proxy.ParentGuid);
+            if (!queuedGuids.Contains(proxy.Guid))
+            {
+                this.LogTraceInstanced($"Queueing SpawnModDataProxy {proxy.Guid} against parent guid {proxy.ParentGuid}");
+                queuedGuids.Add(proxy.Guid);
+            }
+        }
+
+
+        protected override bool IsDataValid(SpawnModDataProxy proxy)
         {
             if (proxy.ParentGuid == Guid.Empty)
             {
@@ -93,11 +93,11 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"Disconnected: {proxy}");
                 return false;
             }
-            return base.IsProxyValid(proxy);
+            return base.IsDataValid(proxy);
         }
 
 
-        public List<Guid> GetQueuedSpawnModDataProxiesByParentGuid(Guid guid)
+        protected List<Guid> GetQueuedSpawnModDataProxiesByParentGuid(Guid guid)
         {
             if (!mQueuedSpawnModDataProxiesByParentGuid.TryGetValue(guid, out List<Guid> proxyGuidsByParentGuid))
             {
@@ -108,75 +108,10 @@ namespace ExpandedAiFramework
         }
 
 
-        //WARNING: If this proxy gets thrown away, bad things happen! We should de-couple the 'get next' with the 'make unavailable'
-        public bool TryGetNextAvailableSpawnModDataProxy(Guid spawnRegionModDataProxyGuid, bool requireForceSpawn, out SpawnModDataProxy proxy)
-        {
-            proxy = null;
-            bool foundValidProxy = false;
-            List<Guid> availableProxies = GetQueuedSpawnModDataProxiesByParentGuid(spawnRegionModDataProxyGuid);
-            for (int i = 0, iMax = availableProxies.Count; i < iMax; i++)
-            {
-                if (!GetSubData(mManager.Manager.CurrentScene).TryGetValue(availableProxies[i], out proxy))
-                {
-                    this.LogErrorInstanced($"Couldnt match existing matched spawn mod data proxy guid {availableProxies[i]} to intended parent proxy guid {spawnRegionModDataProxyGuid}!");
-                    continue;
-                }
-                if (!proxy.Available)
-                {
-                    this.LogTraceInstanced($"Proxy with guid {proxy.Guid} is not currently available, skipping");
-                    continue;
-                }
-                if (requireForceSpawn && !proxy.ForceSpawn)
-                {
-                    this.LogTraceInstanced($"Proxy with guid {proxy.Guid} is not force spawn, skipping");
-                    continue;
-                }
-                foundValidProxy = true;
-                break;
-            }
-            if (!foundValidProxy)
-            {
-                if (!requireForceSpawn)
-                {
-                    this.LogErrorInstanced($"Could not get proxy!");
-                }
-                return false;
-            }
-            proxy.Available = false;
-            return true;
-        }
-
-
-        public bool ClaimAvailableSpawnModDataProxy(SpawnModDataProxy proxy)
-        {
-            List<Guid> availableProxies = GetQueuedSpawnModDataProxiesByParentGuid(proxy.ParentGuid);
-            if (availableProxies.Contains(proxy.Guid))
-            {
-                availableProxies.RemoveAt(availableProxies.IndexOf(proxy.Guid));
-                return true;
-            }
-            return false;
-        }
-
-
-        public override bool TryRegisterProxy(SpawnModDataProxy proxy)
-        {
-            if (base.TryRegisterProxy(proxy))
-            {
-                List<Guid> queuedSpawnsByParentProxy = GetQueuedSpawnModDataProxiesByParentGuid(proxy.ParentGuid);
-                if (!queuedSpawnsByParentProxy.Contains(proxy.Guid))
-                {
-                    queuedSpawnsByParentProxy.Add(proxy.Guid);
-                }
-                return true;
-            }
-            return false;
-        }
-
-
+        //locks force spawn, should be OK
         public bool CanForceSpawn()
         {
-            lock (mLock)
+            lock (mForceSpawnLock)
             {
                 bool canForceSpawn = mForceSpawnCount < mManager.Manager.Settings.MaxForceSpawns;
                 LogVerbose($"ForceSpawnCount: {mForceSpawnCount} | CanForceSpawn: {canForceSpawn}");
@@ -185,13 +120,18 @@ namespace ExpandedAiFramework
         }
 
 
+        //locks force spawn, should be OK
         public void IncrementForceSpawnCount()
         {
-            lock (mLock)
+            lock (mForceSpawnLock)
             {
                 mForceSpawnCount++;
                 LogTrace($"Incrementing force spawn count: {mForceSpawnCount - 1} -> {mForceSpawnCount}");
             }
         }
+
+
+        //explicitly NOT public because I don't want this getting picked up unless it's requested!
+        List<Guid> ISerializedDataCrossReferenceProvider<SpawnRegionModDataProxy, SpawnModDataProxy>.GetCrossReferencedList<T0, T1>(Guid guid) => GetQueuedSpawnModDataProxiesByParentGuid(guid);
     }
 }
