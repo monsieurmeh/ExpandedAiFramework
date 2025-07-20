@@ -16,28 +16,10 @@ namespace ExpandedAiFramework
         public ModDataProxy() : base() { }
 
 
-        public ModDataProxy(Guid guid, string scene, Vector3 currentPosition) : base(guid, scene) 
+        public ModDataProxy(Guid guid, string scene, Vector3 currentPosition) : base(guid, scene)
         {
             mCurrentPosition = currentPosition;
             mCustomData = [];
-            BuildCachedStringSegment();
-        }
-
-
-        public override void UpdateCachedString()
-        {
-            base.UpdateCachedString();
-            BuildCachedStringSegment();
-        }
-
-
-        private void BuildCachedStringSegment()
-        {
-            mCachedString += $" at {CurrentPosition}";
-            for (int i = 0, iMax = mCustomData.Length; i < iMax; i++)
-            {
-                mCachedString += $" [{i}: {mCustomData[i]}";
-            }
         }
     }
 }

@@ -19,7 +19,6 @@ namespace ExpandedAiFramework
             mScene = scene;
             mPosition = position;
             mExtraNearestCandidatesToMaybePickFrom = extraNearestCandidatesToMaybePickFrom;
-            mCachedString += $"at {position} in scene {scene} with {extraNearestCandidatesToMaybePickFrom} extra top candidates to pick from";
         }
 
         public override void Preprocess(ISubDataManager manager)

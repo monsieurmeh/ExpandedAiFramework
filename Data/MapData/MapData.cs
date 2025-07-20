@@ -26,26 +26,6 @@ namespace ExpandedAiFramework
             mTransient = transient;
             mAnchorPosition = anchorPostion;
             mClaimed = false;
-            BuildCachedStringSegment();
-        }
-
-
-        public override void UpdateCachedString()
-        {
-            base.UpdateCachedString();
-            BuildCachedStringSegment();
-        }
-
-
-        private void BuildCachedStringSegment()
-        {
-            mCachedString = (mClaimed ? "Claimed " : "Unclaimed ") + mCachedString + $" named {Name} anchored at {AnchorPosition}";
-        }
-
-
-        public override string ToString()
-        {
-            return mCachedString ?? "UNINITIALIZED";
         }
 
 

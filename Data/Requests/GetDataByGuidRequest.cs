@@ -14,7 +14,6 @@ namespace ExpandedAiFramework
         {
             mScene = scene;
             mGuid = guid;
-            mCachedString += $"for guid {guid} in scene {scene}";
         }
 
 

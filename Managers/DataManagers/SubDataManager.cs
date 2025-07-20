@@ -21,14 +21,14 @@ namespace ExpandedAiFramework
         protected readonly object mRequestQueueLock = new object();
         protected DataManager mManager;
         protected DispatchManager mDispatcher;
-        protected IDataRequest<T> mActiveRequest;
+        protected IRequest mActiveRequest;
         protected Task mTask;
         protected bool mLoaded;
         protected bool mKeepTaskRunning = false;
         protected bool mActive;
         protected string mCurrentScene;
         protected Queue<Action> mInternalActionQueue = new Queue<Action>();
-        protected Queue<IDataRequest<T>> mRequests = new Queue<IDataRequest<T>>();
+        protected Queue<IRequest> mRequests = new Queue<IRequest>();
         protected SerializedDataContainer<T> mDataContainer = new SerializedDataContainer<T>();
 
         public bool Active => mActive;
@@ -52,7 +52,7 @@ namespace ExpandedAiFramework
                 return;
             }
             mKeepTaskRunning = true;
-            this.LogVerboseInstanced($"Starting worker thread");
+            this.LogTraceInstanced($"Starting worker thread");
             mTask = Task.Run(Worker);
         }
         public virtual void StopWorker()
@@ -73,28 +73,24 @@ namespace ExpandedAiFramework
         }
         public void ScheduleRequest(IRequest request)
         {
-            if (request is not DataRequest<T> validRequest)
-            {
-                return;
-            }
             lock (mRequestQueueLock)
             {
-                validRequest.Preprocess(this);
-                mRequests.Enqueue(validRequest);
+                request.Preprocess(this);
+                mRequests.Enqueue(request);
             }
         }
-        public void ScheduleSave() => ScheduleInternalRequest(Save);
-        public void ScheduleLoad() => ScheduleInternalRequest(Load);
-        public void ScheduleClear() => ScheduleInternalRequest(Clear);
-        public void ScheduleLoadAdditional(string pathFromModsFolder) => ScheduleInternalRequest(() => LoadFromPath(pathFromModsFolder));
-        public void ScheduleRefresh(string scene) => ScheduleInternalRequest(() => Refresh(scene));
+        public void ScheduleSave() => ScheduleInternalAction(Save);
+        public void ScheduleLoad() => ScheduleInternalAction(Load);
+        public void ScheduleClear() => ScheduleInternalAction(Clear);
+        public void ScheduleLoadAdditional(string pathFromModsFolder) => ScheduleInternalAction(() => LoadFromPath(pathFromModsFolder));
+        public void ScheduleRefresh(string scene) => ScheduleInternalAction(() => Refresh(scene));
 
 
-        private void ScheduleInternalRequest(Action request)
+        private void ScheduleInternalAction(Action action)
         {
             lock (mRequestQueueLock)
             {
-                mInternalActionQueue.Enqueue(request);
+                mInternalActionQueue.Enqueue(action);
             }
         }
 
@@ -105,12 +101,14 @@ namespace ExpandedAiFramework
             while (mKeepTaskRunning)
             {
                 mActive = true;
-                Action priorityAction = mInternalActionQueue.Dequeue();
-                while (priorityAction != null)
+                lock (mInternalActionQueue)
                 {
-                    priorityAction.Invoke();
-                    priorityAction = mInternalActionQueue.Dequeue();
+                    while (mInternalActionQueue.Count > 0)
+                    {
+                        mInternalActionQueue.Dequeue().Invoke();
+                    }
                 }
+
                 lock (mRequestQueueLock)
                 {
                     mActiveRequest = mRequests.Count > 0 ? mRequests.Dequeue() : null;
@@ -257,7 +255,6 @@ namespace ExpandedAiFramework
 
         protected virtual bool PostProcessDataAfterLoad(T data)
         {
-            data.UpdateCachedString();
             return IsDataValid(data);
         }
 

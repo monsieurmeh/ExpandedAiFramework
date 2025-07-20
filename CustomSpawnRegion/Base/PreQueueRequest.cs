@@ -19,7 +19,6 @@ namespace ExpandedAiFramework
             mCustomSpawnRegion = customSpawnRegion;
             mWildlifeMode = wildlifeMode;
             mCloseEnoughForPreSpawning = closeEnoughForPreSpawning;
-            mCachedString += $"for {mCustomSpawnRegion.ModDataProxy.Guid}'s WildlifeMode {mWildlifeMode}";
         }
 
 

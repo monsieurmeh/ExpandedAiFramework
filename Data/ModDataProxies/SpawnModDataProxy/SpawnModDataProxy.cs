@@ -32,14 +32,14 @@ namespace ExpandedAiFramework
 
 
         //Only constructs mod data; it is on managers to serialize in vanilla data later
-        public SpawnModDataProxy(Guid guid, 
-                                 string scene, 
+        public SpawnModDataProxy(Guid guid,
+                                 string scene,
                                  Vector3 currentPosition,
-                                 Quaternion currentRotation, 
-                                 AiSubType subTypeSpawned, 
-                                 WildlifeMode wildlifeMode, 
-                                 Type variantSpawnType) : base(guid, 
-                                                               scene, 
+                                 Quaternion currentRotation,
+                                 AiSubType subTypeSpawned,
+                                 WildlifeMode wildlifeMode,
+                                 Type variantSpawnType) : base(guid,
+                                                               scene,
                                                                currentPosition)
         {
             CurrentRotation = currentRotation;
@@ -47,20 +47,6 @@ namespace ExpandedAiFramework
             mVariantSpawnType = variantSpawnType;
             WildlifeMode = wildlifeMode;
             VariantSpawnTypeString = $"{variantSpawnType.FullName}, {variantSpawnType.Assembly.GetName().Name}";
-            BuildCachedStringSegment();
-        }
-
-
-        public override void UpdateCachedString()
-        {
-            base.UpdateCachedString();
-            BuildCachedStringSegment();
-        }
-
-
-        private void BuildCachedStringSegment()
-        {
-            mCachedString += $" of variant spawn type {VariantSpawnTypeString} belonging to spawn region with guid {ParentGuid}";
         }
 
 

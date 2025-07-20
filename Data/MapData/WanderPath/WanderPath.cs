@@ -23,30 +23,17 @@ namespace ExpandedAiFramework
 
         public WanderPath() : base() { }
 
-        public WanderPath(string name, 
-                          Vector3[] pathPoints, 
+        public WanderPath(string name,
+                          Vector3[] pathPoints,
                           string scene,
-                          WanderPathTypes wanderPathType = WanderPathTypes.IndividualPath, 
-                          bool transient = false) : base(name, 
-                                                         scene, 
+                          WanderPathTypes wanderPathType = WanderPathTypes.IndividualPath,
+                          bool transient = false) : base(name,
+                                                         scene,
                                                          pathPoints[0],
                                                          transient)
         {
             mPathPoints = pathPoints;
             mWanderPathType = wanderPathType;
-            mCachedString = BuildCachedStringSegment();
         }
-
-
-        public override void UpdateCachedString()
-        {
-            base.UpdateCachedString();
-            mCachedString = BuildCachedStringSegment();
-        }
-
-
-        private string BuildCachedStringSegment() => mCachedString + $" with WanderPathType {mWanderPathType}";
-
-
     }
 }

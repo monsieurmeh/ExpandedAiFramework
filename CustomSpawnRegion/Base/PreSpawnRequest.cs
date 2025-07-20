@@ -14,7 +14,6 @@ namespace ExpandedAiFramework
         public PreSpawnRequest(CustomSpawnRegion customSpawnRegion) : base((result) => { }, false)
         {
             mCustomSpawnRegion = customSpawnRegion;
-            mCachedString += $"for {mCustomSpawnRegion.ModDataProxy.Guid}";
         }
 
 

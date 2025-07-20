@@ -5,13 +5,12 @@ namespace ExpandedAiFramework
     public abstract class Request : IRequest, ILogInfoProvider
     {
         protected RequestResult mResult;
-        protected string mCachedString;
         protected bool mThreadSafe = false;
 
         public bool ThreadSafe => mThreadSafe;
         public RequestResult Result { get { return mResult; } }
 
-        public Request() => mCachedString = $"{GetType().Name}";
+        public Request() { }
         public Request(bool threadSafe) : base() => mThreadSafe = threadSafe;
 
         public void PerformRequest() => mResult = Validate() ? PerformRequestInternal() : RequestResult.Invalid;

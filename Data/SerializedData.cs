@@ -20,25 +20,6 @@ namespace ExpandedAiFramework
         {
             mGuid = guid;
             mScene = scene;
-            BuildCachedStringSegment();
-        }
-
-
-        public virtual void UpdateCachedString()
-        {
-            BuildCachedStringSegment();
-        }
-
-
-        private void BuildCachedStringSegment()
-        {
-            mCachedString = $"{GetType().Name} ({mGuid}) in scene {mScene}";
-        }
-
-         
-        public override string ToString()
-        {
-            return mCachedString ?? "UNINITIALIZED";
         }
 
 

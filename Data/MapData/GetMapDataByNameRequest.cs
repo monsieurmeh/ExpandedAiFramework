@@ -14,7 +14,6 @@ namespace ExpandedAiFramework
         {
             mScene = scene;
             mName = name;
-            mCachedString += $"for {name} in scene {scene}";
         }
 
 

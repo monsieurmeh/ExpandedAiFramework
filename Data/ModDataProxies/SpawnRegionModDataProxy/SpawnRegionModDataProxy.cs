@@ -37,20 +37,6 @@ namespace ExpandedAiFramework
             AiType = spawnRegion.m_AiTypeSpawned;
             AiSubType = spawnRegion.m_AiSubTypeSpawned;
             LastDespawnTime = GetCurrentTimelinePoint();
-            BuildCachedStringSegment();
-        }
-
-
-        public override void UpdateCachedString()
-        {
-            base.UpdateCachedString();
-            BuildCachedStringSegment();
-        }
-
-
-        private void BuildCachedStringSegment()
-        {
-            mCachedString += $" of type {AiType}.{AiSubType}";
         }
 
 

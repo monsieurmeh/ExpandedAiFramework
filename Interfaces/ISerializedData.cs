@@ -7,6 +7,5 @@ namespace ExpandedAiFramework
         Guid Guid { get; }
         string Scene { get; }
         string DataLocation { get; set; }
-        void UpdateCachedString();
     }
 }

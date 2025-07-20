@@ -20,7 +20,6 @@ namespace ExpandedAiFramework
             mScene = scene;
             mRequireForceSpawn = requireForceSpawn;
             mAttemptLimit = allowedAttempts;
-            mCachedString += $"for guid {guid} in scene {scene}";
         }
 
 
