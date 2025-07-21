@@ -276,21 +276,29 @@ namespace ExpandedAiFramework
 
         private void PostDeserialize()
         {
+            LogTrace($"Processing caught spawn regions");
+            foreach (SpawnRegion spawnRegion in mSpawnRegionCatcher)
+            {
+                ProcessCaughtSpawnRegion(spawnRegion);
+            }
+            Task.Run(WaitForSpawnRegionProcessingThenPreSpawn);
+        }
+
+
+        private void WaitForSpawnRegionProcessingThenPreSpawn()
+        {
             try
             {
-                LogTrace($"Processing caught spawn regions");
-                foreach (SpawnRegion spawnRegion in mSpawnRegionCatcher)
-                {
-                    ProcessCaughtSpawnRegion(spawnRegion);
-                }
-                long startTime = DateTime.Now.Ticks;
+                int startTime = DateTime.Now.Second;
                 bool canContinue = false;
-                while (!canContinue && DateTime.Now.Ticks <= startTime + 10000000)
+                while (!canContinue && DateTime.Now.Second <= startTime + 10)
                 {
-                    lock(mPendingWrapOperations)
+                    lock (mPendingWrapOperations)
                     {
+                        LogTrace($"Pending wrap ops: {mPendingWrapOperations.Count}");
                         canContinue = mPendingWrapOperations.Count == 0;
                     }
+                    Task.Delay(250).Wait();
                 }
                 if (!canContinue)
                 {
@@ -306,7 +314,7 @@ namespace ExpandedAiFramework
             catch (Exception e)
             {
                 LogError($"{e}");
-            }
+            }            
             finally
             {
                 mReadyToProcessSpawnRegions = true;
@@ -808,7 +816,7 @@ namespace ExpandedAiFramework
                 {
                     if (proxy.Connected)
                     {
-                        EAFManager.LogWithStackTrace($"Trying to connect to an already-connected SpawnRegionModDataProxy with guid {guid}!"); 
+                        LogTrace($"Trying to connect to an already-connected SpawnRegionModDataProxy with guid {guid}!"); 
                         lock (mPendingWrapOperations)
                         {
                             mPendingWrapOperations.Remove(guid);

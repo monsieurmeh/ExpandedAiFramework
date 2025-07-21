@@ -29,11 +29,11 @@ namespace ExpandedAiFramework
 
         private enum BaseSubManagers : int
         {
-            DataManager = 0,
+            DispatchManager = 0,
+            DataManager,
             AiManager,
             SpawnRegionManager,
             ConsoleCommandManager,
-            DispatchManager,
             COUNT
         }
 
@@ -58,17 +58,20 @@ namespace ExpandedAiFramework
         {
             mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
 
-            mDataManager = new DataManager(this, mSubManagers);
-            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers);
-            mAiManager = new AiManager(this, mSubManagers);
-            mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers);
             mDispatchManager = new DispatchManager(this, mSubManagers);
-
-            mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
-            mBaseSubManagers[(int)BaseSubManagers.SpawnRegionManager] = mSpawnRegionManager;
-            mBaseSubManagers[(int)BaseSubManagers.AiManager] = mAiManager;
-            mBaseSubManagers[(int)BaseSubManagers.ConsoleCommandManager] = mConsoleCommandManager;
             mBaseSubManagers[(int)BaseSubManagers.DispatchManager] = mDispatchManager;
+
+            mDataManager = new DataManager(this, mSubManagers);
+            mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
+
+            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers);
+            mBaseSubManagers[(int)BaseSubManagers.SpawnRegionManager] = mSpawnRegionManager;
+
+            mAiManager = new AiManager(this, mSubManagers);
+            mBaseSubManagers[(int)BaseSubManagers.AiManager] = mAiManager;
+
+            mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers);
+            mBaseSubManagers[(int)BaseSubManagers.ConsoleCommandManager] = mConsoleCommandManager;
         }
 
 

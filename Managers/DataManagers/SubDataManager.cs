@@ -131,6 +131,7 @@ namespace ExpandedAiFramework
                             mDispatcher.Dispatch(mActiveRequest.Callback);
                         }
                     }
+                    mActiveRequest = null;
                 }
                 else
                 { 
@@ -155,6 +156,7 @@ namespace ExpandedAiFramework
                     mActiveAction = mInternalActionQueue.Dequeue();
                 }
                 mActiveAction.Invoke();
+                mActiveAction = null;
                 {
                     requestCount = mInternalActionQueue.Count;
                 }

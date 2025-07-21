@@ -8,6 +8,7 @@ namespace ExpandedAiFramework
     {
         public static DispatchManager Instance;
         private readonly Queue<Action> mActionQueue = new Queue<Action>();
+        private Action mCurrentAction;
         private readonly object mQueueLock = new object();
 
         public DispatchManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) 
@@ -31,8 +32,13 @@ namespace ExpandedAiFramework
             {
                 if (mActionQueue.Count > 0)
                 {
-                    mActionQueue.Dequeue().Invoke();
+                    mCurrentAction = mActionQueue.Dequeue();
                 }
+            }
+            if (mCurrentAction != null)
+            {
+                mCurrentAction.Invoke();
+                mCurrentAction = null;
             }
         }
     }
