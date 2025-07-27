@@ -12,7 +12,7 @@ namespace ExpandedAiFramework
         protected ISerializedDataCrossReferenceProvider<SpawnRegionModDataProxy, SpawnModDataProxy> mSpawnModDataProxyProvider;
 
         public override string InstanceInfo { get { return $"{mCustomSpawnRegion.ModDataProxy.Guid}"; } }
-        public override string TypeInfo { get { return $"PreSpawn"; } }
+        public override string TypeInfo { get { return $"PreQueue"; } }
 
         public PreQueueRequest(CustomSpawnRegion customSpawnRegion, WildlifeMode wildlifeMode, bool closeEnoughForPreSpawning) : base((result) => { }, false)
         {

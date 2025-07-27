@@ -20,7 +20,6 @@ namespace ExpandedAiFramework
         protected List<CustomBaseAi> mActiveSpawns = new List<CustomBaseAi>();
         protected Queue<SpawnModDataProxy> mPendingSpawns = new Queue<SpawnModDataProxy>();
         protected int mProxiesUnderConstruction = 0;
-        protected int mProxiesBeingFetched = 0;
 
         public SpawnRegionManager Manager { get { return mManager; } }
         public DataManager DataManager { get { return mDataManager; } }
@@ -315,30 +314,23 @@ namespace ExpandedAiFramework
 
         public void Spawn(WildlifeMode mode, bool force = false)
         {
-            mProxiesBeingFetched++;
             mDataManager.ScheduleSpawnModDataProxyRequest(new GetNextAvailableSpawnRequest(mModDataProxy.Guid, mModDataProxy.Scene, false, (availableProxy, result) =>
             {
                 if (result == RequestResult.Succeeded)
                 {
-                    mProxiesBeingFetched--;
                     SpawnInternal(availableProxy, force);
                 }
                 else
                 {
-                    /* this should be taken care of by including the proxy fetch/construction count in updateavailablespawns
                     if (mProxiesUnderConstruction > 0)
                     {
                         this.LogTraceInstanced($"No queued spawns for spawn region with guid {mModDataProxy.Guid} for mode {mode}. Wait for pending proxies under construction.");
                         return;
                     }
-                    */
                     this.LogTraceInstanced($"No queued spawns for spawn region with guid {mModDataProxy.Guid} for mode {mode}. Queueing request for new proxy and spawn...");
-                    mProxiesUnderConstruction++;
                     GenerateNewRandomSpawnModDataProxy((s) =>
                     {
                         SpawnInternal(s, force);
-                        mProxiesUnderConstruction--;
-                        mProxiesBeingFetched--;
                     }, true);
                 }
             }), mode);
@@ -584,7 +576,7 @@ namespace ExpandedAiFramework
             int maxSimultaneousSpawns = GameManager.m_TimeOfDay.IsDay()
                 ? GetMaxSimultaneousSpawnsDay()
                 : GetMaxSimultaneousSpawnsNight();
-            int adjustedMaxSimultaneousSpawns = maxSimultaneousSpawns - mSpawnRegion.m_NumTrapped - mSpawnRegion.m_NumRespawnsPending - mProxiesBeingFetched - mProxiesUnderConstruction;
+            int adjustedMaxSimultaneousSpawns = maxSimultaneousSpawns - mSpawnRegion.m_NumTrapped - mSpawnRegion.m_NumRespawnsPending;
             if (adjustedMaxSimultaneousSpawns < 0)
             {
                 return 0;
@@ -632,7 +624,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
-                this.LogVerboseInstanced($"Null mSpawnRegion.m_DifficultySettings");
+                this.LogErrorInstanced($"Null mSpawnRegion.m_DifficultySettings");
                 return 0;
             }
             return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsNight;

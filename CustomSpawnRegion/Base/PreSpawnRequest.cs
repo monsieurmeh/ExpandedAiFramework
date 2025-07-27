@@ -45,25 +45,30 @@ namespace ExpandedAiFramework
             {
                 int preSpawnLimit = mCustomSpawnRegion.CalculateTargetPopulation() - mCustomSpawnRegion.GetCurrentActivePopulation(mCustomSpawnRegion.VanillaSpawnRegion.m_WildlifeMode);
                 int preSpawnCount = 0;
+                this.LogTraceInstanced($"Prespawn limit: {preSpawnLimit} | preSpawnCount: {preSpawnCount}");
                 List<SpawnModDataProxy> spawnableProxies = new List<SpawnModDataProxy>();
                 foreach (Guid guid in mSpawnModDataProxyProvider.GetCrossReferencedList<SpawnRegionModDataProxy, SpawnModDataProxy>(mCustomSpawnRegion.ModDataProxy.Guid))
                 {
                     if (preSpawnCount >= preSpawnLimit)
                     {
+                        this.LogTraceInstanced($"Prespawn limit reached, aborting");
                         break;
                     }
                     if (!mDataContainer.TryGetData(mCustomSpawnRegion.ModDataProxy.Scene, guid, out SpawnModDataProxy proxy))
                     {
+                        this.LogTraceInstanced($"Cannot get data: {guid}");
                         continue;
                     }
                     if (proxy.ForceSpawn)
                     {
+                        this.LogTraceInstanced($"Queueing force spawn");
                         spawnableProxies.Insert(0, proxy);
                         preSpawnCount++;
                         continue;
                     }
                     if (mCustomSpawnRegion.VanillaSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance >= Vector3.Distance(mCustomSpawnRegion.Manager.PlayerStartPos, proxy.CurrentPosition))
                     {
+                        this.LogTraceInstanced($"Queueing pre spawn");
                         spawnableProxies.Add(proxy);
                         preSpawnCount++;
                         continue;
@@ -71,6 +76,7 @@ namespace ExpandedAiFramework
                 }
                 foreach (SpawnModDataProxy proxy in spawnableProxies)
                 {
+                    this.LogTraceInstanced($"Queueing for immediate spawn: {proxy.Guid}");
                     mCustomSpawnRegion.QueueImmediateSpawn(proxy);
                 }
                 spawnableProxies.Clear();
