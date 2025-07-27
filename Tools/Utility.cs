@@ -285,37 +285,37 @@ namespace ExpandedAiFramework
 
         public static void LogTrace(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Trace, GetLastCallerType(FlaggedLoggingLevel.Trace), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Trace, GetLastCallerType(FlaggedLoggingLevel.Trace), callerInstanceInfo, memberName);
         }
 
 
         public static void LogDebug(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Debug, GetLastCallerType(FlaggedLoggingLevel.Debug), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Debug, GetLastCallerType(FlaggedLoggingLevel.Debug), callerInstanceInfo, memberName);
         }
 
 
         public static void LogVerbose(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Verbose, GetLastCallerType(FlaggedLoggingLevel.Verbose), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Verbose, GetLastCallerType(FlaggedLoggingLevel.Verbose), callerInstanceInfo, memberName);
         }
 
 
         public static void LogWarning(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Warning, GetLastCallerType(FlaggedLoggingLevel.Warning), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Warning, GetLastCallerType(FlaggedLoggingLevel.Warning), callerInstanceInfo, memberName);
         }
 
 
         public static void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Error | additionalFlags, GetLastCallerType(FlaggedLoggingLevel.Error), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Error | additionalFlags, GetLastCallerType(FlaggedLoggingLevel.Error), callerInstanceInfo, memberName);
         }
 
 
         public static void LogAlways(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
         {
-            Manager.Log(message, FlaggedLoggingLevel.Always, GetLastCallerType(FlaggedLoggingLevel.Always), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Always, GetLastCallerType(FlaggedLoggingLevel.Always), callerInstanceInfo, memberName);
         }
 
 

@@ -39,10 +39,27 @@ namespace ExpandedAiFramework
 
         public override void Callback() => mCallback?.Invoke(mResult);
 
+
+        protected override bool Validate()
+        {
+            if (mDataProvider == null)
+            {
+                this.LogErrorInstanced($"Null data provider");
+                return false;
+            }
+            if (mDataContainer == null)
+            {
+                this.LogErrorInstanced($"null data container");
+                return false;
+            }
+            return true;
+        }
+
         public override void Preprocess(ISubDataManager manager)
         {
             if (manager is ISerializedDataProvider<T> dataProvider)
             {
+                mDataProvider = dataProvider;
                 mDataContainer = dataProvider.GetDataContainer();
             }
         }

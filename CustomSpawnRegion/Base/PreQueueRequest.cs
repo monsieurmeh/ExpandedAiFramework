@@ -30,7 +30,12 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"null custom spawn region");
                 return false;
             }
-            return true;
+            if (mSpawnModDataProxyProvider == null)
+            {
+                this.LogTraceInstanced($"null spawn mod data proxy provider");
+                return false;
+            }
+            return base.Validate();
         }
 
 

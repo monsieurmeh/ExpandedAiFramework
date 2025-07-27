@@ -332,7 +332,7 @@ namespace ExpandedAiFramework
 
         public FlaggedLoggingLevel CurrentLogLevel => ComplexLogger.Main.CurrentLevel;
 
-
+       
         public static void LogWithStackTrace(string message, int offsetStart = 1, int offsetEnd = 0)
         {
             StackTrace stackTrace = new StackTrace();
@@ -359,7 +359,21 @@ namespace ExpandedAiFramework
             [CallerMemberName] string callerName = "")
         {
             callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
-            mLogger.Log($"[{callerType}.{callerName}{callerInstanceInfo}] {message}", logLevel, LoggingSubType.Normal);
+            lock (mLogger)
+            {
+                mLogger.Log($"[{callerType}.{callerName}{callerInstanceInfo}] {message}", logLevel, LoggingSubType.Normal);
+            }
+        }
+
+
+        public static void LogStatic(
+            string message, 
+            FlaggedLoggingLevel logLevel,
+            string callerType,
+            string callerInstanceInfo = "",
+            [CallerMemberName] string callerName = "")
+        {
+            Manager.Log(message, logLevel, callerType, callerInstanceInfo, callerName);
         }
 #endregion
 
