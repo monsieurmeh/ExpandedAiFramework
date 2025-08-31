@@ -23,7 +23,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             EAFManager.Instance.LoadData("CompanionWolfMod");
             CompanionWolfManager manager = new CompanionWolfManager();
-            CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager, Path.Combine(DataFolderPath, $"Settings.{nameof(CompanionWolf)}"));
+            CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager, Path.Combine(DataFolderPath, $"{nameof(CompanionWolf)}"));
             EAFManager.Instance.RegisterSubmanager(typeof(CompanionWolf), manager);
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.CompanionWolfSettings))
             {

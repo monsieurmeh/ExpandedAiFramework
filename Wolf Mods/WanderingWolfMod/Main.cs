@@ -23,7 +23,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             WanderingWolfManager manager = new WanderingWolfManager();
             EAFManager.Instance.RegisterSubmanager(typeof(WanderingWolf), manager);
-            WanderingWolf.WanderingWolfSettings = new WanderingWolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(WanderingWolf)}"));
+            WanderingWolf.WanderingWolfSettings = new WanderingWolfSettings(Path.Combine(DataFolderPath, $"{nameof(WanderingWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(WanderingWolf), WanderingWolf.WanderingWolfSettings))
             {
                 Utility.LogError("Could not register WanderingWolf spawning!");

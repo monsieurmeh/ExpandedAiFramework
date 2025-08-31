@@ -24,7 +24,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             AmbushWolfManager manager = new AmbushWolfManager();
             EAFManager.Instance.RegisterSubmanager(typeof(AmbushWolf), manager);
-            AmbushWolf.AmbushWolfSettings = new AmbushWolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(AmbushWolf)}"));
+            AmbushWolf.AmbushWolfSettings = new AmbushWolfSettings(Path.Combine(DataFolderPath, $"{nameof(AmbushWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(AmbushWolf), AmbushWolf.AmbushWolfSettings))
             {
                 Utility.LogError("Could not register AmbushWolf spawning!");

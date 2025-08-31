@@ -21,7 +21,7 @@ namespace ExpandedAiFramework.BigWolfMod
         protected bool Initialize()
         {
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
-            BigWolf.BigWolfSettings = new BigWolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BigWolf)}"));
+            BigWolf.BigWolfSettings = new BigWolfSettings(Path.Combine(DataFolderPath, $"{nameof(BigWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(BigWolf), BigWolf.BigWolfSettings))
             {
                 Utility.LogError("Could not register BigWolf spawning!");

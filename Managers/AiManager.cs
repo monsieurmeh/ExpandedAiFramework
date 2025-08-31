@@ -41,14 +41,14 @@ namespace ExpandedAiFramework
 
         private void RegisterBaseSpawnableAiSettings()
         {
-            BaseWolf.BaseWolfSettings = new BaseWolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BaseWolf)}"));
-            BaseTimberwolf.BaseTimberwolfSettings = new BaseTimberwolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BaseTimberwolf)}"));
-            BaseBear.BaseBearSettings = new BaseBearSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BaseBear)}"));
-            BaseCougar.BaseCougarSettings = new BaseCougarSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BaseCougar)}"));
-            BaseMoose.BaseMooseSettings = new BaseMooseSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BaseMoose)}"));
-            BaseRabbit.BaseRabbitSettings = new BaseRabbitSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BaseRabbit)}"));
-            BasePtarmigan.BasePtarmiganSettings = new BasePtarmiganSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BasePtarmigan)}"));
-            BaseDeer.BaseDeerSettings = new BaseDeerSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BaseDeer)}"));
+            BaseWolf.BaseWolfSettings = new BaseWolfSettings(Path.Combine(DataFolderPath, $"{nameof(BaseWolf)}"));
+            BaseTimberwolf.BaseTimberwolfSettings = new BaseTimberwolfSettings(Path.Combine(DataFolderPath, $"{nameof(BaseTimberwolf)}"));
+            BaseBear.BaseBearSettings = new BaseBearSettings(Path.Combine(DataFolderPath, $"{nameof(BaseBear)}"));
+            BaseCougar.BaseCougarSettings = new BaseCougarSettings(Path.Combine(DataFolderPath, $"{nameof(BaseCougar)}"));
+            BaseMoose.BaseMooseSettings = new BaseMooseSettings(Path.Combine(DataFolderPath, $" {nameof(BaseMoose)}"));
+            BaseRabbit.BaseRabbitSettings = new BaseRabbitSettings(Path.Combine(DataFolderPath, $"{nameof(BaseRabbit)}"));
+            BasePtarmigan.BasePtarmiganSettings = new BasePtarmiganSettings(Path.Combine(DataFolderPath, $"{nameof(BasePtarmigan)}"));
+            BaseDeer.BaseDeerSettings = new BaseDeerSettings(Path.Combine(DataFolderPath, $"{nameof(BaseDeer)}"));
         }
 
 

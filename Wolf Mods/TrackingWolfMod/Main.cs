@@ -23,7 +23,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             TrackingWolfManager manager = new TrackingWolfManager();
             EAFManager.Instance.RegisterSubmanager(typeof(TrackingWolf), manager);
-            TrackingWolf.TrackingWolfSettings = new TrackingWolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(TrackingWolf)}"));
+            TrackingWolf.TrackingWolfSettings = new TrackingWolfSettings(Path.Combine(DataFolderPath, $"{nameof(TrackingWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(TrackingWolf), TrackingWolf.TrackingWolfSettings))
             {
                 Utility.LogError("Could not register TrackingWolf spawning!");
