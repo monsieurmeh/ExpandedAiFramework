@@ -2,6 +2,7 @@
 global using MelonLoader;
 global using ModSettings;
 global using static Il2Cpp.BaseAi;
+using MelonLoader.Utils;
 using System.Reflection;
 using UnityEngine;
 
@@ -37,6 +38,7 @@ namespace ExpandedAiFramework
         protected bool Initialize()
         {
             mManager = EAFManager.Instance;
+            Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"EAF.Settings")));
             return mManager != null;
         }
