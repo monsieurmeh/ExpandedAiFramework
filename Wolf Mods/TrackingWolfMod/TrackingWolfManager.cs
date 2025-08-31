@@ -9,7 +9,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
         public void Initialize(EAFManager manager)
         {
             mManager = manager;
-            LogDebug("TrackingWolfManager initialized!");
+            LogTrace("TrackingWolfManager initialized!");
         }
         public bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
         public void Shutdown() { }

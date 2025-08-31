@@ -452,7 +452,7 @@ namespace ExpandedAiFramework
             ISubManager[] subManagers = mManager.Manager.SubManagerArray;
             for (int i = 0, iMax = subManagers.Length; i < iMax; i++)
             {
-                LogVerbose($"Allowing submanager {subManagers[i]} to intercept spawn...");
+                this.LogVerboseInstanced($"Allowing submanager {subManagers[i]} to intercept spawn...");
                 if (subManagers[i].ShouldInterceptSpawn(this))
                 {
                     LogTrace($"Spawn intercept from submanager {subManagers[i]}! new type: {subManagers[i].SpawnType}");
@@ -462,7 +462,7 @@ namespace ExpandedAiFramework
             }
             if (spawnType == typeof(void))
             {
-                LogVerbose($"No submanager interceptions, attempting to randomly pick a valid spawn type...");
+                this.LogVerboseInstanced($"No submanager interceptions, attempting to randomly pick a valid spawn type...");
                 if (async)
                 {
                     mProxiesUnderConstruction++;
@@ -486,7 +486,7 @@ namespace ExpandedAiFramework
         {
             if (variantSpawnType == null)
             {
-                LogTrace($"Can't generate new spawn mod data proxy with null variant spawn type!");
+                this.LogTraceInstanced($"Can't generate new spawn mod data proxy with null variant spawn type!");
                 return null;
             }
             SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.Manager.CurrentScene, position, rotation, mSpawnRegion.m_AiSubTypeSpawned, mSpawnRegion.m_WildlifeMode, variantSpawnType);
@@ -1399,7 +1399,7 @@ namespace ExpandedAiFramework
             baseAi = null;
             if (mSpawnRegion.IsNullOrDestroyed() || mSpawnRegion.m_SpawnablePrefab == null || !mSpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out baseAi) || baseAi.IsNullOrDestroyed())
             {
-                LogVerbose($"Can't get spawnable ai script from spawn region, no pre-queueing spawns. Next...");
+                this.LogVerboseInstanced($"Can't get spawnable ai script from spawn region, no pre-queueing spawns. Next...");
                 return false;
             }
             return true;

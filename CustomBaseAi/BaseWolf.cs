@@ -28,7 +28,7 @@ namespace ExpandedAiFramework
         {
             if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsBear())
             {
-                LogVerbose($"Wolves run from larger threats!");
+                this.LogVerboseInstanced($"Wolves run from larger threats!");
                 SetAiMode(AiMode.Flee);
                 return false;
             }
