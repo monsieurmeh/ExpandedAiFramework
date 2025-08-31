@@ -8,7 +8,7 @@ namespace ExpandedAiFramework
     [RegisterTypeInIl2Cpp]
     public class BaseCougar : CustomBaseAi
     {
-        public static BaseCougarSettings BaseCougarSettings = new BaseCougarSettings(Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(BaseCougar)}"));
+        public static BaseCougarSettings BaseCougarSettings;
 
         protected AiCougar mCougar;
 

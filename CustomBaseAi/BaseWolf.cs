@@ -10,7 +10,7 @@ namespace ExpandedAiFramework
     [RegisterTypeInIl2Cpp]
     public class BaseWolf : CustomBaseAi
     {
-        public static BaseWolfSettings BaseWolfSettings = new BaseWolfSettings(Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(BaseTimberwolf)}"));
+        public static BaseWolfSettings BaseWolfSettings;
         public BaseWolf(IntPtr ptr) : base(ptr) { }
 
         protected override bool ProcessCustom() 

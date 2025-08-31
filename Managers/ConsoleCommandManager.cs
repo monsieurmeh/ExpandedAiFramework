@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
             protected Action<T> mForEachCallback;
             protected string mScene; 
 
-            public override string TypeInfo { get { return $"ForEachMapDataRequest{typeof(T)}"; } }
+            public override string TypeInfo { get { return $"ForEachMapDataRequest{nameof(T)}"; } }
 
             public ForEachMapDataRequest(string scene, Action<T> forEachCallback) : base(null, false)
             {
@@ -61,7 +61,7 @@ namespace ExpandedAiFramework
             protected string mBaseName;
             protected Action<string> mFoundNameCallback;
 
-            public override string TypeInfo { get { return $"GetUniqueMapDataName{typeof(T)}"; } }
+            public override string TypeInfo { get { return $"GetUniqueMapDataName{nameof(T)}"; } }
             
             public GetUniqueMapDataName(string scene, string baseName, Action<string> callback) : base(null, false)
             {
@@ -390,7 +390,7 @@ namespace ExpandedAiFramework
             mCurrentPaintFilePath = uConsole.GetString();
             if (!IsNameProvided(mCurrentPaintFilePath, false))
             {
-                mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"ExpandedAiFramework.WanderPaths.json");
+                mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"WanderPaths.json");
             }
             string scene = mManager.CurrentScene;
             GetMapDataByNameRequest<WanderPath> tryStartNewWanderPath = new GetMapDataByNameRequest<WanderPath>(name, scene, (path, result) =>
@@ -422,7 +422,7 @@ namespace ExpandedAiFramework
             mCurrentPaintFilePath = uConsole.GetString();
             if (!IsNameProvided(mCurrentPaintFilePath, false))
             {
-                mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"ExpandedAiFramework.HidingSpots.json");
+                mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"HidingSpots.json");
             }
             string scene = mManager.CurrentScene;
 
@@ -1158,7 +1158,7 @@ namespace ExpandedAiFramework
             {
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{typeof(WanderPath)}s.json");
+                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{nameof(WanderPath)}s.json");
                 }
                 // Clear any existing state
                 CleanUpPaintMarker();
@@ -1204,7 +1204,7 @@ namespace ExpandedAiFramework
             {
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{typeof(HidingSpot)}s.json");
+                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{nameof(HidingSpot)}s.json");
                 }
                 // Clear any existing state
                 CleanUpPaintMarker();
