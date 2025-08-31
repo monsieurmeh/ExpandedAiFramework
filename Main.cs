@@ -37,9 +37,9 @@ namespace ExpandedAiFramework
 
         protected bool Initialize()
         {
-            mManager = EAFManager.Instance;
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
-            mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"EAF.Settings")));
+            mManager = EAFManager.Instance;
+            mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"Settings")));
             return mManager != null;
         }
 

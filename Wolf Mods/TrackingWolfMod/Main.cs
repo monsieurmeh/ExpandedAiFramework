@@ -2,6 +2,7 @@
 global using MelonLoader;
 global using ModSettings;
 global using static ExpandedAiFramework.Utility;
+using MelonLoader.Utils;
 
 
 [assembly: MelonInfo(typeof(ExpandedAiFramework.TrackingWolfMod.Main), "ExpandedAiFramework.TrackingWolf", "1.0.0", "MonsieurMeh", null)]
@@ -19,8 +20,10 @@ namespace ExpandedAiFramework.TrackingWolfMod
 
         protected bool Initialize()
         {
+            Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             TrackingWolfManager manager = new TrackingWolfManager();
             EAFManager.Instance.RegisterSubmanager(typeof(TrackingWolf), manager);
+            TrackingWolf.TrackingWolfSettings = new TrackingWolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(TrackingWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(TrackingWolf), TrackingWolf.TrackingWolfSettings))
             {
                 Utility.LogError("Could not register TrackingWolf spawning!");

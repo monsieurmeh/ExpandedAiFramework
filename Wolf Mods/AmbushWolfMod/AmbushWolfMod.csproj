@@ -86,13 +86,13 @@
     <Reference Include="UnityEngine.Il2CppAssetBundleManager" />
     <Reference Include="UnityEngine.Il2CppImageConversionManager" />
     <Reference Include="ModSettings">
-      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
+      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
     </Reference>
     <Reference Include="ComplexLogger">
-      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ComplexLogger.dll</HintPath>
+      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ComplexLogger.dll</HintPath>
     </Reference>
     <Reference Include="ExpandedAiFramework">
-      <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ExpandedAiFramework.dll</HintPath>
+      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ExpandedAiFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 global using MelonLoader;
 global using ModSettings;
 global using static ExpandedAiFramework.Utility;
+using MelonLoader.Utils;
 
 
 [assembly: MelonInfo(typeof(ExpandedAiFramework.CompanionWolfMod.Main), "ExpandedAiFramework.CompanionWolfMod", "0.10.1", "MonsieurMeh", null)]
@@ -19,9 +20,10 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         protected bool Initialize()
         {
+            Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             EAFManager.Instance.LoadData("CompanionWolfMod");
             CompanionWolfManager manager = new CompanionWolfManager();
-            CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager, Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(CompanionWolf)}"));
+            CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager, Path.Combine(DataFolderPath, $"Settings.{nameof(CompanionWolf)}"));
             EAFManager.Instance.RegisterSubmanager(typeof(CompanionWolf), manager);
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.CompanionWolfSettings))
             {

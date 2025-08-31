@@ -2,6 +2,7 @@
 global using MelonLoader;
 global using ModSettings;
 global using static ExpandedAiFramework.Utility;
+using MelonLoader.Utils;
 
 
 [assembly: MelonInfo(typeof(ExpandedAiFramework.WanderingWolfMod.Main), "ExpandedAiFramework.WanderingWolfMod", "1.0.2", "MonsieurMeh", null)]
@@ -19,8 +20,10 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         protected bool Initialize()
         {
+            Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             WanderingWolfManager manager = new WanderingWolfManager();
             EAFManager.Instance.RegisterSubmanager(typeof(WanderingWolf), manager);
+            WanderingWolf.WanderingWolfSettings = new WanderingWolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(WanderingWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(WanderingWolf), WanderingWolf.WanderingWolfSettings))
             {
                 Utility.LogError("Could not register WanderingWolf spawning!");

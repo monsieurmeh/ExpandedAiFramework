@@ -2,6 +2,7 @@
 global using MelonLoader;
 global using ModSettings;
 global using static ExpandedAiFramework.Utility;
+using MelonLoader.Utils;
 
 
 [assembly: MelonInfo(typeof(ExpandedAiFramework.BigWolfMod.Main), "ExpandedAiFramework.BigWolfMod", "1.0.1", "MonsieurMeh", null)]
@@ -19,6 +20,8 @@ namespace ExpandedAiFramework.BigWolfMod
 
         protected bool Initialize()
         {
+            Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
+            BigWolf.BigWolfSettings = new BigWolfSettings(Path.Combine(DataFolderPath, $"Settings.{nameof(BigWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(BigWolf), BigWolf.BigWolfSettings))
             {
                 Utility.LogError("Could not register BigWolf spawning!");

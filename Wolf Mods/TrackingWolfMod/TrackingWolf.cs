@@ -6,7 +6,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
     [RegisterTypeInIl2Cpp]
     public class TrackingWolf : BaseWolf
     {
-        internal static TrackingWolfSettings TrackingWolfSettings = new TrackingWolfSettings(Path.Combine(DataFolderPath, $"EAF.Settings.{nameof(TrackingWolf)}"));
+        internal static TrackingWolfSettings TrackingWolfSettings;
 
         protected float m_TimeSinceLastSmellCheck = 0.0f;
         protected float m_TimeSinceLastStruggle = 0.0f;
