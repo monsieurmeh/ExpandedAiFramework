@@ -46,6 +46,8 @@ namespace ExpandedAiFramework
         public Func<T, bool> GetDataValidator() => IsDataValid;
 
 
+        private ManualResetEventSlim mWorkAvailable = new ManualResetEventSlim(false);
+
         public virtual void StartWorker()
         {
             if (mKeepTaskRunning)
@@ -63,6 +65,7 @@ namespace ExpandedAiFramework
                 return;
             }
             mKeepTaskRunning = false;
+            mWorkAvailable.Set(); // Wake up the worker to exit
             try
             {
                 mTask?.Wait();
@@ -71,6 +74,10 @@ namespace ExpandedAiFramework
             {
                 this.LogErrorInstanced($"Error stopping worker thread: {e}");
             }
+            finally
+            {
+                mWorkAvailable.Dispose();
+            }
         }
         public void ScheduleRequest(IRequest request)
         {
@@ -78,6 +85,7 @@ namespace ExpandedAiFramework
             lock (mRequestQueueLock)
             {
                 mRequests.Enqueue(request);
+                mWorkAvailable.Set();
             }
         }
         public void ScheduleSave() => ScheduleInternalAction(Save);
@@ -92,6 +100,7 @@ namespace ExpandedAiFramework
             lock (mRequestQueueLock)
             {
                 mInternalActionQueue.Enqueue(action);
+                mWorkAvailable.Set();
             }
         }
 
@@ -101,15 +110,32 @@ namespace ExpandedAiFramework
         {
             while (mKeepTaskRunning)
             {
+                mWorkAvailable.Wait();
+                
+                if (!mKeepTaskRunning) break;
+                
                 mActive = true;
+                
                 HandleInternalActions();
+                
                 lock (mRequestQueueLock)
                 {
                     if (mRequests.Count > 0)
                     {
                         mActiveRequest = mRequests.Dequeue();
                     }
+                    else
+                    {
+                        mActiveRequest = null;
+                    }
+                    
+                    // If both queues are empty, reset the event
+                    if (mInternalActionQueue.Count == 0 && mRequests.Count == 0)
+                    {
+                        mWorkAvailable.Reset();
+                    }
                 }
+                
                 if (mActiveRequest != null)
                 {
                     mActiveRequest.PerformRequest();
@@ -118,6 +144,7 @@ namespace ExpandedAiFramework
                         lock (mRequestQueueLock)
                         {
                             mRequests.Enqueue(mActiveRequest);
+                            mWorkAvailable.Set();
                         }   
                     }
                     else
@@ -133,10 +160,7 @@ namespace ExpandedAiFramework
                     }
                     mActiveRequest = null;
                 }
-                else
-                { 
-                    Thread.Sleep(250);
-                }
+                
                 mActive = false;
             }
         }
