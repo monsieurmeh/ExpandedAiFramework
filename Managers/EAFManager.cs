@@ -243,7 +243,7 @@ namespace ExpandedAiFramework
                 LogError($"Type {type} already registered in submanager dictionary!");
                 return;
             }
-            LogAlways($"Registering SubManager for type {type}");
+            LogTrace($"Registering SubManager for type {type}");
             subManager.Initialize(this);
             mSubManagerDict.Add(type, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);
@@ -361,7 +361,7 @@ namespace ExpandedAiFramework
             callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
             lock (mLogger)
             {
-                mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo}]");
+                DispatchManager.Dispatch(() => mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {DateTime.Now}]"));
             }
         }
 

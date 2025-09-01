@@ -235,7 +235,7 @@ namespace ExpandedAiFramework
         {
             try
             {
-                this.LogVerboseInstanced($"Loading from path: {dataPath}");
+                this.LogTraceInstanced($"Loading from path: {dataPath}");
                 string dataString = LoadJsonFromPath(dataPath);
                 if (dataString == null)
                 {
@@ -253,7 +253,7 @@ namespace ExpandedAiFramework
                         this.LogTraceInstanced($"Failed to postprocess {newData}, skipping!");
                         continue;
                     }
-                    this.LogVerboseInstanced($"Deserializing {newData}");
+                    this.LogTraceInstanced($"Deserializing {newData}");
                     if (!mDataContainer.TryAddData(newData))
                     {
                         this.LogWarningInstanced($"Failed to add {newData}!");

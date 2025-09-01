@@ -499,7 +499,7 @@ namespace ExpandedAiFramework
                 }
                 if (newProxy.ForceSpawn)
                 {
-                    this.LogAlwaysInstanced($"FORCE spawning on creation!");
+                    this.LogTraceInstanced($"FORCE spawning on creation!");
                     mManager.Manager.DataManager.IncrementForceSpawnCount(mSpawnRegion.m_WildlifeMode);
                     QueueImmediateSpawn(newProxy);
                 }

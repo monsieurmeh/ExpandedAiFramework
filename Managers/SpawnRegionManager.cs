@@ -305,7 +305,7 @@ namespace ExpandedAiFramework
                     LogError($"Timeout on post deserialize waiting for spawn region processing!");
                 }
                 mSpawnRegionCatcher.Clear();
-                LogAlways($"Prequeuing. We have {mCustomSpawnRegions.Values.Count} values in mCustomSpawnRegions!");
+                LogTrace($"Prequeuing. We have {mCustomSpawnRegions.Values.Count} values in mCustomSpawnRegions!");
                 foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
                 {
                     customSpawnRegion.PreSpawn();

@@ -186,7 +186,7 @@ namespace ExpandedAiFramework
 
         private void ClearDataCache()
         {
-            LogAlways($"Clearing DataCache");
+            LogTrace($"Clearing DataCache");
             mLastScene = string.Empty;
             for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
             {
