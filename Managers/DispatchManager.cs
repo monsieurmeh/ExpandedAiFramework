@@ -25,6 +25,15 @@ namespace ExpandedAiFramework
             }
         }
 
+        
+        public override void OnQuitToMainMenu()
+        {
+            lock (mQueueLock)
+            {
+                mActionQueue.Clear();
+            }
+        }
+
 
         public override void Update()
         {
