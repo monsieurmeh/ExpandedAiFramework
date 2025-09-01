@@ -30,6 +30,7 @@ namespace ExpandedAiFramework
         private enum BaseSubManagers : int
         {
             DispatchManager = 0,
+            LogDispatcher,
             DataManager,
             AiManager,
             SpawnRegionManager,
@@ -44,6 +45,7 @@ namespace ExpandedAiFramework
         private AiManager mAiManager;
         private ConsoleCommandManager mConsoleCommandManager;
         private DispatchManager mDispatchManager;
+        private DispatchManager mLogDispatcher;
         private BaseSubManager[] mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
         private Dictionary<Type, ISubManager> mSubManagerDict = new Dictionary<Type, ISubManager>();
         private ISubManager[] mSubManagers = new ISubManager[0];
@@ -51,6 +53,7 @@ namespace ExpandedAiFramework
         private string mCurrentScene = string.Empty;
         private bool mGameLoaded = false;
         private bool mPendingSceneLoadRequest = false;
+        private object mLoggerLock = new object();
 
 
 
@@ -60,6 +63,9 @@ namespace ExpandedAiFramework
 
             mDispatchManager = new DispatchManager(this, mSubManagers);
             mBaseSubManagers[(int)BaseSubManagers.DispatchManager] = mDispatchManager;
+
+            mLogDispatcher = new DispatchManager(this, mSubManagers);
+            mBaseSubManagers[(int)BaseSubManagers.LogDispatcher] = mLogDispatcher;
 
             mDataManager = new DataManager(this, mSubManagers);
             mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
@@ -359,9 +365,9 @@ namespace ExpandedAiFramework
             [CallerMemberName] string callerName = "")
         {
             callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
-            lock (mLogger)
+            lock (mLoggerLock)
             {
-                DispatchManager.Dispatch(() => mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {DateTime.Now}]"));
+                mLogDispatcher.Dispatch(() => mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {DateTime.Now}]"));
             }
         }
 

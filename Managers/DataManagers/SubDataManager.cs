@@ -148,7 +148,8 @@ namespace ExpandedAiFramework
                 }
                 else
                 {
-                    mDispatcher.Dispatch(() => ProcessRequest(mActiveRequest));
+                    IRequest dispatchedRequest = mActiveRequest;
+                    mDispatcher.Dispatch(() => ProcessRequest(dispatchedRequest));
                 }
                 mActiveRequest = null;
             }
