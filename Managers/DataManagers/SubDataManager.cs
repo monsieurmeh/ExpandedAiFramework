@@ -104,64 +104,70 @@ namespace ExpandedAiFramework
             }
         }
 
-
-        //In theory we should be OK using a local variable to hold the active request - inserting a new one doesnt automatically dispose of the previous, it's still being held by the lambda until end of its lifetime.
         private void Worker()
         {
             while (mKeepTaskRunning)
             {
                 mWorkAvailable.Wait();
-                
                 if (!mKeepTaskRunning) break;
-                
                 mActive = true;
-                
                 HandleInternalActions();
-                
-                lock (mRequestQueueLock)
+                GetActiveRequest();
+                HandleActiveRequest();
+                mActive = false;
+            }
+        }
+        
+        private void GetActiveRequest()
+        {
+            lock (mRequestQueueLock)
+            {
+                if (mRequests.Count > 0)
                 {
-                    if (mRequests.Count > 0)
-                    {
-                        mActiveRequest = mRequests.Dequeue();
-                    }
-                    else
-                    {
-                        mActiveRequest = null;
-                    }
-                    
-                    // If both queues are empty, reset the event
-                    if (mInternalActionQueue.Count == 0 && mRequests.Count == 0)
-                    {
-                        mWorkAvailable.Reset();
-                    }
+                    mActiveRequest = mRequests.Dequeue();
                 }
-                
-                if (mActiveRequest != null)
+                else
                 {
-                    mActiveRequest.PerformRequest();
-                    if (mActiveRequest.Result == RequestResult.Requeue)
-                    {
-                        lock (mRequestQueueLock)
-                        {
-                            mRequests.Enqueue(mActiveRequest);
-                            mWorkAvailable.Set();
-                        }   
-                    }
-                    else
-                    {
-                        if (mActiveRequest.ThreadSafe)
-                        {
-                            mActiveRequest.Callback();
-                        }
-                        else
-                        {
-                            mDispatcher.Dispatch(mActiveRequest.Callback);
-                        }
-                    }
                     mActiveRequest = null;
                 }
-                
-                mActive = false;
+                if (mInternalActionQueue.Count == 0 && mRequests.Count == 0)
+                {
+                    mWorkAvailable.Reset();
+                }
+            }
+        }
+
+
+        private void HandleActiveRequest()
+        {
+            if (mActiveRequest != null)
+            {
+                if (mActiveRequest.ThreadSafe)
+                {
+                    ProcessRequest(mActiveRequest);
+                }
+                else
+                {
+                    mDispatcher.Dispatch(() => ProcessRequest(mActiveRequest));
+                }
+                mActiveRequest = null;
+            }
+        }
+
+        private void ProcessRequest(IRequest request)
+        {
+            request.PerformRequest();
+            if (request.Result == RequestResult.Requeue)
+            {
+                lock (mRequestQueueLock)
+                {
+                    mRequests.Enqueue(request);
+                    mWorkAvailable.Set();
+                }
+            }
+            else
+            {
+                request.Callback();
             }
         }
 
