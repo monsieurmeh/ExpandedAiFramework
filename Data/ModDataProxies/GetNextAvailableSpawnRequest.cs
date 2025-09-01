@@ -14,12 +14,21 @@ namespace ExpandedAiFramework
         public override string InstanceInfo { get { return $"{mGuid} in {mScene}"; } }
         public override string TypeInfo { get { return $"GetNextAvailableSpawnModDataProxy"; } }
 
-        public GetNextAvailableSpawnRequest(Guid guid, string scene, bool requireForceSpawn, Action<SpawnModDataProxy, RequestResult> callback, int allowedAttempts = 1) : base(callback, false)
+        public GetNextAvailableSpawnRequest(Guid guid, string scene, bool requireForceSpawn, Action<SpawnModDataProxy, RequestResult> callback, bool callbackIsThreadSafe, int allowedAttempts = 1) : base(callback, true, callbackIsThreadSafe)
         {
             mGuid = guid;
             mScene = scene;
             mRequireForceSpawn = requireForceSpawn;
             mAttemptLimit = allowedAttempts;
+        }
+
+        public override void Preprocess(ISubDataManager manager)
+        {
+            base.Preprocess(manager);
+            if (manager is ISerializedDataCrossReferenceProvider<SpawnRegionModDataProxy, SpawnModDataProxy> crossReferenceProvider)
+            {
+                mSpawnModDataProxyProvider = crossReferenceProvider;
+            }
         }
 
 
@@ -63,17 +72,6 @@ namespace ExpandedAiFramework
             return RequestResult.Requeue;            
         }
         
-
-        public override void Preprocess(ISubDataManager manager)
-        {
-            base.Preprocess(manager);
-            if (manager is ISerializedDataCrossReferenceProvider<SpawnRegionModDataProxy, SpawnModDataProxy> crossReferenceProvider)
-            {
-                mSpawnModDataProxyProvider = crossReferenceProvider;
-            }
-        }
-
-
         private bool TryGetNextAvailableSpawnModDataProxy()
         {
             bool foundValidProxy = false;

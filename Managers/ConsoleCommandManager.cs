@@ -18,7 +18,7 @@ namespace ExpandedAiFramework
 
             public override string TypeInfo { get { return $"ForEachMapDataRequest{nameof(T)}"; } }
 
-            public ForEachMapDataRequest(string scene, Action<T> forEachCallback) : base(null, false)
+            public ForEachMapDataRequest(string scene, Action<T> forEachCallback, bool callbackIsThreadSafe) : base(null, true, callbackIsThreadSafe)
             {
                 mForEachCallback = forEachCallback;
                 mScene = scene;
@@ -43,7 +43,16 @@ namespace ExpandedAiFramework
                 {
                     foreach (T data in mDataContainer.GetSceneData(mScene).Values)
                     {
-                        mForEachCallback.Invoke(data);
+                        if (mThreadSafeCallback)
+                        {
+                            mForEachCallback.Invoke(data);
+                        }
+                        else
+                        {
+                            T dispatchedData = data;
+                            DispatchManager.Instance.Dispatch(() => mForEachCallback.Invoke(dispatchedData));
+                        }
+                        
                     }
                     return RequestResult.Succeeded;
                 }
@@ -63,7 +72,7 @@ namespace ExpandedAiFramework
 
             public override string TypeInfo { get { return $"GetUniqueMapDataName{nameof(T)}"; } }
             
-            public GetUniqueMapDataName(string scene, string baseName, Action<string> callback) : base(null, false)
+            public GetUniqueMapDataName(string scene, string baseName, Action<string> callback) : base(null, true, false)
             {
                 mBaseName = baseName;
                 mFoundNameCallback = callback;
@@ -406,7 +415,7 @@ namespace ExpandedAiFramework
                 {
                     LogWarning($"Can't start recording path because a path with this name exists in this scene!");
                 }                
-            });
+            }, false);
             DataManager.ScheduleMapDataRequest<WanderPath>(tryStartNewWanderPath);
         }
 
@@ -440,7 +449,7 @@ namespace ExpandedAiFramework
                 {
                     LogWarning($"Can't generate hiding spot {name} another spot with that name exists in this scene!");
                 }
-            });
+            }, false);
             DataManager.ScheduleMapDataRequest<HidingSpot>(tryCreateNewHidingSpot);
         }
 
@@ -457,7 +466,7 @@ namespace ExpandedAiFramework
                 mDebugShownHidingSpots.Add(CreateMarker(hidingSpot.Position, Color.yellow, $"Hiding spot: {hidingSpot.Name}", 100.0f));
                 LogAlways($"Generated hiding spot {hidingSpot.Name} at {hidingSpot.Position} with rotation {hidingSpot.Rotation} in scene {hidingSpot.Scene}!");
                 SaveMapData();
-            });
+            }, false);
             DataManager.ScheduleMapDataRequest<HidingSpot>(tryRegisterNewHidingSpot);
         }
 
@@ -501,8 +510,8 @@ namespace ExpandedAiFramework
                     {
                         LogAlways($"Deleted wander path {name} in scene {scene}.");
                         SaveMapData();
-                    }));
-                }));
+                    }, false));
+                }, false));
             }
         }
 
@@ -643,7 +652,7 @@ namespace ExpandedAiFramework
                 mDebugShownWanderPaths.AddRange(mCurrentWanderPathPointMarkers);
                 mCurrentWanderPathPointMarkers.Clear();
                 SaveMapData();
-            }));
+            }, false));
         }
 
         #endregion
@@ -680,7 +689,7 @@ namespace ExpandedAiFramework
                 }
                 Teleport(data.Position, data.Rotation);
                 LogAlways($"Teleported to {data}! Watch out for ambush wolves...");
-            }));
+            }, false));
         }
 
 
@@ -719,7 +728,7 @@ namespace ExpandedAiFramework
                 }
                 Teleport(data.PathPoints[pathPointIndex], lookDir);
                 LogAlways($"Teleported to WanderPath {data.Name} point #{pathPointIndex} at {data.PathPoints[pathPointIndex]}! Watch out for wandering wolves...");
-            }));
+            }, false));
         }
 
 
@@ -766,7 +775,7 @@ namespace ExpandedAiFramework
                     {
                         mDebugShownHidingSpots.Add(CreateMarker(data.Position, Color.yellow, data.Name, 100));
                     }
-                }));
+                }, false));
             }
         }
 
@@ -779,7 +788,7 @@ namespace ExpandedAiFramework
                 {
                     mDebugShownHidingSpots.Add(CreateMarker(data.Position, Color.yellow, data.Name, 100));
                 }
-            }));
+            }, false));
         }
 
 
@@ -809,7 +818,7 @@ namespace ExpandedAiFramework
                             }
                         }
                     }
-                }));
+                }, false));
             }
         }
 
@@ -829,7 +838,7 @@ namespace ExpandedAiFramework
                         }
                     }
                 }
-            }));
+            }, false));
         }
 
 
@@ -1089,7 +1098,7 @@ namespace ExpandedAiFramework
             DataManager.ScheduleMapDataRequest<HidingSpot>(new ForEachMapDataRequest<HidingSpot>(mManager.CurrentScene, (spot) =>
             {
                 LogAlways($"Found {spot}. Occupied: {spot.Claimed}");
-            }));
+            }, false));
         }
 
 
@@ -1098,7 +1107,7 @@ namespace ExpandedAiFramework
             DataManager.ScheduleMapDataRequest<HidingSpot>(new ForEachMapDataRequest<WanderPath>(mManager.CurrentScene, (spot) =>
             {
                 LogAlways($"Found {spot}. Occupied: {spot.Claimed}");
-            }));
+            }, false));
         }
 
         #endregion
@@ -1508,7 +1517,7 @@ namespace ExpandedAiFramework
                                     return;
                                 }
                             }));
-                        }));
+                        }, false));
                     }
                 }
                 else
@@ -1589,7 +1598,7 @@ namespace ExpandedAiFramework
                             return;
                         }
                     }));
-                }));
+                }, false));
 
             }
 

@@ -12,10 +12,19 @@ namespace ExpandedAiFramework
         public override string InstanceInfo { get { return $"{mGuid} in {mScene}"; } }
         public override string TypeInfo { get { return $"GetNextAvailableSpawnModDataProxy"; } }
 
-        public ClaimAvailableSpawnRequest(Guid guid, string scene, Action<SpawnModDataProxy, RequestResult> callback) : base(callback, false)
+        public ClaimAvailableSpawnRequest(Guid guid, string scene, Action<SpawnModDataProxy, RequestResult> callback, bool callbackIsThreadSafe) : base(callback, true, callbackIsThreadSafe)
         {
             mGuid = guid;
             mScene = scene;
+        }
+
+        public override void Preprocess(ISubDataManager manager)
+        {
+            base.Preprocess(manager);
+            if (manager is ISerializedDataCrossReferenceProvider<SpawnRegionModDataProxy, SpawnModDataProxy> crossReferenceProvider)
+            {
+                mSpawnModDataProxyProvider = crossReferenceProvider;
+            }
         }
 
 
@@ -36,6 +45,11 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"Empty guid");
                 return false;
             }
+            if (mSpawnModDataProxyProvider == null)
+            {
+                this.LogTraceInstanced("$Null SpawnModDataProxyProvider");
+                return false;
+            }
             return true;
         }
 
@@ -46,7 +60,7 @@ namespace ExpandedAiFramework
             {
                 return RequestResult.Succeeded;
             }
-             return RequestResult.Failed;
+            return RequestResult.Failed;
         }
 
 

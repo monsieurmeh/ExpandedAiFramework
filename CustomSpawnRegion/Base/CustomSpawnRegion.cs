@@ -333,7 +333,7 @@ namespace ExpandedAiFramework
                         SpawnInternal(s, force);
                     }, true);
                 }
-            }), mode);
+            }, false), mode);
         }
 
 
@@ -341,7 +341,7 @@ namespace ExpandedAiFramework
         {
             if (InstantiateSpawn(queuedProxy, force) != null)
             {
-                mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(queuedProxy.Guid, queuedProxy.Scene, (proxy, result) => { }), queuedProxy.WildlifeMode);
+                mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(queuedProxy.Guid, queuedProxy.Scene, null, false), queuedProxy.WildlifeMode);
             }
             else
             {

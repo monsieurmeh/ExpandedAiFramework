@@ -7,7 +7,7 @@ namespace ExpandedAiFramework
         public override string TypeInfo { get { return $"DeleteDataRequest<{typeof(T)}>"; } }
 
 
-        public DeleteDataRequest(Guid guid, string scene, Action<T, RequestResult> callback) : base(guid, scene, callback) { }
+        public DeleteDataRequest(Guid guid, string scene, Action<T, RequestResult> callback, bool callbackIsThreadSafe) : base(guid, scene, callback, callbackIsThreadSafe) { }
 
 
         protected override RequestResult PerformRequestInternal()

@@ -14,7 +14,7 @@ namespace ExpandedAiFramework
         public override string InstanceInfo { get { return $"{mPosition} in {mScene}"; } }
         public override string TypeInfo { get { return $"GetNearestMapData<{typeof(T)}>"; } }
 
-        public GetNearestMapDataRequest(Vector3 position, string scene, Action<T, RequestResult> callback, int extraNearestCandidatesToMaybePickFrom = 0) : base(callback, false)
+        public GetNearestMapDataRequest(Vector3 position, string scene, Action<T, RequestResult> callback, bool callbackIsThreadSafe, int extraNearestCandidatesToMaybePickFrom = 0) : base(callback, true, callbackIsThreadSafe)
         {
             mScene = scene;
             mPosition = position;

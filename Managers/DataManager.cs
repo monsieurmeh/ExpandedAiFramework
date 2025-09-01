@@ -84,16 +84,16 @@ namespace ExpandedAiFramework
                 return false;
             }
             SpawnModDataProxyManager proxyManager = mSpawnModDataProxyManagers[(int)proxy.WildlifeMode];
-            proxyManager.ScheduleRequest(new RegisterDataRequest<SpawnModDataProxy>(proxy, proxyManager.DataLocation, callback));
+            proxyManager.ScheduleRequest(new RegisterDataRequest<SpawnModDataProxy>(proxy, proxyManager.DataLocation, callback, false));
             return true;
 
         }
 
 
 
-        public bool ScheduleRegisterSpawnRegionModDataProxyRequest(SpawnRegionModDataProxy proxy, Action<SpawnRegionModDataProxy, RequestResult> callback)
+        public bool ScheduleRegisterSpawnRegionModDataProxyRequest(SpawnRegionModDataProxy proxy, Action<SpawnRegionModDataProxy, RequestResult> callback, bool callbackIsThreadSafe)
         {
-            mSpawnRegionModDataProxyManager.ScheduleRequest(new RegisterDataRequest<SpawnRegionModDataProxy>(proxy, mSpawnRegionModDataProxyManager.DataLocation, callback));
+            mSpawnRegionModDataProxyManager.ScheduleRequest(new RegisterDataRequest<SpawnRegionModDataProxy>(proxy, mSpawnRegionModDataProxyManager.DataLocation, callback, callbackIsThreadSafe));
             return true;
         }
 

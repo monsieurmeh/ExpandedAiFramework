@@ -164,11 +164,18 @@ namespace ExpandedAiFramework
                 {
                     mRequests.Enqueue(request);
                     mWorkAvailable.Set();
-                }
+                }   
             }
             else
             {
-                request.Callback();
+                if (request.ThreadSafe && !request.ThreadSafeCallback)
+                {
+                    mDispatcher.Dispatch(request.Callback);
+                }
+                else
+                {
+                    request.Callback();
+                }
             }
         }
 

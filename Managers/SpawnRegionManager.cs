@@ -843,7 +843,7 @@ namespace ExpandedAiFramework
                     mPendingWrapOperations.Remove(guid);
                 }
                 newSpawnRegionWrapper.Start();
-            }));
+            }, false));
         }
 
 
@@ -886,7 +886,7 @@ namespace ExpandedAiFramework
                 return null;
             }
             SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy(guid, scene, spawnRegion);
-            mDataManager.ScheduleRegisterSpawnRegionModDataProxyRequest(newProxy, (proxy, result) => { });
+            mDataManager.ScheduleRegisterSpawnRegionModDataProxyRequest(newProxy, (proxy, result) => { }, true);
             return newProxy;
         }
 

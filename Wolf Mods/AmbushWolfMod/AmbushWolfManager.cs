@@ -38,7 +38,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
                         return;
                     }
                     ClaimHidingSpot(proxy, spot);
-                }, 3));
+                }, false, 3));
             }
             else
             {
@@ -50,7 +50,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
                         return;
                     }
                     ClaimHidingSpot(proxy, spot);
-                }));
+                }, false));
             }
         }
 

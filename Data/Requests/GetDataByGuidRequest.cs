@@ -10,7 +10,7 @@ namespace ExpandedAiFramework
         public override string InstanceInfo { get { return $"{mGuid} in {mScene}"; } }
         public override string TypeInfo { get { return $"GetDataByGuid<{typeof(T)}>"; } }
 
-        public GetDataByGuidRequest(Guid guid, string scene, Action<T, RequestResult> callback) : base(callback, false)
+        public GetDataByGuidRequest(Guid guid, string scene, Action<T, RequestResult> callback, bool callbackIsThreadSafe) : base(callback, true, callbackIsThreadSafe)
         {
             mScene = scene;
             mGuid = guid;

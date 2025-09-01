@@ -13,7 +13,7 @@ namespace ExpandedAiFramework
 
         public DataRequest(Action<T, RequestResult> callback) : base() => mCallback = callback;
 
-        public DataRequest(Action<T, RequestResult> callback, bool threadSafe) : base(threadSafe) => mCallback = callback;
+        public DataRequest(Action<T, RequestResult> callback, bool threadSafe, bool threadSafeCallback) : base(threadSafe, threadSafeCallback) => mCallback = callback;
 
         public override void Callback() => mCallback?.Invoke(mPayload, mResult);
 

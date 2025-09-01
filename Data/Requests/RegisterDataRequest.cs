@@ -12,7 +12,7 @@ namespace ExpandedAiFramework
         public override string TypeInfo { get { return $"RegisterData<{typeof(T)}>"; } }
 
         //Adding explicit constructor param here so I remember to attach it when we make the request!
-        public RegisterDataRequest(T data, string dataLocation, Action<T, RequestResult> callback) : base(callback, false)
+        public RegisterDataRequest(T data, string dataLocation, Action<T, RequestResult> callback, bool callbackIsThreadSafe) : base(callback, true, callbackIsThreadSafe)
         {
             mPayload = data;
             mPayload.DataLocation = dataLocation;

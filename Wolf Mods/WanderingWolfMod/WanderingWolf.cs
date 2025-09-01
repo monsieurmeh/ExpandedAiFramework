@@ -64,7 +64,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             {
                 this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
                 AttachWanderPath(nearestSpot);
-            }, 3));
+            }, false, 3));
 
         }
 
@@ -94,14 +94,14 @@ namespace ExpandedAiFramework.WanderingWolfMod
                     {
                         this.LogTraceInstanced($"Found NEW nearest WanderPath with guid <<<{nearestSpot}>>>");
                         AttachWanderPath(nearestSpot);
-                    }, 3));
+                    }, false, 3));
                 }
                 else
                 {
                     this.LogTraceInstanced($"Found saved WanderPath with guid <<<{spotGuid}>>>");
                     AttachWanderPath(spot);
                 }
-            }));
+            }, false));
             return true;
         }
 

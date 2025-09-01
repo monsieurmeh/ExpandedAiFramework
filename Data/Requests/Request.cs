@@ -6,13 +6,18 @@ namespace ExpandedAiFramework
     {
         protected RequestResult mResult;
         protected bool mThreadSafe = false;
+        protected bool mThreadSafeCallback = false;
 
         public bool ThreadSafe => mThreadSafe;
+        public bool ThreadSafeCallback => mThreadSafeCallback;
         public RequestResult Result { get { return mResult; } }
 
         public Request() { }
-        public Request(bool threadSafe) : base() => mThreadSafe = threadSafe;
-
+        public Request(bool threadSafe, bool threadSafeCallback) : base()
+        {
+            mThreadSafe = threadSafe;
+            mThreadSafeCallback = threadSafeCallback;
+        }
         public void PerformRequest() => mResult = Validate() ? PerformRequestInternal() : RequestResult.Invalid;
         protected virtual bool Validate() => true;
         public virtual void Preprocess(ISubDataManager manager) { }
@@ -35,7 +40,7 @@ namespace ExpandedAiFramework
 
         public Request(Action<RequestResult> callback) : base() => mCallback = callback;
 
-        public Request(Action<RequestResult> callback, bool threadSafe) : base(threadSafe) => mCallback = callback;
+        public Request(Action<RequestResult> callback, bool threadSafe, bool threadSafeCallback) : base(threadSafe, threadSafeCallback) => mCallback = callback;
 
         public override void Callback() => mCallback?.Invoke(mResult);
 

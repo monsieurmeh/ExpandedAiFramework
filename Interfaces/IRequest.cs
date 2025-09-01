@@ -18,6 +18,7 @@ namespace ExpandedAiFramework
     {
         RequestResult Result { get; }
         bool ThreadSafe { get; }
+        bool ThreadSafeCallback { get; }
         void Preprocess(ISubDataManager manager);
         void Reset();
         void PerformRequest();

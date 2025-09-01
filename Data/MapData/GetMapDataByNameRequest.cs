@@ -10,7 +10,7 @@ namespace ExpandedAiFramework
         public override string InstanceInfo { get { return $"{mName} in {mScene}"; } }
         public override string TypeInfo { get { return $"GetDataByGuid<{typeof(T)}>"; } }
 
-        public GetMapDataByNameRequest(string name, string scene, Action<T, RequestResult> callback) : base(callback, false)
+        public GetMapDataByNameRequest(string name, string scene, Action<T, RequestResult> callback, bool callbackIsThreadSafe) : base(callback, true, callbackIsThreadSafe)
         {
             mScene = scene;
             mName = name;
