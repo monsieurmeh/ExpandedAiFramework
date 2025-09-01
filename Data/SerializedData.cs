@@ -13,6 +13,7 @@ namespace ExpandedAiFramework
         public Guid Guid { get { return mGuid; } }
         public string Scene { get { return mScene; } }
         public string DataLocation { get { return mDataLocation; } set { mDataLocation = value; } }
+        public abstract string DisplayName { get; }
 
         public SerializedData() { }
 

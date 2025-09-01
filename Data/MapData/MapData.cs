@@ -16,6 +16,7 @@ namespace ExpandedAiFramework
         public bool Transient { get { return mTransient; } }
         public Vector3 AnchorPosition { get { return mAnchorPosition; } }
         public bool Claimed { get { return mClaimed; } }
+        public override string DisplayName { get { return $"{mName} ({GetType().Name}-{mGuid})"; } }
 
 
         public MapData() : base() { }
