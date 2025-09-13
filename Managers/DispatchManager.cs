@@ -37,17 +37,28 @@ namespace ExpandedAiFramework
 
         public override void Update()
         {
-            lock (mQueueLock)
+            int actionsProcessed = 0;
+            const int maxActionsPerFrame = 10;
+            
+            while (actionsProcessed < maxActionsPerFrame)
             {
-                if (mActionQueue.Count > 0)
+                Action action = null;
+                lock (mQueueLock)
                 {
-                    mCurrentAction = mActionQueue.Dequeue();
+                    if (mActionQueue.Count > 0)
+                    {
+                        action = mActionQueue.Dequeue();
+                    }
                 }
-            }
-            if (mCurrentAction != null)
-            {
-                mCurrentAction.Invoke();
-                mCurrentAction = null;
+                if (action != null)
+                {
+                    action.Invoke();
+                    actionsProcessed++;
+                }
+                else
+                {
+                    break;
+                }
             }
         }
     }
