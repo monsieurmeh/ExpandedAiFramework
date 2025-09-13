@@ -68,24 +68,21 @@ namespace ExpandedAiFramework
 
         #region ExtendingLoadScreenTest
 
-
+        /*
         [HarmonyPatch(typeof(Panel_Loading), nameof(Panel_Loading.Enable), new Type[] { typeof(bool) })]
         private static class Panel_LoadingPatches_Enable
         {
-            private static int RefuseCount = 0;
-            private static readonly int RefuseLimit = 5;
             private static bool Prefix(ref bool enable)
             {
-                if (!enable && EAFManager.Instance.SpawnRegionManager.PreLoading && RefuseCount <= RefuseLimit)
+                if (!enable && EAFManager.Instance.SpawnRegionManager.PreLoading)
                 {
-                    LogVerbose($"Preventing load screen from dropping until preloading is complete! Refusals left: {RefuseLimit - (RefuseCount++)}");
+                    LogTrace($"Preventing load screen from dropping until preloading is complete!")
                     return false;
                 }
-                RefuseCount = 0;
                 return true;
             }
         }
-
+        */
         #endregion
 
 
