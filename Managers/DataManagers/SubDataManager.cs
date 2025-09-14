@@ -242,8 +242,7 @@ namespace ExpandedAiFramework
             List<T> masterProxyList = new List<T>();
             foreach (T data in mDataContainer.EnumerateContents())
             {
-                this.LogTraceInstanced($"Serializing {data}");
-                if (masterProxyDict.TryGetValue(data.DataLocation, out List<T> dataList))
+                if (!masterProxyDict.TryGetValue(data.DataLocation, out List<T> dataList))
                 {
                     dataList = new List<T>();
                     masterProxyDict.Add(data.DataLocation, dataList); 
