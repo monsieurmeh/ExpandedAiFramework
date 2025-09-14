@@ -28,6 +28,8 @@ namespace ExpandedAiFramework
 
         public SpawnModDataProxy() : base() { }
 
+        public override string DisplayName { get { return $"{VariantSpawnTypeString}-{mGuid}";  } }
+
 
 
 
