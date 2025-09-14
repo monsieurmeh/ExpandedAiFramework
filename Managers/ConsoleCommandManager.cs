@@ -138,6 +138,8 @@ namespace ExpandedAiFramework
 
         private PaintMode mCurrentPaintMode = PaintMode.COUNT;
         private string mCurrentPaintFilePath = string.Empty;
+        private string mCurrentWanderPathFile = string.Empty;
+        private string mCurrentHidingSpotPathFile = string.Empty;
         private bool mSelectingHidingSpotRotation = false;
         private Vector3 mPendingHidingSpotPosition;
         private string mCurrentDataNameIterated = string.Empty;
@@ -311,6 +313,7 @@ namespace ExpandedAiFramework
                 case CommandString_Hide: Console_Hide(); return;
                 case CommandString_List: Console_List(); return;
                 case CommandString_Paint: Console_Paint(); return;
+                case CommandString_Set: Console_Set(); return;
                 case "unlock":
                     GameManager.GetFeatMasterHunter().Unlock();
                     return;
@@ -396,11 +399,19 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            mCurrentPaintFilePath = uConsole.GetString();
-            if (!IsNameProvided(mCurrentPaintFilePath, false))
+            if (mCurrentWanderPathFile.Length == 0)
             {
-                mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"WanderPaths.json");
+                mCurrentPaintFilePath = uConsole.GetString();
+                if (!IsNameProvided(mCurrentPaintFilePath, false))
+                {
+                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"WanderPaths.json");
+                }
             }
+            else
+            {
+                mCurrentPaintFilePath = mCurrentWanderPathFile;
+            }
+
             string scene = mManager.CurrentScene;
             GetMapDataByNameRequest<WanderPath> tryStartNewWanderPath = new GetMapDataByNameRequest<WanderPath>(name, scene, (path, result) =>
             {
@@ -428,10 +439,17 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            mCurrentPaintFilePath = uConsole.GetString();
-            if (!IsNameProvided(mCurrentPaintFilePath, false))
+            if (mCurrentHidingSpotPathFile.Length == 0)
             {
-                mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"HidingSpots.json");
+                mCurrentPaintFilePath = uConsole.GetString();
+                if (!IsNameProvided(mCurrentPaintFilePath, false))
+                {
+                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"WanderPaths.json");
+                }
+            }
+            else
+            {
+                mCurrentPaintFilePath = mCurrentHidingSpotPathFile;
             }
             string scene = mManager.CurrentScene;
 
@@ -1129,10 +1147,21 @@ namespace ExpandedAiFramework
             {
                 mCurrentDataNameBase = null; // Auto-generate name if not provided
             }
-            mCurrentPaintFilePath = uConsole.GetString();
 
             if (type == CommandString_HidingSpot)
             {
+                if (mCurrentHidingSpotPathFile.Length == 0)
+                {
+                    mCurrentPaintFilePath = uConsole.GetString();
+                    if (!IsNameProvided(mCurrentPaintFilePath, false))
+                    {
+                        mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"WanderPaths.json");
+                    }
+                }
+                else
+                {
+                    mCurrentPaintFilePath = mCurrentHidingSpotPathFile;
+                }
                 DataManager.ScheduleMapDataRequest<HidingSpot>(new GetUniqueMapDataName<HidingSpot>(mManager.CurrentScene, mCurrentDataNameBase, (uniqueName) =>
                 {
                     if (!InitializePaintHidingSpot(uniqueName))
@@ -1145,6 +1174,18 @@ namespace ExpandedAiFramework
             }
             else if (type == CommandString_WanderPath)
             {
+                if (mCurrentWanderPathFile.Length == 0)
+                {
+                    mCurrentPaintFilePath = uConsole.GetString();
+                    if (!IsNameProvided(mCurrentPaintFilePath, false))
+                    {
+                        mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"WanderPaths.json");
+                    }
+                }
+                else
+                {
+                    mCurrentPaintFilePath = mCurrentWanderPathFile;
+                }
                 DataManager.ScheduleMapDataRequest<WanderPath>(new GetUniqueMapDataName<WanderPath>(mManager.CurrentScene, mCurrentDataNameBase, (uniqueName) =>
                 {
                     if (!InitializePaintWanderPath(uniqueName))
@@ -1167,7 +1208,14 @@ namespace ExpandedAiFramework
             {
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{nameof(WanderPath)}s.json");
+                    if (mCurrentWanderPathFile.Length == 0)
+                    {
+                        mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{nameof(WanderPath)}s.json");
+                    }
+                    else
+                    {
+                        mCurrentPaintFilePath = mCurrentWanderPathFile;
+                    }
                 }
                 // Clear any existing state
                 CleanUpPaintMarker();
@@ -1213,7 +1261,14 @@ namespace ExpandedAiFramework
             {
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{nameof(HidingSpot)}s.json");
+                    if (mCurrentHidingSpotPathFile.Length == 0)
+                    {
+                        mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"{nameof(HidingSpot)}s.json");
+                    }
+                    else
+                    {
+                        mCurrentPaintFilePath = mCurrentWanderPathFile;
+                    }
                 }
                 // Clear any existing state
                 CleanUpPaintMarker();
@@ -1607,6 +1662,29 @@ namespace ExpandedAiFramework
 
         #endregion
 
+
+        #region Set
+
+        private void Console_Set()
+        {
+            string type = uConsole.GetString();
+            if (!IsTypeSupported(type, CommandString_SetSupportedTypes))
+            {
+                return;
+            }
+            string value = uConsole.GetString();
+            if (!IsNameProvided(value, true))
+            {
+                return;
+            }
+            switch (type)
+            {
+                case $"{CommandString_WanderPath}_{CommandString_DataPath}": mCurrentWanderPathFile = value; break;
+                case $"{CommandString_HidingSpot}_{CommandString_DataPath}": mCurrentHidingSpotPathFile = value; break;
+            }
+        }
+
+        #endregion
 
         #region NavMesh Management
 

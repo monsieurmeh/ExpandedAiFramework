@@ -32,12 +32,14 @@ namespace ExpandedAiFramework
         public const string CommandString_Spawn = "spawn";
         public const string CommandString_Info = "info";
         public const string CommandString_Paint = "paint";
+        public const string CommandString_Set = "set";
 
         public const string CommandString_NavMesh = "navmesh";
         public const string CommandString_WanderPath = "wanderpath";
         public const string CommandString_HidingSpot = "hidingspot";
         public const string CommandString_MapData = "mapdata";
         public const string CommandString_SpawnRegion = "spawnregion";
+        public const string CommandString_DataPath = "datapath";
         public const string CommandString_Ai = "ai";
 
 
@@ -53,7 +55,8 @@ namespace ExpandedAiFramework
             $"{CommandString_Show} " +
             $"{CommandString_Hide} " +
             $"{CommandString_List} " +
-            $"{CommandString_Paint}";
+            $"{CommandString_Paint}" +
+            $"{CommandString_Set}";
 
         public const string CommandString_HelpSupportedCommands =
             $"{CommandString_Create} " +
@@ -66,7 +69,8 @@ namespace ExpandedAiFramework
             $"{CommandString_Show} " +
             $"{CommandString_Hide} " +
             $"{CommandString_List} "+
-            $"{CommandString_Paint}";
+            $"{CommandString_Paint}" +
+            $"{CommandString_Set}";
 
         public const string CommandString_CreateSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_DeleteSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
@@ -79,6 +83,7 @@ namespace ExpandedAiFramework
         public const string CommandString_ListSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_LoadSupportedTypes = $"{CommandString_MapData}";
         public const string CommandString_PaintSupportedTypes = $"{CommandString_HidingSpot} {CommandString_WanderPath}"; //{CommandString_NavMesh}
+        public const string CommandString_SetSupportedTypes = $"{CommandString_WanderPath}_{CommandString_DataPath} {CommandString_HidingSpot}_{CommandString_DataPath}";
 
         public static readonly string[] SceneNames = new string[]
         {
