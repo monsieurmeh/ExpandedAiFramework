@@ -33,7 +33,7 @@ namespace ExpandedAiFramework
         {
             base.Initialize(manager, subManagers);
             mDataManager = mManager.DataManager;
-            mTypePicker = new WeightedTypePicker<BaseAi>(GetFallbackBaseSpawnableType, MaybeIncrementForceSpawnCount);
+            mTypePicker = new WeightedTypePicker<BaseAi>(GetFallbackBaseSpawnableType, OnSpawnTypePicked);
             mTypePicker.StartWorker();
             RegisterBaseSpawnableAiSettings();
             RegisterBaseSpawnableAis();
@@ -295,7 +295,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private void MaybeIncrementForceSpawnCount(BaseAi baseAi, Type type)
+        private void OnSpawnTypePicked(BaseAi baseAi, Type type)
         {
             if (!mSpawnSettingsDict.TryGetValue(type, out var spawnSettings))
             {
@@ -306,6 +306,7 @@ namespace ExpandedAiFramework
             {
                 mManager.DataManager.IncrementForceSpawnCount(baseAi.m_WildlifeMode);
             }
+            spawnSettings.OnPick();
         }
     }
 }

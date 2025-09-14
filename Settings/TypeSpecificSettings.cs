@@ -36,7 +36,9 @@ namespace ExpandedAiFramework
             }
         }
 
+        protected virtual void OnPick() { }
 
+        void ISpawnTypePickerCandidate.OnPick() => OnPick();
         bool ISpawnTypePickerCandidate.CanSpawn(BaseAi baseAi) => CanSpawn(baseAi);
         int ISpawnTypePickerCandidate.SpawnWeight() => GetSpawnWeight();
     }

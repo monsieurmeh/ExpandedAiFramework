@@ -20,6 +20,8 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public float AbleToBeTamedTime;
         public float LastDespawnTime;
         public float Scale = 0.6f;
+        public string LastScene = string.Empty;
+        public Vector3 LastPosition = Vector3.zero;
 
         public CompanionWolfData() { }
 

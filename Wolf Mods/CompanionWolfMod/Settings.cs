@@ -109,21 +109,36 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public override bool CanSpawn(BaseAi ai)
         {
-            //Utility.LogVerbose($"Enabled: {Enable} | Connected: {mManager.Data.Connected} | Tamed: {mManager.Data.Tamed} |  Type/Sub: {ai.m_AiType}.{ai.m_AiSubType}");
-            return Enable
+            if (mManager != null && mManager.Data == null)
+            {
+                mManager.TryLoadCompanionData();
+            }
+            if (Enable
                 && mManager != null
                 && mManager.Data != null
+                && !mManager.SpawnOneFlag
                 && !mManager.Data.Tamed
                 && !mManager.Data.Connected
                 && ai.m_AiSubType == AiSubType.Wolf
                 && ai.Timberwolf == null
-                && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay;
+                && ai.m_WildlifeMode == WildlifeMode.Normal
+                && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay)
+            {
+                return true;
+            }
+            return false;
         }
 
 
         public override int GetSpawnWeight()
         {
             return SpawnWeight;
+        }
+
+        protected override void OnPick()
+        {
+            LogTrace($"Picked!");
+            mManager.SpawnOneFlag = true;
         }
     }
 }

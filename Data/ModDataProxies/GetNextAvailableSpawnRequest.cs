@@ -85,7 +85,6 @@ namespace ExpandedAiFramework
                 }
                 if (!mPayload.Available)
                 {
-                    this.LogTraceInstanced($"Proxy with guid {mPayload.Guid} is not currently available, skipping");
                     continue;
                 }
                 if (mRequireForceSpawn && !mPayload.ForceSpawn)

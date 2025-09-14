@@ -3,6 +3,7 @@ using Il2CppInterop.Runtime;
 using MelonLoader.TinyJSON;
 using Il2CppTLD.AddressableAssets;
 using static ExpandedAiFramework.Utility;
+using Il2Cpp;
 
 
 
@@ -21,12 +22,14 @@ namespace ExpandedAiFramework.CompanionWolfMod
         protected bool mShouldCheckForSpawnTamedCompanion = false;
         protected float mLastTriggeredCheckForSpawnTamedCompanionTime = 0.0f;
         protected bool mShouldShowInfoScreen = false;
+        protected bool mSpawnOneFlag = false;
 
         public CompanionWolfData Data { get { return mData; } set { mData = value; } }
         public CompanionWolf Instance { get { return mInstance; } set { mInstance = value; } }
         public Type SpawnType { get { return typeof(CompanionWolf); } }
         public GameObject WolfPrefab { get { return mWolfPrefab; } set { mWolfPrefab = value; } }
         public bool ShouldShowInfoScreen { get { return mShouldShowInfoScreen; } }
+        public bool SpawnOneFlag { get { return mSpawnOneFlag; } set { mSpawnOneFlag = value; } }
 
 
         public void Initialize(EAFManager manager)
@@ -37,7 +40,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { } //Do nothing yet
+        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { proxy.ForceSpawn = true; }
 
 
         public bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
@@ -49,42 +52,46 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public void OnStartNewGame() { }
 
 
-        public void OnLoadGame()
-        {
-            //mData needs to NOT be null, at a minimum to populate from loaded data but also this catches "new" scenarios with no connected companion.
-            if (mData == null)
-            {
-                mData = new CompanionWolfData();
-            }
-
-            string cWolfDataJson = mManager.LoadData("CompanionWolfMod");
-
-            if (cWolfDataJson == null)
-            {
-                LogVerbose("No companionwolf data found. explore and find one! :) ");
-                return;
-            }
-
-            Variant cWolfDataVariant = JSON.Load(cWolfDataJson);
-
-            if (cWolfDataVariant == null)
-            {
-                LogWarning($"Found serialized companionwolf data, but could not load to populatable variant!");
-                return;
-            }
-
-            JSON.Populate(cWolfDataVariant, mData);
-            LogVerbose($"Companion data reloaded. Connected: {mData.Connected} | Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
-        }
+        public void OnLoadGame() { }
 
 
         public void OnLoadScene(string sceneName)
         {
-            if (mInstance != null) 
+            SpawnOneFlag = false;
+            if (mInstance != null)
             {
                 GameObject.Destroy(mInstance.gameObject.transform.parent.gameObject); //destroy the whole thing
             }
         }
+
+
+        public void TryLoadCompanionData()
+        {
+            if (mData == null)
+            {
+                mData = new CompanionWolfData();
+
+                string cWolfDataJson = mManager.LoadData("CompanionWolfMod");
+
+                if (cWolfDataJson == null)
+                {
+                    LogVerbose("No companionwolf data found. explore and find one! :) ");
+                    return;
+                }
+
+                Variant cWolfDataVariant = JSON.Load(cWolfDataJson);
+
+                if (cWolfDataVariant == null)
+                {
+                    LogWarning($"Found serialized companionwolf data, but could not load to populatable variant!");
+                    return;
+                }
+
+                JSON.Populate(cWolfDataVariant, mData);
+                LogTrace($"Companion data reloaded. Connected: {mData.Connected} | Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}");
+            }
+        }
+
 
 
         public void OnInitializedScene(string sceneName)
@@ -137,12 +144,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (Data == null)
             {
-                LogVerbose("No data found, cannot spawn companion!");
+                LogTrace("No data found, cannot spawn companion!");
                 return;
             }
             if (!Data.Tamed)
             {
-                LogVerbose("Companion is not tamed, go find and tame one!");
+                LogTrace("Companion is not tamed, go find and tame one!");
                 return;
             }
             if (mInstance != null)
@@ -189,7 +196,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             wrapper.BaseAi.m_MoveAgent.Warp(validPos, 5.0f, true, -1);
             mShouldCheckForSpawnTamedCompanion = false;
             BaseAiManager.Remove(wrapper.BaseAi); // justin case, this should no longer even be present in there
-            LogVerbose($"Companion wolf loaded!");
+            LogTrace($"Companion wolf loaded!");
         }
 
 

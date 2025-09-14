@@ -461,11 +461,19 @@ namespace ExpandedAiFramework
             }
             if (spawnType == typeof(void))
             {
+                BaseAi spawnableAi = mSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>();
+                if (spawnableAi == null)
+                {
+                    //PANIK!!1
+                    this.LogErrorInstanced($"Could not get spawnable Ai for type picker! Aborting");
+                    return;
+                }
+                spawnableAi.m_WildlifeMode = wildlifeMode;
                 this.LogVerboseInstanced($"No submanager interceptions, attempting to randomly pick a valid spawn type...");
                 if (async)
                 {
                     mProxiesUnderConstruction++;
-                    mManager.Manager.TypePicker.PickTypeAsync(mSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>(), (type) =>
+                    mManager.Manager.TypePicker.PickTypeAsync(spawnableAi, (type) =>
                     {
                         mProxiesUnderConstruction--;
                         callback.Invoke(GenerateNewSpawnModDataProxy(type, wildlifeMode, spawnPosition, spawnRotation));
@@ -474,7 +482,7 @@ namespace ExpandedAiFramework
                 }
                 else
                 {
-                    spawnType = mManager.Manager.TypePicker.PickType(mSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>());
+                    spawnType = mManager.Manager.TypePicker.PickType(spawnableAi);
                 }
             }
             callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation));
@@ -500,6 +508,7 @@ namespace ExpandedAiFramework
                 {
                     this.LogTraceInstanced($"FORCE spawning on creation!");
                     mManager.Manager.DataManager.IncrementForceSpawnCount(wildlifeMode);
+                    newProxy.Available = false;
                     QueueImmediateSpawn(newProxy);
                 }
             });
