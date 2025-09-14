@@ -61,7 +61,7 @@ namespace ExpandedAiFramework
                     mCustomSpawnRegion.GenerateNewRandomSpawnModDataProxy((s) =>
                     {
                         mDataProvider.TryRegister(s);
-                    }, !mCloseEnoughForPreSpawning);
+                    }, mWildlifeMode, !mCloseEnoughForPreSpawning);
                 }
                 return RequestResult.Succeeded;
             }

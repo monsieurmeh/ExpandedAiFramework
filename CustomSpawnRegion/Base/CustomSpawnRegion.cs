@@ -331,7 +331,7 @@ namespace ExpandedAiFramework
                     GenerateNewRandomSpawnModDataProxy((s) =>
                     {
                         SpawnInternal(s, force);
-                    }, true);
+                    }, mode, true);
                 }
             }, false), mode);
         }
@@ -437,7 +437,7 @@ namespace ExpandedAiFramework
 
         #region SpawnModDataProxy Generation
 
-        public void GenerateNewRandomSpawnModDataProxy(Action<SpawnModDataProxy> callback, bool async = true)
+        public void GenerateNewRandomSpawnModDataProxy(Action<SpawnModDataProxy> callback, WildlifeMode wildlifeMode, bool async = true)
         {
             Vector3 spawnPosition = Vector3.zero;
             Quaternion spawnRotation = Quaternion.identity;
@@ -469,7 +469,7 @@ namespace ExpandedAiFramework
                     mManager.Manager.TypePicker.PickTypeAsync(mSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>(), (type) =>
                     {
                         mProxiesUnderConstruction--;
-                        callback.Invoke(GenerateNewSpawnModDataProxy(type, spawnPosition, spawnRotation));
+                        callback.Invoke(GenerateNewSpawnModDataProxy(type, wildlifeMode, spawnPosition, spawnRotation));
                     });
                     return;
                 }
@@ -478,18 +478,18 @@ namespace ExpandedAiFramework
                     spawnType = mManager.Manager.TypePicker.PickType(mSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>());
                 }
             }
-            callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, spawnPosition, spawnRotation));
+            callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation));
         }
 
 
-        private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, Vector3 position, Quaternion rotation)
+        private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, WildlifeMode wildlifeMode, Vector3 position, Quaternion rotation)
         {
             if (variantSpawnType == null)
             {
                 this.LogTraceInstanced($"Can't generate new spawn mod data proxy with null variant spawn type!");
                 return null;
             }
-            SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.Manager.CurrentScene, position, rotation, mSpawnRegion.m_AiSubTypeSpawned, mSpawnRegion.m_WildlifeMode, variantSpawnType);
+            SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.Manager.CurrentScene, position, rotation, mSpawnRegion.m_AiSubTypeSpawned, wildlifeMode, variantSpawnType);
             newProxy.ParentGuid = mModDataProxy.Guid;
             mDataManager.ScheduleRegisterSpawnModDataProxyRequest(newProxy, (proxy, result) =>
             {
@@ -500,7 +500,7 @@ namespace ExpandedAiFramework
                 if (newProxy.ForceSpawn)
                 {
                     this.LogTraceInstanced($"FORCE spawning on creation!");
-                    mManager.Manager.DataManager.IncrementForceSpawnCount(mSpawnRegion.m_WildlifeMode);
+                    mManager.Manager.DataManager.IncrementForceSpawnCount(wildlifeMode);
                     QueueImmediateSpawn(newProxy);
                 }
             });
