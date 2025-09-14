@@ -141,26 +141,6 @@ namespace ExpandedAiFramework
         }
 
 
-        {
-            if (spawnRegion == null)
-            {
-                return false;
-            }
-            spawnRegion.Save();
-            //UnityEngine.Object.Destroy(customSpawnRegion.Self); won't be needed until (unless) we turn CustomBaseSpawnRegion into a ticking monobomb
-            mCustomSpawnRegions.Remove(spawnRegion.GetHashCode());
-            if (spawnRegion.VanillaSpawnRegion != null)
-            {
-                mVanillaManager.m_SpawnRegions.Remove(spawnRegion.VanillaSpawnRegion);
-            }
-            if (spawnRegion.ModDataProxy != null)
-            {
-                mCustomSpawnRegionsByGuid.Remove(spawnRegion.ModDataProxy.Guid);
-            }
-            return true;
-        }
-
-
         #region SpawnRegionManager Vanilla Rerouting
 
         /* No longer supporting "adding" spawn regions, they get caught during awake now.
