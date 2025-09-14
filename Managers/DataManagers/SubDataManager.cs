@@ -79,6 +79,16 @@ namespace ExpandedAiFramework
                 mWorkAvailable.Dispose();
             }
         }
+
+        public void ClearRequests()
+        {
+            lock(mRequestQueueLock)
+            {
+                mRequests.Clear();
+                mInternalActionQueue.Clear();
+            }
+        }
+
         public void ScheduleRequest(IRequest request)
         {
             request.Preprocess(this);
@@ -186,10 +196,10 @@ namespace ExpandedAiFramework
         private void CallbackWithExecutionLog(IRequest request)
         {
             request.CallbackStartTime = DateTime.Now.Ticks;
-                    request.Callback();
+            request.Callback();
             request.CallbackCompleteTime = DateTime.Now.Ticks;
             //request.LogExecutionInfo(BuildQueueExecutionInfo());
-                }
+        }
 
         private string BuildQueueExecutionInfo()
         {

@@ -17,5 +17,6 @@ namespace ExpandedAiFramework
         void ScheduleLoad();
         void ScheduleClear();
         void ScheduleRequest(IRequest request);
+        void ClearRequests();
     }
 }

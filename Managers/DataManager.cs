@@ -171,6 +171,7 @@ namespace ExpandedAiFramework
 
         public override void Shutdown()
         {
+            ClearWorkers();
             ClearMapData();
             ClearDataCache();
             StopSubManagers();
@@ -180,7 +181,31 @@ namespace ExpandedAiFramework
 
         public override void OnQuitToMainMenu()
         {
+            ClearWorkers();
             ClearDataCache();
+        }
+
+
+        private void ClearWorkers()
+        {
+            LogTrace($"Clearing Workers");
+            for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
+            {
+                if (mSpawnModDataProxyManagers[i] == null)
+                {
+                    continue;
+                }
+                mSpawnModDataProxyManagers[i].ClearRequests();
+            }
+            foreach (IMapDataManager mapDataManager in mMapDataManagers.Values)
+            {
+                if (mapDataManager == null)
+                {
+                    continue;
+                }
+                mapDataManager.ClearRequests();
+            }
+            mSpawnRegionModDataProxyManager.ClearRequests();
         }
 
 
