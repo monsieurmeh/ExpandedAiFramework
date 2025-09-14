@@ -84,6 +84,7 @@ namespace ExpandedAiFramework
             request.Preprocess(this);
             lock (mRequestQueueLock)
             {
+                request.QueueTime = DateTime.Now.Ticks;
                 mRequests.Enqueue(request);
                 mWorkAvailable.Set();
             }
@@ -157,7 +158,9 @@ namespace ExpandedAiFramework
 
         private void ProcessRequest(IRequest request)
         {
+            request.RequestStartTime = DateTime.Now.Ticks;
             request.PerformRequest();
+            request.RequestCompleteTime = DateTime.Now.Ticks;
             if (request.Result == RequestResult.Requeue)
             {
                 lock (mRequestQueueLock)
@@ -170,15 +173,34 @@ namespace ExpandedAiFramework
             {
                 if (request.ThreadSafe && !request.ThreadSafeCallback)
                 {
-                    mDispatcher.Dispatch(request.Callback);
+                    mDispatcher.Dispatch(() => CallbackWithExecutionLog(request));
                 }
                 else
                 {
-                    request.Callback();
+                    CallbackWithExecutionLog(request);
                 }
             }
         }
 
+        
+        private void CallbackWithExecutionLog(IRequest request)
+        {
+            request.CallbackStartTime = DateTime.Now.Ticks;
+                    request.Callback();
+            request.CallbackCompleteTime = DateTime.Now.Ticks;
+            //request.LogExecutionInfo(BuildQueueExecutionInfo());
+                }
+
+        private string BuildQueueExecutionInfo()
+        {
+            string queueExecutionInfo = string.Empty;
+            lock(mRequestQueueLock)
+            {
+                queueExecutionInfo += $"Queue size: {mRequests.Count}\n";
+                queueExecutionInfo += $"Manager: {GetType()}\n";
+            }
+            return queueExecutionInfo;
+        }
 
         private void HandleInternalActions()
         {

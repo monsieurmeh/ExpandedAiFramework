@@ -7,10 +7,20 @@ namespace ExpandedAiFramework
         protected RequestResult mResult;
         protected bool mThreadSafe = false;
         protected bool mThreadSafeCallback = false;
+        protected long mQueueTime = 0L;
+        protected long mRequestStartTime = 0L;
+        protected long mRequestCompleteTime = 0L;
+        protected long mCallbackStartTime = 0L;
+        protected long mCallbackCompleteTime = 0L;
 
         public bool ThreadSafe => mThreadSafe;
         public bool ThreadSafeCallback => mThreadSafeCallback;
         public RequestResult Result { get { return mResult; } }
+        public long QueueTime { get {  return mQueueTime; } set {  mQueueTime = value; } }
+        public long RequestStartTime { get { return mRequestStartTime; } set { mRequestStartTime = value; } }
+        public long RequestCompleteTime { get { return mRequestCompleteTime; } set { mRequestCompleteTime = value; } }
+        public long CallbackStartTime { get { return mCallbackStartTime; } set { mCallbackStartTime = value; } }
+        public long CallbackCompleteTime { get { return mCallbackCompleteTime; } set { mCallbackCompleteTime = value; } }
 
         public Request() { }
         public Request(bool threadSafe, bool threadSafeCallback) : base()
@@ -27,6 +37,12 @@ namespace ExpandedAiFramework
 
         public abstract void Callback();
         protected abstract RequestResult PerformRequestInternal();
+
+        public void LogExecutionInfo(string extraInfo)
+        {
+            this.LogDebugInstanced($"\nExecutionInformation\nWait Time: {(mRequestStartTime - mQueueTime) * 0.00001}ms\nRequest execution time: {(mRequestCompleteTime - mRequestStartTime) * 0.0001}ms\nCallback Wait Time: {(mCallbackStartTime - mRequestCompleteTime) * 0.0001}ms\nCallback Execution Time: {(mCallbackCompleteTime - mCallbackStartTime) * 0.0001}ms\n{extraInfo}");
+        }
+
     }
 
     public abstract class Request<T> : Request where T : ISerializedData, new()
@@ -43,7 +59,7 @@ namespace ExpandedAiFramework
         public Request(Action<RequestResult> callback, bool threadSafe, bool threadSafeCallback) : base(threadSafe, threadSafeCallback) => mCallback = callback;
 
         public override void Callback() => mCallback?.Invoke(mResult);
-
+        
 
         protected override bool Validate()
         {
