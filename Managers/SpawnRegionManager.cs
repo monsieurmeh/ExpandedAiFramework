@@ -739,10 +739,6 @@ namespace ExpandedAiFramework
         private void ClearCustomSpawnRegions()
         {
             LogTrace($"Clearing");
-            foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
-            {
-                RemoveCustomSpawnRegion(customSpawnRegion);
-            }
             mCustomSpawnRegions.Clear();
             mCustomSpawnRegionsByGuid.Clear();
             mCustomSpawnRegionsByIndex.Clear();
