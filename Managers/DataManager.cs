@@ -183,20 +183,21 @@ namespace ExpandedAiFramework
         {
             ClearWorkers();
             ClearDataCache();
-        }
-
-        
-        private void ClearWorkers()
-        {
-            LogTrace($"Clearing Workers");
             for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
             {
                 if (mSpawnModDataProxyManagers[i] == null)
                 {
                     continue;
                 }
-                mSpawnModDataProxyManagers[i].ClearRequests();
+                mSpawnModDataProxyManagers[i].OnQuitToMainMenu();
             }
+            mSpawnRegionModDataProxyManager.OnQuitToMainMenu();
+        }
+
+        
+        private void ClearWorkers()
+        {
+            LogTrace($"Clearing Workers");
             foreach (IMapDataManager mapDataManager in mMapDataManagers.Values)
             {
                 if (mapDataManager == null)
@@ -204,6 +205,14 @@ namespace ExpandedAiFramework
                     continue;
                 }
                 mapDataManager.ClearRequests();
+            }
+            for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
+            {
+                if (mSpawnModDataProxyManagers[i] == null)
+                {
+                    continue;
+                }
+                mSpawnModDataProxyManagers[i].ClearRequests();
             }
             mSpawnRegionModDataProxyManager.ClearRequests();
         }
