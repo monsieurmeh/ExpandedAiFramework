@@ -1199,7 +1199,7 @@ namespace ExpandedAiFramework
                 LogError($"invalid spawn location. Set force spawn to bypass this check!");
                 return false;
             }
-            if (ActiveSpawns.Count >= CalculateTargetPopulationInternal())
+            if (GetCurrentActivePopulation(VanillaSpawnRegion.m_WildlifeMode) >= CalculateTargetPopulationInternal())
             {
                 LogError($"Population maxed. Set force spawn to bypass this check!");
                 return false;
