@@ -7,6 +7,7 @@ using Il2CppRewired.Utils;
 using Il2CppTLD.PDID;
 using MelonLoader.Utils;
 using Il2CppTLD.AI;
+using System.Collections.Generic;
 
 namespace ExpandedAiFramework
 {
@@ -831,8 +832,20 @@ namespace ExpandedAiFramework
                     proxy = GenerateNewSpawnRegionModDataProxy(mManager.CurrentScene, spawnRegion, guid);
                 }
                 CustomSpawnRegion newSpawnRegionWrapper = GenerateCustomSpawnRegion(spawnRegion, proxy);
+                if (mCustomSpawnRegions.ContainsKey(spawnRegion.GetHashCode()))
+                {
+                    LogWarning($"Alpha -> Beta Transition Warning - ID conflict on mCustomSpawnRegions: {spawnRegion.GetHashCode()}");
+                    mCustomSpawnRegions.Remove(spawnRegion.GetHashCode());
+                }
                 mCustomSpawnRegions.Add(spawnRegion.GetHashCode(), newSpawnRegionWrapper);
+
+                if (mCustomSpawnRegionsByGuid.ContainsKey(proxy.Guid))
+                {
+                    LogWarning($"Alpha -> Beta Transition Warning - ID conflict on mCustomSpawnRegionsByGuid: {proxy.Guid}");
+                    mCustomSpawnRegionsByGuid.Remove(proxy.Guid);
+                }
                 mCustomSpawnRegionsByGuid.Add(proxy.Guid, newSpawnRegionWrapper);
+
                 mCustomSpawnRegionsByIndex.Add(newSpawnRegionWrapper);
                 if (!mVanillaManager.m_SpawnRegions.Contains(spawnRegion))
                 {

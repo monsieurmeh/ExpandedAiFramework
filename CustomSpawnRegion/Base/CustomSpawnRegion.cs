@@ -45,17 +45,16 @@ namespace ExpandedAiFramework
             mDataManager = mManager.Manager.DataManager;
             mSpawnRegion.m_Registered = true;
 
-
-            mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = mModDataProxy.ElapsedHoursAtLastActiveReRoll;
-            mSpawnRegion.m_NumRespawnsPending = mModDataProxy.NumRespawnsPending;
-            mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = mModDataProxy.ElapasedHoursNextRespawnAllowed;
-            mSpawnRegion.m_NumTrapped = mModDataProxy.NumTrapped;
-            mSpawnRegion.m_HoursNextTrapReset = mModDataProxy.HoursNextTrapReset;
-            mSpawnRegion.m_CurrentWaypointPathIndex = mModDataProxy.CurrentWaypointPathIndex;
-            mSpawnRegion.m_WildlifeMode = mModDataProxy.WildlifeMode;
-            mSpawnRegion.m_HasBeenDisabledByAurora = mModDataProxy.HasBeenDisabledByAurora;
-            mSpawnRegion.m_WasActiveBeforeAurora = mModDataProxy.WasActiveBeforeAurora;
-            mSpawnRegion.m_CooldownTimerHours = mModDataProxy.CooldownTimerHours;
+            mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = mModDataProxy?.ElapsedHoursAtLastActiveReRoll ?? 0f;
+            mSpawnRegion.m_NumRespawnsPending = mModDataProxy?.NumRespawnsPending ?? 0;
+            mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = mModDataProxy?.ElapasedHoursNextRespawnAllowed ?? 0f;
+            mSpawnRegion.m_NumTrapped = mModDataProxy?.NumTrapped ?? 0;
+            mSpawnRegion.m_HoursNextTrapReset = mModDataProxy?.HoursNextTrapReset ?? 0f;
+            mSpawnRegion.m_CurrentWaypointPathIndex = mModDataProxy?.CurrentWaypointPathIndex ?? 0;
+            mSpawnRegion.m_WildlifeMode = mModDataProxy?.WildlifeMode ?? WildlifeMode.Normal;
+            mSpawnRegion.m_HasBeenDisabledByAurora = mModDataProxy?.HasBeenDisabledByAurora ?? false;
+            mSpawnRegion.m_WasActiveBeforeAurora = mModDataProxy?.WasActiveBeforeAurora ?? true;
+            mSpawnRegion.m_CooldownTimerHours = mModDataProxy?.CooldownTimerHours ?? 0f;
 
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
@@ -130,7 +129,7 @@ namespace ExpandedAiFramework
             ActiveSpawns.Clear();
 
 
-            SetBoundingSphereBasedOnWaypoints(mModDataProxy.CurrentWaypointPathIndex);
+            SetBoundingSphereBasedOnWaypoints(mModDataProxy?.CurrentWaypointPathIndex ?? 0);
             PreQueue();
         }
 
