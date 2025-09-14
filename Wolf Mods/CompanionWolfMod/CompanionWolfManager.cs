@@ -52,16 +52,15 @@ namespace ExpandedAiFramework.CompanionWolfMod
         public void OnStartNewGame() { }
 
 
-        public void OnLoadGame() { }
+        public void OnLoadGame()
+        {
+            TryLoadCompanionData();
+        }
 
 
         public void OnLoadScene(string sceneName)
         {
             SpawnOneFlag = false;
-            if (mInstance != null)
-            {
-                GameObject.Destroy(mInstance.gameObject.transform.parent.gameObject); //destroy the whole thing
-            }
         }
 
 
@@ -122,6 +121,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void OnQuitToMainMenu()
         {
+            mInstance = null;
             mData = null;
         }
 
