@@ -286,38 +286,16 @@ namespace ExpandedAiFramework
 
         #endregion
 
-     
+
         #region Spawning Method Chain
 
-
-        public void QueueImmediateSpawn(SpawnModDataProxy proxy)
-        {
-            lock(mPendingSpawns)
-            {
-                mPendingSpawns.Enqueue(proxy);
-            }
-        }
-
-
-        private void ProcessPendingSpawnQueue()
-        {
-            lock (mPendingSpawns)
-            {
-                while (mPendingSpawns.Count > 0)
-                {
-                    SpawnInternal(mPendingSpawns.Dequeue(), true);
-                }
-            }
-        }
-
-
-        public void Spawn(WildlifeMode mode, bool force = false)
+        public void Spawn(WildlifeMode mode)
         {
             mDataManager.ScheduleSpawnModDataProxyRequest(new GetNextAvailableSpawnRequest(mModDataProxy.Guid, mModDataProxy.Scene, false, (availableProxy, result) =>
             {
                 if (result == RequestResult.Succeeded)
                 {
-                    SpawnInternal(availableProxy, force);
+                    QueueSpawn(availableProxy);
                 }
                 else
                 {
@@ -329,29 +307,70 @@ namespace ExpandedAiFramework
                     this.LogTraceInstanced($"No queued spawns for spawn region with guid {mModDataProxy.Guid} for mode {mode}. Queueing request for new proxy and spawn...");
                     GenerateNewRandomSpawnModDataProxy((s) =>
                     {
-                        SpawnInternal(s, force);
+                        QueueSpawn(s);
                     }, mode, true);
                 }
             }, false), mode);
         }
 
 
-        private void SpawnInternal(SpawnModDataProxy queuedProxy, bool force)
+        public void QueueSpawn(SpawnModDataProxy proxy)
         {
-            if (InstantiateSpawn(queuedProxy, force) != null)
+            lock(mPendingSpawns)
+            {
+                if (!proxy.Available)
+                {
+                    this.LogWarningInstanced($"Proxy {proxy.Guid} unavailable");
+                    return;
+                }
+                if (mPendingSpawns.Contains(proxy))
+                {
+                    this.LogWarningInstanced($"Attempting to double-spawn proxy, aborting!");
+                    return;
+                }
+                for (int i = 0, iMax = mActiveSpawns.Count; i < iMax; i++)
+                {
+                    if (mActiveSpawns[i].ModDataProxy == proxy)
+                    {
+                        this.LogWarningInstanced($"Attempting to double-spawn proxy, aborting!");
+                        return;
+                    }
+                }
+                proxy.Available = false;
+                mPendingSpawns.Enqueue(proxy);
+            }
+        }
+
+
+        private void ProcessPendingSpawnQueue()
+        {
+            lock (mPendingSpawns)
+            {
+                while (mPendingSpawns.Count > 0)
+                {
+                    SpawnInternal(mPendingSpawns.Dequeue());
+                }
+            }
+        }
+
+
+        private void SpawnInternal(SpawnModDataProxy queuedProxy)
+        {
+            if (InstantiateSpawn(queuedProxy) != null)
             {
                 mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(queuedProxy.Guid, queuedProxy.Scene, null, false), queuedProxy.WildlifeMode);
             }
             else
             {
+                this.LogTraceInstanced($"Proxy with guid {queuedProxy.Guid} set to AVAILABLE.");
                 queuedProxy.Available = true;
             }
         }
 
 
-        private CustomBaseAi InstantiateSpawn(SpawnModDataProxy modDataProxy, bool force)
+        private CustomBaseAi InstantiateSpawn(SpawnModDataProxy modDataProxy)
         {
-            if (!force && !ValidSpawn(modDataProxy))
+            if (!modDataProxy.ForceSpawn && !ValidSpawn(modDataProxy))
             {
                 return null;
             }
@@ -508,8 +527,7 @@ namespace ExpandedAiFramework
                 {
                     this.LogTraceInstanced($"FORCE spawning on creation!");
                     mManager.Manager.DataManager.IncrementForceSpawnCount(wildlifeMode);
-                    newProxy.Available = false;
-                    QueueImmediateSpawn(newProxy);
+                    QueueSpawn(newProxy);
                 }
             });
             return newProxy;

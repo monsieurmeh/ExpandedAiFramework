@@ -56,11 +56,10 @@ namespace ExpandedAiFramework
                         this.LogTraceInstanced($"Cannot get data: {guid}");
                         continue;
                     }
-                    proxy.Available = false;
                     if (proxy.ForceSpawn)
                     {
                         this.LogTraceInstanced($"Queueing force spawn");
-                        spawnableProxies.Insert(0, proxy);
+                        spawnableProxies.Insert(0, proxy); 
                         continue;
                     }
                     if (mCustomSpawnRegion.VanillaSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance >= Vector3.Distance(mCustomSpawnRegion.Manager.PlayerStartPos, proxy.CurrentPosition))
@@ -73,7 +72,7 @@ namespace ExpandedAiFramework
                 foreach (SpawnModDataProxy proxy in spawnableProxies)
                 {
                     this.LogTraceInstanced($"Queueing for immediate spawn: {proxy.Guid}");
-                    mCustomSpawnRegion.QueueImmediateSpawn(proxy);
+                    mCustomSpawnRegion.QueueSpawn(proxy);
                 }
                 spawnableProxies.Clear();
                 return RequestResult.Succeeded;
