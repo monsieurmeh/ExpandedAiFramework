@@ -238,10 +238,9 @@ namespace ExpandedAiFramework
         {
             this.LogTraceInstanced($"Saving");
             Dictionary<string, List<T>> masterProxyDict = new Dictionary<string, List<T>>();
-
-            List<T> masterProxyList = new List<T>();
             foreach (T data in mDataContainer.EnumerateContents())
             {
+                this.LogTraceInstanced($"Saving {data.DisplayName}");
                 if (!masterProxyDict.TryGetValue(data.DataLocation, out List<T> dataList))
                 {
                     dataList = new List<T>();
@@ -251,14 +250,14 @@ namespace ExpandedAiFramework
             }
             foreach (string dataLocation in masterProxyDict.Keys)
             {
-                string json = JSON.Dump(masterProxyList, EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
+                string json = JSON.Dump(masterProxyDict[dataLocation], EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
                 if (json == null || json == string.Empty)
                 {
                     continue;
                 }
                 SaveJsonToPath(json, dataLocation);
+                this.LogTraceInstanced($"Saved to {dataLocation} with json length {json.Length}");
             }
-            this.LogTraceInstanced($"Saved");
         }
 
 
@@ -295,13 +294,13 @@ namespace ExpandedAiFramework
                     newData.DataLocation = dataPath;
                     if (!PostProcessDataAfterLoad(newData))
                     {
-                        this.LogTraceInstanced($"Failed to postprocess {newData}, skipping!");
+                        this.LogTraceInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
                         continue;
                     }
-                    this.LogTraceInstanced($"Deserializing {newData}");
+                    this.LogTraceInstanced($"Loading {newData.DisplayName}");
                     if (!mDataContainer.TryAddData(newData))
                     {
-                        this.LogWarningInstanced($"Failed to add {newData}!");
+                        this.LogWarningInstanced($"Failed to add {newData.DisplayName}!");
                     }
                 }
                 this.LogTraceInstanced($"Loaded from path: {dataPath}");
