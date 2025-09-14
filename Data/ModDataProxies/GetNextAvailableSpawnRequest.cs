@@ -85,6 +85,7 @@ namespace ExpandedAiFramework
                 }
                 if (!mPayload.Available)
                 {
+                    this.LogTraceInstanced($"Proxy with guid {mPayload.Guid} unavailable.");
                     continue;
                 }
                 if (mRequireForceSpawn && !mPayload.ForceSpawn)
@@ -103,7 +104,6 @@ namespace ExpandedAiFramework
                 }
                 return false;
             }
-            mPayload.Available = false;
             return true;
         }
     }
