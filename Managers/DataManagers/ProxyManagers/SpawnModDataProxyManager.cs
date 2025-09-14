@@ -41,6 +41,7 @@ namespace ExpandedAiFramework
 
         protected override void RefreshData(SpawnModDataProxy proxy)
         {
+            proxy.Available = true;
             if (mManager.Manager.AiManager.SpawnSettingsDict.TryGetValue(proxy.VariantSpawnType, out ISpawnTypePickerCandidate settings))
             {
                 proxy.ForceSpawn = settings.ForceSpawningEnabled() && CanForceSpawn();
