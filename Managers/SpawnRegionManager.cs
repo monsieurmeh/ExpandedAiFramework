@@ -141,7 +141,6 @@ namespace ExpandedAiFramework
         }
 
 
-        public bool RemoveCustomSpawnRegion(CustomSpawnRegion spawnRegion)
         {
             if (spawnRegion == null)
             {

@@ -25,6 +25,11 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"null custom spawn region");
                 return false;
             }
+            if (mCustomSpawnRegion.VanillaSpawnRegion == null)
+            {
+                this.LogErrorInstanced("null VANILLA spawn region!");
+                return false;
+            }
             return true;
         }
 
