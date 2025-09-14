@@ -140,5 +140,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             LogTrace($"Picked!");
             mManager.SpawnOneFlag = true;
         }
+
+        public override bool ForceSpawningEnabled() => true;
     }
 }
