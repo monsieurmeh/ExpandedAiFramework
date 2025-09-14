@@ -43,6 +43,10 @@ namespace ExpandedAiFramework
         public void Save(CustomSpawnRegion spawnRegion)
         {
             LastDespawnTime = GetCurrentTimelinePoint();
+            if (spawnRegion.VanillaSpawnRegion == null)
+            {
+                return;
+            }
             ElapsedHoursAtLastActiveReRoll = spawnRegion.VanillaSpawnRegion.m_ElapsedHoursAtLastActiveReRoll;
             NumRespawnsPending = spawnRegion.VanillaSpawnRegion.m_NumRespawnsPending;
             ElapasedHoursNextRespawnAllowed = spawnRegion.VanillaSpawnRegion.m_ElapasedHoursNextRespawnAllowed;

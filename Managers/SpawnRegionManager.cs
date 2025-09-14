@@ -141,23 +141,22 @@ namespace ExpandedAiFramework
         }
 
 
-        public bool TryRemoveCustomSpawnRegion(SpawnRegion spawnRegion)
+        public bool RemoveCustomSpawnRegion(CustomSpawnRegion spawnRegion)
         {
             if (spawnRegion == null)
             {
                 return false;
             }
-            if (!mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out CustomSpawnRegion customSpawnRegion))
-            {
-                return false;
-            }
-            customSpawnRegion.Save();
+            spawnRegion.Save();
             //UnityEngine.Object.Destroy(customSpawnRegion.Self); won't be needed until (unless) we turn CustomBaseSpawnRegion into a ticking monobomb
             mCustomSpawnRegions.Remove(spawnRegion.GetHashCode());
-            mVanillaManager.m_SpawnRegions.Remove(spawnRegion);
-            if (customSpawnRegion.ModDataProxy != null)
+            if (spawnRegion.VanillaSpawnRegion != null)
             {
-                mCustomSpawnRegionsByGuid.Remove(customSpawnRegion.ModDataProxy.Guid);
+                mVanillaManager.m_SpawnRegions.Remove(spawnRegion.VanillaSpawnRegion);
+            }
+            if (spawnRegion.ModDataProxy != null)
+            {
+                mCustomSpawnRegionsByGuid.Remove(spawnRegion.ModDataProxy.Guid);
             }
             return true;
         }
@@ -219,59 +218,7 @@ namespace ExpandedAiFramework
 
         public void Deserialize(string text)
         {
-            DeserializeInternal(text);
             PostDeserialize();
-        }
-
-
-        private void DeserializeInternal(string text)
-        {
-            try
-            {
-                GameManager.GetPlayerManagerComponent().GetTeleportTransformAfterSceneLoad(out mPlayerStartPos, out _);
-                LogTrace($"Deserializing Vanilla Data");
-                if (!CheckVanillaManager())
-                {
-                    LogTrace("Can't get vanilla SpawnRegionManager");
-                    return;
-                }
-                if (string.IsNullOrEmpty(text))
-                {
-                    LogTrace($"Null or empty deserialize text");
-                    return;
-                }
-                SpawnRegionSaveList spawnRegionSaveList = Utils.DeserializeObject<SpawnRegionSaveList>(text);
-                if (spawnRegionSaveList.IsNullOrDestroyed())
-                {
-                    LogError($"Could not deserialize text");
-                    return;
-                }
-                Il2Cpp.SpawnRegionManager.m_NoPredatorSpawningInVoyageurHours = spawnRegionSaveList.m_NoPredatorSpawningInVoyageurHours;
-                foreach (SpawnRegionSaveData data in spawnRegionSaveList.m_SerializedSpawnRegions)
-                {
-                    if (!mCustomSpawnRegionsByGuid.TryGetValue(new Guid(data.m_Guid), out CustomSpawnRegion customSpawnRegion))
-                    {
-                        SpawnRegion spawnRegion = FindSpawnRegionByGuid(data.m_Guid);
-
-                        if (spawnRegion.IsNullOrDestroyed())
-                        {
-                            LogTrace($"Could not fetch spawn region by guid, attempting to fetch by position");
-                            spawnRegion = FindSpawnRegionByPosition(data);
-                        }
-                        if (spawnRegion.IsNullOrDestroyed())
-                        {
-                            LogError($"Could not fetch spawn region by guid OR position, skipping");
-                            continue;
-                        }
-                        LogTrace($"Wrapping spawn region during deserialize!");
-                        WrapSpawnRegion(spawnRegion, new Guid(data.m_Guid));
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                LogError($"{e}");
-            }
         }
 
 
@@ -795,7 +742,7 @@ namespace ExpandedAiFramework
             LogTrace($"Clearing");
             foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
             {
-                TryRemoveCustomSpawnRegion(customSpawnRegion.VanillaSpawnRegion);
+                RemoveCustomSpawnRegion(customSpawnRegion);
             }
             mCustomSpawnRegions.Clear();
             mCustomSpawnRegionsByGuid.Clear();
