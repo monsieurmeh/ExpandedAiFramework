@@ -77,8 +77,8 @@ namespace ExpandedAiFramework
                 {
                     if (mQueue.Count > 0)
                     {
-                    mCurrentAction = mQueue.Dequeue();
-                }
+                        mCurrentAction = mQueue.Dequeue();
+                    }
                 }
                 if (mCurrentAction != null)
                 {
@@ -165,7 +165,10 @@ namespace ExpandedAiFramework
                     try
                     {
                         Type spawnType = PickType(t);
-                        DispatchManager.Instance.Dispatch(() => callback.Invoke(spawnType));
+                        EAFManager.Instance.DispatchManager.Dispatch(() =>
+                        {
+                            callback.Invoke(spawnType);
+                        });
                     }
                     catch (Exception e)
                     {

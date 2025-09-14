@@ -70,7 +70,7 @@ namespace ExpandedAiFramework
             Task.Run(() =>
             {
                 Task.Delay(1000).Wait();
-                DispatchManager.Instance.Dispatch(() =>
+                EAFManager.Instance.DispatchManager.Dispatch(() =>
                 {
                     PostDeserialize();
                 });

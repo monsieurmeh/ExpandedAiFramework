@@ -50,7 +50,7 @@ namespace ExpandedAiFramework
                         else
                         {
                             T dispatchedData = data;
-                            DispatchManager.Instance.Dispatch(() => mForEachCallback.Invoke(dispatchedData));
+                            EAFManager.Instance.DispatchManager.Dispatch(() => mForEachCallback.Invoke(dispatchedData));
                         }
                         
                     }

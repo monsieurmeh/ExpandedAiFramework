@@ -367,7 +367,8 @@ namespace ExpandedAiFramework
             callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
             lock (mLoggerLock)
             {
-                mLogDispatcher.Dispatch(() => mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {DateTime.Now}]"));
+                DateTime now = DateTime.Now;
+                mLogDispatcher.Dispatch(() => mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {now}"));
             }
         }
 
