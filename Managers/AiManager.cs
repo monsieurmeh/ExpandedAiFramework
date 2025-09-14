@@ -100,6 +100,7 @@ namespace ExpandedAiFramework
         public override void OnQuitToMainMenu()
         {
             ClearCustomAis(false);
+            mTypePicker.Clear();
             base.OnQuitToMainMenu();
         }
 
@@ -284,7 +285,7 @@ namespace ExpandedAiFramework
             if (mCustomAis.TryGetValue(hashCode, out CustomBaseAi customAi))
             {
                 customAi.Save();
-                UnityEngine.Object.Destroy(customAi.Self);
+                //UnityEngine.Object.Destroy(customAi.Self);
                 mCustomAis.Remove(hashCode);
                 if (customAi.ModDataProxy != null)
                 {

@@ -184,9 +184,7 @@ namespace ExpandedAiFramework
         {
             lock (mLock)
             {
-                allEntries.Clear();
-                validEntries.Clear();
-                totalValidWeight = 0;
+                mQueue.Clear();
             }
         }
     }

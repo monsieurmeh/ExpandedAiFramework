@@ -66,26 +66,6 @@ namespace ExpandedAiFramework
         #endregion
 
 
-        #region ExtendingLoadScreenTest
-
-        /*
-        [HarmonyPatch(typeof(Panel_Loading), nameof(Panel_Loading.Enable), new Type[] { typeof(bool) })]
-        private static class Panel_LoadingPatches_Enable
-        {
-            private static bool Prefix(ref bool enable)
-            {
-                if (!enable && EAFManager.Instance.SpawnRegionManager.PreLoading)
-                {
-                    LogTrace($"Preventing load screen from dropping until preloading is complete!")
-                    return false;
-                }
-                return true;
-            }
-        }
-        */
-        #endregion
-
-
         #region BaseAi
 
         [HarmonyPatch(typeof(BaseAi), nameof(BaseAi.Start))]

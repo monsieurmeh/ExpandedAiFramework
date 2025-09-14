@@ -831,6 +831,11 @@ namespace ExpandedAiFramework
                     LogTrace($"No spawn region mod data proxy matched to spawn region with hashcode {spawnRegion.GetHashCode()} and guid {guid}. creating then wrapping");
                     proxy = GenerateNewSpawnRegionModDataProxy(mManager.CurrentScene, spawnRegion, guid);
                 }
+                if (proxy == null)
+                {
+                    // A null proxy by now has definitely generated warnings; abort!
+                    return;
+                }
                 CustomSpawnRegion newSpawnRegionWrapper = GenerateCustomSpawnRegion(spawnRegion, proxy);
                 if (mCustomSpawnRegions.ContainsKey(spawnRegion.GetHashCode()))
                 {
