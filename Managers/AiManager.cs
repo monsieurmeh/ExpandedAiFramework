@@ -34,6 +34,7 @@ namespace ExpandedAiFramework
             base.Initialize(manager, subManagers);
             mDataManager = mManager.DataManager;
             mTypePicker = new WeightedTypePicker<BaseAi>(GetFallbackBaseSpawnableType, MaybeIncrementForceSpawnCount);
+            mTypePicker.StartWorker();
             RegisterBaseSpawnableAiSettings();
             RegisterBaseSpawnableAis();
         }

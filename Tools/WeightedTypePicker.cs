@@ -38,7 +38,6 @@ namespace ExpandedAiFramework
         {
             mGetFallbackTypeFunction = fallbackFunction;
             mOnPick = onPick;
-            StartWorker();
         }
 
 
@@ -48,16 +47,16 @@ namespace ExpandedAiFramework
         }
 
 
-        private void StartWorker()
+        public void StartWorker()
         {
-            LogVerbose($"Starting TypePicker worker thread");
+            LogTrace($"Starting TypePicker worker thread");
             mTask = Task.Run(Worker);
         }
 
 
-        private void StopWorker()
+        public void StopWorker()
         {
-            LogVerbose($"Stopping TypePicker worker thread");
+            LogTrace($"Stopping TypePicker worker thread");
             mRunWorker = false;
             try
             {
@@ -76,11 +75,15 @@ namespace ExpandedAiFramework
             {
                 lock (mLock)
                 {
+                    if (mQueue.Count > 0)
+                    {
                     mCurrentAction = mQueue.Dequeue();
+                }
                 }
                 if (mCurrentAction != null)
                 {
                     mCurrentAction.Invoke();
+                    mCurrentAction = null;
                 }
                 else
                 {  

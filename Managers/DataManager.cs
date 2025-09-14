@@ -185,7 +185,7 @@ namespace ExpandedAiFramework
             ClearDataCache();
         }
 
-
+        
         private void ClearWorkers()
         {
             LogTrace($"Clearing Workers");
