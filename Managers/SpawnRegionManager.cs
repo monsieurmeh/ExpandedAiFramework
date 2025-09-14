@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
         #region Fields/Properties/Constructors
 
 
-        private bool mPreLoading = false;
+        private bool mPreSpawning = false;
         private Il2Cpp.SpawnRegionManager mVanillaManager;
 
         private Dictionary<int, CustomSpawnRegion> mCustomSpawnRegions = new Dictionary<int, CustomSpawnRegion>();
@@ -44,7 +44,7 @@ namespace ExpandedAiFramework
         public Dictionary<int, CustomSpawnRegion> CustomSpawnRegions { get { return mCustomSpawnRegions; } }
         public Dictionary<Guid, CustomSpawnRegion> CustomSpawnRegionsByGuid { get { return mCustomSpawnRegionsByGuid; } }
         public bool ReadyToProcessSpawnRegions { get { return mReadyToProcessSpawnRegions; } }
-        public bool PreLoading => mPreLoading;
+        public bool PreSpawning => mPreSpawning;
         public Vector3 PlayerStartPos => mPlayerStartPos;
 
         #endregion
@@ -65,7 +65,6 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            mPreLoading = false;
             mManager.GameLoaded = true;
             //Lazy man's way of waiting for the slow computers to do their thing... maybe fix later lol
             Task.Run(() =>
@@ -83,7 +82,6 @@ namespace ExpandedAiFramework
         {
             base.OnLoadScene(sceneName);
             ClearCustomSpawnRegions();
-            mPreLoading = IsValidGameplayScene(sceneName, out _);
         }
 
 
@@ -113,7 +111,6 @@ namespace ExpandedAiFramework
 
         public override void OnQuitToMainMenu()
         {
-            mPreLoading = false;
             ClearCustomSpawnRegions();
             base.OnQuitToMainMenu();
         }
@@ -216,6 +213,7 @@ namespace ExpandedAiFramework
         {
             try
             {
+                mPreSpawning = true;
                 int startTime = DateTime.Now.Second;
                 bool canContinue = false;
                 while (!canContinue && DateTime.Now.Second <= startTime + 10)
@@ -245,8 +243,7 @@ namespace ExpandedAiFramework
             finally
             {
                 mReadyToProcessSpawnRegions = true;
-                mPreLoading = false;
-                InterfaceManager.GetPanel<Panel_Loading>().Enable(false);
+                mPreSpawning = false;
             }
         }
 
@@ -495,11 +492,6 @@ namespace ExpandedAiFramework
                 LogVerbose($"Paused");
                 return;
             }
-            if (PreLoading)
-            {
-                LogTrace("Preloading...");
-                return;
-            }
             if (!CheckVanillaManager())
             {
                 //LogTrace("Can't get vanilla SpawnRegionManager");
@@ -724,6 +716,7 @@ namespace ExpandedAiFramework
             mCustomSpawnRegionsByIndex.Clear();
             mSpawnRegionCatcher.Clear();
             mReadyToProcessSpawnRegions = false;
+            LogTrace($"Cleard");
         }
 
 

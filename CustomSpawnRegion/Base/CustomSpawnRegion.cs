@@ -1261,12 +1261,12 @@ namespace ExpandedAiFramework
                 this.LogVerboseInstanced($"Encountered indoor environment... why does this automatically return true???");
                 return true;
             }
-            if (!mManager.PreLoading && SpawnPositionOnScreenTooClose(position))
+            if (!mManager.PreSpawning && SpawnPositionOnScreenTooClose(position))
             {
                 this.LogTraceInstanced($"Spawn position on screen too close");
                 return false;
             }
-            if (!mManager.PreLoading && SpawnPositionTooCloseToCamera(position))
+            if (!mManager.PreSpawning && SpawnPositionTooCloseToCamera(position))
             {
                 this.LogTraceInstanced($"Spawn position too close to camera");
                 return false;
