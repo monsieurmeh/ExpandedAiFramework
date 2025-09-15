@@ -5,6 +5,7 @@ global using static Il2Cpp.BaseAi;
 using MelonLoader.Utils;
 using System.Reflection;
 using UnityEngine;
+using System.Resources;
 
 
 [assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.10.9", "MonsieurMeh", null)]
@@ -38,6 +39,14 @@ namespace ExpandedAiFramework
         protected bool Initialize()
         {
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
+            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.HidingSpots.json")))
+            {
+                EmbeddedResourceExtractor.Extract("HidingSpots.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.HidingSpots.json"));
+            }
+            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.WanderPaths.json")))
+            {
+                EmbeddedResourceExtractor.Extract("WanderPaths.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.WanderPaths.json"));
+            }
             mManager = EAFManager.Instance;
             mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"Settings")));
             return mManager != null;

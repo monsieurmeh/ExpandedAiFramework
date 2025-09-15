@@ -46,8 +46,12 @@
     <None Remove="Wolf Mods\**" />
     <None Remove="DLLs\**" />
   </ItemGroup>
-  
 
+  <ItemGroup>
+    <EmbeddedResource Include="Data\HidingSpots.json" />
+    <EmbeddedResource Include="Data\WanderPaths.json" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Reference Include="Il2CppInterop.Common">
       <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\MelonLoader\net6\Il2CppInterop.Common.dll</HintPath>
