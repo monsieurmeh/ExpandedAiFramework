@@ -39,13 +39,13 @@ namespace ExpandedAiFramework
         protected bool Initialize()
         {
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
-            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.HidingSpots.json")))
+            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/HidingSpots.json")))
             {
-                EmbeddedResourceExtractor.Extract("HidingSpots.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.HidingSpots.json"));
+                EmbeddedResourceExtractor.Extract("HidingSpots.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/HidingSpots.json"));
             }
-            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.WanderPaths.json")))
+            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/WanderPaths.json")))
             {
-                EmbeddedResourceExtractor.Extract("WanderPaths.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.WanderPaths.json"));
+                EmbeddedResourceExtractor.Extract("WanderPaths.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/WanderPaths.json"));
             }
             mManager = EAFManager.Instance;
             mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"Settings")));
