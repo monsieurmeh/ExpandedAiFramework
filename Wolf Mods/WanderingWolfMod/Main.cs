@@ -5,7 +5,7 @@ global using static ExpandedAiFramework.Utility;
 using MelonLoader.Utils;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.WanderingWolfMod.Main), "ExpandedAiFramework.WanderingWolfMod", "1.0.2", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.WanderingWolfMod.Main), "ExpandedAiFramework.WanderingWolfMod", "0.11.0", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 
