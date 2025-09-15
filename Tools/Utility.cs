@@ -1,9 +1,10 @@
 ﻿global using static ExpandedAiFramework.Utility;
 using ComplexLogger;
-using Il2Cpp;
+using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
-using static Il2CppSystem.Runtime.Remoting.RemotingServices;
+using System.Diagnostics;
+using System.Reflection;
 
 
 namespace ExpandedAiFramework
@@ -15,6 +16,7 @@ namespace ExpandedAiFramework
         public const float SecondsToHours = 1f / 3600f;
         public const float HoursToSeconds = 3600;
         public const string ModName = "Expanded Ai Framework";
+        public const string DataFolderPath = "EAF";
         public const string CommandString = "eaf";
         public const string CommandString_Help = "help";
         public const string CommandString_Create = "create";
@@ -29,12 +31,16 @@ namespace ExpandedAiFramework
         public const string CommandString_List = "list";
         public const string CommandString_Spawn = "spawn";
         public const string CommandString_Info = "info";
+        public const string CommandString_Paint = "paint";
+        public const string CommandString_Set = "set";
 
         public const string CommandString_NavMesh = "navmesh";
         public const string CommandString_WanderPath = "wanderpath";
         public const string CommandString_HidingSpot = "hidingspot";
         public const string CommandString_MapData = "mapdata";
         public const string CommandString_SpawnRegion = "spawnregion";
+        public const string CommandString_DataPath = "datapath";
+        public const string CommandString_Ai = "ai";
 
 
         public const string CommandString_OnCommandSupportedTypes =
@@ -48,7 +54,9 @@ namespace ExpandedAiFramework
             $"{CommandString_Finish} " +
             $"{CommandString_Show} " +
             $"{CommandString_Hide} " +
-            $"{CommandString_List} ";
+            $"{CommandString_List} " +
+            $"{CommandString_Paint}" +
+            $"{CommandString_Set}";
 
         public const string CommandString_HelpSupportedCommands =
             $"{CommandString_Create} " +
@@ -60,7 +68,9 @@ namespace ExpandedAiFramework
             $"{CommandString_Finish} " +
             $"{CommandString_Show} " +
             $"{CommandString_Hide} " +
-            $"{CommandString_List} ";
+            $"{CommandString_List} "+
+            $"{CommandString_Paint}" +
+            $"{CommandString_Set}";
 
         public const string CommandString_CreateSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_DeleteSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
@@ -68,19 +78,253 @@ namespace ExpandedAiFramework
         public const string CommandString_AddToSupportedTypes = $"{CommandString_WanderPath}";
         public const string CommandString_FinishSupportedTypes = $"{CommandString_WanderPath}";
         public const string CommandString_GoToSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
-        public const string CommandString_ShowSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion}";
-        public const string CommandString_HideSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion}";
+        public const string CommandString_ShowSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion} {CommandString_Ai}";
+        public const string CommandString_HideSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion} {CommandString_Ai}";
         public const string CommandString_ListSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_LoadSupportedTypes = $"{CommandString_MapData}";
+        public const string CommandString_PaintSupportedTypes = $"{CommandString_HidingSpot} {CommandString_WanderPath}"; //{CommandString_NavMesh}
+        public const string CommandString_SetSupportedTypes = $"{CommandString_WanderPath}_{CommandString_DataPath} {CommandString_HidingSpot}_{CommandString_DataPath}";
+
+        public static readonly string[] SceneNames = new string[]
+        {
+            "AFHangar",
+            "AirfieldRegion",
+            "AirfieldTrailerB",
+            "AirfieldWoodCabinA",
+            "AshCabinD",
+            "AshCabinF",
+            "AshCanyonRegion",
+            "AshCaveA",
+            "AshCaveB",
+            "AshMine",
+            "AshWoodCabinA",
+            "BankA",
+            "BarnHouseA",
+            "BarnHouseB",
+            "BlackrockCaveA",
+            "BlackrockInteriorASurvival",
+            "BlackrockMineA",
+            "BlackrockPowerplantA",
+            "BlackrockPrisonSurvivalZone",
+            "BlackrockRegion",
+            "BlackrockSteamTunnelsASurvival",
+            "BlackRockTrailerB",
+            "BlackrockTransitionZone",
+            "BunkerA",
+            "BunkerB",
+            "BunkerC",
+            "BunkerXL",
+            "CampOffice",
+            "CanneryMarshTransitionCave",
+            "CanneryRegion",
+            "CanneryTrailerA",
+            "CanyonRoadCave",
+            "CanyonRoadTransitionZone",
+            "CaveB",
+            "CaveC",
+            "CaveD",
+            "ChurchB",
+            "ChurchC",
+            "CoastalHouseA",
+            "CoastalHouseB",
+            "CoastalHouseC",
+            "CoastalHouseD",
+            "CoastalHouseE",
+            "CoastalHouseF",
+            "CoastalHouseH",
+            "CoastalRegion",
+            "CommunityHallA",
+            "ConvenienceStoreA",
+            "CrashMountainRegion",
+            "Dam",
+            "DamCaveTransitionZone",
+            "DamRiverTransitionZoneB",
+            "DamTrailerB",
+            "DamTransitionZone",
+            "FarmHouseA",
+            "FarmHouseABasement",
+            "FarmHouseB",
+            "FishingCabinA",
+            "FishingCabinC",
+            "FishingCabinD",
+            "GreyMothersHouseA",
+            "HighwayMineTransitionZone",
+            "HighwayTransitionZone",
+            "HouseBasementC",
+            "HouseBasementPV",
+            "HubCave",
+            "HubRegion",
+            "HuntingLodgeA",
+            "IceCaveA",
+            "IceCaveB",
+            "LakeCabinA",
+            "LakeCabinB",
+            "LakeCabinC",
+            "LakeCabinD",
+            "LakeCabinE",
+            "LakeCabinF",
+            "LakeRegion",
+            "LighthouseA",
+            "LongRailTransitionZone",
+            "LongTransitionCave",
+            "MaintenanceShedA",
+            "MaintenanceShedB",
+            "MarshRegion",
+            "MiltonHouseA",
+            "MiltonHouseC",
+            "MiltonHouseD",
+            "MiltonHouseF1",
+            "MiltonHouseF2",
+            "MiltonHouseF3",
+            "MiltonHouseH1",
+            "MiltonHouseH2",
+            "MiltonHouseH3",
+            "MiltonTrailerB",
+            "MineConcentratorBuilding",
+            "MineTransitionZone",
+            "MiningRegion",
+            "MiningRegionMine",
+            "MountainCaveA",
+            "MountainCaveB",
+            "MountainPassBasement",
+            "MountainPassBuriedCabin",
+            "MountainPassCabinA",
+            "MountainPassCaveA",
+            "MountainPassCaveB",
+            "MountainPassRegion",
+            "MountainTownCaveA",
+            "MountainTownCaveB",
+            "MountainTownRegion",
+            "PostOfficeA",
+            "PrepperCacheA",
+            "PrepperCacheAEmpty",
+            "PrepperCacheB",
+            "PrepperCacheBEmpty",
+            "PrepperCacheBInterloper",
+            "PrepperCacheC",
+            "PrepperCacheCEmpty",
+            "PrepperCacheD",
+            "PrepperCacheDEmpty",
+            "PrepperCacheE",
+            "PrepperCacheEEmpty",
+            "PrepperCacheEmpty",
+            "PrepperCacheF",
+            "PrepperCacheFEmpty",
+            "PumpHouse",
+            "QuonsetGasStation",
+            "RadarBuilding",
+            "RadioControlHut",
+            "RadioControlHutB",
+            "RadioControlHutC",
+            "RavineTransitionZone",
+            "RiverValleyRegion",
+            "RiverValleyTransitionCave",
+            "RuralRegion",
+            "RuralStoreA",
+            "SafeHouseA",
+            "TracksRegion",
+            "TrailerA",
+            "TrailerB",
+            "TrailerC",
+            "TrailerD",
+            "TrailerE",
+            "TrailerSShape",
+            "WhalingMine",
+            "WhalingShipA",
+            "WhalingStationRegion",
+            "WhalingWarehouseA",
+            "WoodCabinA",
+            "WoodCabinB",
+            "WoodCabinC"
+        };
 
         public static EAFManager Manager { get { return EAFManager.Instance; } }
-        public static void Log(string message, FlaggedLoggingLevel logLevel, bool toUConsole) { Manager.Log(message, logLevel, toUConsole); }
-        public static void LogTrace(string message) { Manager.LogTrace(message); }
-        public static void LogDebug(string message) { Manager.LogDebug(message); }
-        public static void LogVerbose(string message) { Manager.LogVerbose(message); }
-        public static void LogWarning(string message, bool toUConsole = true) { Manager.LogWarning(message, toUConsole); }
-        public static void LogError(string message, FlaggedLoggingLevel additionalLevelFlags = 0U) { Manager.LogError(message, additionalLevelFlags); }
-        public static void LogAlways(string message) { Manager.LogAlways(message); }
+
+        private static string GetLastCallerType(FlaggedLoggingLevel logLevel)
+        {
+            if (!Manager.CurrentLogLevel.IsSet(logLevel))
+            {
+                return string.Empty;
+            }
+            StackTrace stackTrace = new StackTrace();
+            for (int i = 2, iMax = stackTrace.FrameCount; i < iMax; i++)
+            {
+                MethodBase method = stackTrace.GetFrame(i).GetMethod();
+                Type type = stackTrace.GetFrame(i)?.GetMethod()?.DeclaringType;
+                if (type == typeof(Utility))
+                {
+                    continue;
+                }
+                if (method.Name.Contains("Log"))
+                {
+                    continue;
+                }
+                return type == null ? "UNKNOWN" : GetFriendlyTypeName(type);
+            }
+            return "ERROR";
+        }
+
+
+        private static string GetFriendlyTypeName(Type type)
+        {
+            if (type.IsGenericType)
+            {
+                string baseName = type.Name;
+                int index = baseName.IndexOf('`');
+                if (index > 0)
+                {
+                    baseName = baseName.Substring(0, index);
+                }
+
+                var genericArgs = type.GetGenericArguments()
+                                      .Select(arg =>
+                                          arg.IsGenericParameter
+                                              ? arg.Name
+                                              : GetFriendlyTypeName(arg));
+                return $"{baseName}<{string.Join(", ", genericArgs)}>";
+            }
+
+            return type.Name;
+        }
+
+
+        public static void LogTrace(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        {
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Trace, GetLastCallerType(FlaggedLoggingLevel.Trace), callerInstanceInfo, memberName);
+        }
+
+
+        public static void LogDebug(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        {
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Debug, GetLastCallerType(FlaggedLoggingLevel.Debug), callerInstanceInfo, memberName);
+        }
+
+
+        public static void LogVerbose(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        {
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Verbose, GetLastCallerType(FlaggedLoggingLevel.Verbose), callerInstanceInfo, memberName);
+        }
+
+
+        public static void LogWarning(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        {
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Warning, GetLastCallerType(FlaggedLoggingLevel.Warning), callerInstanceInfo, memberName);
+        }
+
+
+        public static void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        {
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Error | additionalFlags, GetLastCallerType(FlaggedLoggingLevel.Error), callerInstanceInfo, memberName);
+        }
+
+
+        public static void LogAlways(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        {
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Always, GetLastCallerType(FlaggedLoggingLevel.Always), callerInstanceInfo, memberName);
+        }
+
+
+
         public static TEnum ToEnum<TEnum>(this uint uval) where TEnum : Enum { return UnsafeUtility.As<uint, TEnum>(ref uval); }
         public static TEnum ToEnumL<TEnum>(this ulong uval) where TEnum : Enum { return UnsafeUtility.As<ulong, TEnum>(ref uval); }
         public static uint ToUInt<TEnum>(this TEnum val) where TEnum : Enum { return UnsafeUtility.As<TEnum, uint>(ref val); }
@@ -109,13 +353,40 @@ namespace ExpandedAiFramework
         public static TEnum UnsetFlagsL<TEnum>(this TEnum val, TEnum flags) where TEnum : Enum { return (val.ToULong() & ~flags.ToULong()).ToEnumL<TEnum>(); }
         public static TEnum SetFlags<TEnum>(this TEnum val, TEnum flags, bool shouldSet = true) where TEnum : Enum { return (shouldSet ? val.ToUInt() | flags.ToUInt() : val.ToUInt() & ~flags.ToUInt()).ToEnum<TEnum>(); }
         public static TEnum SetFlagsL<TEnum>(this TEnum val, TEnum flags, bool shouldSet = true) where TEnum : Enum { return (shouldSet ? val.ToULong() | flags.ToULong() : val.ToULong() & ~flags.ToULong()).ToEnumL<TEnum>(); }
+
+
         public static float SquaredDistance(Vector3 a, Vector3 b)
         {
             return ((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y)) + ((a.z - b.z) * (a.z - b.z));
         }
+
+
         public static float GetCurrentTimelinePoint()
         {
             return GameManager.m_TimeOfDay.m_WeatherSystem.m_ElapsedHoursAccumulator + GameManager.m_TimeOfDay.m_WeatherSystem.m_ElapsedHours;
+        }
+
+
+        public static bool IsValidGameplayScene(string sceneName, out string parsedSceneName)
+        {
+            parsedSceneName = string.Empty;
+            for (int i = 0, iMax = SceneNames.Length; i < iMax; i++)
+            {
+                if (sceneName.Contains(SceneNames[i]))
+                {
+                    parsedSceneName = SceneNames[i];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        public static void Teleport(Vector3 pos, Quaternion rot)
+        {
+            PlayerManager playerManager = GameManager.m_PlayerManager;
+            playerManager.TeleportPlayer(pos, rot);
+            playerManager.StickPlayerToGround();
         }
 
 

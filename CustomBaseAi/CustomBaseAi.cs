@@ -1,35 +1,53 @@
 ﻿using ComplexLogger;
-using Il2Cpp;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
 namespace ExpandedAiFramework
 {
     [RegisterTypeInIl2Cpp]
-    public class CustomAiBase : MonoBehaviour, ICustomAi
+    public class CustomBaseAi : MonoBehaviour, ILogInfoProvider
     {
-        public CustomAiBase(IntPtr intPtr) : base(intPtr) { }
+        public CustomBaseAi(IntPtr intPtr) : base(intPtr) { }
 
         protected BaseAi mBaseAi;
         protected TimeOfDay mTimeOfDay;
         protected EAFManager mManager;
+        protected SpawnModDataProxy mModDataProxy;
         protected float mTimeSinceCheckForTargetInPatrolWaypointsMode = 0.0f;
+
 
         public BaseAi BaseAi { get { return mBaseAi; } }
         public Component Self { get { return this; } }
+        public SpawnModDataProxy ModDataProxy { get { return mModDataProxy; } }
+        public virtual string InstanceInfo { get { return mBaseAi.GetHashCode().ToString(); } }
+        public virtual string TypeInfo { get { return GetType().Name; } }
+        public virtual Color DebugHighlightColor { get { return Color.white; } }
 
         //ML is fighting me on dependency injection, doesn't want to "support" injecting my manager class for whatever reason. Feh
         // Occasionally the spawn region is needed during initial setup, and it doesn't always seem to set itself until after the spawn process, so it's being passed here just in case
-        public virtual void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion)//, EAFManager manager)
+        public virtual void Initialize(BaseAi ai, TimeOfDay timeOfDay, SpawnRegion spawnRegion, SpawnModDataProxy proxy)//, EAFManager manager)
         {
             mBaseAi = ai;
             mTimeOfDay = timeOfDay;
             mManager = Manager;// manager;
+            mModDataProxy = proxy;
+            if (proxy != null) // persistency needs to be disabled for this to end up happening, but it CAN happen!
+            {
+                mBaseAi.transform.position = proxy.CurrentPosition;
+            }
             OnAugmentDebug();
         }
 
 
-        public virtual void Despawn(float despawnTime) { } //Override this if you need to handle any kind of longer term tracking
+        //Override this if you need to handle any kind of longer term tracking
+        public virtual void Save() 
+        {
+            if (mModDataProxy != null)
+            {
+                mModDataProxy.Save(this);
+            }
+        } 
 
         
         public void OverrideStart() //Manager is triggering this so we don't want to use "start" itself unfortunately
@@ -75,10 +93,6 @@ namespace ExpandedAiFramework
         {
             OnUpdateDebug();
             if (mBaseAi == null)
-            {
-                return;
-            }
-            if (!UpdateCustom())
             {
                 return;
             }
@@ -234,12 +248,12 @@ namespace ExpandedAiFramework
                 case AiMode.InteractWithProp: mBaseAi.ProcessInteractWithProp(); break;
                 case AiMode.ScriptedSequence: mBaseAi.ProcessScriptedSequence(); break;
                 case AiMode.Stunned: mBaseAi.ProcessStunned(); break;
-                case AiMode.ScratchingAntlers: mBaseAi.Moose?.ProcessScratchingAntlers(); break;
+                case AiMode.ScratchingAntlers: mBaseAi.Moose.ProcessScratchingAntlers(); break;
                 case AiMode.PatrolPointsOfInterest: mBaseAi.ProcessPatrolPointsOfInterest(); break;
-                case AiMode.HideAndSeek: mBaseAi.Timberwolf?.ProcessHideAndSeek(); break;
-                case AiMode.JoinPack: mBaseAi.Timberwolf?.ProcessJoinPack(); break;
-                case AiMode.PassingAttack: mBaseAi.Timberwolf?.ProcessPassingAttack(); break;
-                case AiMode.Howl: mBaseAi.BaseWolf?.ProcessHowl(); break;
+                case AiMode.HideAndSeek: mBaseAi.Timberwolf.ProcessHideAndSeek(); break;
+                case AiMode.JoinPack: mBaseAi.Timberwolf.ProcessJoinPack(); break;
+                case AiMode.PassingAttack: mBaseAi.ProcessPassingAttack(); break;
+                case AiMode.Howl: mBaseAi.BaseWolf.ProcessHowl(); break;
             }
         }
 
@@ -288,20 +302,20 @@ namespace ExpandedAiFramework
         {
             if (!PreprocesSetAiModeCustom(mode, out mode))
             {
-                //LogVerbose($"ProcessSetAiModeCustom injection, routing mode to {mode}");
+                this.LogVerboseInstanced($"ProcessSetAiModeCustom injection, routing mode to {mode}");
                 return mode;
             }
             if (mode > AiMode.Disabled)
             {
                 //Vanilla logic does not know how to pre-process new ai modes, return early here with current mode
-                //LogVerbose($"Custom AI mode {mode} not handled by custom implementation, deferring to current mode as a fallback");
+                this.LogVerboseInstanced($"Custom AI mode {mode} not handled by custom implementation, deferring to current mode as a fallback");
                 return mode;
             }
             if (mode == AiMode.Flee)
             {
                 if (CurrentMode == AiMode.Flee && mBaseAi.m_FleeReason == AiFleeReason.AfterPassingAttack)
                 {
-                    //LogVerbose($"Ai is fleeign after passing attack, preventing change mode to {mode}");
+                    this.LogVerboseInstanced($"Ai is fleeign after passing attack, preventing change mode to {mode}");
                     return AiMode.None;
                 }
             }
@@ -309,7 +323,7 @@ namespace ExpandedAiFramework
             {
                 if (mBaseAi.IsTooScaredToAttack())
                 {
-                    //LogVerbose($"Ai is too scared to attack, preventing change mode to {mode}");
+                    this.LogVerboseInstanced($"Ai is too scared to attack, preventing change mode to {mode}");
                     return AiMode.None;
                 }
                 bool skip = false;
@@ -319,20 +333,20 @@ namespace ExpandedAiFramework
                     {
                         if (CurrentMode == AiMode.Attack)
                         {
-                            //LogVerbose($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}");
+                            this.LogVerboseInstanced($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}");
                             return AiMode.None;
                         }
                         if (PackManager.InPack(mBaseAi.m_PackAnimal))
                         {
                             if (!GameManager.m_PackManager.CanAttack(mBaseAi.m_PackAnimal, false))
                             {
-                                //LogVerbose($"Ai is timberwolf that can't attack due to pack mechanics, changing {mode} to HoldGround");
+                                this.LogVerboseInstanced($"Ai is timberwolf that can't attack due to pack mechanics, changing {mode} to HoldGround");
                                 mode = AiMode.HoldGround;
                             }
                         }
                         else
                         {
-                            //LogVerbose($"AI is timberwolf without a pack, routing {mode} to Flee");
+                            this.LogVerboseInstanced($"AI is timberwolf without a pack, routing {mode} to Flee");
                             mode = AiMode.Flee;
                         }
                         skip = true;
@@ -342,12 +356,12 @@ namespace ExpandedAiFramework
                 {
                     if (MaybeHoldGround())
                     {
-                        //LogVerbose($"MaybeHoldGround returned true and set aimode itself, preventing mode change to {mode}");
+                        this.LogVerboseInstanced($"MaybeHoldGround returned true and set aimode itself, preventing mode change to {mode}");
                         return AiMode.None;
                     }
                     if (!mBaseAi.CanPathfindToPosition(mBaseAi.m_CurrentTarget?.transform?.position ?? Vector3.positiveInfinity, MoveAgent.PathRequirement.FullPath))
                     {
-                        //LogVerbose($"Can't reach target, changing {mode} to {mBaseAi.m_DefaultMode}");
+                        this.LogVerboseInstanced($"Can't reach target, changing {mode} to {mBaseAi.m_DefaultMode}");
                         mBaseAi.CantReachTarget();
                         return mBaseAi.m_DefaultMode;
                     }
@@ -355,7 +369,7 @@ namespace ExpandedAiFramework
             }
             else if (mode == AiMode.Wander && mBaseAi.Timberwolf != null && PackManager.InPack(mBaseAi.m_PackAnimal) && GameManager.m_PackManager.IsPackCombatRestricted(mBaseAi.m_PackAnimal))
             {
-                //LogVerbose($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}");
+                this.LogVerboseInstanced($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}");
                 mode = AiMode.HoldGround;
             }
             if (mode == AiMode.Wander || mode == AiMode.Flee)
@@ -367,7 +381,7 @@ namespace ExpandedAiFramework
             }
             else if (mode == AiMode.None)
             {
-                //LogVerbose($"Mode change of AiMode.None not caught during preprocessing, changing to idle");
+                this.LogVerboseInstanced($"Mode change of AiMode.None not caught during preprocessing, changing to idle");
                 mode = AiMode.Idle;
             }
             /* weird HL bug catch?
@@ -384,22 +398,22 @@ namespace ExpandedAiFramework
             {
                 if (CurrentMode != AiMode.Flee)
                 {
-                    //LogVerbose($"Trying to set AiMode to current mode {mode} which is not AiMode.Flee, triggering early out");
+                    this.LogVerboseInstanced($"Trying to set AiMode to current mode {mode} which is not AiMode.Flee, triggering early out");
                     return AiMode.None;
                 }
                 if (mBaseAi.m_UseRetreatSpeedInFlee == false)
                 {
-                    //LogVerbose($"Trying to set AiMode to current mode {mode} and m_UseRetreatSpeedInFlee is false, triggering early out");
+                    this.LogVerboseInstanced($"Trying to set AiMode to current mode {mode} and m_UseRetreatSpeedInFlee is false, triggering early out");
                     return AiMode.None;
                 }
                 mBaseAi.m_UseRetreatSpeedInFlee = false;
                 mBaseAi.m_AiGoalSpeed = mBaseAi.GetFleeSpeed();
-                //LogVerbose($"Trying to set AiMode to current mode {mode}, triggering early out after ajusting flee speed");
+                this.LogVerboseInstanced($"Trying to set AiMode to current mode {mode}, triggering early out after ajusting flee speed");
                 return AiMode.None;
             }
             if (CurrentMode == AiMode.Stunned && mBaseAi.IsStunTimerActive() && mode != AiMode.Dead && mode != AiMode.ScriptedSequence)
             {
-                //LogVerbose($"Trying to set AiMode to mode {mode} while stunned and stun timer is active, triggering early out");
+                this.LogVerboseInstanced($"Trying to set AiMode to mode {mode} while stunned and stun timer is active, triggering early out");
                 return AiMode.None;
             }
             return mode;
@@ -411,7 +425,7 @@ namespace ExpandedAiFramework
             mode = PreprocessNewAiMode(mode);
             if (mode == AiMode.None)
             {
-                //LogVerbose($"ProcessNewAiMode returned AiMode.None, early-outting setAiMode");
+                this.LogVerboseInstanced($"ProcessNewAiMode returned AiMode.None, early-outting setAiMode");
                 return;
             }
             ExitAiMode(CurrentMode);
@@ -452,12 +466,12 @@ namespace ExpandedAiFramework
                 case AiMode.InteractWithProp: mBaseAi.EnterInteractWithProp(); break;
                 case AiMode.ScriptedSequence: mBaseAi.EnterScriptedSequence(); break;
                 case AiMode.Stunned: mBaseAi.EnterStunned(); break;
-                case AiMode.ScratchingAntlers: mBaseAi.Moose?.EnterScratchingAntlers(); break;
+                case AiMode.ScratchingAntlers: mBaseAi.Moose.EnterScratchingAntlers(); break;
                 case AiMode.PatrolPointsOfInterest: mBaseAi.EnterPatrolPointsOfInterest(); break;
-                case AiMode.HideAndSeek: mBaseAi.Timberwolf?.EnterHideAndSeek(); break;
-                case AiMode.JoinPack: mBaseAi.Timberwolf?.EnterJoinPack(); break;
-                case AiMode.PassingAttack: mBaseAi.Timberwolf?.EnterPassingAttack(); break;
-                case AiMode.Howl: mBaseAi.BaseWolf?.EnterHowl(); break;
+                case AiMode.HideAndSeek: mBaseAi.Timberwolf.EnterHideAndSeek(); break;
+                case AiMode.JoinPack: mBaseAi.Timberwolf.EnterJoinPack(); break;
+                case AiMode.PassingAttack: mBaseAi.EnterPassingAttack(); break;
+                case AiMode.Howl: mBaseAi.BaseWolf.EnterHowl(); break;
             }
         }
 
@@ -490,12 +504,12 @@ namespace ExpandedAiFramework
                 case AiMode.InteractWithProp: mBaseAi.ExitInteractWithProp(); break;
                 case AiMode.ScriptedSequence: mBaseAi.ExitScriptedSequence(); break;
                 case AiMode.Stunned: mBaseAi.ExitStunned(); break;
-                case AiMode.ScratchingAntlers: mBaseAi.Moose?.ExitScratchingAntlers(); break;
+                case AiMode.ScratchingAntlers: mBaseAi.Moose.ExitScratchingAntlers(); break;
                 case AiMode.PatrolPointsOfInterest: mBaseAi.ExitPatrolPointsOfInterest(); break;
-                case AiMode.HideAndSeek: mBaseAi.Timberwolf?.ExitHideAndSeek(); break;
-                case AiMode.JoinPack: mBaseAi.Timberwolf?.ExitJoinPack(); break;
+                case AiMode.HideAndSeek: mBaseAi.Timberwolf.ExitHideAndSeek(); break;
+                case AiMode.JoinPack: mBaseAi.Timberwolf.ExitJoinPack(); break;
                 case AiMode.PassingAttack: break;
-                case AiMode.Howl: mBaseAi.BaseWolf?.ExitHowl(); break;
+                case AiMode.Howl: mBaseAi.BaseWolf.ExitHowl(); break;
             }
         }
 
@@ -512,22 +526,22 @@ namespace ExpandedAiFramework
             }
             if (mBaseAi.m_AiType != AiType.Predator)
             {
-                //LogVerbose($"Not predator, cannot hold ground");
+                this.LogVerboseInstanced($"Not predator, cannot hold ground");
                 return false;
             }
             if (!mBaseAi.CanHoldGround())
             {
-                //LogVerbose($"BaseAi.CanHoldGround false, cannot hold ground");
+                this.LogVerboseInstanced($"BaseAi.CanHoldGround false, cannot hold ground");
                 return false;
             }
             if (((1U << (int)CurrentMode) & (uint)AiModeFlags.EarlyOutMaybeHoldGround) != 0U)
             {
-                //LogVerbose($"Current mode is {CurrentMode} which precludes holding ground, cannot hold ground");
+                this.LogVerboseInstanced($"Current mode is {CurrentMode} which precludes holding ground, cannot hold ground");
                 return false;
             }
             else if (CurrentMode == AiMode.Attack && mBaseAi.m_IgnoreFlaresAndFireWhenAttacking)
             {
-                //LogVerbose($"Attacking and ignoring stimulus, cannot hold ground");
+                this.LogVerboseInstanced($"Attacking and ignoring stimulus, cannot hold ground");
                 return false;
             }
 
@@ -582,7 +596,7 @@ namespace ExpandedAiFramework
 
             if (holdingGround)
             {
-                LogVerbose($"Holding ground!");
+                this.LogVerboseInstanced($"Holding ground!");
                 SetAiMode(AiMode.HoldGround);
             }
             return holdingGround;
@@ -639,10 +653,10 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            if (!mManager.InvokeUpdateWounds(mBaseAi, deltaTime))
-            {
-                return;
-            }
+            //if (!mManager.InvokeUpdateWounds(mBaseAi, deltaTime)) Add this back in when it's ready
+            //{
+                //return;
+            //}
             if (!mBaseAi.m_Wounded)
             {
                 return;
@@ -657,10 +671,10 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            if (!mManager.InvokeUpdateBleeding(mBaseAi, deltaTime))
-            {
-                return;
-            }
+            //if (!mManager.InvokeUpdateBleeding(mBaseAi, deltaTime)) Add back in as a larger to-do when the framework is more complete internally. Dont want these hooks laying around usable in the meantime causing havoc
+            //{
+                //return;
+            //}
             if (!mBaseAi.m_BleedingOut)
             {
                 return;
@@ -769,7 +783,7 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            //LogVerbose($"Scanning for new target...");
+            this.LogVerboseInstanced($"Scanning for new target...");
             mBaseAi.m_TimeForNextTargetScan = Time.time + UnityEngine.Random.Range(0.1f, 0.5f); //todo: yoink out the hard coded values
             Vector3 eyePosition = mBaseAi.GetEyePos();
             float distanceToNearestTarget = float.MaxValue;
@@ -808,11 +822,11 @@ namespace ExpandedAiFramework
 
             if (nearestTarget == null)
             {
-                //LogDebug($"No possible additional candidates during scan for new targets");
+                this.LogVerboseInstanced($"No possible additional candidates during scan for new targets");
                 return;
             }
 
-            //LogDebug($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
+            this.LogVerboseInstanced($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
             AiTarget previousTarget = mBaseAi.m_CurrentTarget;
             mBaseAi.m_CurrentTarget = nearestTarget;
 
@@ -827,7 +841,7 @@ namespace ExpandedAiFramework
                 {
                     if (!mBaseAi.CanPlayerBeReached(mBaseAi.m_CurrentTarget.transform.position, MoveAgent.PathRequirement.FullPath) || !CanSeeTarget(false))
                     {
-                        //LogDebug($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
+                        this.LogVerboseInstanced($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
                         mBaseAi.m_CurrentTarget = null;
                         return;
                     }
@@ -845,7 +859,7 @@ namespace ExpandedAiFramework
             GameManager.m_PackManager.MaybeAlertMembers(mBaseAi.m_PackAnimal);
             if (!packForming)
             {
-                //LogDebug($"Target detected, running ChangeModeWhenTargetDetected");
+                this.LogVerboseInstanced($"Target detected, running ChangeModeWhenTargetDetected");
                 ChangeModeWhenTargetDetected(); 
             }
 
@@ -860,17 +874,17 @@ namespace ExpandedAiFramework
         {
             if (!CanSeeTargetCustom(out bool canSeeTarget))
             {
-                LogVerbose($"Custom override, cannot see");
+                this.LogVerboseInstanced($"Custom override, cannot see");
                 return canSeeTarget;
             }
             if (Vector3.Angle(mBaseAi.transform.forward, CurrentTarget.transform.position - mBaseAi.transform.position) >= mBaseAi.m_DetectionFOV / 2f)
             {
-                LogVerbose($"{mBaseAi.gameObject.name}'s CurrentTarget {CurrentTarget} is out of field of view, cannot see");
+                this.LogVerboseInstanced($"CurrentTarget is out of field of view, cannot see");
                 return false;
             }
             if (!skipDistCheck && ComputeDistanceForTarget(mBaseAi.GetEyePos(), CurrentTarget) == float.PositiveInfinity)
             {
-                LogVerbose($"{mBaseAi.gameObject.name}'s CurrentTarget {CurrentTarget} distance too great, cannot see");
+                this.LogVerboseInstanced($"{mBaseAi.gameObject.name}'s CurrentTarget {CurrentTarget} distance too great, cannot see");
                 return false;
             }
             return true;
@@ -881,7 +895,7 @@ namespace ExpandedAiFramework
         {
             if (TargetCanBeIgnored(potentialTarget))
             {
-                LogVerbose($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} can be ignored, infinite distance");
+                this.LogVerboseInstanced($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} can be ignored, infinite distance");
                 return float.PositiveInfinity;
             }
             Vector3 targetEyePos = potentialTarget.GetEyePos();
@@ -915,7 +929,7 @@ namespace ExpandedAiFramework
                 Feat_MasterHunter bigCatKillerFeat = FeatsManager.m_Feat_MasterHunter;
                 if (bigCatKillerFeat.IsUnlockedAndEnabled())
                 {
-                    //LogVerbose($"Master hunter feat enabled! AiSightRangeScale is {bigCatKillerFeat.m_AiSightRangeScale} and SightScale is {bigCatKillerFeat.m_SightScale}");
+                    this.LogVerboseInstanced($"Master hunter feat enabled! AiSightRangeScale is {bigCatKillerFeat.m_AiSightRangeScale} and SightScale is {bigCatKillerFeat.m_SightScale}");
                     bigCatKillerScalar = bigCatKillerFeat.m_AiSightRangeScale;
                 }
                 else
@@ -929,7 +943,7 @@ namespace ExpandedAiFramework
                 {
                     if (CurrentTarget != potentialTarget)
                     {
-                        LogVerbose($"{mBaseAi.gameObject.name}'s Current Target {CurrentTarget} != potential target {potentialTarget.gameObject.name}, infinite distance");
+                        this.LogVerboseInstanced($"{mBaseAi.gameObject.name}'s Current Target {CurrentTarget} != potential target {potentialTarget.gameObject.name}, infinite distance");
                         return float.PositiveInfinity;
                     }
                 }
@@ -937,11 +951,11 @@ namespace ExpandedAiFramework
             
             if (!AiUtils.PositionVisible(eyePos, mBaseAi.transform.forward, targetEyePos, detectionRange, mBaseAi.m_DetectionFOV, 0.0f, Utils.m_PhysicalCollisionLayerMask)) 
             {
-                LogVerbose($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} position not visible using eyePos {eyePos}, forward {mBaseAi.transform.forward}, targetEyePos {targetEyePos}, detectionRange {mBaseAi.m_DetectionFOV}, detectionFOV {crouchDetectionRangeScalar}, infinite distance");
+                this.LogVerboseInstanced($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} position not visible using eyePos {eyePos}, forward {mBaseAi.transform.forward}, targetEyePos {targetEyePos}, detectionRange {mBaseAi.m_DetectionFOV}, detectionFOV {crouchDetectionRangeScalar}, infinite distance");
                 return float.PositiveInfinity;
             }
             float dist = Vector3.Distance(BaseAi.transform.position, potentialTarget.transform.position);
-            LogVerbose($"Distance from ai {mBaseAi.gameObject.name} to target {potentialTarget.gameObject.name}: {dist}");
+            this.LogVerboseInstanced($"Distance from ai {mBaseAi.gameObject.name} to target {potentialTarget.gameObject.name}: {dist}");
             return dist;
         }
 
@@ -950,24 +964,24 @@ namespace ExpandedAiFramework
         {
             if (!TargetCanBeIgnoredCustom(target, out bool canBeIgnored))
             {
-                LogVerbose("TargetCanBeIgnoredCustom");
+                this.LogVerboseInstanced("TargetCanBeIgnoredCustom");
                 return canBeIgnored;
             }
             if (target == null)
             {
-                LogVerbose("Null Target, ignoring");
+                this.LogVerboseInstanced("Null Target, ignoring");
                 return true;
             }
             /* pretty sure this one precludes the player? Might have interpreted it wrong.
             if (target.m_BaseAi == null)
             {
-                LogVerbose("Target is not baseAi, ignoring");
+                this.LogVerboseInstanced("Target is not baseAi, ignoring");
                 return true;
             }
             */
             if (target.m_BaseAi == this)
             {
-                LogVerbose("Target is self, ignoring");
+                this.LogVerboseInstanced("Target is self, ignoring");
                 return true;
             }
             /* Not sure we need this, i dont really care if BaseAI is active or not.
@@ -979,70 +993,70 @@ namespace ExpandedAiFramework
             bool isPlayer = target.IsPlayer();
             if (isPlayer && GameManager.m_PlayerManager.PlayerIsInvisibleToAi())
             {
-                LogVerbose("Target is invisible player, ignoring");
+                this.LogVerboseInstanced("Target is invisible player, ignoring");
                 return true;
             }
             if (isPlayer && CurrentMode == AiMode.Feeding)
             {
-                LogVerbose("Target is player and am feeding, ignoring");
+                this.LogVerboseInstanced("Target is player and am feeding, ignoring");
                 return true;
             }
             if (target.IsDead())
             {
-                LogVerbose("Target is dead, ignoring (should we make this overridable for zombie wolves...?)");
+                this.LogVerboseInstanced("Target is dead, ignoring (should we make this overridable for zombie wolves...?)");
                 return true;
             }
             // NPC survivor code that I'm not going to bother adding
             if (target.IsMoose())
             {
-                LogVerbose($"Target is moosing, returning ignore value of {MooseCanBeIgnored()}");
+                this.LogVerboseInstanced($"Target is moosing, returning ignore value of {MooseCanBeIgnored()}");
                 return MooseCanBeIgnored();
             }
             if (PackManager.InPack(mBaseAi.m_PackAnimal) && !PackManager.IsValidPackTarget(target))
             {
-                LogVerbose($"In pack and target is not valid pack target, ignoring");
+                this.LogVerboseInstanced($"In pack and target is not valid pack target, ignoring");
                 return true;
             }
             if (!target.IsHostileTowards(mBaseAi))
             {
-                LogVerbose($"Target is not hostile toward me, ignoring");
+                this.LogVerboseInstanced($"Target is not hostile toward me, ignoring");
                 return true;
             }
             if (isPlayer)
             {
                 if (InterfaceManager.IsMainMenuEnabled())
                 {
-                    LogVerbose($"Target is player while in main menu, ignoring");
+                    this.LogVerboseInstanced($"Target is player while in main menu, ignoring");
                     return true;
                 }
                 if (GameManager.m_PlayerStruggle.m_Active)
                 {
-                    LogVerbose($"Target is player in active struggle, ignoring");
+                    this.LogVerboseInstanced($"Target is player in active struggle, ignoring");
                     return true;
                 }
-                LogVerbose($"Target is player, NOT ignoring");
+                this.LogVerboseInstanced($"Target is player, NOT ignoring");
                 return false;
             }
 
             if (mBaseAi.WillOnlyTargetPlayer())
             {
-                LogVerbose($"Target is not player and will target player, ignoring");
+                this.LogVerboseInstanced($"Target is not player and will target player, ignoring");
                 return true;
             }
 
             if (mBaseAi.m_WildlifeMode != WildlifeMode.Aurora)
             {
-                LogVerbose($"Target is not player and non-aurora wildlife, NOT ignoring");
+                this.LogVerboseInstanced($"Target is not player and non-aurora wildlife, NOT ignoring");
                 return false;
             }
 
             if (AuroraManager.m_AuroraFieldsSceneManager.GetFieldContaining(target.transform.position) != null)
             {
-                LogVerbose($"Target is not player and aurora wildlife and target is not in aurora field, NOT ignoring");
+                this.LogVerboseInstanced($"Target is not player and aurora wildlife and target is not in aurora field, NOT ignoring");
                 return false;
             }
 
-            LogWarning($"CustomBaseAi.TargetCanBeIgnored reached end of method with no cases returning a valid condition. Falling through to 'can ignore target' condition");
+            this.LogWarningInstanced($"CustomBaseAi.TargetCanBeIgnored reached end of method with no cases returning a valid condition. Falling through to 'can ignore target' condition");
             return true;
         }
 
@@ -1051,13 +1065,13 @@ namespace ExpandedAiFramework
         {
             if (!ChangeModeWhenTargetDetectedCustom())
             {
-                LogVerbose($"ChangeModeWhenTargetDetectedCustom");
+                this.LogVerboseInstanced($"ChangeModeWhenTargetDetectedCustom");
                 return;
             }
 
             if (mBaseAi.m_AiType == AiType.Human)
             {
-                LogVerbose($"Astrid and mackenzie aren't ai... yet...");
+                this.LogVerboseInstanced($"Astrid and mackenzie aren't ai... yet...");
                 return;
             }
 
@@ -1067,7 +1081,7 @@ namespace ExpandedAiFramework
             //todo: move to moose-specific ai script
             if (mBaseAi.Moose != null && mBaseAi.m_CurrentTarget.IsPlayer())
             {
-                LogVerbose($"Moose specific hold ground catch");
+                this.LogVerboseInstanced($"Moose specific hold ground catch");
                 SetAiMode(AiMode.HoldGround);
                 return;
             }
@@ -1078,7 +1092,7 @@ namespace ExpandedAiFramework
             {
                 if (!BaseAi.ShouldAlwaysFleeFromCurrentTarget())
                 {
-                    LogVerbose($"Feeding and should always flee from current target, fleeing");
+                    this.LogVerboseInstanced($"Feeding and should always flee from current target, fleeing");
                     SetAiMode(AiMode.Flee);
                 }
                 return;
@@ -1086,14 +1100,14 @@ namespace ExpandedAiFramework
 
             if (mBaseAi.Timberwolf?.CanEnterHideAndSeek() ?? false)
             {
-                LogVerbose($"Target found, timberwolf entering hide and seek");
+                this.LogVerboseInstanced($"Target found, timberwolf entering hide and seek");
                 SetAiMode(AiMode.HideAndSeek);
             }
 
             float fleeChance = mBaseAi.m_FleeChanceWhenTargetDetected;
             if (!mBaseAi.m_CurrentTarget.IsHostileTowards(mBaseAi) || mBaseAi.m_CurrentTarget.IsAmbient())
             {
-                LogVerbose($"Target found, target is not hostile or ai is ambient, no flee chance");
+                this.LogVerboseInstanced($"Target found, target is not hostile or ai is ambient, no flee chance");
                 fleeChance = 0.0f;
             }
 
@@ -1125,7 +1139,7 @@ namespace ExpandedAiFramework
             {
                 if (mBaseAi.m_CurrentTarget.IsVulnerable() || (CurrentMode != AiMode.Wander))
                 {
-                    LogVerbose($"Target found, am predator and target is vulnerable OR currentmode {CurrentMode} is not wander, zero flee chance");
+                    this.LogVerboseInstanced($"Target found, am predator and target is vulnerable OR currentmode {CurrentMode} is not wander, zero flee chance");
                     fleeChance = 0.0f;
                 }
             }
@@ -1141,44 +1155,44 @@ namespace ExpandedAiFramework
             if (mBaseAi.m_CurrentTarget.IsPlayer() && mBaseAi.BaseWolf != null)
             {
                 fleeChance += GameManager.m_PlayerManager.m_IncreaseWolfFleePercentagePoints; 
-                LogVerbose($"Playertarget found, am wolf, flee chance increased to {fleeChance}");
+                this.LogVerboseInstanced($"Playertarget found, am wolf, flee chance increased to {fleeChance}");
             }
 
             if (mBaseAi.m_AiType == AiType.Predator)
             {
                 AuroraManager auroraManager = GameManager.m_AuroraManager;
                 fleeChance *= auroraManager.AuroraIsActive() ? auroraManager.m_PredatorFleeChanceScale : 1.0f;
-                LogVerbose($"Playertarget found, am aurora wolf: {auroraManager.AuroraIsActive()}, flee chance multiplied to {fleeChance}");
+                this.LogVerboseInstanced($"Playertarget found, am aurora wolf: {auroraManager.AuroraIsActive()}, flee chance multiplied to {fleeChance}");
             }
 
             if (CurrentMode == AiMode.Wander && mBaseAi.m_WanderingAroundPos)
             {
-                LogVerbose($"CurrentMode is wander and wandering around pos, flee chance is zero");
+                this.LogVerboseInstanced($"CurrentMode is wander and wandering around pos, flee chance is zero");
                 fleeChance = 0.0f;
             }
 
             if (PackManager.InPack(mBaseAi.m_PackAnimal) && !GameManager.m_PackManager.ShouldAnimalFlee(mBaseAi.m_PackAnimal))
             {
-                LogVerbose($"In pack and packmanager says no flee, flee chance is zero");
+                this.LogVerboseInstanced($"In pack and packmanager says no flee, flee chance is zero");
                 fleeChance = 0.0f;
             }
 
             //move to cougar AI
             if (mBaseAi.m_CurrentTarget.IsPlayer() && mBaseAi.Cougar != null)
             {
-                LogVerbose($"Cougar is not scared of you, flee chance is zero");
+                this.LogVerboseInstanced($"Cougar is not scared of you, flee chance is zero");
                 fleeChance = 0.0f;
             }
 
             if (mBaseAi.ShouldAlwaysFleeFromCurrentTarget())
             {
-                LogVerbose($"Should always flee from current target, flee chance is 100%");
+                this.LogVerboseInstanced($"Should always flee from current target, flee chance is 100%");
                 fleeChance = 100.0f;
             }
 
             if (Utils.RollChance(fleeChance))
             {
-                LogVerbose($"Random roll with fleeChance {fleeChance} triggered fleeing");
+                this.LogVerboseInstanced($"Random roll with fleeChance {fleeChance} triggered fleeing");
                 SetAiMode(AiMode.Flee);
                 return;
             }
@@ -1347,7 +1361,7 @@ namespace ExpandedAiFramework
 
         protected void SetDefaultAiMode()
         {
-            //LogDebug($"For whatever reason, ai mode is being set to default by the mod!");
+            this.LogVerboseInstanced($"For whatever reason, ai mode is being set to default by the mod!");
             SetAiMode(mBaseAi.m_DefaultMode);
         }
 
@@ -1390,329 +1404,328 @@ namespace ExpandedAiFramework
         #endregion
 
 
-            #region Setup
+        #region Setup
 
-            /// <summary>
-            /// Intercept or inject logic into parent start method.
-            /// Vanilla logic performs pathfinding, collider setup and adds to base AI manager.
-            /// </summary>
-            /// <returns>True to defer to parent logic, false to halt in favor of your own.</returns>
-            public virtual bool OverrideStartCustom() => true;
+        /// <summary>
+        /// Intercept or inject logic into parent start method.
+        /// Vanilla logic performs pathfinding, collider setup and adds to base AI manager.
+        /// </summary>
+        /// <returns>True to defer to parent logic, false to halt in favor of your own.</returns>
+        protected virtual bool OverrideStartCustom() => true;
 
 
-            /// <summary>
-            /// Controls whether base start method adds ai to baseaimanager.
-            /// </summary>
-            /// <returns>True to allow, false to prevent. </returns>
-            public virtual bool ShouldAddToBaseAiManager() => true;
+        /// <summary>
+        /// Controls whether base start method adds ai to baseaimanager.
+        /// </summary>
+        /// <returns>True to allow, false to prevent. </returns>
+        protected virtual bool ShouldAddToBaseAiManager() => true;
 
 
 
-            /// <summary>
-            /// Intercept or inject logic into parent first frame setup. 
-            /// Vanilla logic applies difficulty modifiers and sticks character to ground if not dead.
-            /// </summary>
-            /// <returns>Return false halt parent first frame logic. Return true to allow parent first frame logic to execute.</returns>
-            protected virtual bool FirstFrameCustom() => true;
+        /// <summary>
+        /// Intercept or inject logic into parent first frame setup. 
+        /// Vanilla logic applies difficulty modifiers and sticks character to ground if not dead.
+        /// </summary>
+        /// <returns>Return false halt parent first frame logic. Return true to allow parent first frame logic to execute.</returns>
+        protected virtual bool FirstFrameCustom() => true;
 
-            #endregion
+        #endregion
 
 
-            #region HoldGround
+        #region HoldGround
 
 
-            //Override any of these and return false to decide whether or not the ai should hold ground.
+        //Override any of these and return false to decide whether or not the ai should hold ground.
 
-            protected virtual bool MaybeHoldGroundCustom(out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundCustom(out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundForTorchCustom(float radius, out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundForTorchCustom(float radius, out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundForTorchOnGroundCustom(float radius, out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundForTorchOnGroundCustom(float radius, out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundForFireCustom(float radius, out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundForFireCustom(float radius, out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundForRedFlareCustom(float radius, out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundForRedFlareCustom(float radius, out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundForRedFlareOnGroundCustom(float radius, out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundForRedFlareOnGroundCustom(float radius, out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundForBlueFlareCustom(float radius, out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundForBlueFlareCustom(float radius, out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundForBlueFlareOnGroundCustom(float radius, out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundForBlueFlareOnGroundCustom(float radius, out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundForSpearCustom(float radius, out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundForSpearCustom(float radius, out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundAuroraFieldCustom(out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
-
-
-            protected virtual bool MaybeHoldGroundDueToSafeHavenCustom(out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundAuroraFieldCustom(out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
 
-            protected virtual bool MaybeHoldGroundDueToStruggleCustom(out bool shouldHoldGround)
-            {
-                shouldHoldGround = false;
-                return true;
-            }
+        protected virtual bool MaybeHoldGroundDueToSafeHavenCustom(out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
-            #endregion
 
+        protected virtual bool MaybeHoldGroundDueToStruggleCustom(out bool shouldHoldGround)
+        {
+            shouldHoldGround = false;
+            return true;
+        }
 
-            #region Update & State Processing
+        #endregion
 
-            /// <summary>
-            /// Intercept or inject logic into parent update loop. 
-            /// Vanilla logic runs the entire process, so you will need to route your own state machine if you halt this method.
-            /// </summary>
-            /// <returns>Return false halt prevent parent updating. Return true to allow parent updating.</returns>
-            protected virtual bool UpdateCustom() => true;
 
+        #region Update & State Processing
 
-            /// <summary>
-            /// Intercept changing of AI modes at the very beginning. Useful if you want to preclude certain behaviors altogether, such as
-            /// a wolf that won't attack by turning any "attack", "stalk", "HoldGround", etc state into flee
-            /// </summary>
-            /// <param name="mode">Incoming AiMode</param>
-            /// <param name="newMode">New AiMode to inject</param>
-            /// <returns>Return false to skip parent preprocess checks and force set new mode. Return true to allow parent to preprocess newMode, whatever it may have changed to. </returns>
-            protected virtual bool PreprocesSetAiModeCustom(AiMode mode, out AiMode newMode)
-            {
-                newMode = mode;
-                return true;
-            }
 
+        /// <summary>
+        /// Intercept changing of AI modes at the very beginning. Useful if you want to preclude certain behaviors altogether, such as
+        /// a wolf that won't attack by turning any "attack", "stalk", "HoldGround", etc state into flee
+        /// </summary>
+        /// <param name="mode">Incoming AiMode</param>
+        /// <param name="newMode">New AiMode to inject</param>
+        /// <returns>Return false to skip parent preprocess checks and force set new mode. Return true to allow parent to preprocess newMode, whatever it may have changed to. </returns>
+        protected virtual bool PreprocesSetAiModeCustom(AiMode mode, out AiMode newMode)
+        {
+            newMode = mode;
+            return true;
+        }
 
-            /// <summary>
-            /// Allows intercepting of preprocessing logic.
-            /// Vanilla logic increments time in mode, updates wounds/bleeding and tries to trigger some preemptive behaviors like dodging and retargetting.
-            /// </summary>
-            /// <returns>Return false to halt parent state preprocessing. Return true to allow parent state preprocessing.</returns>
-            protected virtual bool PreProcessCustom() => true;
 
+        /// <summary>
+        /// Allows intercepting of preprocessing logic.
+        /// Vanilla logic increments time in mode, updates wounds/bleeding and tries to trigger some preemptive behaviors like dodging and retargetting.
+        /// </summary>
+        /// <returns>Return false to halt parent state preprocessing. Return true to allow parent state preprocessing.</returns>
+        protected virtual bool PreProcessCustom() => true;
 
-            /// <summary>
-            /// Allows intercepting of current mode processing logic. 
-            /// Necessary if you are using any non-vanilla state enum values.
-            /// Useful if you want to override any base behaviors like attacking or wandering which would otherwise interrupt your intent.
-            /// </summary>
-            /// <returns>Return false if you are engaging any custom behaviors or overriding any parent behaviors. Return true to allow parent to process current state.</returns>
-            protected virtual bool ProcessCustom() => true;
-
-
-            /// <summary>
-            /// Allows intercepting of postprocessing logic.
-            /// Vanilla logic primarily handles animation speed updating.
-            /// Really not much to see here but provides an easy access point for injecting logic between the end of one state processing frame and the beginning of another.
-            /// </summary>
-            /// <returns>Return false to halt parent state postprocessing. Return true to allow parent state postprocessing.</returns>
-            protected virtual bool PostProcessCustom() => true;
 
+        /// <summary>
+        /// Allows intercepting of current mode processing logic. 
+        /// Necessary if you are using any non-vanilla state enum values.
+        /// Useful if you want to override any base behaviors like attacking or wandering which would otherwise interrupt your intent.
+        /// </summary>
+        /// <returns>Return false if you are engaging any custom behaviors or overriding any parent behaviors. Return true to allow parent to process current state.</returns>
+        protected virtual bool ProcessCustom() => true;
+
+
+        /// <summary>
+        /// Allows intercepting of postprocessing logic.
+        /// Vanilla logic primarily handles animation speed updating.
+        /// Really not much to see here but provides an easy access point for injecting logic between the end of one state processing frame and the beginning of another.
+        /// </summary>
+        /// <returns>Return false to halt parent state postprocessing. Return true to allow parent state postprocessing.</returns>
+        protected virtual bool PostProcessCustom() => true;
 
-            /// <summary>
-            /// Allows handling of on-enter events for custom states, as well as overriding on-enter events for base ai states.
-            /// </summary>
-            /// <param name="mode">State being entered</param>
-            /// <returns>Return false to prevent parent on-enter event from firing. Return true to allow parent on-enter events to fire.</returns>
-            protected virtual bool EnterAiModeCustom(AiMode mode) => true;
 
+        /// <summary>
+        /// Allows handling of on-enter events for custom states, as well as overriding on-enter events for base ai states.
+        /// </summary>
+        /// <param name="mode">State being entered</param>
+        /// <returns>Return false to prevent parent on-enter event from firing. Return true to allow parent on-enter events to fire.</returns>
+        protected virtual bool EnterAiModeCustom(AiMode mode) => true;
 
-            /// <summary>
-            /// Allows handling of on-exit events for custom states, as well as overriding on-exit events for base ai states.
-            /// </summary>
-            /// <param name="mode">State being entered</param>
-            /// <returns>Return false to prevent parent on-enter event from firing. Return true to allow parent on-enter events to fire.</returns>
-            protected virtual bool ExitAiModeCustom(AiMode mode) => true;
-
 
-            /// <summary>
-            /// Allows injection of custom target scanning logic.
-            /// Vanilla logic looks for the nearest ai target or player, whichever is closer, and tries to target.
-            /// If new target does not match old target, ChangeModeWhenTargetDetected is run. This can be overridden in a separate method.
-            /// Only override this method if you want to adjust how new targets are acquired.
-            /// </summary>
-            /// <returns>Return false to prevent parent retargetting logic from firing. Return true to allow parent re-targetting logic to fire.</returns>
-
-            protected virtual bool ScanForNewTargetCustom() => true;
-
-
-            /// <summary>
-            /// Allows injection of custom logic for handling behavior upon acquiring a new target.
-            /// 
-            /// </summary>
-            /// <returns></returns>
-            protected virtual bool ChangeModeWhenTargetDetectedCustom() => true;
-
-
-            #endregion
-
-
-            #region Imposter Settings
+        /// <summary>
+        /// Allows handling of on-exit events for custom states, as well as overriding on-exit events for base ai states.
+        /// </summary>
+        /// <param name="mode">State being entered</param>
+        /// <returns>Return false to prevent parent on-enter event from firing. Return true to allow parent on-enter events to fire.</returns>
+        protected virtual bool ExitAiModeCustom(AiMode mode) => true;
 
-            /// <summary>
-            /// Allows intercepting of parent application of imposter status to an AI. 
-            /// Classic logic sets m_Imposter to true and disables character controller entirely (as far as I can tell? further testing is needed here).
-            /// </summary>
-            /// <returns>Return false to halt parent imposter logic. Return true to allow parent to handle imposter state change.</returns>
-            protected virtual bool UpdateImposterStateCustom() => true;
 
+        /// <summary>
+        /// Allows injection of custom target scanning logic.
+        /// Vanilla logic looks for the nearest ai target or player, whichever is closer, and tries to target.
+        /// If new target does not match old target, ChangeModeWhenTargetDetected is run. This can be overridden in a separate method.
+        /// Only override this method if you want to adjust how new targets are acquired.
+        /// </summary>
+        /// <returns>Return false to prevent parent retargetting logic from firing. Return true to allow parent re-targetting logic to fire.</returns>
+
+        protected virtual bool ScanForNewTargetCustom() => true;
+
+
+        /// <summary>
+        /// Allows injection of custom logic for handling behavior upon acquiring a new target.
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool ChangeModeWhenTargetDetectedCustom() => true;
 
-            /// <summary>
-            /// Allows intercepting of parent imposter status calculation.
-            /// Classic logic tests a number of things like distance to camera, whether ai is on screen, etc.
-            /// A never-imposter AI can be created by returning true with isImposter set to false. 
-            /// </summary>
-            /// <returns>Return false to halt parent imposter calculation. Return true to allow parent to handle imposter calculations.</returns>
-            protected virtual bool TestIsImposterCustom(out bool isImposter)
-            {
-                isImposter = false;
-                return true;
-            }
 
-            #endregion
+        #endregion
+
+
+        #region Imposter Settings
 
+        /// <summary>
+        /// Allows intercepting of parent application of imposter status to an AI. 
+        /// Classic logic sets m_Imposter to true and disables character controller entirely (as far as I can tell? further testing is needed here).
+        /// </summary>
+        /// <returns>Return false to halt parent imposter logic. Return true to allow parent to handle imposter state change.</returns>
+        protected virtual bool UpdateImposterStateCustom() => true;
 
-            #region Animation
 
-            /// <summary>
-            /// Allows intercepting of parent AiAnimationState mapping from input AiMode.
-            /// Allows for functional routing of custom ai modes to existing (or new?) AiAnimationState values.
-            /// </summary>
-            /// <param name="mode">Incoming mode. Usually CurrentMode but leaving the parameter open for calculation purposes</param>
-            /// <param name="overrideState">Return your own state here. Required for custom states, optionally can override base game states as well.</param>
-            /// <returns>Return false to override base mapping with your own overrideState. Return true to allow parent to handle animation state mapping.</returns>
-            protected virtual bool GetAiAnimationStateCustom(AiMode mode, out AiAnimationState overrideState)
-            {
-                overrideState = AiAnimationState.Invalid;
-                return true;
-            }
+        /// <summary>
+        /// Allows intercepting of parent imposter status calculation.
+        /// Classic logic tests a number of things like distance to camera, whether ai is on screen, etc.
+        /// A never-imposter AI can be created by returning true with isImposter set to false. 
+        /// </summary>
+        /// <returns>Return false to halt parent imposter calculation. Return true to allow parent to handle imposter calculations.</returns>
+        protected virtual bool TestIsImposterCustom(out bool isImposter)
+        {
+            isImposter = false;
+            return true;
+        }
 
+        #endregion
 
-            /// <summary>
-            /// Allows intercepting of parent move state flag mapping from input AiMode, and for functional routing of custom ai modes to move state flag.
-            /// Setting this to false will preclude any AI movement, be careful!
-            /// </summary>
-            /// <param name="mode">Incoming mode. Usually CurrentMode but leaving the parameter open for calculation purposes</param>
-            /// <param name="overrideState">Return your own preference here</param>
-            /// <returns>Return false to override base mapping with your own move state. Return true to allow parent to handle move state determination.</returns>
-            protected virtual bool IsMoveStateCustom(AiMode mode, out bool isMoveState)
-            {
-                isMoveState = false;
-                return true;
-            }
 
-            #endregion
+        #region Animation
 
+        /// <summary>
+        /// Allows intercepting of parent AiAnimationState mapping from input AiMode.
+        /// Allows for functional routing of custom ai modes to existing (or new?) AiAnimationState values.
+        /// </summary>
+        /// <param name="mode">Incoming mode. Usually CurrentMode but leaving the parameter open for calculation purposes</param>
+        /// <param name="overrideState">Return your own state here. Required for custom states, optionally can override base game states as well.</param>
+        /// <returns>Return false to override base mapping with your own overrideState. Return true to allow parent to handle animation state mapping.</returns>
+        protected virtual bool GetAiAnimationStateCustom(AiMode mode, out AiAnimationState overrideState)
+        {
+            overrideState = AiAnimationState.Invalid;
+            return true;
+        }
 
-            #region Damage & Wound/Bleeding
 
-            /// <summary>
-            /// Allows intercepting of parent logic for wound processing. 
-            /// Vanilla logic increments BaseAi.m_ElapsedWoundedMinutes.
-            /// </summary>
-            /// <param name="deltaTime">frame time</param>
-            /// <returns>return false to halt parent wound processing. Return true to allow parent wound processing.</returns>
-            protected bool UpdateWoundsCustom(float deltaTime) => true;
+        /// <summary>
+        /// Allows intercepting of parent move state flag mapping from input AiMode, and for functional routing of custom ai modes to move state flag.
+        /// Setting this to false will preclude any AI movement, be careful!
+        /// </summary>
+        /// <param name="mode">Incoming mode. Usually CurrentMode but leaving the parameter open for calculation purposes</param>
+        /// <param name="overrideState">Return your own preference here</param>
+        /// <returns>Return false to override base mapping with your own move state. Return true to allow parent to handle move state determination.</returns>
+        protected virtual bool IsMoveStateCustom(AiMode mode, out bool isMoveState)
+        {
+            isMoveState = false;
+            return true;
+        }
 
+        #endregion
 
-            /// <summary>
-            /// Allows intercepting of parent logic for bleeding out. 
-            /// Vanilla logic increments BaseAi.m_ElapsedWoundedMinutes.
-            /// </summary>
-            /// <param name="deltaTime">frame time</param>
-            /// <returns>return false to halt parent bleeding processing. Return true to allow parent bleeding processing.</returns>
-            protected bool UpdateBleedingCustom(float deltaTime) => true;
 
+        #region Damage & Wound/Bleeding
 
-            /// <summary>
-            /// Allows intercepting of base game logic for bleed out qualification. 
-            /// Vanilla logic is surprisingly obfuscated, but we all pretty much know that Moose (and i think cougar?) can't bleed out in vanilla.
-            /// </summary>
-            /// <param name="canBleedOut">Return your own value here</param>
-            /// <returns>Return false to override parent CanBleedOut logic with your own. Return true to defer to parent calculations.</returns>
-            protected virtual bool CanBleedOutCustom(out bool canBleedOut)
-            {
-                canBleedOut = false;
-                return true;
-            }
+        /// <summary>
+        /// Allows intercepting of parent logic for wound processing. 
+        /// Vanilla logic increments BaseAi.m_ElapsedWoundedMinutes.
+        /// </summary>
+        /// <param name="deltaTime">frame time</param>
+        /// <returns>return false to halt parent wound processing. Return true to allow parent wound processing.</returns>
+        protected bool UpdateWoundsCustom(float deltaTime) => true;
 
-            #endregion
 
+        /// <summary>
+        /// Allows intercepting of parent logic for bleeding out. 
+        /// Vanilla logic increments BaseAi.m_ElapsedWoundedMinutes.
+        /// </summary>
+        /// <param name="deltaTime">frame time</param>
+        /// <returns>return false to halt parent bleeding processing. Return true to allow parent bleeding processing.</returns>
+        protected bool UpdateBleedingCustom(float deltaTime) => true;
 
-            #region Targetting
 
-            protected virtual bool TargetCanBeIgnoredCustom(AiTarget target, out bool canBeIgnored)
-            {
-                canBeIgnored = false;
-                return true;
-            }
+        /// <summary>
+        /// Allows intercepting of base game logic for bleed out qualification. 
+        /// Vanilla logic is surprisingly obfuscated, but we all pretty much know that Moose (and i think cougar?) can't bleed out in vanilla.
+        /// </summary>
+        /// <param name="canBleedOut">Return your own value here</param>
+        /// <returns>Return false to override parent CanBleedOut logic with your own. Return true to defer to parent calculations.</returns>
+        protected virtual bool CanBleedOutCustom(out bool canBleedOut)
+        {
+            canBleedOut = false;
+            return true;
+        }
 
+        #endregion
 
-            protected virtual bool CanSeeTargetCustom(out bool canSeeTarget)
-            {
-                canSeeTarget = false;
-                return true;
-            }
 
+        #region Targetting
 
-            protected virtual bool MooseCanBeIgnoredCustom(out bool mooseCanBeIgnored)
-            {
-                mooseCanBeIgnored = false;
-                return true;
-            }
+        protected virtual bool TargetCanBeIgnoredCustom(AiTarget target, out bool canBeIgnored)
+        {
+            canBeIgnored = false;
+            return true;
+        }
 
-            #endregion
 
+        protected virtual bool CanSeeTargetCustom(out bool canSeeTarget)
+        {
+            canSeeTarget = false;
+            return true;
+        }
+
+
+        protected virtual bool MooseCanBeIgnoredCustom(out bool mooseCanBeIgnored)
+        {
+            mooseCanBeIgnored = false;
+            return true;
+        }
+
+        #endregion
+
+
+
+        #endregion
+
+
+        #region Logging
 
 
         #endregion
@@ -1720,21 +1733,13 @@ namespace ExpandedAiFramework
 
         #region ***DEBUG***
 
-        protected void LogTrace(string message) { Utility.LogTrace($"[{this}]: {message}"); }
-        protected void LogDebug(string message) { Utility.LogDebug($"[{this}]: {message}"); ; }
-        protected void LogVerbose(string message) { Utility.LogVerbose($"[{this}]: {message}"); ; }
-        protected void LogWarning(string message) { Utility.LogWarning($"[{this}]:  {message}"); ; }
-        protected void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U) { Utility.LogError($"[{this}]:  {message}", additionalFlags); }
-        protected void LogCriticalError(string message) { LogError($"[{this}]:  {message}", FlaggedLoggingLevel.Critical); }
-        protected void LogException(string message) { LogError($"[{this}]:  {message}", FlaggedLoggingLevel.Exception); }
-
-
 #if DEV_BUILD
         protected AiMode mCachedMode = AiMode.None;
         protected bool mReadout = false;
         public Transform mMarkerTransform;
         public Renderer mMarkerRenderer;
 #endif
+
 
         private void OnAugmentDebug()
         {

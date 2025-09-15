@@ -4,11 +4,15 @@ using System.Reflection;
 
 namespace ExpandedAiFramework
 {
-    public abstract class TypeSpecificSettings : JsonModSettings
+    public abstract class TypeSpecificSettings : JsonModSettings, ISpawnTypePickerCandidate
     {
         //Include a field name named "Enable"!
+
+        public TypeSpecificSettings(string path) : base(path) { }
+
         public abstract bool CanSpawn(BaseAi baseAi);
         public abstract int GetSpawnWeight();
+        public virtual bool ForceSpawningEnabled() { return false; }
         protected override void OnChange(FieldInfo field, object oldValue, object newValue)
         {
             ShowSettingsIfEnabled();
@@ -31,5 +35,11 @@ namespace ExpandedAiFramework
                 }
             }
         }
+
+        protected virtual void OnPick() { }
+
+        void ISpawnTypePickerCandidate.OnPick() => OnPick();
+        bool ISpawnTypePickerCandidate.CanSpawn(BaseAi baseAi) => CanSpawn(baseAi);
+        int ISpawnTypePickerCandidate.SpawnWeight() => GetSpawnWeight();
     }
 }

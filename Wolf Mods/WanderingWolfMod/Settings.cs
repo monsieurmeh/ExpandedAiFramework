@@ -22,6 +22,8 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public int SpawnDelay = 10;
 
 
+        public WanderingWolfSettings(string path) : base(path) { }
+
         public override bool CanSpawn(BaseAi ai)
         {
             return Enable

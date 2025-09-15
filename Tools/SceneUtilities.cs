@@ -1,5 +1,5 @@
 ﻿// ---------------------------------------------
-// ScenenUtilities - sourced from The (generous) Illusion
+// SceneUtilities - sourced from The (generous) Illusion
 // ---------------------------------------------
 
 namespace ExpandedAiFramework

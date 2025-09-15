@@ -3,3 +3,5 @@ obj/
 bin/
 clips/
 IgnoreMe/
+.aider*
+start_aider_manual_reasoner.bat

@@ -26,6 +26,7 @@ namespace ExpandedAiFramework.BigWolfMod
         [Description("Enables or disables big wolf bleeding")]
         public bool CanBleedOut = false;
 
+        public BigWolfSettings(string path) : base(path) { }
 
         public override bool CanSpawn(BaseAi ai)
         {

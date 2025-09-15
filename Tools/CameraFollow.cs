@@ -19,12 +19,12 @@ namespace ExpandedAiFramework
         protected float mY = 0.0f;
 
 
-        public void SetTarget(Transform target, Transform camera)
+        public void SetTarget(Transform target)
         {
             mTarget = target;
-            mCamera = camera;
-            mX = camera.eulerAngles.x;
-            mY = camera.eulerAngles.y;
+            mCamera = GameManager.m_vpFPSCamera.m_Camera.transform;
+            mX = mCamera.eulerAngles.x;
+            mY = mCamera.eulerAngles.y;
         }
 
 

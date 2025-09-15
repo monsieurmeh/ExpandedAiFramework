@@ -1,9 +1,11 @@
 ﻿global using Il2Cpp;
 global using MelonLoader;
 global using ModSettings;
+global using static ExpandedAiFramework.Utility;
+using MelonLoader.Utils;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.CompanionWolfMod.Main), "ExpandedAiFramework.CompanionWolfMod", "0.10.0", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.CompanionWolfMod.Main), "ExpandedAiFramework.CompanionWolfMod", "0.11.0", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 
@@ -18,12 +20,18 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         protected bool Initialize()
         {
-            EAFManager.Instance.ModData.Load("CompanionWolfMod");
+            Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
+            EAFManager.Instance.LoadData("CompanionWolfMod");
             CompanionWolfManager manager = new CompanionWolfManager();
-            manager.Initialize(EAFManager.Instance);
-            CompanionWolf.Settings = new CompanionWolfSettings(manager);
+            CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager, Path.Combine(DataFolderPath, $"{nameof(CompanionWolf)}"));
             EAFManager.Instance.RegisterSubmanager(typeof(CompanionWolf), manager);
-            return EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.Settings);
+            if (!EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.CompanionWolfSettings))
+            {
+                Utility.LogError("Could not register CompanionWolf spawning!");
+                return false;
+            }
+            CompanionWolf.CompanionWolfSettings.AddToModSettings(Utility.ModName);
+            return true;
         }
     }
 }

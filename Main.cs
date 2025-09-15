@@ -2,10 +2,13 @@
 global using MelonLoader;
 global using ModSettings;
 global using static Il2Cpp.BaseAi;
+using MelonLoader.Utils;
 using System.Reflection;
+using UnityEngine;
+using System.Resources;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "1.0.0", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.11.0", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 namespace ExpandedAiFramework
@@ -28,15 +31,24 @@ namespace ExpandedAiFramework
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
-            LogDebug("OnInitializedScene");
-            Manager.OnInitializedScene();
+            LogVerbose("OnInitializedScene");
+            Manager.OnInitializedScene(sceneName);
         }
-       
+
 
         protected bool Initialize()
         {
+            Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
+            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.HidingSpots.json")))
+            {
+                EmbeddedResourceExtractor.Extract("HidingSpots.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.HidingSpots.json"));
+            }
+            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.WanderPaths.json")))
+            {
+                EmbeddedResourceExtractor.Extract("WanderPaths.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/ExpandedAiFramework.WanderPaths.json"));
+            }
             mManager = EAFManager.Instance;
-            mManager?.Initialize(new ExpandedAiFrameworkSettings());
+            mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"Settings")));
             return mManager != null;
         }
 

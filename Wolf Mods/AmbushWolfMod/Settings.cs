@@ -22,6 +22,9 @@ namespace ExpandedAiFramework.AmbushWolfMod
         public int SpawnDelay = 20;
 
 
+        public AmbushWolfSettings(string path) : base(path) { }
+
+
         public override bool CanSpawn(BaseAi ai)
         {
             return Enable
