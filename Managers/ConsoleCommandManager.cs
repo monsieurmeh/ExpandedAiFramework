@@ -444,7 +444,7 @@ namespace ExpandedAiFramework
                 mCurrentPaintFilePath = uConsole.GetString();
                 if (!IsNameProvided(mCurrentPaintFilePath, false))
                 {
-                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"WanderPaths.json");
+                    mCurrentPaintFilePath = Path.Combine(DataFolderPath, $"HidingSpots.json");
                 }
             }
             else
