@@ -43,16 +43,19 @@ namespace ExpandedAiFramework
             string basePath = Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath);
             Directory.CreateDirectory(basePath);
             bool shouldRefreshEmbeddedData = false;
-            string detectedVersion = string.Empty;
+            string detectedVersion;
             if (!File.Exists(Path.Combine(basePath, "VersionInfo.txt")))
             {
+                LoggerInstance.Msg($"Could not detect version info file, making with current version {CurrentVersion}");
                 shouldRefreshEmbeddedData = true;
                 File.WriteAllText(Path.Combine(basePath, "VersionInfo.txt"), CurrentVersion, System.Text.Encoding.UTF8);
             }
             detectedVersion = File.ReadAllText(Path.Combine(basePath, "VersionInfo.txt"), System.Text.Encoding.UTF8);
             if (detectedVersion != CurrentVersion)
             {
+                LoggerInstance.Msg($"Detected version {detectedVersion} is not {CurrentVersion}");
                 shouldRefreshEmbeddedData = true;
+                File.WriteAllText(Path.Combine(basePath, "VersionInfo.txt"), CurrentVersion, System.Text.Encoding.UTF8);
             }
             if (shouldRefreshEmbeddedData || !File.Exists(Path.Combine(basePath, "HidingSpots.json")))
             {
