@@ -6,15 +6,17 @@ using MelonLoader.Utils;
 using System.Reflection;
 using UnityEngine;
 using System.Resources;
+using MelonLoader.TinyJSON;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.11.1", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.11.2", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 namespace ExpandedAiFramework
 {
     public class Main : MelonMod
     {
+        private const string CurrentVersion = "0.11.2";
         protected EAFManager mManager;
 
         public override void OnInitializeMelon()
@@ -38,14 +40,27 @@ namespace ExpandedAiFramework
 
         protected bool Initialize()
         {
-            Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
-            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/HidingSpots.json")))
+            string basePath = Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath);
+            Directory.CreateDirectory(basePath);
+            bool shouldRefreshEmbeddedData = false;
+            string detectedVersion = string.Empty;
+            if (!File.Exists(Path.Combine(basePath, "VersionInfo.txt")))
             {
-                EmbeddedResourceExtractor.Extract("HidingSpots.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/HidingSpots.json"));
+                shouldRefreshEmbeddedData = true;
+                File.WriteAllText(Path.Combine(basePath, "VersionInfo.txt"), CurrentVersion, System.Text.Encoding.UTF8);
             }
-            if (!File.Exists(Path.Combine(MelonEnvironment.ModsDirectory, "EAF/WanderPaths.json")))
+            detectedVersion = File.ReadAllText(Path.Combine(basePath, "VersionInfo.txt"), System.Text.Encoding.UTF8);
+            if (detectedVersion != CurrentVersion)
             {
-                EmbeddedResourceExtractor.Extract("WanderPaths.Json", Path.Combine(MelonEnvironment.ModsDirectory, "EAF/WanderPaths.json"));
+                shouldRefreshEmbeddedData = true;
+            }
+            if (shouldRefreshEmbeddedData || !File.Exists(Path.Combine(basePath, "HidingSpots.json")))
+            {
+                EmbeddedResourceExtractor.Extract("HidingSpots.Json", Path.Combine(basePath, "HidingSpots.Json"));
+            }
+            if (shouldRefreshEmbeddedData || !File.Exists(Path.Combine(basePath, "WanderPaths.Json")))
+            {
+                EmbeddedResourceExtractor.Extract("WanderPaths.Json", Path.Combine(basePath, "WanderPaths.Json"));
             }
             mManager = EAFManager.Instance;
             mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"Settings")));
