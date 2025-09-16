@@ -815,7 +815,7 @@ namespace ExpandedAiFramework
             string name = uConsole.GetString();
             if (!IsNameProvided(name, false))
             {
-                Console_ShowAllHidingSpots();
+                Console_ShowAllWanderPaths();
             }
             else
             {
