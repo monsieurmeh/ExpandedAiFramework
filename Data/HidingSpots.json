@@ -6,15 +6,15 @@
 			"z": -0.026694756,
 			"w": -0.35223755
 		},
-		"mGuid": "7d110eb1-9b9d-42b2-a84f-c91b1a8d2192",
 		"mName": "Riker",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 1031.1536,
 			"y": 17.707115,
 			"z": 990.0072
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "7d110eb1-9b9d-42b2-a84f-c91b1a8d2192",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -23,15 +23,15 @@
 			"z": -0.06077713,
 			"w": -0.6335808
 		},
-		"mGuid": "37785c88-5d8f-4538-bd82-08a31c03aa7f",
 		"mName": "WhaleProcessing1",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 1029.9861,
 			"y": 20.379831,
 			"z": 1325.8386
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "37785c88-5d8f-4538-bd82-08a31c03aa7f",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -40,15 +40,15 @@
 			"z": -0.0295172,
 			"w": -0.8662402
 		},
-		"mGuid": "0e2f45f8-5d56-44ee-8396-f7f7718aea82",
 		"mName": "WhaleProcessing2",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 1071.2225,
 			"y": 26.646582,
 			"z": 1217.0942
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "0e2f45f8-5d56-44ee-8396-f7f7718aea82",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -57,15 +57,15 @@
 			"z": -0.009051135,
 			"w": 0.6792003
 		},
-		"mGuid": "f94522d7-77ae-4f1f-be9c-0863be7a88b6",
 		"mName": "WhaleProcessing3",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 1114.4802,
 			"y": 19.802677,
 			"z": 1284.818
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f94522d7-77ae-4f1f-be9c-0863be7a88b6",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -74,15 +74,15 @@
 			"z": -0.019996686,
 			"w": -0.8648987
 		},
-		"mGuid": "d5a44b07-198b-4660-bd01-433cb0fec0d5",
 		"mName": "ModRegionEntryPoint",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 1084.7631,
 			"y": 37.912468,
 			"z": 1620.5593
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d5a44b07-198b-4660-bd01-433cb0fec0d5",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -91,15 +91,15 @@
 			"z": -1.8465835E-05,
 			"w": 0.99790674
 		},
-		"mGuid": "b724788f-cbdd-4899-b281-d30f033f91d3",
 		"mName": "Lighthouse1",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 666.3205,
 			"y": 18.992548,
 			"z": 801.028
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b724788f-cbdd-4899-b281-d30f033f91d3",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -108,15 +108,15 @@
 			"z": -0.030965272,
 			"w": 0.31747308
 		},
-		"mGuid": "32cb8520-fd80-474e-b866-25c671225cff",
 		"mName": "Lighthouse2",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 650.3029,
 			"y": 15.839085,
 			"z": 768.07104
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "32cb8520-fd80-474e-b866-25c671225cff",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -125,15 +125,15 @@
 			"z": -0.022441506,
 			"w": 0.20162643
 		},
-		"mGuid": "e9bd0407-ff73-4851-b22d-1d089741ac6d",
 		"mName": "south1",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 374.285,
 			"y": 17.695688,
 			"z": 895.9566
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "e9bd0407-ff73-4851-b22d-1d089741ac6d",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -142,15 +142,15 @@
 			"z": -0.06358228,
 			"w": -0.14368477
 		},
-		"mGuid": "0fd4a9c4-c2e4-4a35-bfee-dab2853b87ad",
 		"mName": "lighthouse3",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 598.68256,
 			"y": 25.33571,
 			"z": 953.8242
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "0fd4a9c4-c2e4-4a35-bfee-dab2853b87ad",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -159,15 +159,15 @@
 			"z": -0.024886053,
 			"w": -0.22950235
 		},
-		"mGuid": "4cd8e071-236e-46d8-a84e-416984561723",
 		"mName": "EntryAmbush1",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 150.4638,
 			"y": 71.27194,
 			"z": 1267.1793
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4cd8e071-236e-46d8-a84e-416984561723",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -176,15 +176,15 @@
 			"z": -0.044489555,
 			"w": 0.7963531
 		},
-		"mGuid": "5f53fbbb-60f8-4440-a450-0346077adab1",
 		"mName": "EntryAmbush2",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 92.26615,
 			"y": 89.06782,
 			"z": 1144.8499
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "5f53fbbb-60f8-4440-a450-0346077adab1",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mRotation": {
@@ -193,15 +193,15 @@
 			"z": 0,
 			"w": 0
 		},
-		"mGuid": "635cd4ed-dc01-42be-b0ba-4c7efa40f05f",
 		"mName": "debris3",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1567.2166,
 			"y": 127.75288,
 			"z": 484.06213
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "635cd4ed-dc01-42be-b0ba-4c7efa40f05f",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -210,15 +210,15 @@
 			"z": -0.0131413825,
 			"w": 0.9649749
 		},
-		"mGuid": "1b1f5f5d-0fc0-4fe8-9b30-7cc2d0b8370e",
 		"mName": "summitpath1",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1638.7292,
 			"y": 155.5918,
 			"z": 1149.6055
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "1b1f5f5d-0fc0-4fe8-9b30-7cc2d0b8370e",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -227,15 +227,15 @@
 			"z": -0.00014010615,
 			"w": 0.9920636
 		},
-		"mGuid": "7bd00a2a-1bca-4c77-9a46-1657685245bb",
 		"mName": "summitpath2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1663.3713,
 			"y": 208.10733,
 			"z": 1608.8496
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7bd00a2a-1bca-4c77-9a46-1657685245bb",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -244,15 +244,15 @@
 			"z": -0.05146118,
 			"w": 0.751735
 		},
-		"mGuid": "14f40475-a24d-49c0-b407-6f02c6c68087",
 		"mName": "debris1",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 640.1048,
 			"y": 276.559,
 			"z": 1091.7445
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "14f40475-a24d-49c0-b407-6f02c6c68087",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -261,15 +261,15 @@
 			"z": -0.06882701,
 			"w": 0.8867689
 		},
-		"mGuid": "60d11b88-e502-4361-8acb-2ea92b3d16d4",
 		"mName": "summitpath3",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 975.4199,
 			"y": 274.44205,
 			"z": 1712.7472
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "60d11b88-e502-4361-8acb-2ea92b3d16d4",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -278,15 +278,15 @@
 			"z": -0.03525098,
 			"w": 0.03584038
 		},
-		"mGuid": "fccd4524-8d2f-4207-9760-653efcfb6b20",
 		"mName": "summitpath4",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1217.0819,
 			"y": 275.03336,
 			"z": 1690.7872
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "fccd4524-8d2f-4207-9760-653efcfb6b20",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -295,15 +295,15 @@
 			"z": -0.10133634,
 			"w": -0.76656514
 		},
-		"mGuid": "2b1bd0a7-acff-40db-a165-79ad93ae695e",
 		"mName": "proudwolf",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 386.8712,
 			"y": 361.38907,
 			"z": 1517.8452
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "2b1bd0a7-acff-40db-a165-79ad93ae695e",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -312,15 +312,15 @@
 			"z": -0.042055096,
 			"w": 0.7517211
 		},
-		"mGuid": "d758abd6-63c4-4558-8662-f8d367d938e5",
 		"mName": "proudwolf2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 302.37665,
 			"y": 234.70648,
 			"z": 806.23914
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d758abd6-63c4-4558-8662-f8d367d938e5",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -329,15 +329,15 @@
 			"z": -0.012772285,
 			"w": 0.73290145
 		},
-		"mGuid": "7a155783-e3e7-469b-abec-68f247496534",
 		"mName": "summit1",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1010.88574,
 			"y": 489.05838,
 			"z": 1428.6013
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "7a155783-e3e7-469b-abec-68f247496534",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -346,15 +346,15 @@
 			"z": -0.055150673,
 			"w": -0.77263397
 		},
-		"mGuid": "b3128def-65c8-489c-a8b3-bb552a55864d",
 		"mName": "summit2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 998.6134,
 			"y": 487.49017,
 			"z": 1216.6586
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "b3128def-65c8-489c-a8b3-bb552a55864d",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -363,15 +363,15 @@
 			"z": -0.0064178174,
 			"w": -0.95077324
 		},
-		"mGuid": "3d92cf5a-aa0a-4ae8-bf93-201258665ffe",
 		"mName": "canyon",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1143.4275,
 			"y": 51.952766,
 			"z": 899.41907
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "3d92cf5a-aa0a-4ae8-bf93-201258665ffe",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -380,15 +380,15 @@
 			"z": -0.09462126,
 			"w": -0.4631563
 		},
-		"mGuid": "1f5792a8-d35a-4e54-bac4-5630286c7cbe",
 		"mName": "cabin1",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 755.29297,
 			"y": 167.73538,
 			"z": 365.04495
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "1f5792a8-d35a-4e54-bac4-5630286c7cbe",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -397,15 +397,15 @@
 			"z": -0.03149685,
 			"w": -0.9411141
 		},
-		"mGuid": "d71f0796-2206-4109-93a8-21de6de9c9bf",
 		"mName": "cabin2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 950.3826,
 			"y": 160.95624,
 			"z": 377.50412
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "d71f0796-2206-4109-93a8-21de6de9c9bf",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -414,15 +414,15 @@
 			"z": -0.18385637,
 			"w": 0.04060781
 		},
-		"mGuid": "b6aa8506-a846-4dbe-a4a6-072f354e30b5",
 		"mName": "acentry",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1819.2418,
 			"y": 59.225876,
 			"z": 722.236
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b6aa8506-a846-4dbe-a4a6-072f354e30b5",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -431,15 +431,15 @@
 			"z": -0.033719372,
 			"w": -0.9239492
 		},
-		"mGuid": "fe55253b-3e34-4eca-b63e-93f5b5a1c7ee",
 		"mName": "canyoncave",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1387.8026,
 			"y": 154.44745,
 			"z": 1221.2522
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "fe55253b-3e34-4eca-b63e-93f5b5a1c7ee",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mRotation": {
@@ -448,15 +448,15 @@
 			"z": -0.011228653,
 			"w": 0.98863107
 		},
-		"mGuid": "e5680656-60b6-4c7d-aa06-c12082aa8b57",
 		"mName": "bunker1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 334.4811,
 			"y": 185.42012,
 			"z": 2258.1406
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "e5680656-60b6-4c7d-aa06-c12082aa8b57",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -465,15 +465,15 @@
 			"z": -0.078646764,
 			"w": -0.6564473
 		},
-		"mGuid": "f83578c0-0fc7-4f84-bf37-36eebac048a0",
 		"mName": "cave1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 386.37454,
 			"y": 143.27802,
 			"z": 2613.095
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f83578c0-0fc7-4f84-bf37-36eebac048a0",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -482,15 +482,15 @@
 			"z": -0.10523182,
 			"w": -0.6004344
 		},
-		"mGuid": "b246dfe2-d5b3-4f7b-9379-856d59063c13",
 		"mName": "barn1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1796.4008,
 			"y": 44.415295,
 			"z": 1810.4261
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b246dfe2-d5b3-4f7b-9379-856d59063c13",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -499,15 +499,15 @@
 			"z": -0.010180869,
 			"w": 0.9827287
 		},
-		"mGuid": "2168b9d6-9c22-4e88-b519-c559a02806f1",
 		"mName": "barn2",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1715.3502,
 			"y": 47.104233,
 			"z": 1763.9675
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "2168b9d6-9c22-4e88-b519-c559a02806f1",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -516,15 +516,15 @@
 			"z": -0.11231368,
 			"w": -0.14895585
 		},
-		"mGuid": "476f5eb9-4e3d-475b-93a7-a6746c13510b",
 		"mName": "barn3",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1523.0428,
 			"y": 48.41433,
 			"z": 1357.5144
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "476f5eb9-4e3d-475b-93a7-a6746c13510b",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -533,15 +533,15 @@
 			"z": -0.10578192,
 			"w": -0.4657103
 		},
-		"mGuid": "e594e5b9-85ff-4dc4-8d48-fa70acfab9af",
 		"mName": "barn4",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1505.0304,
 			"y": 51.266605,
 			"z": 1078.7191
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "e594e5b9-85ff-4dc4-8d48-fa70acfab9af",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -550,15 +550,15 @@
 			"z": -0.101820014,
 			"w": 0.8400275
 		},
-		"mGuid": "6565df27-4311-46e3-82f7-b6cce2b220b6",
 		"mName": "farmhouse",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1458.1548,
 			"y": 50.310833,
 			"z": 1026.3678
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6565df27-4311-46e3-82f7-b6cce2b220b6",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -567,15 +567,15 @@
 			"z": -0.011552393,
 			"w": -0.97853476
 		},
-		"mGuid": "1946767b-7fe5-45ec-8f33-f4d0b404b181",
 		"mName": "corpse1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1229.795,
 			"y": 75.86053,
 			"z": 870.0017
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "1946767b-7fe5-45ec-8f33-f4d0b404b181",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -584,15 +584,15 @@
 			"z": -0.0051921424,
 			"w": 0.77786505
 		},
-		"mGuid": "731f24a3-2733-460a-a0ba-253f95f8fcc5",
 		"mName": "0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 950.3158,
 			"y": 47.71416,
 			"z": 932.3732
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "731f24a3-2733-460a-a0ba-253f95f8fcc5",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -601,15 +601,15 @@
 			"z": -0.003159305,
 			"w": 0.9860008
 		},
-		"mGuid": "9f29169a-4bd5-4090-ad19-44316378ae2b",
 		"mName": "1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 774.9553,
 			"y": 56.549976,
 			"z": 936.58453
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9f29169a-4bd5-4090-ad19-44316378ae2b",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -618,15 +618,15 @@
 			"z": -0.05437431,
 			"w": -0.94360507
 		},
-		"mGuid": "b0c8b13c-56e9-4607-9bea-d844d9a47eac",
 		"mName": "barn5",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1122.7012,
 			"y": 50.71982,
 			"z": 686.36194
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b0c8b13c-56e9-4607-9bea-d844d9a47eac",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -635,15 +635,15 @@
 			"z": -0.011179131,
 			"w": 0.9881181
 		},
-		"mGuid": "cc43a498-b49d-4792-889e-e830ff4397f8",
 		"mName": "barn6",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1724.4908,
 			"y": 50.873577,
 			"z": 923.117
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "cc43a498-b49d-4792-889e-e830ff4397f8",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -652,15 +652,15 @@
 			"z": -0.042869445,
 			"w": 0.59297353
 		},
-		"mGuid": "3e838c54-86d9-4f3f-b68c-ec1cc508805d",
 		"mName": "random0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1979.0459,
 			"y": 141.36942,
 			"z": 311.2565
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "3e838c54-86d9-4f3f-b68c-ec1cc508805d",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -669,15 +669,15 @@
 			"z": -0.06556458,
 			"w": 0.63098
 		},
-		"mGuid": "22502cf8-764f-4a27-a98f-a0ff35baefde",
 		"mName": "ptarmigan0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1904.7216,
 			"y": 221.9837,
 			"z": 456.60388
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "22502cf8-764f-4a27-a98f-a0ff35baefde",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -686,15 +686,15 @@
 			"z": -0.043899838,
 			"w": 0.85035324
 		},
-		"mGuid": "0f5e5a43-aede-4c38-96ad-1b61e4c2c46d",
 		"mName": "transmitter",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1899.8113,
 			"y": 200.1068,
 			"z": 640.19183
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "0f5e5a43-aede-4c38-96ad-1b61e4c2c46d",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -703,15 +703,15 @@
 			"z": -0.059821222,
 			"w": -0.93352556
 		},
-		"mGuid": "ef76e279-3a12-4df2-94ae-7fd71b4e7ae3",
 		"mName": "overlook0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2643.28,
 			"y": 158.69302,
 			"z": 574.69684
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ef76e279-3a12-4df2-94ae-7fd71b4e7ae3",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -720,15 +720,15 @@
 			"z": -0.029956441,
 			"w": -0.9565597
 		},
-		"mGuid": "a18384c7-0cb0-4778-a2e2-d3670fb3e265",
 		"mName": "cave0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2385.948,
 			"y": 170.74051,
 			"z": 277.19415
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a18384c7-0cb0-4778-a2e2-d3670fb3e265",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -737,15 +737,15 @@
 			"z": -0.101082735,
 			"w": 0.23184209
 		},
-		"mGuid": "8df9cb15-ec98-49e7-a6a2-cba92596a051",
 		"mName": "road0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2335.5652,
 			"y": 168.78088,
 			"z": 797.88965
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "8df9cb15-ec98-49e7-a6a2-cba92596a051",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -754,15 +754,15 @@
 			"z": -0.03072986,
 			"w": -0.95701355
 		},
-		"mGuid": "208eaed2-4b18-4e60-8df1-8df465452166",
 		"mName": "proudwolf0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2717.484,
 			"y": 144.67805,
 			"z": 1126.1425
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "208eaed2-4b18-4e60-8df1-8df465452166",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -771,15 +771,15 @@
 			"z": -0.1136192,
 			"w": -0.0056581185
 		},
-		"mGuid": "96e896f0-ffdc-408d-ab7f-9c48603373a0",
 		"mName": "picnic",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2610.7805,
 			"y": 132.80377,
 			"z": 1272.4209
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "96e896f0-ffdc-408d-ab7f-9c48603373a0",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -788,15 +788,15 @@
 			"z": -0.043842994,
 			"w": 0.44753718
 		},
-		"mGuid": "4e3a3aa1-605b-4977-b5b7-5b6952635811",
 		"mName": "fishinghut0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2476.7305,
 			"y": 112.67422,
 			"z": 1250.3899
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4e3a3aa1-605b-4977-b5b7-5b6952635811",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -805,15 +805,15 @@
 			"z": -0.009310931,
 			"w": -0.98034114
 		},
-		"mGuid": "d41233a3-b8bd-4ea9-8caf-302d81f3ff06",
 		"mName": "fishinghut1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2539.572,
 			"y": 112.97779,
 			"z": 1150.5493
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d41233a3-b8bd-4ea9-8caf-302d81f3ff06",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -822,15 +822,15 @@
 			"z": -0.05193467,
 			"w": -0.7144194
 		},
-		"mGuid": "8c3bf579-bca2-4100-96b2-582000bd4b3a",
 		"mName": "random1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2513.693,
 			"y": 110.40771,
 			"z": 1519.2488
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "8c3bf579-bca2-4100-96b2-582000bd4b3a",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -839,15 +839,15 @@
 			"z": -0.029051555,
 			"w": -0.89790386
 		},
-		"mGuid": "f77f3057-ab11-42fb-8b42-35d4785bc52b",
 		"mName": "waterfall0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2201.1738,
 			"y": 42.446438,
 			"z": 1088.4781
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f77f3057-ab11-42fb-8b42-35d4785bc52b",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -856,15 +856,15 @@
 			"z": -0.015082297,
 			"w": -0.6696876
 		},
-		"mGuid": "7738476e-df93-4f22-a6d9-2e4b19fd9410",
 		"mName": "bridge",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2665.8687,
 			"y": 135.29224,
 			"z": 881.5754
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7738476e-df93-4f22-a6d9-2e4b19fd9410",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -873,15 +873,15 @@
 			"z": -0.27453536,
 			"w": -0.5021316
 		},
-		"mGuid": "727e2bd7-a662-4bb0-8ba5-abaf6fb2ab77",
 		"mName": "path",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2713.9282,
 			"y": 147.29253,
 			"z": 1611.9753
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "727e2bd7-a662-4bb0-8ba5-abaf6fb2ab77",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -890,15 +890,15 @@
 			"z": -0.011374703,
 			"w": 0.8269004
 		},
-		"mGuid": "709ab3fa-2da3-4739-b73f-4d76ec1afea1",
 		"mName": "path2",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2461.6763,
 			"y": 74.12795,
 			"z": 1751.8823
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "709ab3fa-2da3-4739-b73f-4d76ec1afea1",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -907,15 +907,15 @@
 			"z": -0.0012344366,
 			"w": 0.9341133
 		},
-		"mGuid": "5764b4a6-4bd3-4501-9b65-f93867e39f0e",
 		"mName": "car",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2328.6624,
 			"y": 45.813313,
 			"z": 2024.6793
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "5764b4a6-4bd3-4501-9b65-f93867e39f0e",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -924,15 +924,15 @@
 			"z": -0.028584225,
 			"w": 0.17327851
 		},
-		"mGuid": "1fbcf819-020d-4e56-89b8-c5ae7f1b9caf",
 		"mName": "random2",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2556.826,
 			"y": 72.00752,
 			"z": 2037.8073
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "1fbcf819-020d-4e56-89b8-c5ae7f1b9caf",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -941,15 +941,15 @@
 			"z": -0.07282381,
 			"w": -0.6726329
 		},
-		"mGuid": "c7a875ea-8c58-4929-b643-8c825e5b35eb",
 		"mName": "market0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2339.051,
 			"y": 57.053,
 			"z": 2256.5554
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c7a875ea-8c58-4929-b643-8c825e5b35eb",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -958,15 +958,15 @@
 			"z": -0.0049592652,
 			"w": 0.8025789
 		},
-		"mGuid": "1607aaf9-cac7-49af-9127-c9a3702fad08",
 		"mName": "market1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2250.8857,
 			"y": 56.591278,
 			"z": 2267.793
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "1607aaf9-cac7-49af-9127-c9a3702fad08",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -975,15 +975,15 @@
 			"z": -0.03137887,
 			"w": 0.9288326
 		},
-		"mGuid": "224b7291-e251-4d9e-89dc-be7166d4f4a5",
 		"mName": "market2",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2273.996,
 			"y": 57.827274,
 			"z": 2262.8215
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "224b7291-e251-4d9e-89dc-be7166d4f4a5",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -992,15 +992,15 @@
 			"z": -0.064185254,
 			"w": 0.8745723
 		},
-		"mGuid": "fbb17792-039e-4ada-b05f-d24f210f1193",
 		"mName": "market3",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2290.641,
 			"y": 56.735195,
 			"z": 2258.307
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "fbb17792-039e-4ada-b05f-d24f210f1193",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1009,15 +1009,15 @@
 			"z": -0.07386471,
 			"w": 0.42383662
 		},
-		"mGuid": "b83ef23c-a19b-456e-89de-a348d864c183",
 		"mName": "market4",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2273.9197,
 			"y": 53.10075,
 			"z": 2316.0173
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b83ef23c-a19b-456e-89de-a348d864c183",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1026,15 +1026,15 @@
 			"z": -0.16523306,
 			"w": -0.6242882
 		},
-		"mGuid": "69bf6a09-b308-4b2a-8c15-d68cee67fc53",
 		"mName": "market5",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2477.774,
 			"y": 56.377792,
 			"z": 2410.5115
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "69bf6a09-b308-4b2a-8c15-d68cee67fc53",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1043,15 +1043,15 @@
 			"z": -0.051904067,
 			"w": 0.8353449
 		},
-		"mGuid": "bf78e6e1-5d6c-4503-8b84-ce41faa4d1da",
 		"mName": "ch0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2181.1184,
 			"y": 103.0056,
 			"z": 2630.1765
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "bf78e6e1-5d6c-4503-8b84-ce41faa4d1da",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1060,15 +1060,15 @@
 			"z": -0.02214004,
 			"w": -0.97690594
 		},
-		"mGuid": "3e4e323b-01b2-4095-ab19-e698ffe33f29",
 		"mName": "ch1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2212.8823,
 			"y": 106.21338,
 			"z": 2754.3813
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "3e4e323b-01b2-4095-ab19-e698ffe33f29",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1077,15 +1077,15 @@
 			"z": -0.02562741,
 			"w": -0.8038829
 		},
-		"mGuid": "c6ede1d1-4c28-4747-90bb-6eb93483e159",
 		"mName": "ch2",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2042.3473,
 			"y": 93.544136,
 			"z": 2811.3455
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c6ede1d1-4c28-4747-90bb-6eb93483e159",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1094,15 +1094,15 @@
 			"z": -0.0133119095,
 			"w": 0.8037309
 		},
-		"mGuid": "d40e9ce3-a49c-4b07-ade5-6f44af4b307b",
 		"mName": "ch3",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1966.1195,
 			"y": 94.63897,
 			"z": 2717.7463
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d40e9ce3-a49c-4b07-ade5-6f44af4b307b",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1111,15 +1111,15 @@
 			"z": -0.040494535,
 			"w": -0.8293152
 		},
-		"mGuid": "d73609db-3d32-4b35-ac3e-ae3cfeeb6e64",
 		"mName": "ch4",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2040.7863,
 			"y": 91.33654,
 			"z": 2775.248
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d73609db-3d32-4b35-ac3e-ae3cfeeb6e64",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1128,15 +1128,15 @@
 			"z": -0.11914442,
 			"w": 0.48326236
 		},
-		"mGuid": "d4bbdc4a-dafa-4e97-98b8-e67a4bb04d65",
 		"mName": "proudwolf1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1761.2706,
 			"y": 115.52004,
 			"z": 2769.7231
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d4bbdc4a-dafa-4e97-98b8-e67a4bb04d65",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1145,15 +1145,15 @@
 			"z": -0.12768164,
 			"w": -0.3288682
 		},
-		"mGuid": "464c56a1-d6e9-41d0-8bbc-aa6ee047b62a",
 		"mName": "path5",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1519.641,
 			"y": 98.118195,
 			"z": 2732.9434
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "464c56a1-d6e9-41d0-8bbc-aa6ee047b62a",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1162,15 +1162,15 @@
 			"z": -0.12624298,
 			"w": 0.005487458
 		},
-		"mGuid": "c2352c18-b871-403a-b5d4-5344a87b0f1e",
 		"mName": "path6",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1397.9685,
 			"y": 92.63635,
 			"z": 2703.3828
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c2352c18-b871-403a-b5d4-5344a87b0f1e",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1179,15 +1179,15 @@
 			"z": -0.04477898,
 			"w": 0.79072106
 		},
-		"mGuid": "c838f66d-3195-48e3-9011-258991bb839d",
 		"mName": "path7",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1183.1946,
 			"y": 87.67827,
 			"z": 2665.0205
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c838f66d-3195-48e3-9011-258991bb839d",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1196,15 +1196,15 @@
 			"z": -0.0009229252,
 			"w": 0.99795026
 		},
-		"mGuid": "d952de79-d293-4bae-9417-d3f4b8ec28ab",
 		"mName": "path8",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 886.1856,
 			"y": 130.53163,
 			"z": 2578.9583
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d952de79-d293-4bae-9417-d3f4b8ec28ab",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1213,15 +1213,15 @@
 			"z": -0.030552583,
 			"w": 0.1550937
 		},
-		"mGuid": "4311f7cf-885b-4427-bef7-3266194b2148",
 		"mName": "path9",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 766.42316,
 			"y": 151.42453,
 			"z": 2563.9958
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4311f7cf-885b-4427-bef7-3266194b2148",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1230,15 +1230,15 @@
 			"z": -0.105796486,
 			"w": 0.50076044
 		},
-		"mGuid": "cda19714-9427-48ec-9c98-951a6c892747",
 		"mName": "proudwolf2",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 654.4014,
 			"y": 158.13953,
 			"z": 2334.596
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "cda19714-9427-48ec-9c98-951a6c892747",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1247,15 +1247,15 @@
 			"z": -0.06623956,
 			"w": 0.19395
 		},
-		"mGuid": "140d4174-7bda-495a-abbb-bc6930b6b0c7",
 		"mName": "disagreement",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 642.6233,
 			"y": 142.22488,
 			"z": 2281.5662
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "140d4174-7bda-495a-abbb-bc6930b6b0c7",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1264,15 +1264,15 @@
 			"z": -0.18995221,
 			"w": 0.24069686
 		},
-		"mGuid": "b82863bc-4a9e-40b4-b8ef-69889a00fc3e",
 		"mName": "plane0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 450.6379,
 			"y": 184.71335,
 			"z": 1655.1938
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b82863bc-4a9e-40b4-b8ef-69889a00fc3e",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1281,15 +1281,15 @@
 			"z": -0.028939174,
 			"w": -0.8939993
 		},
-		"mGuid": "a1af19d2-9684-4dfc-85f7-aa1c065acc67",
 		"mName": "plane1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 548.9432,
 			"y": 155.23668,
 			"z": 1727.001
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a1af19d2-9684-4dfc-85f7-aa1c065acc67",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1298,15 +1298,15 @@
 			"z": -0.08607096,
 			"w": -0.09369775
 		},
-		"mGuid": "625edd57-0d5d-42f6-8594-80c144c31dc7",
 		"mName": "plane2",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 577.7233,
 			"y": 153.33868,
 			"z": 1793.0804
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "625edd57-0d5d-42f6-8594-80c144c31dc7",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1315,15 +1315,15 @@
 			"z": -0.0841487,
 			"w": -0.5348543
 		},
-		"mGuid": "2b14112d-7f0b-408e-ba2d-1bd4e41889df",
 		"mName": "plane3",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 604.18005,
 			"y": 155.2815,
 			"z": 1776.8877
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "2b14112d-7f0b-408e-ba2d-1bd4e41889df",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1332,15 +1332,15 @@
 			"z": -0.100371934,
 			"w": 0.47933388
 		},
-		"mGuid": "bc1d4fcd-912f-4faf-ab19-42d87d7352c6",
 		"mName": "random4",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2133.1646,
 			"y": 45.717804,
 			"z": 1966.1503
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "bc1d4fcd-912f-4faf-ab19-42d87d7352c6",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1349,15 +1349,15 @@
 			"z": -0.013637486,
 			"w": 0.9849512
 		},
-		"mGuid": "0112c450-64d6-4a5a-8b6b-b6196205a027",
 		"mName": "random5",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2104.8718,
 			"y": 63.06643,
 			"z": 2018.3757
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "0112c450-64d6-4a5a-8b6b-b6196205a027",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1366,15 +1366,15 @@
 			"z": -0.0041187005,
 			"w": -0.5967924
 		},
-		"mGuid": "7f7abf7b-8b03-4484-93f7-64ba2e75dec2",
 		"mName": "bridge3",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1787.865,
 			"y": 51.47264,
 			"z": 1932.4657
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7f7abf7b-8b03-4484-93f7-64ba2e75dec2",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1383,15 +1383,15 @@
 			"z": -0.034717128,
 			"w": 0.7609176
 		},
-		"mGuid": "5cd79f02-71d4-4a1a-98a3-f09c624a56b2",
 		"mName": "river0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2089.9404,
 			"y": 42.084175,
 			"z": 1357.416
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "5cd79f02-71d4-4a1a-98a3-f09c624a56b2",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1400,15 +1400,15 @@
 			"z": -0.016924122,
 			"w": -0.8860188
 		},
-		"mGuid": "0e4eefe1-3e45-43f9-8d66-18ff65a95d94",
 		"mName": "river1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 2075.2273,
 			"y": 44.296135,
 			"z": 1188.7883
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "0e4eefe1-3e45-43f9-8d66-18ff65a95d94",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1417,15 +1417,15 @@
 			"z": -0.017473675,
 			"w": -0.81545246
 		},
-		"mGuid": "5703d521-7f0c-4efc-bd97-561e72a87f04",
 		"mName": "cairne0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1723.554,
 			"y": 51.27171,
 			"z": 1153.0704
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "5703d521-7f0c-4efc-bd97-561e72a87f04",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1434,15 +1434,15 @@
 			"z": -0.06601002,
 			"w": -0.6588261
 		},
-		"mGuid": "17a62d35-93fe-4e5a-8f74-190e4e9c9368",
 		"mName": "barn7",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1463.2185,
 			"y": 40.642857,
 			"z": 1871.5197
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "17a62d35-93fe-4e5a-8f74-190e4e9c9368",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1451,15 +1451,15 @@
 			"z": -0.006660683,
 			"w": -0.9928597
 		},
-		"mGuid": "a1272625-4cff-44d4-8186-869ae397d021",
 		"mName": "river2",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 866.03687,
 			"y": 49.563904,
 			"z": 1283.6167
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a1272625-4cff-44d4-8186-869ae397d021",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1468,15 +1468,15 @@
 			"z": -0.028240295,
 			"w": -0.78290075
 		},
-		"mGuid": "223d80d1-ea16-4a73-83ca-d9e456bca9ff",
 		"mName": "bridge4",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 699.26794,
 			"y": 53.05444,
 			"z": 1147.4192
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "223d80d1-ea16-4a73-83ca-d9e456bca9ff",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1485,15 +1485,15 @@
 			"z": -0.09035952,
 			"w": 0.716084
 		},
-		"mGuid": "b6d5ce45-3366-4681-9158-1f220014faca",
 		"mName": "river3",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1174.3535,
 			"y": 42.2452,
 			"z": 1733.0093
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b6d5ce45-3366-4681-9158-1f220014faca",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1502,15 +1502,15 @@
 			"z": -0.0048872624,
 			"w": -0.95286727
 		},
-		"mGuid": "bf2d65e9-d7f7-460f-b52b-5f1c6ac85daa",
 		"mName": "river4",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 1200.9788,
 			"y": 43.7553,
 			"z": 2117.5056
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "bf2d65e9-d7f7-460f-b52b-5f1c6ac85daa",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mRotation": {
@@ -1519,15 +1519,15 @@
 			"z": 0,
 			"w": 0.99419385
 		},
-		"mGuid": "8aaa6c7b-d052-4fc3-a88d-8747bec9601d",
 		"mName": "HidingSpot_1",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 356.20126,
 			"y": 234.6889,
 			"z": 3.154388
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "8aaa6c7b-d052-4fc3-a88d-8747bec9601d",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1536,15 +1536,15 @@
 			"z": 0,
 			"w": -0.2995606
 		},
-		"mGuid": "e0e290b0-da43-4419-83e6-7432ee37c23f",
 		"mName": "HidingSpot_2",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 236.16774,
 			"y": 244.75261,
 			"z": 14.798871
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "e0e290b0-da43-4419-83e6-7432ee37c23f",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1553,15 +1553,15 @@
 			"z": 0,
 			"w": 0.57461005
 		},
-		"mGuid": "71180312-151a-4d80-8b5a-ce8fe2f23518",
 		"mName": "HidingSpot_3",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 209.86119,
 			"y": 231.95143,
 			"z": -41.048615
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "71180312-151a-4d80-8b5a-ce8fe2f23518",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1570,15 +1570,15 @@
 			"z": 0,
 			"w": 0.5626827
 		},
-		"mGuid": "33b243a0-377c-4cb5-a2ac-47a2480f986e",
 		"mName": "HidingSpot_4",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 164.66716,
 			"y": 226.38925,
 			"z": 50.468384
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "33b243a0-377c-4cb5-a2ac-47a2480f986e",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1587,15 +1587,15 @@
 			"z": 0,
 			"w": -0.3027511
 		},
-		"mGuid": "bab0a2d6-6502-43ec-a820-e13a06809454",
 		"mName": "HidingSpot_5",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 136.32964,
 			"y": 225.85213,
 			"z": -19.75399
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "bab0a2d6-6502-43ec-a820-e13a06809454",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1604,15 +1604,15 @@
 			"z": 0,
 			"w": 0.99989283
 		},
-		"mGuid": "9372c7b5-1e6f-40d1-8bd9-07657a4ce1ee",
 		"mName": "HidingSpot_6",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": -198.34926,
 			"y": 229.44281,
 			"z": -390.07535
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9372c7b5-1e6f-40d1-8bd9-07657a4ce1ee",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1621,15 +1621,15 @@
 			"z": 0,
 			"w": 0.81143427
 		},
-		"mGuid": "4b8432fd-1c41-4335-a207-f37354beff68",
 		"mName": "HidingSpot_7",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": -289.53836,
 			"y": 196.50014,
 			"z": -308.4921
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4b8432fd-1c41-4335-a207-f37354beff68",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1638,15 +1638,15 @@
 			"z": 0,
 			"w": 0.30134705
 		},
-		"mGuid": "89c7ecd9-a4de-421a-b59f-409f6da4d504",
 		"mName": "HidingSpot_8",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": -107.53071,
 			"y": 232.99936,
 			"z": -159.50543
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "89c7ecd9-a4de-421a-b59f-409f6da4d504",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1655,15 +1655,15 @@
 			"z": 0,
 			"w": 0.7477088
 		},
-		"mGuid": "9262458a-9e9c-439e-a49f-67166a92f083",
 		"mName": "HidingSpot_9",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": -519.6311,
 			"y": 182.36339,
 			"z": -322.15436
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9262458a-9e9c-439e-a49f-67166a92f083",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1672,15 +1672,15 @@
 			"z": 0,
 			"w": -0.24679741
 		},
-		"mGuid": "1432017b-7dce-457e-bffa-436e8a2d0680",
 		"mName": "HidingSpot_10",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": -154.66063,
 			"y": 218.83275,
 			"z": -265.79175
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "1432017b-7dce-457e-bffa-436e8a2d0680",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1689,15 +1689,15 @@
 			"z": 0,
 			"w": 0.9819249
 		},
-		"mGuid": "f9cfaf87-1e57-43ee-bd41-629b0ccdb18f",
 		"mName": "HidingSpot_11",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": -554.91656,
 			"y": 167.88028,
 			"z": -170.76808
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f9cfaf87-1e57-43ee-bd41-629b0ccdb18f",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1706,15 +1706,15 @@
 			"z": 0,
 			"w": -0.4623362
 		},
-		"mGuid": "0ce5b5dc-3ed3-453c-95ef-85d702d5253c",
 		"mName": "HidingSpot_12",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 338.98868,
 			"y": 233.65685,
 			"z": 592.21094
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "0ce5b5dc-3ed3-453c-95ef-85d702d5253c",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1723,15 +1723,15 @@
 			"z": 0,
 			"w": 0.6247691
 		},
-		"mGuid": "ab95444c-0023-433a-97b1-5ad00e9cf343",
 		"mName": "HidingSpot_13",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 318.1854,
 			"y": 233.65685,
 			"z": 578.7866
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ab95444c-0023-433a-97b1-5ad00e9cf343",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1740,15 +1740,15 @@
 			"z": 0,
 			"w": 0.90581834
 		},
-		"mGuid": "db8c9b3d-cc4b-43ef-9f8c-35b0b9bfc898",
 		"mName": "HidingSpot_14",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 353.16028,
 			"y": 234.7529,
 			"z": 576.2432
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "db8c9b3d-cc4b-43ef-9f8c-35b0b9bfc898",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1757,15 +1757,15 @@
 			"z": 0,
 			"w": 0.7675881
 		},
-		"mGuid": "9e0b3956-897b-4f98-9711-8cc952179037",
 		"mName": "HidingSpot_15",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 414.0497,
 			"y": 243.0655,
 			"z": 592.76306
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9e0b3956-897b-4f98-9711-8cc952179037",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1774,15 +1774,15 @@
 			"z": 0,
 			"w": -0.49355748
 		},
-		"mGuid": "178333f1-fcf4-4150-9368-880ee724ac3d",
 		"mName": "HidingSpot_16",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": -405.14288,
 			"y": 91.18526,
 			"z": -531.8093
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "178333f1-fcf4-4150-9368-880ee724ac3d",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1791,15 +1791,15 @@
 			"z": 0,
 			"w": 0.7836683
 		},
-		"mGuid": "82d8ec58-5d6e-4496-9683-07acd52d6a81",
 		"mName": "HidingSpot_17",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": -371.93604,
 			"y": 101.40071,
 			"z": -738.6559
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "82d8ec58-5d6e-4496-9683-07acd52d6a81",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mRotation": {
@@ -1808,15 +1808,15 @@
 			"z": 0,
 			"w": 0.7745032
 		},
-		"mGuid": "2be5e722-7871-4ef4-bf93-3ba561e3eb6f",
 		"mName": "lake_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1251.5972,
 			"y": 22.015717,
 			"z": 6.4533386
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "2be5e722-7871-4ef4-bf93-3ba561e3eb6f",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1825,15 +1825,15 @@
 			"z": 0,
 			"w": 0.8772695
 		},
-		"mGuid": "192db51c-4eb7-4da0-8668-ea1c13f5a4ab",
 		"mName": "lake_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1246.526,
 			"y": 16.375,
 			"z": 259.33948
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "192db51c-4eb7-4da0-8668-ea1c13f5a4ab",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1842,15 +1842,15 @@
 			"z": 0,
 			"w": 0.77008754
 		},
-		"mGuid": "440f6327-0089-4ef9-a3d2-864e9042021b",
 		"mName": "lake_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1051.3418,
 			"y": 21.290558,
 			"z": 423.94174
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "440f6327-0089-4ef9-a3d2-864e9042021b",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1859,32 +1859,32 @@
 			"z": 0,
 			"w": -0.2317682
 		},
-		"mGuid": "5c325096-b61f-4a8d-a092-aec80b3b0577",
 		"mName": "lake_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1437.7626,
 			"y": 16.375,
 			"z": -13.034203
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "5c325096-b61f-4a8d-a092-aec80b3b0577",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.51509094,
-			"z": -0,
+			"z": 0,
 			"w": 0.85713553
 		},
-		"mGuid": "89b1cfe4-8250-417e-875a-02abdb73e31f",
 		"mName": "lake_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1384.1096,
 			"y": 16.375,
 			"z": 189.44937
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "89b1cfe4-8250-417e-875a-02abdb73e31f",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1893,15 +1893,15 @@
 			"z": 0,
 			"w": 0.08308502
 		},
-		"mGuid": "3ffa1b7e-9896-42d7-9ab8-ac5d351fa560",
 		"mName": "lake_6",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1531.3815,
 			"y": 16.375,
 			"z": 225.57495
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "3ffa1b7e-9896-42d7-9ab8-ac5d351fa560",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1910,15 +1910,15 @@
 			"z": 0,
 			"w": 0.53423685
 		},
-		"mGuid": "b6593aba-158a-44e7-8d5f-09088ce15ca4",
 		"mName": "lake_7",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1658.8844,
 			"y": 17.047483,
 			"z": 424.45126
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b6593aba-158a-44e7-8d5f-09088ce15ca4",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1927,15 +1927,15 @@
 			"z": 0,
 			"w": -0.3580261
 		},
-		"mGuid": "c0e4fea2-36df-4e00-8750-2d3e4051381c",
 		"mName": "lake_8",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1678.3226,
 			"y": 20.194214,
 			"z": 289.37332
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c0e4fea2-36df-4e00-8750-2d3e4051381c",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1944,15 +1944,15 @@
 			"z": 0,
 			"w": 0.999706
 		},
-		"mGuid": "7b1c52c4-2e2d-428d-ad9d-8864fa7f4acb",
 		"mName": "lake_9",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1671.9934,
 			"y": 29.435364,
 			"z": 201.68103
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7b1c52c4-2e2d-428d-ad9d-8864fa7f4acb",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1961,32 +1961,32 @@
 			"z": 0,
 			"w": 0.7565157
 		},
-		"mGuid": "71bf0fa5-d429-471b-b9db-17257d0c5187",
 		"mName": "lake_10",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1343.6699,
 			"y": 23.200537,
 			"z": -66.363686
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "71bf0fa5-d429-471b-b9db-17257d0c5187",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.08093351,
-			"z": -0,
+			"z": 0,
 			"w": 0.99671954
 		},
-		"mGuid": "f077741d-5afe-4204-bbc0-578cfe1cce3f",
 		"mName": "lake_11",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1303.072,
 			"y": 39.347523,
 			"z": -91.52357
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f077741d-5afe-4204-bbc0-578cfe1cce3f",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -1995,15 +1995,15 @@
 			"z": 0,
 			"w": 0.80803484
 		},
-		"mGuid": "f946ea9e-75f8-4e3c-9f57-adfdddc4739c",
 		"mName": "lake_12",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1315.5166,
 			"y": 30.417217,
 			"z": -68.99145
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f946ea9e-75f8-4e3c-9f57-adfdddc4739c",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2012,15 +2012,15 @@
 			"z": 0,
 			"w": 0.9173537
 		},
-		"mGuid": "86cdba17-4597-4d92-9e08-cd08fb8bf4ec",
 		"mName": "lake_13",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 969.52563,
 			"y": 45.611176,
 			"z": -216.3187
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "86cdba17-4597-4d92-9e08-cd08fb8bf4ec",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2029,15 +2029,15 @@
 			"z": 0,
 			"w": 0.16060188
 		},
-		"mGuid": "eddc891d-6de2-4647-9fde-04dc3eca551c",
 		"mName": "lake_14",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 953.1566,
 			"y": 50.51648,
 			"z": 60.234894
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "eddc891d-6de2-4647-9fde-04dc3eca551c",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2046,32 +2046,32 @@
 			"z": 0,
 			"w": 0.85412586
 		},
-		"mGuid": "219624e7-90ff-44a2-9eef-0ee8fdd0ccdc",
 		"mName": "lake_15",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1090.6632,
 			"y": 41.8815,
 			"z": 142.99405
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "219624e7-90ff-44a2-9eef-0ee8fdd0ccdc",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.5583104,
-			"z": -0,
+			"z": 0,
 			"w": 0.82963216
 		},
-		"mGuid": "9e1c2268-35d8-4e57-89e3-0b85d0de4378",
 		"mName": "cabin_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 950.77673,
 			"y": 37.457,
 			"z": 586.1521
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9e1c2268-35d8-4e57-89e3-0b85d0de4378",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2080,66 +2080,66 @@
 			"z": 0,
 			"w": 0.41688544
 		},
-		"mGuid": "5cdf6f26-0bee-4ea0-9ce2-a92f165f9f94",
 		"mName": "cabin_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 836.1813,
 			"y": 29.47641,
 			"z": 436.83212
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "5cdf6f26-0bee-4ea0-9ce2-a92f165f9f94",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.45543933,
-			"z": -0,
+			"z": 0,
 			"w": 0.89026684
 		},
-		"mGuid": "a0b086ea-4df8-40f7-9d13-7c72f49ba5d0",
 		"mName": "cabin_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 950.76013,
 			"y": 45.700287,
 			"z": 400.93472
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a0b086ea-4df8-40f7-9d13-7c72f49ba5d0",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.43673497,
-			"z": -0,
+			"z": 0,
 			"w": 0.89959025
 		},
-		"mGuid": "315a3e39-10c8-4198-b7df-2663f3f8e9ea",
 		"mName": "cabin_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 930.49976,
 			"y": 61.607193,
 			"z": 286.09378
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "315a3e39-10c8-4198-b7df-2663f3f8e9ea",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.15792528,
-			"z": -0,
+			"z": 0,
 			"w": 0.9874511
 		},
-		"mGuid": "d46f6a97-74ec-4fc5-b84f-4cbd7e22c570",
 		"mName": "cabin_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1169.2809,
 			"y": 73.67693,
 			"z": 510.67212
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d46f6a97-74ec-4fc5-b84f-4cbd7e22c570",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2148,32 +2148,32 @@
 			"z": 0,
 			"w": 0.9415579
 		},
-		"mGuid": "d4679f82-1e16-46be-87c9-83e3c4c55cf9",
 		"mName": "cabin_6",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1194.8383,
 			"y": 89.00687,
 			"z": 483.68497
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d4679f82-1e16-46be-87c9-83e3c4c55cf9",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.18306191,
-			"z": -0,
+			"z": 0,
 			"w": 0.9831014
 		},
-		"mGuid": "044bc052-f373-4018-b4f3-97d3bcd8a0e3",
 		"mName": "cabin_7",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1291.2788,
 			"y": 132.91011,
 			"z": 496.19827
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "044bc052-f373-4018-b4f3-97d3bcd8a0e3",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2182,15 +2182,15 @@
 			"z": 0,
 			"w": -0.45408323
 		},
-		"mGuid": "6652882d-c8a7-49ac-8b27-52141cf988ed",
 		"mName": "cabin_8",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1292.5532,
 			"y": 120.72345,
 			"z": 638.9918
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6652882d-c8a7-49ac-8b27-52141cf988ed",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2199,49 +2199,49 @@
 			"z": 0,
 			"w": 0.9473087
 		},
-		"mGuid": "991208a7-abb4-468e-a4e8-3ff9d17cb200",
 		"mName": "trapper_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 727.23,
 			"y": 38.1633,
 			"z": 63.762573
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "991208a7-abb4-468e-a4e8-3ff9d17cb200",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.30439484,
-			"z": -0,
+			"z": 0,
 			"w": 0.952546
 		},
-		"mGuid": "9d02442b-2296-466a-8c5c-daf41816f6fc",
 		"mName": "trapper_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 766.6946,
 			"y": 35.931,
 			"z": -90.81581
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9d02442b-2296-466a-8c5c-daf41816f6fc",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.6041449,
-			"z": -0,
+			"z": 0,
 			"w": 0.7968745
 		},
-		"mGuid": "4124f52f-3bcb-4d2e-9c58-941bc33c2517",
 		"mName": "trapper_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 765.56506,
 			"y": 37.220825,
 			"z": -116.39284
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4124f52f-3bcb-4d2e-9c58-941bc33c2517",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2250,15 +2250,15 @@
 			"z": 0,
 			"w": 0.5147307
 		},
-		"mGuid": "16b99d57-ee7b-42f3-b490-ecccda5b9688",
 		"mName": "trapper_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 704.6119,
 			"y": 23.451818,
 			"z": -2.3837109
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "16b99d57-ee7b-42f3-b490-ecccda5b9688",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2267,15 +2267,15 @@
 			"z": 0,
 			"w": 0.693697
 		},
-		"mGuid": "d4f15fe9-11d7-4a3f-9065-f0990ab953f0",
 		"mName": "lake_16",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1777.1034,
 			"y": 58.54483,
 			"z": 141.66324
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d4f15fe9-11d7-4a3f-9065-f0990ab953f0",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2284,15 +2284,15 @@
 			"z": 0,
 			"w": -0.46622083
 		},
-		"mGuid": "6c62f461-2fa2-452b-8929-bf9d6a834826",
 		"mName": "lake_17",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1637.7588,
 			"y": 20.131195,
 			"z": 509.33658
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6c62f461-2fa2-452b-8929-bf9d6a834826",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2301,15 +2301,15 @@
 			"z": 0,
 			"w": -0.13990368
 		},
-		"mGuid": "4454c283-f713-465e-bb58-40d7d4b8e02e",
 		"mName": "lake_18",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1594.9526,
 			"y": 21.22586,
 			"z": 540.3668
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4454c283-f713-465e-bb58-40d7d4b8e02e",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2318,15 +2318,15 @@
 			"z": 0,
 			"w": 0.50688905
 		},
-		"mGuid": "ab779e40-cbff-40aa-a942-2daad6d01d51",
 		"mName": "lake_19",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1481.8649,
 			"y": 16.375,
 			"z": 352.20392
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ab779e40-cbff-40aa-a942-2daad6d01d51",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2335,15 +2335,15 @@
 			"z": 0,
 			"w": 0.40033168
 		},
-		"mGuid": "62132a16-3925-45b4-b9ee-2ef8a37ddec2",
 		"mName": "trapper_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 590.5247,
 			"y": 38.712807,
 			"z": 357.52557
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "62132a16-3925-45b4-b9ee-2ef8a37ddec2",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2352,15 +2352,15 @@
 			"z": 0,
 			"w": 0.8974602
 		},
-		"mGuid": "7eddc819-923e-488c-aa34-0ca8847c56b9",
 		"mName": "trapper_6",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 470.64328,
 			"y": 2.204071,
 			"z": 288.9343
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7eddc819-923e-488c-aa34-0ca8847c56b9",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2369,15 +2369,15 @@
 			"z": 0,
 			"w": 0.6461132
 		},
-		"mGuid": "c40c45fe-da79-4666-9e43-a6fed4bf29ea",
 		"mName": "trapper_7",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 575.3037,
 			"y": 3.0009155,
 			"z": 129.59271
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c40c45fe-da79-4666-9e43-a6fed4bf29ea",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2386,15 +2386,15 @@
 			"z": 0,
 			"w": 0.8440137
 		},
-		"mGuid": "6923a183-7412-4143-8647-aa8a6b6a2ae5",
 		"mName": "trapper_8",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 580.0458,
 			"y": 0.11047363,
 			"z": 150.96426
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6923a183-7412-4143-8647-aa8a6b6a2ae5",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2403,32 +2403,32 @@
 			"z": 0,
 			"w": 0.4141791
 		},
-		"mGuid": "f9c4e599-517a-4986-9648-c0821a79ec0e",
 		"mName": "trapper_9",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 173.3486,
 			"y": 5.525177,
 			"z": 44.625427
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f9c4e599-517a-4986-9648-c0821a79ec0e",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.62435895,
-			"z": -0,
+			"z": 0,
 			"w": 0.78113765
 		},
-		"mGuid": "5dee41a9-ffe8-4dc7-b1ad-413818377ebb",
 		"mName": "trapper_10",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 152.15955,
 			"y": 4.1498413,
 			"z": 46.447784
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "5dee41a9-ffe8-4dc7-b1ad-413818377ebb",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2437,15 +2437,15 @@
 			"z": 0,
 			"w": 0.9277502
 		},
-		"mGuid": "ab8610c2-ba15-4920-93c9-b70e26386792",
 		"mName": "trapper_11",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 48.941513,
 			"y": 11.131683,
 			"z": -20.12114
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ab8610c2-ba15-4920-93c9-b70e26386792",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2454,15 +2454,15 @@
 			"z": 0,
 			"w": 0.2528098
 		},
-		"mGuid": "5cc8316f-ccdf-4576-ab59-6735acfd3140",
 		"mName": "trapper_12",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 33.362625,
 			"y": 15.388824,
 			"z": 93.37753
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "5cc8316f-ccdf-4576-ab59-6735acfd3140",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2471,15 +2471,15 @@
 			"z": 0,
 			"w": 0.98465
 		},
-		"mGuid": "6d2cc58e-a502-44de-9c83-6b8f684b9f24",
 		"mName": "trapper_13",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 276.62634,
 			"y": 17.348633,
 			"z": 83.63446
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6d2cc58e-a502-44de-9c83-6b8f684b9f24",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2488,15 +2488,15 @@
 			"z": 0,
 			"w": -0.25616798
 		},
-		"mGuid": "379b15f1-6b7d-4efe-ab7d-e0cfe577c2a2",
 		"mName": "trapper_14",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 237.60562,
 			"y": 15.836975,
 			"z": -40.014465
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "379b15f1-6b7d-4efe-ab7d-e0cfe577c2a2",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2505,15 +2505,15 @@
 			"z": 0,
 			"w": 0.8486655
 		},
-		"mGuid": "84f8bcb1-00db-4364-8d6d-244ff9568872",
 		"mName": "tower_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 431.18948,
 			"y": 155.07886,
 			"z": 986.4518
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "84f8bcb1-00db-4364-8d6d-244ff9568872",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2522,32 +2522,32 @@
 			"z": 0,
 			"w": 0.69351315
 		},
-		"mGuid": "70bdf261-20fb-4374-91b5-035ba9d67f53",
 		"mName": "tower_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 351.5342,
 			"y": 93.09851,
 			"z": 974.9325
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "70bdf261-20fb-4374-91b5-035ba9d67f53",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.34678742,
-			"z": -0,
+			"z": 0,
 			"w": 0.9379438
 		},
-		"mGuid": "0a9d0d40-38e8-4c60-8d39-5fb8e9ad1dbb",
 		"mName": "tower_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 752.6389,
 			"y": 188.4126,
 			"z": 1002.125
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "0a9d0d40-38e8-4c60-8d39-5fb8e9ad1dbb",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2556,15 +2556,15 @@
 			"z": 0,
 			"w": 0.1350741
 		},
-		"mGuid": "8ca151e3-0f29-40c9-99d6-8b9dca1dfddc",
 		"mName": "dam_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1541.918,
 			"y": 21.045227,
 			"z": 1269.3679
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "8ca151e3-0f29-40c9-99d6-8b9dca1dfddc",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2573,15 +2573,15 @@
 			"z": 0,
 			"w": 0.6217841
 		},
-		"mGuid": "6076cf31-efdc-44d5-ae7c-30c2614a0083",
 		"mName": "dam_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1708.9019,
 			"y": 37.623627,
 			"z": 1318.012
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6076cf31-efdc-44d5-ae7c-30c2614a0083",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2590,49 +2590,49 @@
 			"z": 0,
 			"w": -0.09403876
 		},
-		"mGuid": "778bb700-45ee-47e9-aae7-70ce92dbafa2",
 		"mName": "dam_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1665.4684,
 			"y": 36.676037,
 			"z": 1396.4
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "778bb700-45ee-47e9-aae7-70ce92dbafa2",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.34304708,
-			"z": -0,
+			"z": 0,
 			"w": 0.93931824
 		},
-		"mGuid": "3154919f-187e-4966-ab99-0e35e8f2a4a1",
 		"mName": "dam_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1685.0795,
 			"y": 32.1817,
 			"z": 1212.9495
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "3154919f-187e-4966-ab99-0e35e8f2a4a1",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.5029958,
-			"z": -0,
+			"z": 0,
 			"w": 0.86428887
 		},
-		"mGuid": "b0206e7b-d118-4942-a8c9-85360390649c",
 		"mName": "dam_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1650.3096,
 			"y": 16.665184,
 			"z": 1381.2722
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b0206e7b-d118-4942-a8c9-85360390649c",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2641,32 +2641,32 @@
 			"z": 0,
 			"w": -0.084920086
 		},
-		"mGuid": "b04d1807-e98a-46b3-bcb2-035c29523881",
 		"mName": "dam_6",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1518.4213,
 			"y": 27.44159,
 			"z": 1364.6881
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b04d1807-e98a-46b3-bcb2-035c29523881",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.3580632,
-			"z": -0,
+			"z": 0,
 			"w": 0.9336974
 		},
-		"mGuid": "2d0d7868-f525-418a-b5a6-5a89b80662b8",
 		"mName": "dam_7",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1495.0452,
 			"y": 38.739017,
 			"z": 1262.1062
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "2d0d7868-f525-418a-b5a6-5a89b80662b8",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2675,15 +2675,15 @@
 			"z": 0,
 			"w": 0.4124337
 		},
-		"mGuid": "79e87053-764f-46da-86c9-97e07a021de1",
 		"mName": "ml_to_fm_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1336.0004,
 			"y": 36.70511,
 			"z": 1269.6163
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "79e87053-764f-46da-86c9-97e07a021de1",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2692,15 +2692,15 @@
 			"z": 0,
 			"w": 0.6570682
 		},
-		"mGuid": "ee2f214f-56ae-43ee-87d1-74f975283696",
 		"mName": "ml_to_fm_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1236.6436,
 			"y": 37.033722,
 			"z": 1192.6268
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ee2f214f-56ae-43ee-87d1-74f975283696",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2709,15 +2709,15 @@
 			"z": 0,
 			"w": 0.6040722
 		},
-		"mGuid": "db3befc6-e575-485e-be46-68ee6f95fef2",
 		"mName": "ml_to_fm_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1292.0658,
 			"y": 46.929993,
 			"z": 1149.5784
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "db3befc6-e575-485e-be46-68ee6f95fef2",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2726,32 +2726,32 @@
 			"z": 0,
 			"w": 0.99699277
 		},
-		"mGuid": "510a5fa7-2e4c-46d5-8a2f-93d152eaed3c",
 		"mName": "ml_to_fm_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1287.9622,
 			"y": 44.55372,
 			"z": 1083.3691
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "510a5fa7-2e4c-46d5-8a2f-93d152eaed3c",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
 			"x": 0,
 			"y": -0.22875403,
-			"z": -0,
+			"z": 0,
 			"w": 0.9734843
 		},
-		"mGuid": "6fa019d3-ea1a-48ba-9fd9-c1117997eed9",
 		"mName": "ml_to_fm_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1177.3827,
 			"y": 34.93936,
 			"z": 1076.2932
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6fa019d3-ea1a-48ba-9fd9-c1117997eed9",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mRotation": {
@@ -2760,14 +2760,14 @@
 			"z": 0,
 			"w": 0.55967945
 		},
-		"mGuid": "f57f4b22-d6d4-4135-8889-03708802d023",
 		"mName": "ml_to_fm_6",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1011.589,
 			"y": 44.460236,
 			"z": 1066.6395
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f57f4b22-d6d4-4135-8889-03708802d023",
+		"mScene": "LakeRegion"
 	}
 ]

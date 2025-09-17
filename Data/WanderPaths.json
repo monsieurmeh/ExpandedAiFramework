@@ -93,15 +93,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "b10150c3-d84f-42c9-9bc7-ff7b9d20003c",
 		"mName": "ChurchPatrol",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "b10150c3-d84f-42c9-9bc7-ff7b9d20003c",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mPathPoints": [
@@ -182,15 +182,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "02a18b30-b7c2-494a-a10e-27f2c443b00a",
 		"mName": "ModRegionToProcessing",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "02a18b30-b7c2-494a-a10e-27f2c443b00a",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mPathPoints": [
@@ -276,15 +276,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "eedcbcf1-9368-4caa-8f1a-5e6b9676ec5d",
 		"mName": "roundtrip",
-		"mScene": "WhalingStationRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "eedcbcf1-9368-4caa-8f1a-5e6b9676ec5d",
+		"mScene": "WhalingStationRegion"
 	},
 	{
 		"mPathPoints": [
@@ -335,15 +335,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c8dbc3fe-8f02-4229-add5-5d046a820966",
 		"mName": "cabin",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "c8dbc3fe-8f02-4229-add5-5d046a820966",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -464,15 +464,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c9da611b-e08c-4543-9ad3-6d8afde35eda",
 		"mName": "cabinriver",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "c9da611b-e08c-4543-9ad3-6d8afde35eda",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -543,15 +543,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "0c8fd89d-422a-486a-bad5-712deee65884",
 		"mName": "summitpath1",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "0c8fd89d-422a-486a-bad5-712deee65884",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -822,15 +822,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "43c15247-cc55-40e8-bdb4-f17a48132627",
 		"mName": "summitpath2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "43c15247-cc55-40e8-bdb4-f17a48132627",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -926,15 +926,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "ff08a253-ecc6-4875-a2cd-9d5f1e779fbe",
 		"mName": "cabinoverlook",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ff08a253-ecc6-4875-a2cd-9d5f1e779fbe",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1030,15 +1030,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "a8344df8-add3-4077-a000-1f4a559fe9d2",
 		"mName": "canyon",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a8344df8-add3-4077-a000-1f4a559fe9d2",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1184,15 +1184,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "9ccb1557-2057-4b7b-8ad9-1219a9a04af3",
 		"mName": "canyon2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9ccb1557-2057-4b7b-8ad9-1219a9a04af3",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1293,15 +1293,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "94862afc-4b56-4767-86ce-9b3b4558cf2a",
 		"mName": "bunker",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "94862afc-4b56-4767-86ce-9b3b4558cf2a",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1412,15 +1412,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "1acec7e9-79af-47cb-9141-5e1566d857b6",
 		"mName": "summitpath0",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "1acec7e9-79af-47cb-9141-5e1566d857b6",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1546,15 +1546,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "86480103-70c7-41c6-86bd-0052e17c1e60",
 		"mName": "cabin1",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "86480103-70c7-41c6-86bd-0052e17c1e60",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1660,15 +1660,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "06a78deb-4475-43bd-afba-67cca3f436eb",
 		"mName": "PVEntry1",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "06a78deb-4475-43bd-afba-67cca3f436eb",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1744,15 +1744,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "ea42a883-0264-492f-8f3f-37f77ade2f0f",
 		"mName": "PVEntry2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ea42a883-0264-492f-8f3f-37f77ade2f0f",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1858,15 +1858,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "694fc349-ba77-4319-9dca-76355471bb6b",
 		"mName": "summit",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "694fc349-ba77-4319-9dca-76355471bb6b",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -1947,15 +1947,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "fb0f9b66-b724-45c3-bd94-1df4a482f167",
 		"mName": "summitpath6",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "fb0f9b66-b724-45c3-bd94-1df4a482f167",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2021,15 +2021,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "91d90091-bcce-4b91-9b12-fd55aed5f650",
 		"mName": "ACNorthEntry",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "91d90091-bcce-4b91-9b12-fd55aed5f650",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2135,15 +2135,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "ade18dda-6e77-4ab2-94ab-29cba81a9aa1",
 		"mName": "ACNorthEntry2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ade18dda-6e77-4ab2-94ab-29cba81a9aa1",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2259,15 +2259,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "e77295c0-7a8e-4337-ad18-cef4e395e6d4",
 		"mName": "summitpath7",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "e77295c0-7a8e-4337-ad18-cef4e395e6d4",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2338,15 +2338,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "f3c0fa86-a6f0-4232-b122-ed3a62ec8d13",
 		"mName": "ExpressWanderPath_1",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f3c0fa86-a6f0-4232-b122-ed3a62ec8d13",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2412,15 +2412,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "4ea31251-7284-4094-98e4-3efe2a0be807",
 		"mName": "ExpressWanderPath_2",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4ea31251-7284-4094-98e4-3efe2a0be807",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2461,15 +2461,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "28510045-f51b-431a-b61d-7bd64dc5f917",
 		"mName": "ExpressWanderPath_3",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "28510045-f51b-431a-b61d-7bd64dc5f917",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2520,15 +2520,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "3362d4c2-7cda-4afd-97c3-bd49f893cfb0",
 		"mName": "ExpressWanderPath_4",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "3362d4c2-7cda-4afd-97c3-bd49f893cfb0",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2569,15 +2569,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "170510c4-307d-4ce8-b60f-52777040e221",
 		"mName": "ExpressWanderPath_5",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "170510c4-307d-4ce8-b60f-52777040e221",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2598,15 +2598,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "982d689d-4d01-4bb3-8279-ee46e4569848",
 		"mName": "ExpressWanderPath_6",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 965.861,
 			"y": 482.68503,
 			"z": 1242.61
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "982d689d-4d01-4bb3-8279-ee46e4569848",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2627,15 +2627,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "cb207994-3339-4608-8cf3-5b2f21fad3fe",
 		"mName": "ExpressWanderPath_7",
-		"mScene": "CrashMountainRegion",
 		"mAnchorPosition": {
 			"x": 1431.9279,
 			"y": 218.2472,
 			"z": 1521.2451
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "cb207994-3339-4608-8cf3-5b2f21fad3fe",
+		"mScene": "CrashMountainRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2741,15 +2741,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "80df8b7a-121b-4cf0-a727-3f8aba1f6fbe",
 		"mName": "plane",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "80df8b7a-121b-4cf0-a727-3f8aba1f6fbe",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2865,15 +2865,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "ec70bdf0-c72d-4c87-a1e1-522b110e122b",
 		"mName": "plane1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ec70bdf0-c72d-4c87-a1e1-522b110e122b",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -2954,15 +2954,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "5f0181c6-d3b0-4918-ab91-9c547ae27193",
 		"mName": "disagreement",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "5f0181c6-d3b0-4918-ab91-9c547ae27193",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3123,15 +3123,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "a718b330-f655-43c0-a536-f2585aa229e6",
 		"mName": "river",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a718b330-f655-43c0-a536-f2585aa229e6",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3292,15 +3292,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "43ff421f-cfb2-4d17-afa6-821400e6df3a",
 		"mName": "river1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "43ff421f-cfb2-4d17-afa6-821400e6df3a",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3386,15 +3386,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "b590cba2-0bc0-43a5-80dc-57383964e483",
 		"mName": "ch",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "b590cba2-0bc0-43a5-80dc-57383964e483",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3500,15 +3500,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "042ae169-f4b6-47da-a2bf-62b092848fe4",
 		"mName": "town0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "042ae169-f4b6-47da-a2bf-62b092848fe4",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3519,15 +3519,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "163bcbd9-e70d-4a78-9146-46f86dbada40",
 		"mName": "barn0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "163bcbd9-e70d-4a78-9146-46f86dbada40",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3633,15 +3633,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "be370e36-8a63-46e7-82b6-5bfd8aebdd0c",
 		"mName": "barn1",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "be370e36-8a63-46e7-82b6-5bfd8aebdd0c",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3702,15 +3702,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "362aa82a-5592-4235-b87f-1a96a25d9009",
 		"mName": "road0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "362aa82a-5592-4235-b87f-1a96a25d9009",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3761,15 +3761,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "da8f4b3b-2ffc-4eb8-8ad7-6cd1bc62f0bf",
 		"mName": "townhouse",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "da8f4b3b-2ffc-4eb8-8ad7-6cd1bc62f0bf",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -3920,15 +3920,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "109da0b7-67e4-4e22-a872-d44142a032a2",
 		"mName": "totwm0",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "109da0b7-67e4-4e22-a872-d44142a032a2",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4019,15 +4019,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c1b553b7-20cb-43e9-b50a-9eafcc2ee64e",
 		"mName": "transmitter",
-		"mScene": "RuralRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c1b553b7-20cb-43e9-b50a-9eafcc2ee64e",
+		"mScene": "RuralRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4113,15 +4113,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "f0ae718c-c071-4ed7-8708-cfc2b8a0d600",
 		"mName": "ExpressWanderPath_1",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f0ae718c-c071-4ed7-8708-cfc2b8a0d600",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4272,15 +4272,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "736d2a3f-9526-481b-a6d1-3ee83dce6952",
 		"mName": "ExpressWanderPath_2",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "736d2a3f-9526-481b-a6d1-3ee83dce6952",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4381,15 +4381,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c1c9bcfd-00a5-4c99-9fc7-80b1ea7ac896",
 		"mName": "ExpressWanderPath_3",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c1c9bcfd-00a5-4c99-9fc7-80b1ea7ac896",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4415,15 +4415,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "1f5d56c9-e90b-4eee-8181-e8d99180761a",
 		"mName": "ExpressWanderPath_4",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "1f5d56c9-e90b-4eee-8181-e8d99180761a",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4469,15 +4469,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "4b98215a-67a8-4c57-853d-10cad4b1d971",
 		"mName": "ExpressWanderPath_5",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4b98215a-67a8-4c57-853d-10cad4b1d971",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4543,15 +4543,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "9125e985-97ee-471b-9587-074cff201f39",
 		"mName": "ExpressWanderPath_6",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9125e985-97ee-471b-9587-074cff201f39",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4582,15 +4582,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "47f785fe-44ed-49b2-81c5-658b0cc03759",
 		"mName": "ExpressWanderPath_7",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "47f785fe-44ed-49b2-81c5-658b0cc03759",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4661,15 +4661,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "04bfefe8-9493-4830-900a-04ffe2328c00",
 		"mName": "ExpressWanderPath_8",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "04bfefe8-9493-4830-900a-04ffe2328c00",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4755,15 +4755,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "3afcccd5-0c78-43d7-a9dc-25455423d9a8",
 		"mName": "ExpressWanderPath_9",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "3afcccd5-0c78-43d7-a9dc-25455423d9a8",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4849,15 +4849,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "392dc487-d9fe-4265-a205-d8688afbe861",
 		"mName": "ExpressWanderPath_10",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "392dc487-d9fe-4265-a205-d8688afbe861",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -4913,15 +4913,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "4e443093-2818-4a99-870d-33551207cbf1",
 		"mName": "ExpressWanderPath_11",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4e443093-2818-4a99-870d-33551207cbf1",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5037,15 +5037,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "8186eecf-fc79-4e3d-8093-4ff9cd3daabe",
 		"mName": "ExpressWanderPath_12",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "8186eecf-fc79-4e3d-8093-4ff9cd3daabe",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5116,15 +5116,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "03a2f765-9e1a-4b7b-bae1-c29db249626c",
 		"mName": "ExpressWanderPath_13",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "03a2f765-9e1a-4b7b-bae1-c29db249626c",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5215,15 +5215,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "af3385ce-d915-43d7-a2ad-9786230ecd61",
 		"mName": "ExpressWanderPath_14",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "af3385ce-d915-43d7-a2ad-9786230ecd61",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5309,15 +5309,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "2d23b43b-d2ce-48aa-bb9e-778dc88b0a23",
 		"mName": "ExpressWanderPath_15",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "2d23b43b-d2ce-48aa-bb9e-778dc88b0a23",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5363,15 +5363,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "189a312d-c62d-4d66-9ad3-e2114361f074",
 		"mName": "ExpressWanderPath_16",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "189a312d-c62d-4d66-9ad3-e2114361f074",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5462,15 +5462,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "54158f19-bccc-4252-9c30-b8298183479a",
 		"mName": "ExpressWanderPath_17",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "54158f19-bccc-4252-9c30-b8298183479a",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5521,15 +5521,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c5095dd3-c46b-4655-bc64-a7f4be000cc6",
 		"mName": "ExpressWanderPath_18",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c5095dd3-c46b-4655-bc64-a7f4be000cc6",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5600,15 +5600,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "21f0782d-c403-4865-8f15-1a45df3f8c29",
 		"mName": "ExpressWanderPath_19",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "21f0782d-c403-4865-8f15-1a45df3f8c29",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5649,15 +5649,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "7ed2eae8-8cdd-4d10-bf17-1f95251f4df4",
 		"mName": "ExpressWanderPath_20",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7ed2eae8-8cdd-4d10-bf17-1f95251f4df4",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5728,15 +5728,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "8bf6cfda-7189-4853-8266-bc977cce4de2",
 		"mName": "ExpressWanderPath_21",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "8bf6cfda-7189-4853-8266-bc977cce4de2",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5872,15 +5872,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "47179a4f-7c33-4979-8a45-cee6a2a0977b",
 		"mName": "ExpressWanderPath_22",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "47179a4f-7c33-4979-8a45-cee6a2a0977b",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -5981,15 +5981,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "d6a027cd-a053-48ff-8712-b90606df4027",
 		"mName": "ExpressWanderPath_23",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d6a027cd-a053-48ff-8712-b90606df4027",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -6045,15 +6045,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "94d997af-f46d-48c2-b453-799024533efd",
 		"mName": "ExpressWanderPath_24",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "94d997af-f46d-48c2-b453-799024533efd",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -6219,15 +6219,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "ad70d253-d278-4a68-b944-0c74f2b743d6",
 		"mName": "ExpressWanderPath_25",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ad70d253-d278-4a68-b944-0c74f2b743d6",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -6298,15 +6298,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "4e3b52ca-e551-4d3c-95d6-29b155ba496d",
 		"mName": "ExpressWanderPath_26",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4e3b52ca-e551-4d3c-95d6-29b155ba496d",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -6472,15 +6472,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "2bec617a-f2fe-4c21-9c5f-61f676643da1",
 		"mName": "ExpressWanderPath_27",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "2bec617a-f2fe-4c21-9c5f-61f676643da1",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -6671,15 +6671,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "ae362413-fd20-491b-a84d-3423162b1529",
 		"mName": "ExpressWanderPath_28",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "ae362413-fd20-491b-a84d-3423162b1529",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -6805,15 +6805,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "77faea90-163a-4502-8734-32db052110aa",
 		"mName": "ExpressWanderPath_29",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "77faea90-163a-4502-8734-32db052110aa",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -6919,15 +6919,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "87aefd74-5e26-4c90-82e9-86086d9703de",
 		"mName": "ExpressWanderPath_30",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "87aefd74-5e26-4c90-82e9-86086d9703de",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7028,15 +7028,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "7dff8c75-5b41-4d2a-9ba3-4ab28b487504",
 		"mName": "ExpressWanderPath_31",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7dff8c75-5b41-4d2a-9ba3-4ab28b487504",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7142,15 +7142,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "987dabe2-3398-458d-849e-7d9a15c7045d",
 		"mName": "ExpressWanderPath_32",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "987dabe2-3398-458d-849e-7d9a15c7045d",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7236,15 +7236,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "44023705-bedf-44bc-a435-53605c4bff3e",
 		"mName": "ExpressWanderPath_33",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "44023705-bedf-44bc-a435-53605c4bff3e",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7300,15 +7300,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "7aad14f4-e0f1-4156-ad02-a05b87a02bc6",
 		"mName": "ExpressWanderPath_34",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7aad14f4-e0f1-4156-ad02-a05b87a02bc6",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7459,15 +7459,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "7b70d199-63ec-499f-bbab-bcd1e791790d",
 		"mName": "ExpressWanderPath_35",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "7b70d199-63ec-499f-bbab-bcd1e791790d",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7543,15 +7543,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c115f8dd-fe62-4358-948f-8e37a452b62b",
 		"mName": "ExpressWanderPath_36",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c115f8dd-fe62-4358-948f-8e37a452b62b",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7622,15 +7622,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "fbd18803-68db-47d8-9bde-d8127f95dca5",
 		"mName": "ExpressWanderPath_37",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "fbd18803-68db-47d8-9bde-d8127f95dca5",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7711,15 +7711,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c8b28766-25a1-4788-be9d-8c6e8fb3d5bb",
 		"mName": "ExpressWanderPath_38",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c8b28766-25a1-4788-be9d-8c6e8fb3d5bb",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7840,15 +7840,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "8fbba337-0c9e-49c4-a29e-57a58085c58e",
 		"mName": "ExpressWanderPath_39",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "8fbba337-0c9e-49c4-a29e-57a58085c58e",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -7939,15 +7939,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "3bd53bd6-6769-4c49-903d-62e9e5057c6e",
 		"mName": "ExpressWanderPath_40",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "3bd53bd6-6769-4c49-903d-62e9e5057c6e",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8048,15 +8048,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "0768bd79-7745-4876-a9fb-3318ca485ca9",
 		"mName": "ExpressWanderPath_41",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "0768bd79-7745-4876-a9fb-3318ca485ca9",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8182,15 +8182,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "237de863-2422-4de6-b8b1-7778209acbc9",
 		"mName": "ExpressWanderPath_42",
-		"mScene": "AshCanyonRegion",
 		"mAnchorPosition": {
 			"x": 0,
 			"y": 0,
 			"z": 0
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "237de863-2422-4de6-b8b1-7778209acbc9",
+		"mScene": "AshCanyonRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8326,15 +8326,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "9d637152-5628-42d2-87b7-72a3cef19264",
 		"mName": "ML_to_FM_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1734.8296,
 			"y": 37.527008,
 			"z": 1272.525
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9d637152-5628-42d2-87b7-72a3cef19264",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8390,15 +8390,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "f208ecd7-e3bf-4b21-af08-6a470f88b906",
 		"mName": "ML_to_FM_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1497.3546,
 			"y": 37.16577,
 			"z": 1273.5729
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "f208ecd7-e3bf-4b21-af08-6a470f88b906",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8474,15 +8474,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "1f6ee55f-4aac-43d0-a8be-d48f95de393c",
 		"mName": "ML_to_FM_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1194.0579,
 			"y": 37.082275,
 			"z": 1172.6154
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "1f6ee55f-4aac-43d0-a8be-d48f95de393c",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8538,15 +8538,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "9e541237-c6e1-4ff0-a988-093d7f93b64a",
 		"mName": "ML_to_FM_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 986.4374,
 			"y": 38.464172,
 			"z": 970.3815
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "9e541237-c6e1-4ff0-a988-093d7f93b64a",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8662,15 +8662,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "0393d1ef-f31c-4448-8348-696bdb44c513",
 		"mName": "ML_to_FM_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1018.7136,
 			"y": 37.1369,
 			"z": 990.0432
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "0393d1ef-f31c-4448-8348-696bdb44c513",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8711,15 +8711,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "647cc6e0-faf3-4a68-a428-7b224cf1fb5b",
 		"mName": "cabin_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 990.4143,
 			"y": 28.4104,
 			"z": 419.38998
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "647cc6e0-faf3-4a68-a428-7b224cf1fb5b",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8815,15 +8815,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "6f4bdf41-31d4-466b-a900-e8faf2695853",
 		"mName": "cabin_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 990.5005,
 			"y": 28.540894,
 			"z": 438.02048
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6f4bdf41-31d4-466b-a900-e8faf2695853",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8904,15 +8904,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "4053be47-a225-42b7-aa39-422e210b0ead",
 		"mName": "cabin_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1071.6357,
 			"y": 19.420074,
 			"z": 453.09018
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "4053be47-a225-42b7-aa39-422e210b0ead",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -8988,15 +8988,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "896909ee-e6b0-433d-a1c6-22409efd2d65",
 		"mName": "lake_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1210.5898,
 			"y": 16.375,
 			"z": 341.40277
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "896909ee-e6b0-433d-a1c6-22409efd2d65",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9047,15 +9047,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "27bcb9f8-c174-47ff-97c3-1d69e0ed7f5e",
 		"mName": "lake_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1515.7324,
 			"y": 16.375,
 			"z": 99.556076
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "27bcb9f8-c174-47ff-97c3-1d69e0ed7f5e",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9116,15 +9116,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "e54fd511-3170-48a1-9640-a597efec8319",
 		"mName": "lake_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1664.3796,
 			"y": 16.375,
 			"z": 324.9255
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "e54fd511-3170-48a1-9640-a597efec8319",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9240,15 +9240,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "a8a16288-fb39-420d-8f6f-ff27f053cebe",
 		"mName": "lake_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1335.9829,
 			"y": 17.091553,
 			"z": -24.585907
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a8a16288-fb39-420d-8f6f-ff27f053cebe",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9334,15 +9334,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "d9b94ff9-800c-4bd6-8e47-c45e02b61d05",
 		"mName": "lake_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1299.1162,
 			"y": 17.274658,
 			"z": 19.388214
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d9b94ff9-800c-4bd6-8e47-c45e02b61d05",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9433,15 +9433,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "6b9d388d-d693-4629-9eb5-99b2dca062a5",
 		"mName": "lake_6",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1160.8649,
 			"y": 66.04761,
 			"z": 190.65628
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "6b9d388d-d693-4629-9eb5-99b2dca062a5",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9512,15 +9512,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "01b00943-725a-4bc4-adaa-b47944443246",
 		"mName": "ML_to_lake_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1584.7671,
 			"y": 26.416077,
 			"z": 849.0604
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "01b00943-725a-4bc4-adaa-b47944443246",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9616,15 +9616,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "87002887-4ea0-45bc-a3cd-9f65b710f75d",
 		"mName": "ML_to_lake_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1589.7789,
 			"y": 23.638275,
 			"z": 838.4053
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "87002887-4ea0-45bc-a3cd-9f65b710f75d",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9700,15 +9700,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c3bbd056-bc46-4564-8972-1a4b17cf78f3",
 		"mName": "cougar_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 1271.1942,
 			"y": 36.987152,
 			"z": 1287.212
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "c3bbd056-bc46-4564-8972-1a4b17cf78f3",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9764,15 +9764,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "403e0e83-83c6-4796-abff-9d9c37b57c4b",
 		"mName": "cougar_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 990.5802,
 			"y": 32.115623,
 			"z": 1437.0721
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "403e0e83-83c6-4796-abff-9d9c37b57c4b",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9873,15 +9873,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "060f4af1-f6fb-4162-b4f5-4402bdec1479",
 		"mName": "cougar_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 970.1421,
 			"y": 23.788055,
 			"z": 1409.5073
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "060f4af1-f6fb-4162-b4f5-4402bdec1479",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -9952,15 +9952,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "61b2686a-411b-460d-93e2-230cac5d8a90",
 		"mName": "cougar_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 614.02454,
 			"y": 16.908447,
 			"z": 1290.1584
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "61b2686a-411b-460d-93e2-230cac5d8a90",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10086,15 +10086,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "8abdde61-7f04-45f3-b41c-e287062a7369",
 		"mName": "cougar_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 716.28503,
 			"y": 18.209564,
 			"z": 1357.4768
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "8abdde61-7f04-45f3-b41c-e287062a7369",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10155,15 +10155,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "aab9141a-18d1-456c-90ab-39c926343a5a",
 		"mName": "cougar_6",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 594.66907,
 			"y": 16.908447,
 			"z": 1274.9485
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "aab9141a-18d1-456c-90ab-39c926343a5a",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10189,15 +10189,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "202ad559-cd30-4966-b2fa-e2d135b7f780",
 		"mName": "tower1__1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 425.7476,
 			"y": 155.38995,
 			"z": 996.0419
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "202ad559-cd30-4966-b2fa-e2d135b7f780",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10353,15 +10353,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "f694dce3-6c0d-4dc1-9cfb-f21bc65ee12c",
 		"mName": "tower1__2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 441.5167,
 			"y": 155.72675,
 			"z": 1002.2058
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "f694dce3-6c0d-4dc1-9cfb-f21bc65ee12c",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10432,15 +10432,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "d182dca1-b9c0-4c5b-875a-06fd5e4cd404",
 		"mName": "tower1__3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 326.60007,
 			"y": 15.362244,
 			"z": 1151.2424
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "d182dca1-b9c0-4c5b-875a-06fd5e4cd404",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10476,15 +10476,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c713d605-adc7-4d0d-8a8e-6d616d7e7132",
 		"mName": "tower2_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 771.18835,
 			"y": 191.38367,
 			"z": 1015.9303
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c713d605-adc7-4d0d-8a8e-6d616d7e7132",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10635,15 +10635,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "e41a2750-109b-4e69-97b6-cd847ae1a2c7",
 		"mName": "tower2_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 739.4043,
 			"y": 181.1507,
 			"z": 1029.8204
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "e41a2750-109b-4e69-97b6-cd847ae1a2c7",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10709,15 +10709,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "337405c9-9804-480d-b90a-4c5b9a1cce38",
 		"mName": "tower2_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 806.4132,
 			"y": 47.5231,
 			"z": 808.3711
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "337405c9-9804-480d-b90a-4c5b9a1cce38",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10773,15 +10773,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "a2256ac7-2e3e-40ba-b383-c595b94aabd4",
 		"mName": "trapper_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": -2.2530823,
 			"y": 16.309174,
 			"z": 3.0702667
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a2256ac7-2e3e-40ba-b383-c595b94aabd4",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10867,15 +10867,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "62647fa8-ec26-4731-ba76-aeec8d7529ea",
 		"mName": "trapper_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": -2.6993713,
 			"y": 15.883118,
 			"z": 48.865997
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "62647fa8-ec26-4731-ba76-aeec8d7529ea",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -10936,15 +10936,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "66175c24-347e-4d25-b328-e289f967e1c9",
 		"mName": "trapper_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 110.98398,
 			"y": 12.435089,
 			"z": -43.09691
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "66175c24-347e-4d25-b328-e289f967e1c9",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11015,15 +11015,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "3f20a511-d8b2-48d6-a88f-9d1f8fbc48f4",
 		"mName": "trapper_4",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 183.75357,
 			"y": 3.0879211,
 			"z": 3.0155487
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "3f20a511-d8b2-48d6-a88f-9d1f8fbc48f4",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11124,15 +11124,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "c69def64-3bba-420b-9de0-b0df213fa2e0",
 		"mName": "trapper_5",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 240.36172,
 			"y": 10.063538,
 			"z": 6.130722
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "c69def64-3bba-420b-9de0-b0df213fa2e0",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11178,15 +11178,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "432ea1de-8248-4ec8-be3c-2489933e0ce9",
 		"mName": "trapper_6",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 420.87616,
 			"y": 47.68637,
 			"z": 91.018005
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "432ea1de-8248-4ec8-be3c-2489933e0ce9",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11232,15 +11232,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "e31cf865-84fe-4d65-901e-ff8c97dccc5e",
 		"mName": "trapper_7",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 23.112411,
 			"y": -1.7709961,
 			"z": 494.51553
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "e31cf865-84fe-4d65-901e-ff8c97dccc5e",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11311,15 +11311,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "92bc8f9e-24ca-4cd5-812b-4d04d368fae0",
 		"mName": "bear_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 67.96968,
 			"y": 95.257935,
 			"z": 237.32799
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "92bc8f9e-24ca-4cd5-812b-4d04d368fae0",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11360,15 +11360,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "a7f7da2f-211a-4f50-93f7-ed33eaf8516d",
 		"mName": "bear_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": -8.390259,
 			"y": 33.39975,
 			"z": 285.2888
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "a7f7da2f-211a-4f50-93f7-ed33eaf8516d",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11459,15 +11459,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "97f727c8-5484-493c-a7cf-657b5c5061df",
 		"mName": "trails_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 816.2167,
 			"y": 31.54654,
 			"z": 264.42065
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "97f727c8-5484-493c-a7cf-657b5c5061df",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11533,15 +11533,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "e0a91d14-f80f-4941-828e-34b7ff4131f6",
 		"mName": "trails_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 880.9149,
 			"y": 28.33023,
 			"z": 607.83044
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "e0a91d14-f80f-4941-828e-34b7ff4131f6",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11597,15 +11597,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "00ec9f03-cd22-4508-b0d5-640c47e3fcd6",
 		"mName": "trails_3",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 498.82065,
 			"y": -1.316803,
 			"z": 466.22385
 		},
-		"mClaimed": false
+		"mClaimed": false,
+		"mGuid": "00ec9f03-cd22-4508-b0d5-640c47e3fcd6",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11666,15 +11666,15 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "2280bc31-f702-46ee-9d6f-5480855f4e2d",
 		"mName": "aaa_1",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 92.24559,
 			"y": 9.699992,
 			"z": 717.51587
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "2280bc31-f702-46ee-9d6f-5480855f4e2d",
+		"mScene": "LakeRegion"
 	},
 	{
 		"mPathPoints": [
@@ -11745,14 +11745,4715 @@
 			}
 		],
 		"mWanderPathType": "IndividualPath",
-		"mGuid": "5c465e16-c0e1-431e-a1c8-b6b0044a12bf",
 		"mName": "aaa_2",
-		"mScene": "LakeRegion",
 		"mAnchorPosition": {
 			"x": 168.2168,
 			"y": 22.692139,
 			"z": 575.0244
 		},
-		"mClaimed": true
+		"mClaimed": true,
+		"mGuid": "5c465e16-c0e1-431e-a1c8-b6b0044a12bf",
+		"mScene": "LakeRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 189.8002,
+				"y": 160.28986,
+				"z": -566.4539
+			},
+			{
+				"x": 235.37329,
+				"y": 160.31293,
+				"z": -559.843
+			},
+			{
+				"x": 264.17493,
+				"y": 161.96347,
+				"z": -515.6898
+			},
+			{
+				"x": 246.85999,
+				"y": 163.22247,
+				"z": -476.3523
+			},
+			{
+				"x": 250.43787,
+				"y": 161.48692,
+				"z": -431.6587
+			},
+			{
+				"x": 209.35852,
+				"y": 161.05215,
+				"z": -411.9878
+			},
+			{
+				"x": 164.16672,
+				"y": 160.09695,
+				"z": -419.85004
+			},
+			{
+				"x": 182.01648,
+				"y": 160.62381,
+				"z": -480.51764
+			},
+			{
+				"x": 234.21033,
+				"y": 160.85785,
+				"z": -502.26752
+			},
+			{
+				"x": 260.1294,
+				"y": 162.82986,
+				"z": -478.82794
+			},
+			{
+				"x": 256.14404,
+				"y": 161.59093,
+				"z": -405.97778
+			},
+			{
+				"x": 176.36316,
+				"y": 161.22166,
+				"z": -374.58984
+			},
+			{
+				"x": 129.56873,
+				"y": 160.0784,
+				"z": -272.34485
+			},
+			{
+				"x": 63.04748,
+				"y": 165.7879,
+				"z": -252.70361
+			},
+			{
+				"x": 111.15698,
+				"y": 160.69469,
+				"z": -361.06372
+			},
+			{
+				"x": -13.227661,
+				"y": 161.71597,
+				"z": -361.73596
+			},
+			{
+				"x": 69.41321,
+				"y": 160.42715,
+				"z": -499.6723
+			},
+			{
+				"x": -88.12695,
+				"y": 161.76207,
+				"z": -598.5275
+			},
+			{
+				"x": 53.15564,
+				"y": 161.02356,
+				"z": -647.7673
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "airfield_1",
+		"mAnchorPosition": {
+			"x": 189.8002,
+			"y": 160.28986,
+			"z": -566.4539
+		},
+		"mClaimed": false,
+		"mGuid": "94e40809-30bb-488d-be26-b2ed7a179ce7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 69.89551,
+				"y": 161.76968,
+				"z": -637.45013
+			},
+			{
+				"x": 88.62451,
+				"y": 160.87683,
+				"z": -683.8208
+			},
+			{
+				"x": 137.16516,
+				"y": 163.11046,
+				"z": -707.9825
+			},
+			{
+				"x": 250.67981,
+				"y": 164.24442,
+				"z": -691.9511
+			},
+			{
+				"x": 252.4862,
+				"y": 160.71538,
+				"z": -563.6702
+			},
+			{
+				"x": 113.12915,
+				"y": 160.96948,
+				"z": -585.74164
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "airfield_2",
+		"mAnchorPosition": {
+			"x": 69.89551,
+			"y": 161.76968,
+			"z": -637.45013
+		},
+		"mClaimed": false,
+		"mGuid": "6aea796a-8dc4-41c5-86fc-bf2ac27c933f",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -804.02246,
+				"y": 276.59875,
+				"z": 1174.5029
+			},
+			{
+				"x": -830.89874,
+				"y": 275.99585,
+				"z": 1210.2012
+			},
+			{
+				"x": -845.74335,
+				"y": 279.48584,
+				"z": 1250.8005
+			},
+			{
+				"x": -799.804,
+				"y": 296.4064,
+				"z": 1302.2217
+			},
+			{
+				"x": -726.9957,
+				"y": 296.2001,
+				"z": 1314.5483
+			},
+			{
+				"x": -851.3635,
+				"y": 296.4919,
+				"z": 1356.9291
+			},
+			{
+				"x": -935.0012,
+				"y": 290.23706,
+				"z": 1337.7173
+			},
+			{
+				"x": -927.74506,
+				"y": 280.8216,
+				"z": 1215.6182
+			},
+			{
+				"x": -813.31683,
+				"y": 279.66718,
+				"z": 1152.384
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "cabin_1",
+		"mAnchorPosition": {
+			"x": -804.02246,
+			"y": 276.59875,
+			"z": 1174.5029
+		},
+		"mClaimed": false,
+		"mGuid": "231a704a-d807-423d-b44b-fcbcb4e20a4f",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 290.6631,
+				"y": 160.69968,
+				"z": -546.735
+			},
+			{
+				"x": 378.30823,
+				"y": 162.11313,
+				"z": -565.84296
+			},
+			{
+				"x": 476.31458,
+				"y": 166.42667,
+				"z": -586.1716
+			},
+			{
+				"x": 576.0869,
+				"y": 171.47849,
+				"z": -631.62305
+			},
+			{
+				"x": 670.2412,
+				"y": 173.19101,
+				"z": -618.5434
+			},
+			{
+				"x": 782.7473,
+				"y": 179.40042,
+				"z": -512.2031
+			},
+			{
+				"x": 738.7146,
+				"y": 175.58139,
+				"z": -393.31482
+			},
+			{
+				"x": 672.1206,
+				"y": 164.28699,
+				"z": -218.79712
+			},
+			{
+				"x": 563.4231,
+				"y": 152.37894,
+				"z": -64.064575
+			},
+			{
+				"x": 396.34607,
+				"y": 154.22208,
+				"z": -128.22693
+			},
+			{
+				"x": 286.62634,
+				"y": 159.37317,
+				"z": -267.5968
+			},
+			{
+				"x": 292.14062,
+				"y": 159.5607,
+				"z": -442.13416
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "field_1",
+		"mAnchorPosition": {
+			"x": 290.6631,
+			"y": 160.69968,
+			"z": -546.735
+		},
+		"mClaimed": false,
+		"mGuid": "18f9a7ee-7539-438a-997e-284283b40ea1",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 520.2468,
+				"y": 167.84326,
+				"z": -485.6454
+			},
+			{
+				"x": 610.69385,
+				"y": 169.96884,
+				"z": -469.02856
+			},
+			{
+				"x": 649.60547,
+				"y": 167.3251,
+				"z": -345.86438
+			},
+			{
+				"x": 564.3474,
+				"y": 165.19382,
+				"z": -278.38928
+			},
+			{
+				"x": 494.24255,
+				"y": 164.31818,
+				"z": -326.3855
+			},
+			{
+				"x": 477.10657,
+				"y": 166.28812,
+				"z": -404.0271
+			},
+			{
+				"x": 502.63342,
+				"y": 165.36649,
+				"z": -449.48267
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "field_2",
+		"mAnchorPosition": {
+			"x": 520.2468,
+			"y": 167.84326,
+			"z": -485.6454
+		},
+		"mClaimed": false,
+		"mGuid": "c3e06624-9106-4f0e-9b24-ec3a5235228c",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 247.46167,
+				"y": 162.18729,
+				"z": -193.67114
+			},
+			{
+				"x": 903.0393,
+				"y": 178.67715,
+				"z": -551.95764
+			},
+			{
+				"x": 319.3778,
+				"y": 160.76874,
+				"z": -533.8145
+			},
+			{
+				"x": 765.6658,
+				"y": 157.83615,
+				"z": 10.61792
+			},
+			{
+				"x": 670.3684,
+				"y": 180.70526,
+				"z": -693.02515
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "field_3",
+		"mAnchorPosition": {
+			"x": 247.46167,
+			"y": 162.18729,
+			"z": -193.67114
+		},
+		"mClaimed": false,
+		"mGuid": "4fe5b7cf-e712-4eb9-be8f-1e62481ef3d3",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 736.9509,
+				"y": 158.21838,
+				"z": -69.14624
+			},
+			{
+				"x": 672.8943,
+				"y": 154.70242,
+				"z": -57.73889
+			},
+			{
+				"x": 617.42676,
+				"y": 151.97699,
+				"z": -79.44556
+			},
+			{
+				"x": 600.1804,
+				"y": 159.53323,
+				"z": -145.35889
+			},
+			{
+				"x": 632.39185,
+				"y": 162.35178,
+				"z": -195.83398
+			},
+			{
+				"x": 677.8628,
+				"y": 158.6272,
+				"z": -132.95984
+			},
+			{
+				"x": 731.1477,
+				"y": 165.02759,
+				"z": -163.1521
+			},
+			{
+				"x": 767.4955,
+				"y": 182.63165,
+				"z": -228.98355
+			},
+			{
+				"x": 732.1963,
+				"y": 169.03186,
+				"z": -287.62073
+			},
+			{
+				"x": 687.5217,
+				"y": 168.24136,
+				"z": -338.56152
+			},
+			{
+				"x": 659.1438,
+				"y": 168.46732,
+				"z": -399.8252
+			},
+			{
+				"x": 664.8865,
+				"y": 169.52094,
+				"z": -455.0216
+			},
+			{
+				"x": 700.66284,
+				"y": 172.99048,
+				"z": -464.3418
+			},
+			{
+				"x": 760.8511,
+				"y": 177.68417,
+				"z": -491.1781
+			},
+			{
+				"x": 754.38306,
+				"y": 176.87668,
+				"z": -530.88434
+			},
+			{
+				"x": 774.8706,
+				"y": 177.6842,
+				"z": -579.2817
+			},
+			{
+				"x": 853.8191,
+				"y": 180.83768,
+				"z": -584.7658
+			},
+			{
+				"x": 928.32764,
+				"y": 184.60889,
+				"z": -562.5094
+			},
+			{
+				"x": 981.04443,
+				"y": 181.2598,
+				"z": -442.68604
+			},
+			{
+				"x": 939.71704,
+				"y": 182.13571,
+				"z": -348.4983
+			},
+			{
+				"x": 869.25024,
+				"y": 178.22238,
+				"z": -326.2954
+			},
+			{
+				"x": 816.11255,
+				"y": 174.40433,
+				"z": -279.70825
+			},
+			{
+				"x": 829.8733,
+				"y": 173.77231,
+				"z": -210.75964
+			},
+			{
+				"x": 819.4126,
+				"y": 171.99109,
+				"z": -144.25684
+			},
+			{
+				"x": 775.27,
+				"y": 164.92538,
+				"z": -88.78369
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "field_4",
+		"mAnchorPosition": {
+			"x": 736.9509,
+			"y": 158.21838,
+			"z": -69.14624
+		},
+		"mClaimed": false,
+		"mGuid": "e08340a2-bc49-410d-89bc-304395545b35",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 495.0238,
+				"y": 155.56024,
+				"z": 25.512451
+			},
+			{
+				"x": 559.07935,
+				"y": 156.12643,
+				"z": 43.72339
+			},
+			{
+				"x": 622.43945,
+				"y": 157.43661,
+				"z": 11.442871
+			},
+			{
+				"x": 659.59106,
+				"y": 154.2208,
+				"z": -43.336792
+			},
+			{
+				"x": 388.6997,
+				"y": 159.74402,
+				"z": -517.35187
+			},
+			{
+				"x": 615.5244,
+				"y": 177.80856,
+				"z": -693.8497
+			},
+			{
+				"x": 689.2837,
+				"y": 161.66547,
+				"z": -160.90833
+			},
+			{
+				"x": 333.73865,
+				"y": 158.11578,
+				"z": -114.328
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "field_5",
+		"mAnchorPosition": {
+			"x": 495.0238,
+			"y": 155.56024,
+			"z": 25.512451
+		},
+		"mClaimed": false,
+		"mGuid": "3f2a1a77-ebe5-4d60-8201-13e5b52e650f",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 372.19177,
+				"y": 151.00385,
+				"z": 683.1489
+			},
+			{
+				"x": 320.41846,
+				"y": 151.00385,
+				"z": 584.43384
+			},
+			{
+				"x": 358.9037,
+				"y": 151.00385,
+				"z": 462.2002
+			},
+			{
+				"x": 448.318,
+				"y": 151.00385,
+				"z": 322.45398
+			},
+			{
+				"x": 529.32947,
+				"y": 151.00385,
+				"z": 242.78174
+			},
+			{
+				"x": 642.9263,
+				"y": 151.00385,
+				"z": 201.90173
+			},
+			{
+				"x": 780.0813,
+				"y": 151.00385,
+				"z": 219.13672
+			},
+			{
+				"x": 933.6648,
+				"y": 151.00385,
+				"z": 264.8175
+			},
+			{
+				"x": 910.30225,
+				"y": 151.00385,
+				"z": 455.6775
+			},
+			{
+				"x": 800.55664,
+				"y": 151.00385,
+				"z": 617.1179
+			},
+			{
+				"x": 578.167,
+				"y": 151.00385,
+				"z": 749.87476
+			},
+			{
+				"x": 457.92908,
+				"y": 151.00385,
+				"z": 703.4031
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "lake_1",
+		"mAnchorPosition": {
+			"x": 372.19177,
+			"y": 151.00385,
+			"z": 683.1489
+		},
+		"mClaimed": false,
+		"mGuid": "58caf71b-1440-45f1-be6a-090976ce9545",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 359.1775,
+				"y": 151.00385,
+				"z": 552.583
+			},
+			{
+				"x": 727.1758,
+				"y": 151.00385,
+				"z": 216.61829
+			},
+			{
+				"x": 409.8562,
+				"y": 151.00385,
+				"z": 678.5825
+			},
+			{
+				"x": 824.751,
+				"y": 151.00385,
+				"z": 298.07483
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "lake_2",
+		"mAnchorPosition": {
+			"x": 359.1775,
+			"y": 151.00385,
+			"z": 552.583
+		},
+		"mClaimed": false,
+		"mGuid": "95b769bd-91db-4cef-8197-43d069f6d63d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 797.0349,
+				"y": 151.00385,
+				"z": 741.125
+			},
+			{
+				"x": 820.98364,
+				"y": 151.00385,
+				"z": 560.33374
+			},
+			{
+				"x": 847.22974,
+				"y": 151.00385,
+				"z": 368.97327
+			},
+			{
+				"x": 888.7356,
+				"y": 151.00385,
+				"z": 206.46667
+			},
+			{
+				"x": 813.7871,
+				"y": 151.00385,
+				"z": 132.8645
+			},
+			{
+				"x": 602.9824,
+				"y": 151.00385,
+				"z": 168.35852
+			},
+			{
+				"x": 676.833,
+				"y": 151.00385,
+				"z": 203.3374
+			},
+			{
+				"x": 839.77905,
+				"y": 151.00385,
+				"z": 173.65308
+			},
+			{
+				"x": 811.0498,
+				"y": 151.00385,
+				"z": 356.5121
+			},
+			{
+				"x": 759.0581,
+				"y": 151.00385,
+				"z": 537.51416
+			},
+			{
+				"x": 755.4326,
+				"y": 151.00385,
+				"z": 701.72314
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "lake_3",
+		"mAnchorPosition": {
+			"x": 797.0349,
+			"y": 151.00385,
+			"z": 741.125
+		},
+		"mClaimed": false,
+		"mGuid": "bf2a2d91-beed-494c-833c-043ffc3bcd23",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 467.51587,
+				"y": 151.00385,
+				"z": 671.7793
+			},
+			{
+				"x": 260.6183,
+				"y": 151.00385,
+				"z": 604.9614
+			},
+			{
+				"x": 305.10254,
+				"y": 151.00385,
+				"z": 366.03894
+			},
+			{
+				"x": 474.6383,
+				"y": 151.04068,
+				"z": 203.59937
+			},
+			{
+				"x": 657.56226,
+				"y": 151.00385,
+				"z": 202.90576
+			},
+			{
+				"x": 327.0747,
+				"y": 151.00385,
+				"z": 569.8374
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "lake_4",
+		"mAnchorPosition": {
+			"x": 467.51587,
+			"y": 151.00385,
+			"z": 671.7793
+		},
+		"mClaimed": false,
+		"mGuid": "f50892a5-234d-4348-a035-53e3ec4cce05",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 399.1007,
+				"y": 151.16956,
+				"z": 184.66028
+			},
+			{
+				"x": 430.55127,
+				"y": 151.00385,
+				"z": 31.334595
+			},
+			{
+				"x": 338.12207,
+				"y": 154.8504,
+				"z": -230.76514
+			},
+			{
+				"x": 353.95605,
+				"y": 159.12213,
+				"z": -517.43427
+			},
+			{
+				"x": 488.8153,
+				"y": 193.11511,
+				"z": -789.33057
+			},
+			{
+				"x": 498.41357,
+				"y": 165.53671,
+				"z": -537.57837
+			},
+			{
+				"x": 481.13147,
+				"y": 163.82837,
+				"z": -330.88342
+			},
+			{
+				"x": 519.3345,
+				"y": 157.29736,
+				"z": -149.45728
+			},
+			{
+				"x": 575.2041,
+				"y": 154.80408,
+				"z": 4.466797
+			},
+			{
+				"x": 519.92017,
+				"y": 151.01465,
+				"z": 138.00806
+			},
+			{
+				"x": 448.86865,
+				"y": 151.00385,
+				"z": 390.37476
+			},
+			{
+				"x": 452.0227,
+				"y": 151.00385,
+				"z": 627.9004
+			},
+			{
+				"x": 351.69775,
+				"y": 151.00385,
+				"z": 331.9325
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "lake_5",
+		"mAnchorPosition": {
+			"x": 399.1007,
+			"y": 151.16956,
+			"z": 184.66028
+		},
+		"mClaimed": false,
+		"mGuid": "32ebc85f-16b1-4391-859d-4571a424908b",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 486.01294,
+				"y": 151.00385,
+				"z": 675.0227
+			},
+			{
+				"x": 544.0287,
+				"y": 151.00385,
+				"z": 702.4431
+			},
+			{
+				"x": 605.8169,
+				"y": 151.00385,
+				"z": 727.8921
+			},
+			{
+				"x": 704.95483,
+				"y": 151.00385,
+				"z": 841.09033
+			},
+			{
+				"x": 699.4043,
+				"y": 151.00385,
+				"z": 954.17456
+			},
+			{
+				"x": 567.4387,
+				"y": 151.00385,
+				"z": 1171.3169
+			},
+			{
+				"x": 297.26892,
+				"y": 151.00385,
+				"z": 1234.5576
+			},
+			{
+				"x": 149.25317,
+				"y": 151.00385,
+				"z": 1116.7437
+			},
+			{
+				"x": 195.5116,
+				"y": 151.00385,
+				"z": 910.35547
+			},
+			{
+				"x": 280.21204,
+				"y": 151.00385,
+				"z": 716.73193
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "island_1",
+		"mAnchorPosition": {
+			"x": 486.01294,
+			"y": 151.00385,
+			"z": 675.0227
+		},
+		"mClaimed": false,
+		"mGuid": "7e7d47c7-9bea-476a-9904-f57a3dc81ffe",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 481.7085,
+				"y": 201.80286,
+				"z": 853.15137
+			},
+			{
+				"x": 457.47986,
+				"y": 187.9521,
+				"z": 904.55664
+			},
+			{
+				"x": 493.34033,
+				"y": 186.3202,
+				"z": 934.5215
+			},
+			{
+				"x": 536.65796,
+				"y": 187.24309,
+				"z": 913.41187
+			},
+			{
+				"x": 586.0139,
+				"y": 189.66208,
+				"z": 887.0342
+			},
+			{
+				"x": 637.552,
+				"y": 201.61191,
+				"z": 919.2461
+			},
+			{
+				"x": 602.3633,
+				"y": 197.6542,
+				"z": 920.05884
+			},
+			{
+				"x": 561.4685,
+				"y": 187.4597,
+				"z": 936.4011
+			},
+			{
+				"x": 552.3281,
+				"y": 183.94295,
+				"z": 966.7588
+			},
+			{
+				"x": 597.16846,
+				"y": 164.82085,
+				"z": 1000.4458
+			},
+			{
+				"x": 585.37134,
+				"y": 159.49536,
+				"z": 1055.0386
+			},
+			{
+				"x": 523.59827,
+				"y": 166.57135,
+				"z": 1046.9824
+			},
+			{
+				"x": 462.88867,
+				"y": 173.56546,
+				"z": 1113.3
+			},
+			{
+				"x": 407.48535,
+				"y": 182.7991,
+				"z": 1146.8926
+			},
+			{
+				"x": 349.92993,
+				"y": 190.04813,
+				"z": 1096.7915
+			},
+			{
+				"x": 406.59265,
+				"y": 188.17018,
+				"z": 1071.467
+			},
+			{
+				"x": 465.1184,
+				"y": 185.08784,
+				"z": 1020.31665
+			},
+			{
+				"x": 457.78455,
+				"y": 184.35909,
+				"z": 954.95874
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "island_2",
+		"mAnchorPosition": {
+			"x": 481.7085,
+			"y": 201.80286,
+			"z": 853.15137
+		},
+		"mClaimed": false,
+		"mGuid": "6be5300b-b9c9-4f4c-9796-be52274e4cfe",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 297.94604,
+				"y": 207.56406,
+				"z": 1125.894
+			},
+			{
+				"x": 332.29285,
+				"y": 195.63838,
+				"z": 1133.7615
+			},
+			{
+				"x": 360.3755,
+				"y": 181.28183,
+				"z": 1141.759
+			},
+			{
+				"x": 417.01355,
+				"y": 183.87509,
+				"z": 1136.322
+			},
+			{
+				"x": 441.90845,
+				"y": 178.77444,
+				"z": 1107.0735
+			},
+			{
+				"x": 430.00867,
+				"y": 188.38033,
+				"z": 1047.6628
+			},
+			{
+				"x": 385.93054,
+				"y": 194.55707,
+				"z": 1038.7556
+			},
+			{
+				"x": 394.36597,
+				"y": 188.84007,
+				"z": 1066.2141
+			},
+			{
+				"x": 360.92468,
+				"y": 190.40744,
+				"z": 1091.9141
+			},
+			{
+				"x": 290.59692,
+				"y": 204.66522,
+				"z": 1108.0686
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "island_3",
+		"mAnchorPosition": {
+			"x": 297.94604,
+			"y": 207.56406,
+			"z": 1125.894
+		},
+		"mClaimed": false,
+		"mGuid": "f0c795bc-bdf8-4c85-bed7-bc797cd8b81f",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 473.47498,
+				"y": 210.43542,
+				"z": 789.12476
+			},
+			{
+				"x": 481.8844,
+				"y": 201.94083,
+				"z": 847.3345
+			},
+			{
+				"x": 454.23853,
+				"y": 182.93109,
+				"z": 926.11304
+			},
+			{
+				"x": 497.27014,
+				"y": 187.07587,
+				"z": 970.9956
+			},
+			{
+				"x": 555.43115,
+				"y": 183.92026,
+				"z": 939.68994
+			},
+			{
+				"x": 632.2915,
+				"y": 200.30351,
+				"z": 912.28345
+			},
+			{
+				"x": 582.8484,
+				"y": 190.51337,
+				"z": 891.2849
+			},
+			{
+				"x": 541.63477,
+				"y": 184.03278,
+				"z": 933.80615
+			},
+			{
+				"x": 462.43298,
+				"y": 194.05075,
+				"z": 894.03955
+			},
+			{
+				"x": 485.76892,
+				"y": 210.60693,
+				"z": 820.5862
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "island_4",
+		"mAnchorPosition": {
+			"x": 473.47498,
+			"y": 210.43542,
+			"z": 789.12476
+		},
+		"mClaimed": false,
+		"mGuid": "59408e33-197d-4828-8559-14cc8e30a119",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 618.87573,
+				"y": 151.00385,
+				"z": 1118.9961
+			},
+			{
+				"x": 903.5896,
+				"y": 151.00385,
+				"z": 1065.3779
+			},
+			{
+				"x": 650.4492,
+				"y": 158.42258,
+				"z": 996.6726
+			},
+			{
+				"x": 873.3413,
+				"y": 151.00385,
+				"z": 924.6682
+			},
+			{
+				"x": 683.2578,
+				"y": 151.00385,
+				"z": 868.52905
+			},
+			{
+				"x": 869.54706,
+				"y": 169.03062,
+				"z": 717.64026
+			},
+			{
+				"x": 582.57007,
+				"y": 151.00385,
+				"z": 712.81274
+			},
+			{
+				"x": 598.2229,
+				"y": 151.00385,
+				"z": 504.0951
+			},
+			{
+				"x": 384.7787,
+				"y": 151.00385,
+				"z": 700.8257
+			},
+			{
+				"x": 149.69226,
+				"y": 154.20291,
+				"z": 667.719
+			},
+			{
+				"x": 325.36487,
+				"y": 183.5499,
+				"z": 808.1029
+			},
+			{
+				"x": 97.28821,
+				"y": 151.00385,
+				"z": 1010.7366
+			},
+			{
+				"x": 198.1958,
+				"y": 151.00385,
+				"z": 999.0813
+			},
+			{
+				"x": 147.69067,
+				"y": 151.00385,
+				"z": 1152.1694
+			},
+			{
+				"x": 323.3833,
+				"y": 151.00385,
+				"z": 1216.5691
+			},
+			{
+				"x": 459.55823,
+				"y": 151.00385,
+				"z": 1214.4253
+			},
+			{
+				"x": 771.5056,
+				"y": 151.00385,
+				"z": 1077.0249
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "lake_6",
+		"mAnchorPosition": {
+			"x": 618.87573,
+			"y": 151.00385,
+			"z": 1118.9961
+		},
+		"mClaimed": false,
+		"mGuid": "594be62a-1377-4adc-a855-b93bc8ee998c",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 220.60669,
+				"y": 151.00385,
+				"z": 929.7578
+			},
+			{
+				"x": 35.825806,
+				"y": 151.00385,
+				"z": 975.5659
+			},
+			{
+				"x": -145.74512,
+				"y": 151.00385,
+				"z": 972.4829
+			},
+			{
+				"x": -246.29224,
+				"y": 151.00385,
+				"z": 1112.3145
+			},
+			{
+				"x": -93.03479,
+				"y": 151.00385,
+				"z": 1195.3306
+			},
+			{
+				"x": 12.44104,
+				"y": 153.29727,
+				"z": 1272.8374
+			},
+			{
+				"x": 167.68335,
+				"y": 151.00385,
+				"z": 1275.0193
+			},
+			{
+				"x": 195.82166,
+				"y": 151.00385,
+				"z": 1090.001
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "lake_7",
+		"mAnchorPosition": {
+			"x": 220.60669,
+			"y": 151.00385,
+			"z": 929.7578
+		},
+		"mClaimed": false,
+		"mGuid": "9d297837-6048-42d6-91af-7ed9de043de7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -607.3092,
+				"y": 197.766,
+				"z": 909.8193
+			},
+			{
+				"x": -495.0537,
+				"y": 174.7892,
+				"z": 927.30225
+			},
+			{
+				"x": -382.3474,
+				"y": 165.19064,
+				"z": 926.5735
+			},
+			{
+				"x": -302.04932,
+				"y": 156.61392,
+				"z": 978.10156
+			},
+			{
+				"x": -340.24268,
+				"y": 156.6201,
+				"z": 1115.0806
+			},
+			{
+				"x": -469.25122,
+				"y": 178.93845,
+				"z": 1055.093
+			},
+			{
+				"x": -460.70874,
+				"y": 203.54102,
+				"z": 1168.0156
+			},
+			{
+				"x": -569.86536,
+				"y": 222.41565,
+				"z": 1173.5337
+			},
+			{
+				"x": -648.29004,
+				"y": 216.74272,
+				"z": 1110.7241
+			},
+			{
+				"x": -632.5951,
+				"y": 210.21857,
+				"z": 1052.8313
+			},
+			{
+				"x": -729.02795,
+				"y": 222.0781,
+				"z": 981.5114
+			},
+			{
+				"x": -811.3431,
+				"y": 186.85504,
+				"z": 859.94385
+			},
+			{
+				"x": -671.3308,
+				"y": 178.65207,
+				"z": 866.1277
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "forest_1",
+		"mAnchorPosition": {
+			"x": -607.3092,
+			"y": 197.766,
+			"z": 909.8193
+		},
+		"mClaimed": false,
+		"mGuid": "80ff09a4-8ed7-4d4c-a788-2ac9c7b65eb9",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -751.1057,
+				"y": 180.03696,
+				"z": 846.98804
+			},
+			{
+				"x": -774.4833,
+				"y": 191.9879,
+				"z": 974.30225
+			},
+			{
+				"x": -857.2807,
+				"y": 195.56895,
+				"z": 950.583
+			},
+			{
+				"x": -831.2994,
+				"y": 194.43062,
+				"z": 897.4966
+			},
+			{
+				"x": -880.97363,
+				"y": 202.81874,
+				"z": 889.1282
+			},
+			{
+				"x": -924.38666,
+				"y": 204.71605,
+				"z": 932.01587
+			},
+			{
+				"x": -990.0632,
+				"y": 220.31181,
+				"z": 851.11597
+			},
+			{
+				"x": -978.3317,
+				"y": 213.66356,
+				"z": 816.3496
+			},
+			{
+				"x": -953.1059,
+				"y": 196.74297,
+				"z": 772.2986
+			},
+			{
+				"x": -962.338,
+				"y": 179.19174,
+				"z": 723.76196
+			},
+			{
+				"x": -900.64874,
+				"y": 178.16692,
+				"z": 706.8479
+			},
+			{
+				"x": -814.3237,
+				"y": 182.8076,
+				"z": 764.75684
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "forest_2",
+		"mAnchorPosition": {
+			"x": -751.1057,
+			"y": 180.03696,
+			"z": 846.98804
+		},
+		"mClaimed": false,
+		"mGuid": "ceb897d6-fa21-4cf8-a6c5-b8216d6586cd",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -860.2658,
+				"y": 178.4397,
+				"z": 713.42236
+			},
+			{
+				"x": -928.7217,
+				"y": 177.47054,
+				"z": 626.8225
+			},
+			{
+				"x": -998.9923,
+				"y": 178.38757,
+				"z": 563.95215
+			},
+			{
+				"x": -938.998,
+				"y": 177.75826,
+				"z": 441.69104
+			},
+			{
+				"x": -987.4159,
+				"y": 178.53467,
+				"z": 269.2804
+			},
+			{
+				"x": -1092.7003,
+				"y": 180.10213,
+				"z": 394.22913
+			},
+			{
+				"x": -1125.9475,
+				"y": 186.86394,
+				"z": 497.47437
+			},
+			{
+				"x": -1067.5514,
+				"y": 186.05788,
+				"z": 610.2888
+			},
+			{
+				"x": -981.74646,
+				"y": 179.13803,
+				"z": 703.75684
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "forest_3",
+		"mAnchorPosition": {
+			"x": -860.2658,
+			"y": 178.4397,
+			"z": 713.42236
+		},
+		"mClaimed": false,
+		"mGuid": "648905ad-d013-4e2f-a12f-0a2c30ba61e7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -748.252,
+				"y": 186.97183,
+				"z": 916.1992
+			},
+			{
+				"x": -876.02576,
+				"y": 201.44423,
+				"z": 885.36084
+			},
+			{
+				"x": -984.3583,
+				"y": 218.13745,
+				"z": 841.53784
+			},
+			{
+				"x": -1104.1416,
+				"y": 232.87587,
+				"z": 807.3203
+			},
+			{
+				"x": -1089.2888,
+				"y": 239.89107,
+				"z": 935.0244
+			},
+			{
+				"x": -1019.57385,
+				"y": 259.00702,
+				"z": 1040.2058
+			},
+			{
+				"x": -952.2835,
+				"y": 276.71667,
+				"z": 1147.148
+			},
+			{
+				"x": -1012.9409,
+				"y": 260.302,
+				"z": 1047.3911
+			},
+			{
+				"x": -1080.2568,
+				"y": 241.7794,
+				"z": 939.40015
+			},
+			{
+				"x": -1087.1174,
+				"y": 230.6299,
+				"z": 807.6782
+			},
+			{
+				"x": -992.93304,
+				"y": 219.58981,
+				"z": 837.05396
+			},
+			{
+				"x": -853.4619,
+				"y": 211.2451,
+				"z": 916.0278
+			},
+			{
+				"x": -738.9006,
+				"y": 186.44809,
+				"z": 894.92896
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "forest_4",
+		"mAnchorPosition": {
+			"x": -748.252,
+			"y": 186.97183,
+			"z": 916.1992
+		},
+		"mClaimed": false,
+		"mGuid": "e194e2d2-9702-45c6-ae1d-49dd0bacbadd",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -960.7539,
+				"y": 289.22113,
+				"z": 1343.2256
+			},
+			{
+				"x": -1080.9612,
+				"y": 282.48795,
+				"z": 1348.1948
+			},
+			{
+				"x": -1171.4329,
+				"y": 282.74713,
+				"z": 1300.5723
+			},
+			{
+				"x": -1239.9226,
+				"y": 277.95123,
+				"z": 1192.1069
+			},
+			{
+				"x": -1259.4633,
+				"y": 280.16742,
+				"z": 1046.9329
+			},
+			{
+				"x": -1162.7201,
+				"y": 275.17426,
+				"z": 1048.3015
+			},
+			{
+				"x": -1060.3406,
+				"y": 279.24805,
+				"z": 1145.0891
+			},
+			{
+				"x": -988.80383,
+				"y": 281.69952,
+				"z": 1223.8379
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "cabin_2",
+		"mAnchorPosition": {
+			"x": -960.7539,
+			"y": 289.22113,
+			"z": 1343.2256
+		},
+		"mClaimed": false,
+		"mGuid": "338a040d-7f14-4f44-97b7-3ec5b428dbc9",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -1218.7258,
+				"y": 275.73383,
+				"z": 1092.1045
+			},
+			{
+				"x": -1116.2316,
+				"y": 317.41138,
+				"z": 1078.5681
+			},
+			{
+				"x": -1257.5181,
+				"y": 282.12067,
+				"z": 1185.2917
+			},
+			{
+				"x": -1109.8079,
+				"y": 316.71603,
+				"z": 1143.8538
+			},
+			{
+				"x": -1195.246,
+				"y": 282.78787,
+				"z": 1259.6748
+			},
+			{
+				"x": -1053.9221,
+				"y": 277.01807,
+				"z": 1172.2073
+			},
+			{
+				"x": -1178.9412,
+				"y": 300.4342,
+				"z": 1366.1653
+			},
+			{
+				"x": -1015.3718,
+				"y": 276.8846,
+				"z": 1201.2007
+			},
+			{
+				"x": -1076.2738,
+				"y": 295.3173,
+				"z": 1390.4238
+			},
+			{
+				"x": -959.94,
+				"y": 282.56122,
+				"z": 1203.4043
+			},
+			{
+				"x": -952.044,
+				"y": 328.79895,
+				"z": 1328.97
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "cabin_3",
+		"mAnchorPosition": {
+			"x": -1218.7258,
+			"y": 275.73383,
+			"z": 1092.1045
+		},
+		"mClaimed": false,
+		"mGuid": "437e792d-1e05-433f-a00a-6a4abf2a58b4",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -665.5062,
+				"y": 298.38693,
+				"z": 1312.1287
+			},
+			{
+				"x": -614.6483,
+				"y": 299.32202,
+				"z": 1248.0732
+			},
+			{
+				"x": -566.1463,
+				"y": 296.20013,
+				"z": 1335.3003
+			},
+			{
+				"x": -493.84412,
+				"y": 296.73413,
+				"z": 1317.918
+			},
+			{
+				"x": -474.67957,
+				"y": 297.617,
+				"z": 1395.28
+			},
+			{
+				"x": -421.3963,
+				"y": 311.1431,
+				"z": 1326.8605
+			},
+			{
+				"x": -442.51843,
+				"y": 296.52786,
+				"z": 1381.3948
+			},
+			{
+				"x": -528.78296,
+				"y": 297.22397,
+				"z": 1321.6758
+			},
+			{
+				"x": -660.42065,
+				"y": 296.3086,
+				"z": 1289.1951
+			},
+			{
+				"x": -732.22656,
+				"y": 296.2001,
+				"z": 1308.6401
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "cabin_4",
+		"mAnchorPosition": {
+			"x": -665.5062,
+			"y": 298.38693,
+			"z": 1312.1287
+		},
+		"mClaimed": false,
+		"mGuid": "f6e393c0-1e53-49fa-b8bc-5146bcb6fdd8",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -839.1797,
+				"y": 276.7187,
+				"z": 1227.4585
+			},
+			{
+				"x": -949.07666,
+				"y": 282.40833,
+				"z": 1198.1724
+			},
+			{
+				"x": -1012.2278,
+				"y": 271.25842,
+				"z": 1084.644
+			},
+			{
+				"x": -1216.0854,
+				"y": 274.20007,
+				"z": 1023.3828
+			},
+			{
+				"x": -1217.2086,
+				"y": 274.30878,
+				"z": 1151.7483
+			},
+			{
+				"x": -1174.1892,
+				"y": 285.07767,
+				"z": 1326.7224
+			},
+			{
+				"x": -963.71814,
+				"y": 288.81613,
+				"z": 1312.9146
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "cabin_5",
+		"mAnchorPosition": {
+			"x": -839.1797,
+			"y": 276.7187,
+			"z": 1227.4585
+		},
+		"mClaimed": false,
+		"mGuid": "721b28ff-3855-4488-8ebf-d5f28fb89dc5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -1194.5466,
+				"y": 248.73419,
+				"z": 788.7954
+			},
+			{
+				"x": -1263.5919,
+				"y": 259.0263,
+				"z": 686.1118
+			},
+			{
+				"x": -1226.4514,
+				"y": 252.87558,
+				"z": 610.66296
+			},
+			{
+				"x": -1214.5284,
+				"y": 240.1831,
+				"z": 478.49353
+			},
+			{
+				"x": -1288.3691,
+				"y": 279.7039,
+				"z": 480.31912
+			},
+			{
+				"x": -1333.7991,
+				"y": 252.22388,
+				"z": 524.9564
+			},
+			{
+				"x": -1249.3811,
+				"y": 245.9332,
+				"z": 565.5935
+			},
+			{
+				"x": -1318.6548,
+				"y": 266.1629,
+				"z": 620.0642
+			},
+			{
+				"x": -1230.3398,
+				"y": 244.52646,
+				"z": 627.75195
+			},
+			{
+				"x": -1236.1387,
+				"y": 254.24095,
+				"z": 707.4463
+			},
+			{
+				"x": -1169.4562,
+				"y": 244.35461,
+				"z": 736.24
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "forest_5",
+		"mAnchorPosition": {
+			"x": -1194.5466,
+			"y": 248.73419,
+			"z": 788.7954
+		},
+		"mClaimed": false,
+		"mGuid": "761e8f0d-2227-4609-aab8-5d707c7c9e86",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -1257.5201,
+				"y": 244.72359,
+				"z": 440.56946
+			},
+			{
+				"x": -1219.8442,
+				"y": 239.06134,
+				"z": 496.0835
+			},
+			{
+				"x": -1321.1438,
+				"y": 250.30177,
+				"z": 468.77454
+			},
+			{
+				"x": -1349.4097,
+				"y": 253.08571,
+				"z": 495.75427
+			},
+			{
+				"x": -1241.2178,
+				"y": 246.19562,
+				"z": 596.01074
+			},
+			{
+				"x": -1258.6392,
+				"y": 260.42267,
+				"z": 728.75977
+			},
+			{
+				"x": -1227.3737,
+				"y": 318.5846,
+				"z": 818.72296
+			},
+			{
+				"x": -1181.6174,
+				"y": 249.49074,
+				"z": 806.5178
+			},
+			{
+				"x": -1180.2806,
+				"y": 245.90675,
+				"z": 734.13574
+			},
+			{
+				"x": -1182.6462,
+				"y": 225.19258,
+				"z": 645.875
+			},
+			{
+				"x": -1232.1534,
+				"y": 243.01703,
+				"z": 566.89307
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "forest_6",
+		"mAnchorPosition": {
+			"x": -1257.5201,
+			"y": 244.72359,
+			"z": 440.56946
+		},
+		"mClaimed": false,
+		"mGuid": "59bb6040-18e2-4267-81d0-0eda28146fc2",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -989.16516,
+				"y": 178.56084,
+				"z": 252.19287
+			},
+			{
+				"x": -996.43994,
+				"y": 180.59512,
+				"z": 92.82776
+			},
+			{
+				"x": -1133.7196,
+				"y": 186.57922,
+				"z": 101.97388
+			},
+			{
+				"x": -1196.4849,
+				"y": 206.08554,
+				"z": -92.578735
+			},
+			{
+				"x": -933.71265,
+				"y": 191.12787,
+				"z": -148.66174
+			},
+			{
+				"x": -931.1348,
+				"y": 186.4895,
+				"z": 20.516968
+			},
+			{
+				"x": -1057.647,
+				"y": 195.29272,
+				"z": -34.03943
+			},
+			{
+				"x": -1132.222,
+				"y": 179.60327,
+				"z": 244.86328
+			},
+			{
+				"x": -1213.9868,
+				"y": 200.49136,
+				"z": 352.77582
+			},
+			{
+				"x": -1040.2974,
+				"y": 180.59656,
+				"z": 392.35437
+			},
+			{
+				"x": -1073.6874,
+				"y": 178.92438,
+				"z": 159.93921
+			},
+			{
+				"x": -1181.5879,
+				"y": 191.60248,
+				"z": 95.77466
+			},
+			{
+				"x": -972.83777,
+				"y": 191.12463,
+				"z": -54.708008
+			},
+			{
+				"x": -1079.4705,
+				"y": 180.64764,
+				"z": 115.18408
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "forest_7",
+		"mAnchorPosition": {
+			"x": -989.16516,
+			"y": 178.56084,
+			"z": 252.19287
+		},
+		"mClaimed": false,
+		"mGuid": "ce1f9ea0-da92-42b7-af71-f88c70902fa3",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -1047.7714,
+				"y": 180.94601,
+				"z": 470.06873
+			},
+			{
+				"x": -1167.073,
+				"y": 191.22925,
+				"z": 396.2959
+			},
+			{
+				"x": -1042.3892,
+				"y": 180.07489,
+				"z": 222.21631
+			},
+			{
+				"x": -1123.6517,
+				"y": 182.71368,
+				"z": 139.92615
+			},
+			{
+				"x": -1012.28784,
+				"y": 178.0521,
+				"z": 559.5283
+			},
+			{
+				"x": -990.80054,
+				"y": 196.30148,
+				"z": -85.52222
+			},
+			{
+				"x": -1115.8088,
+				"y": 214.09909,
+				"z": -83.93364
+			},
+			{
+				"x": -1051.6091,
+				"y": 192.1405,
+				"z": -16.130127
+			},
+			{
+				"x": -1024.6351,
+				"y": 184.24518,
+				"z": 128.38
+			},
+			{
+				"x": -1145.5548,
+				"y": 188.79106,
+				"z": 91.497246
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "forest_8",
+		"mAnchorPosition": {
+			"x": -1047.7714,
+			"y": 180.94601,
+			"z": 470.06873
+		},
+		"mClaimed": false,
+		"mGuid": "fb1c26fe-5a07-49b7-a37a-5d77773d726e",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -743.43243,
+				"y": 178.78195,
+				"z": 814.5952
+			},
+			{
+				"x": -832.7921,
+				"y": 177.75491,
+				"z": 564.3628
+			},
+			{
+				"x": -759.706,
+				"y": 167.20242,
+				"z": 446.48315
+			},
+			{
+				"x": -518.2494,
+				"y": 157.94324,
+				"z": 413.19836
+			},
+			{
+				"x": -356.2124,
+				"y": 154.7898,
+				"z": 316.4082
+			},
+			{
+				"x": -181.37512,
+				"y": 154.36826,
+				"z": 222.59424
+			},
+			{
+				"x": -85.52832,
+				"y": 152.68997,
+				"z": -13.481812
+			},
+			{
+				"x": -259.9038,
+				"y": 155.43552,
+				"z": -206.87012
+			},
+			{
+				"x": -415.06543,
+				"y": 160.71115,
+				"z": -302.09338
+			},
+			{
+				"x": -582.83936,
+				"y": 171.72876,
+				"z": -407.79846
+			},
+			{
+				"x": -601.64343,
+				"y": 176.53296,
+				"z": -544.9193
+			},
+			{
+				"x": -567.3661,
+				"y": 170.90906,
+				"z": -393.84607
+			},
+			{
+				"x": -422.57288,
+				"y": 160.28513,
+				"z": -296.31628
+			},
+			{
+				"x": -233.20154,
+				"y": 156.84848,
+				"z": -180.36316
+			},
+			{
+				"x": -94.32068,
+				"y": 153.14655,
+				"z": -18.40857
+			},
+			{
+				"x": -179.53308,
+				"y": 154.62305,
+				"z": 254.83752
+			},
+			{
+				"x": -385.25293,
+				"y": 155.19147,
+				"z": 336.3058
+			},
+			{
+				"x": -497.59778,
+				"y": 158.37704,
+				"z": 373.62854
+			},
+			{
+				"x": -747.262,
+				"y": 167.00635,
+				"z": 415.23706
+			},
+			{
+				"x": -845.3685,
+				"y": 177.72113,
+				"z": 559.09155
+			},
+			{
+				"x": -751.1138,
+				"y": 177.29303,
+				"z": 798.3362
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "crosscountry_1",
+		"mAnchorPosition": {
+			"x": -743.43243,
+			"y": 178.78195,
+			"z": 814.5952
+		},
+		"mClaimed": false,
+		"mGuid": "783594d7-c112-49d7-8856-ffeae0e5f64a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -609.3614,
+				"y": 172.66406,
+				"z": -674.8487
+			},
+			{
+				"x": -560.3018,
+				"y": 174.46431,
+				"z": -765.43024
+			},
+			{
+				"x": -480.38458,
+				"y": 175.70145,
+				"z": -827.9305
+			},
+			{
+				"x": -379.1311,
+				"y": 176.79567,
+				"z": -892.1418
+			},
+			{
+				"x": -266.12378,
+				"y": 162.6383,
+				"z": -905.68536
+			},
+			{
+				"x": -186.66846,
+				"y": 163.40619,
+				"z": -894.3567
+			},
+			{
+				"x": -111.9458,
+				"y": 158.32133,
+				"z": -799.6349
+			},
+			{
+				"x": -68.79651,
+				"y": 158.37408,
+				"z": -747.4037
+			},
+			{
+				"x": 5.732788,
+				"y": 158.55055,
+				"z": -689.96643
+			},
+			{
+				"x": 2.3233643,
+				"y": 160.04608,
+				"z": -601.8328
+			},
+			{
+				"x": 68.66675,
+				"y": 159.71884,
+				"z": -534.90784
+			},
+			{
+				"x": 164.03784,
+				"y": 159.8303,
+				"z": -456.23303
+			},
+			{
+				"x": 144.6604,
+				"y": 160.15814,
+				"z": -351.82806
+			},
+			{
+				"x": 111.382324,
+				"y": 159.99336,
+				"z": -288.34106
+			},
+			{
+				"x": 210.61667,
+				"y": 159.9655,
+				"z": -116.81541
+			},
+			{
+				"x": 287.65417,
+				"y": 160.19656,
+				"z": -46.00659
+			},
+			{
+				"x": 407.02808,
+				"y": 158.63922,
+				"z": -85.59595
+			},
+			{
+				"x": 460.25745,
+				"y": 151.00385,
+				"z": 89.960205
+			},
+			{
+				"x": 709.1741,
+				"y": 153.34723,
+				"z": 97.64404
+			},
+			{
+				"x": 685.926,
+				"y": 156.72778,
+				"z": -105.26648
+			},
+			{
+				"x": 679.3242,
+				"y": 168.37927,
+				"z": -356.49084
+			},
+			{
+				"x": 567.2976,
+				"y": 168.2201,
+				"z": -515.3195
+			},
+			{
+				"x": 337.29602,
+				"y": 158.96979,
+				"z": -477.36383
+			},
+			{
+				"x": 139.57092,
+				"y": 160.05753,
+				"z": -297.5016
+			},
+			{
+				"x": -31.611248,
+				"y": 159.90854,
+				"z": -440.80453
+			},
+			{
+				"x": -104.07776,
+				"y": 161.40817,
+				"z": -585.57166
+			},
+			{
+				"x": -64.87366,
+				"y": 158.33621,
+				"z": -695.6304
+			},
+			{
+				"x": -148.82117,
+				"y": 158.10909,
+				"z": -765.80524
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "crosscountry_2",
+		"mAnchorPosition": {
+			"x": -609.3614,
+			"y": 172.66406,
+			"z": -674.8487
+		},
+		"mClaimed": false,
+		"mGuid": "4e77be7a-101a-40d0-9ad1-b13f2bba310a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -169.89453,
+				"y": 151.00385,
+				"z": -401.3838
+			},
+			{
+				"x": -65.589966,
+				"y": 151.00385,
+				"z": -320.36218
+			},
+			{
+				"x": 49.61792,
+				"y": 151.00385,
+				"z": -214.19104
+			},
+			{
+				"x": 145.54773,
+				"y": 151.00385,
+				"z": -59.272217
+			},
+			{
+				"x": 155.31677,
+				"y": 151.00385,
+				"z": 85.99231
+			},
+			{
+				"x": 235.21204,
+				"y": 151.91344,
+				"z": 277.84143
+			},
+			{
+				"x": 290.94922,
+				"y": 151.00385,
+				"z": 480.2638
+			},
+			{
+				"x": 232.52698,
+				"y": 151.01538,
+				"z": 702.61475
+			},
+			{
+				"x": 93.35974,
+				"y": 151.00385,
+				"z": 834.7344
+			},
+			{
+				"x": -155.60901,
+				"y": 151.00385,
+				"z": 956.55054
+			},
+			{
+				"x": -412.9065,
+				"y": 168.10062,
+				"z": 892.43726
+			},
+			{
+				"x": -675.0487,
+				"y": 174.80502,
+				"z": 787.3501
+			},
+			{
+				"x": -823.4663,
+				"y": 177.04259,
+				"z": 541.7455
+			},
+			{
+				"x": -851.1982,
+				"y": 173.1269,
+				"z": 244.37048
+			},
+			{
+				"x": -736.3767,
+				"y": 168.62259,
+				"z": -7.168701
+			},
+			{
+				"x": -690.7427,
+				"y": 169.23128,
+				"z": -361.77112
+			},
+			{
+				"x": -349.4038,
+				"y": 158.93729,
+				"z": -265.44556
+			},
+			{
+				"x": -165.12793,
+				"y": 155.49173,
+				"z": -138.9773
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "crosscountry_3",
+		"mAnchorPosition": {
+			"x": -169.89453,
+			"y": 151.00385,
+			"z": -401.3838
+		},
+		"mClaimed": false,
+		"mGuid": "af28feec-f7fe-4a08-9255-e32c68d609ee",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -172.24915,
+				"y": 151.00385,
+				"z": -405.22217
+			},
+			{
+				"x": -175.38281,
+				"y": 151.56433,
+				"z": -572.11395
+			},
+			{
+				"x": -290.67725,
+				"y": 151.00385,
+				"z": -579.8099
+			},
+			{
+				"x": -238.78235,
+				"y": 151.63431,
+				"z": -743.1936
+			},
+			{
+				"x": -314.17725,
+				"y": 151.00385,
+				"z": -802.06433
+			},
+			{
+				"x": -405.48596,
+				"y": 151.00385,
+				"z": -610.04
+			},
+			{
+				"x": -465.2787,
+				"y": 151.00385,
+				"z": -564.474
+			},
+			{
+				"x": -486.78046,
+				"y": 151.0411,
+				"z": -569.6296
+			},
+			{
+				"x": -500.46118,
+				"y": 151.00385,
+				"z": -595.4777
+			},
+			{
+				"x": -537.5026,
+				"y": 151.06671,
+				"z": -653.34686
+			},
+			{
+				"x": -645.9462,
+				"y": 151.00385,
+				"z": -638.144
+			},
+			{
+				"x": -743.3037,
+				"y": 151.00385,
+				"z": -624.3905
+			},
+			{
+				"x": -809.9835,
+				"y": 151.00385,
+				"z": -696.3207
+			},
+			{
+				"x": -895.4118,
+				"y": 151.00385,
+				"z": -762.71936
+			},
+			{
+				"x": -959.36145,
+				"y": 151.00385,
+				"z": -783.6061
+			},
+			{
+				"x": -1038.8353,
+				"y": 151.00385,
+				"z": -758.46826
+			},
+			{
+				"x": -1067.5405,
+				"y": 151.00385,
+				"z": -724.7619
+			},
+			{
+				"x": -1039.1111,
+				"y": 173.3594,
+				"z": -708.8972
+			},
+			{
+				"x": -942.0967,
+				"y": 191.22856,
+				"z": -651.8103
+			},
+			{
+				"x": -886.0606,
+				"y": 251.0284,
+				"z": -574.8334
+			},
+			{
+				"x": -754.11615,
+				"y": 174.71329,
+				"z": -449.3767
+			},
+			{
+				"x": -607.9411,
+				"y": 163.92776,
+				"z": -313.41174
+			},
+			{
+				"x": -441.55432,
+				"y": 158.31714,
+				"z": -249.6023
+			},
+			{
+				"x": -299.12085,
+				"y": 156.54999,
+				"z": -312.13477
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "crosscountry_4",
+		"mAnchorPosition": {
+			"x": -172.24915,
+			"y": 151.00385,
+			"z": -405.22217
+		},
+		"mClaimed": false,
+		"mGuid": "483f082c-87b5-46bb-8bb0-f863ac264871",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -582.59454,
+				"y": 174.37955,
+				"z": -746.8445
+			},
+			{
+				"x": -749.6658,
+				"y": 179.1246,
+				"z": -731.4732
+			},
+			{
+				"x": -821.6844,
+				"y": 186.10565,
+				"z": -806.83093
+			},
+			{
+				"x": -921.3477,
+				"y": 190.05344,
+				"z": -864.6512
+			},
+			{
+				"x": -1023.7233,
+				"y": 267.82983,
+				"z": -856.6178
+			},
+			{
+				"x": -1156.2305,
+				"y": 217.42848,
+				"z": -914.34955
+			},
+			{
+				"x": -1133.2244,
+				"y": 228.86955,
+				"z": -974.24963
+			},
+			{
+				"x": -1079.5831,
+				"y": 235.5243,
+				"z": -1017.6675
+			},
+			{
+				"x": -1022.45966,
+				"y": 233.29657,
+				"z": -1103.7937
+			},
+			{
+				"x": -1013.2025,
+				"y": 246.08685,
+				"z": -1232.218
+			},
+			{
+				"x": -940.6393,
+				"y": 264.3355,
+				"z": -1306.141
+			},
+			{
+				"x": -856.2595,
+				"y": 261.1769,
+				"z": -1315.3503
+			},
+			{
+				"x": -753.90485,
+				"y": 272.882,
+				"z": -1309.3043
+			},
+			{
+				"x": -695.0403,
+				"y": 272.7492,
+				"z": -1198.051
+			},
+			{
+				"x": -633.86536,
+				"y": 273.01413,
+				"z": -1086.2021
+			},
+			{
+				"x": -588.02765,
+				"y": 272.90646,
+				"z": -1052.1924
+			},
+			{
+				"x": -662.9916,
+				"y": 272.7692,
+				"z": -1134.4889
+			},
+			{
+				"x": -706.018,
+				"y": 273.0872,
+				"z": -1224.404
+			},
+			{
+				"x": -738.34106,
+				"y": 272.4458,
+				"z": -1291.5305
+			},
+			{
+				"x": -793.71674,
+				"y": 267.33594,
+				"z": -1315.219
+			},
+			{
+				"x": -914.5332,
+				"y": 263.63647,
+				"z": -1316.693
+			},
+			{
+				"x": -992.84033,
+				"y": 250.85513,
+				"z": -1252.7908
+			},
+			{
+				"x": -1020.7263,
+				"y": 236.55174,
+				"z": -1173.9763
+			},
+			{
+				"x": -1018.78094,
+				"y": 233.26051,
+				"z": -1085.0662
+			},
+			{
+				"x": -1073.0846,
+				"y": 237.9105,
+				"z": -1037.1575
+			},
+			{
+				"x": -1122.2479,
+				"y": 229.86882,
+				"z": -986.774
+			},
+			{
+				"x": -1150.7825,
+				"y": 216.79901,
+				"z": -902.74695
+			},
+			{
+				"x": -1030.1863,
+				"y": 198.20027,
+				"z": -867.71204
+			},
+			{
+				"x": -930.9041,
+				"y": 191.02779,
+				"z": -873.8451
+			},
+			{
+				"x": -810.6874,
+				"y": 185.41435,
+				"z": -796.5973
+			},
+			{
+				"x": -753.8185,
+				"y": 179.573,
+				"z": -735.0635
+			},
+			{
+				"x": -579.2183,
+				"y": 174.82736,
+				"z": -757.3144
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "crosscountry_5",
+		"mAnchorPosition": {
+			"x": -582.59454,
+			"y": 174.37955,
+			"z": -746.8445
+		},
+		"mClaimed": false,
+		"mGuid": "5aa2573a-0742-49fa-b7df-1ff13557fcbc",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -387.20663,
+				"y": 258.29974,
+				"z": -1237.2438
+			},
+			{
+				"x": -317.72266,
+				"y": 262.593,
+				"z": -1197.8416
+			},
+			{
+				"x": -279.6433,
+				"y": 266.5076,
+				"z": -1202.7131
+			},
+			{
+				"x": -270.4945,
+				"y": 268.09116,
+				"z": -1223.0549
+			},
+			{
+				"x": -299.06882,
+				"y": 264.07663,
+				"z": -1191.7983
+			},
+			{
+				"x": -323.9281,
+				"y": 263.55148,
+				"z": -1203.2725
+			},
+			{
+				"x": -366.9569,
+				"y": 260.33884,
+				"z": -1219.0288
+			},
+			{
+				"x": -407.88983,
+				"y": 258.70493,
+				"z": -1253.78
+			},
+			{
+				"x": -438.89734,
+				"y": 258.84647,
+				"z": -1256.3938
+			},
+			{
+				"x": -480.1516,
+				"y": 260.6244,
+				"z": -1270.6333
+			},
+			{
+				"x": -524.452,
+				"y": 265.44986,
+				"z": -1272.688
+			},
+			{
+				"x": -542.8916,
+				"y": 273.53827,
+				"z": -1214.72
+			},
+			{
+				"x": -521.7329,
+				"y": 273.27112,
+				"z": -1159.2035
+			},
+			{
+				"x": -515.3503,
+				"y": 273.19678,
+				"z": -1133.0813
+			},
+			{
+				"x": -533.0471,
+				"y": 273.41852,
+				"z": -1098.1216
+			},
+			{
+				"x": -510.50574,
+				"y": 273.46,
+				"z": -1141.9684
+			},
+			{
+				"x": -528.44446,
+				"y": 274.0655,
+				"z": -1186.1598
+			},
+			{
+				"x": -544.0837,
+				"y": 271.2416,
+				"z": -1248.2191
+			},
+			{
+				"x": -477.18164,
+				"y": 261.34357,
+				"z": -1264.5793
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "entry_1",
+		"mAnchorPosition": {
+			"x": -387.20663,
+			"y": 258.29974,
+			"z": -1237.2438
+		},
+		"mClaimed": false,
+		"mGuid": "66d6e477-fb01-4bad-bfd0-62fdb0a0301b",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -54.67904,
+				"y": 263.80096,
+				"z": -1388.1434
+			},
+			{
+				"x": 1.7426758,
+				"y": 262.98154,
+				"z": -1344.133
+			},
+			{
+				"x": 58.886414,
+				"y": 263.3979,
+				"z": -1283.8351
+			},
+			{
+				"x": 99.05542,
+				"y": 263.8321,
+				"z": -1263.4325
+			},
+			{
+				"x": 177.3,
+				"y": 261.3699,
+				"z": -1279.5365
+			},
+			{
+				"x": 211.25903,
+				"y": 259.90546,
+				"z": -1313.7694
+			},
+			{
+				"x": 259.75195,
+				"y": 259.82092,
+				"z": -1335.1001
+			},
+			{
+				"x": 297.71106,
+				"y": 259.8209,
+				"z": -1341.8738
+			},
+			{
+				"x": 355.62143,
+				"y": 260.5829,
+				"z": -1326.7354
+			},
+			{
+				"x": 396.3075,
+				"y": 263.36862,
+				"z": -1297.9807
+			},
+			{
+				"x": 426.18698,
+				"y": 263.8392,
+				"z": -1282.2068
+			},
+			{
+				"x": 371.30536,
+				"y": 261.33917,
+				"z": -1317.2301
+			},
+			{
+				"x": 299.89746,
+				"y": 259.82092,
+				"z": -1342.3778
+			},
+			{
+				"x": 241.76393,
+				"y": 259.9828,
+				"z": -1328.7296
+			},
+			{
+				"x": 182.22424,
+				"y": 261.59998,
+				"z": -1286.2014
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "entry_2",
+		"mAnchorPosition": {
+			"x": -54.67904,
+			"y": 263.80096,
+			"z": -1388.1434
+		},
+		"mClaimed": false,
+		"mGuid": "9d7ba3fc-4413-4666-886a-cb6a2ba730c6",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 861.11523,
+				"y": 311.35345,
+				"z": -915.60046
+			},
+			{
+				"x": 949.6045,
+				"y": 286.5729,
+				"z": -833.9291
+			},
+			{
+				"x": 1058.0303,
+				"y": 267.61688,
+				"z": -692.82996
+			},
+			{
+				"x": 1134.522,
+				"y": 288.65015,
+				"z": -764.42065
+			},
+			{
+				"x": 1052.6907,
+				"y": 288.30228,
+				"z": -839.84186
+			},
+			{
+				"x": 1168.7837,
+				"y": 297.2355,
+				"z": -836.4317
+			},
+			{
+				"x": 1197.3042,
+				"y": 297.538,
+				"z": -926.3362
+			},
+			{
+				"x": 1059.2795,
+				"y": 282.741,
+				"z": -928.286
+			},
+			{
+				"x": 1047.2808,
+				"y": 284.79895,
+				"z": -754.091
+			},
+			{
+				"x": 919.58496,
+				"y": 294.8587,
+				"z": -877.3373
+			},
+			{
+				"x": 1066.7131,
+				"y": 292.05225,
+				"z": -960.3724
+			},
+			{
+				"x": 929.40356,
+				"y": 295.11865,
+				"z": -984.4245
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "southwest_1",
+		"mAnchorPosition": {
+			"x": 861.11523,
+			"y": 311.35345,
+			"z": -915.60046
+		},
+		"mClaimed": false,
+		"mGuid": "b623b592-5a10-4991-ac88-f784ebdce76b",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 648.5503,
+				"y": 301.17963,
+				"z": -962.6897
+			},
+			{
+				"x": 888.6727,
+				"y": 351.1626,
+				"z": -917.069
+			},
+			{
+				"x": 812.3172,
+				"y": 354.09772,
+				"z": -992.84125
+			},
+			{
+				"x": 784.6455,
+				"y": 305.43463,
+				"z": -903.9199
+			},
+			{
+				"x": 964.2141,
+				"y": 292.57794,
+				"z": -1070.1025
+			},
+			{
+				"x": 962.214,
+				"y": 300.75378,
+				"z": -854.59784
+			},
+			{
+				"x": 858.27515,
+				"y": 311.37598,
+				"z": -909.49146
+			},
+			{
+				"x": 840.1111,
+				"y": 300.18063,
+				"z": -1043.242
+			},
+			{
+				"x": 696.687,
+				"y": 297.97382,
+				"z": -963.0033
+			},
+			{
+				"x": 789.6067,
+				"y": 299.70718,
+				"z": -948.68207
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "southwest_2",
+		"mAnchorPosition": {
+			"x": 648.5503,
+			"y": 301.17963,
+			"z": -962.6897
+		},
+		"mClaimed": false,
+		"mGuid": "baea5cfb-114b-4767-9ab7-b1a982c7328d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 682.81323,
+				"y": 188.737,
+				"z": -733.9048
+			},
+			{
+				"x": 818.1968,
+				"y": 191.58331,
+				"z": -701.6808
+			},
+			{
+				"x": 1002.1443,
+				"y": 206.2992,
+				"z": -600.8284
+			},
+			{
+				"x": 1080.2852,
+				"y": 218.46056,
+				"z": -556.436
+			},
+			{
+				"x": 1013.378,
+				"y": 231.4626,
+				"z": -427.5011
+			},
+			{
+				"x": 1142.5435,
+				"y": 211.25043,
+				"z": -364.50537
+			},
+			{
+				"x": 1186.0486,
+				"y": 229.80789,
+				"z": -452.58813
+			},
+			{
+				"x": 1169.8921,
+				"y": 242.67824,
+				"z": -534.0344
+			},
+			{
+				"x": 1045.4758,
+				"y": 197.1803,
+				"z": -515.6829
+			},
+			{
+				"x": 989.13745,
+				"y": 224.38647,
+				"z": -638.3851
+			},
+			{
+				"x": 876.15356,
+				"y": 199.14415,
+				"z": -698.19073
+			},
+			{
+				"x": 751.4829,
+				"y": 190.63588,
+				"z": -731.9866
+			},
+			{
+				"x": 613.1057,
+				"y": 207.69783,
+				"z": -810.21625
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "southwest_3",
+		"mAnchorPosition": {
+			"x": 682.81323,
+			"y": 188.737,
+			"z": -733.9048
+		},
+		"mClaimed": false,
+		"mGuid": "99e41a07-6cc5-4ecb-9595-c3649daf3b77",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -8.614258,
+				"y": 153.04587,
+				"z": 318.00232
+			},
+			{
+				"x": 41.805664,
+				"y": 151.7682,
+				"z": 333.4292
+			},
+			{
+				"x": 69.46094,
+				"y": 152.06062,
+				"z": 374.1521
+			},
+			{
+				"x": 51.68164,
+				"y": 151.83421,
+				"z": 426.19348
+			},
+			{
+				"x": -26.109253,
+				"y": 152.6639,
+				"z": 417.20898
+			},
+			{
+				"x": -52.745117,
+				"y": 152.40245,
+				"z": 360.80505
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_1",
+		"mAnchorPosition": {
+			"x": -8.614258,
+			"y": 153.04587,
+			"z": 318.00232
+		},
+		"mClaimed": false,
+		"mGuid": "3180d0d6-5034-4d9b-9c45-daa8acf85710",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -51.076538,
+				"y": 152.7525,
+				"z": 102.10449
+			},
+			{
+				"x": 75.294556,
+				"y": 153.39069,
+				"z": 260.7234
+			},
+			{
+				"x": 163.943,
+				"y": 151.98682,
+				"z": 414.56458
+			},
+			{
+				"x": 149.42932,
+				"y": 152.42728,
+				"z": 574.3093
+			},
+			{
+				"x": -55.78357,
+				"y": 154.1612,
+				"z": 654.25757
+			},
+			{
+				"x": -239.51556,
+				"y": 161.38696,
+				"z": 875.1493
+			},
+			{
+				"x": -475.83508,
+				"y": 167.23813,
+				"z": 730.81177
+			},
+			{
+				"x": -525.3011,
+				"y": 167.15256,
+				"z": 590.81396
+			},
+			{
+				"x": -289.93982,
+				"y": 163.61453,
+				"z": 452.62854
+			},
+			{
+				"x": -126.278076,
+				"y": 153.26636,
+				"z": 238.8783
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_2",
+		"mAnchorPosition": {
+			"x": -51.076538,
+			"y": 152.7525,
+			"z": 102.10449
+		},
+		"mClaimed": false,
+		"mGuid": "4ae59aee-604e-43fb-b68d-427fb8a5cfb2",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -178.95459,
+				"y": 154.68988,
+				"z": 253.12561
+			},
+			{
+				"x": 43.07434,
+				"y": 151.74268,
+				"z": 619.2842
+			},
+			{
+				"x": -338.68298,
+				"y": 162.93896,
+				"z": 399.85156
+			},
+			{
+				"x": -165.93604,
+				"y": 156.3511,
+				"z": 895.7627
+			},
+			{
+				"x": -645.28546,
+				"y": 165.75531,
+				"z": 611.71704
+			},
+			{
+				"x": 31.988281,
+				"y": 151.00385,
+				"z": 738.7949
+			},
+			{
+				"x": -279.7882,
+				"y": 162.2055,
+				"z": 409.0929
+			},
+			{
+				"x": -419.31934,
+				"y": 173.32416,
+				"z": 810.72925
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_3",
+		"mAnchorPosition": {
+			"x": -178.95459,
+			"y": 154.68988,
+			"z": 253.12561
+		},
+		"mClaimed": false,
+		"mGuid": "dd7068e2-b207-48ab-84ba-cfa823b2d4b8",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -851.95776,
+				"y": 173.88358,
+				"z": 281.4192
+			},
+			{
+				"x": -403.30347,
+				"y": 162.78186,
+				"z": 457.26782
+			},
+			{
+				"x": -787.90826,
+				"y": 169.54825,
+				"z": 41.69214
+			},
+			{
+				"x": -365.234,
+				"y": 158.44742,
+				"z": -24.240967
+			},
+			{
+				"x": -617.74646,
+				"y": 163.84637,
+				"z": -160.89575
+			},
+			{
+				"x": -247.62439,
+				"y": 160.1048,
+				"z": -364.47864
+			},
+			{
+				"x": -625.5213,
+				"y": 154.10718,
+				"z": 248.83545
+			},
+			{
+				"x": -780.4863,
+				"y": 167.50742,
+				"z": 240.31665
+			},
+			{
+				"x": -757.39526,
+				"y": 172.19077,
+				"z": -254.5315
+			},
+			{
+				"x": -403.4254,
+				"y": 161.92358,
+				"z": -104.59204
+			},
+			{
+				"x": -561.3887,
+				"y": 159.95297,
+				"z": 70.291016
+			},
+			{
+				"x": -477.1576,
+				"y": 158.33527,
+				"z": 405.31384
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_4",
+		"mAnchorPosition": {
+			"x": -851.95776,
+			"y": 173.88358,
+			"z": 281.4192
+		},
+		"mClaimed": false,
+		"mGuid": "0ab14213-e511-43c0-837c-aa113e0b4b26",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -503.1009,
+				"y": 156.37225,
+				"z": 193.55798
+			},
+			{
+				"x": -480.0985,
+				"y": 156.11499,
+				"z": 95.15369
+			},
+			{
+				"x": -360.20508,
+				"y": 157.70059,
+				"z": 33.39026
+			},
+			{
+				"x": -301.48254,
+				"y": 156.98358,
+				"z": -32.57361
+			},
+			{
+				"x": -326.43823,
+				"y": 157.15579,
+				"z": -136.09863
+			},
+			{
+				"x": -303.06232,
+				"y": 156.29152,
+				"z": -253.68045
+			},
+			{
+				"x": -216.90527,
+				"y": 156.15222,
+				"z": -220.6903
+			},
+			{
+				"x": -96.32727,
+				"y": 159.91937,
+				"z": -149.29395
+			},
+			{
+				"x": -56.53955,
+				"y": 154.3736,
+				"z": -79.15149
+			},
+			{
+				"x": -73.744385,
+				"y": 152.72311,
+				"z": -10.367065
+			},
+			{
+				"x": -122.44092,
+				"y": 153.44122,
+				"z": 113.893555
+			},
+			{
+				"x": -110.675415,
+				"y": 155.7247,
+				"z": 201.72119
+			},
+			{
+				"x": -139.3357,
+				"y": 153.89429,
+				"z": 345.71887
+			},
+			{
+				"x": -283.60547,
+				"y": 159.40024,
+				"z": 356.66528
+			},
+			{
+				"x": -402.40247,
+				"y": 158.53998,
+				"z": 386.7517
+			},
+			{
+				"x": -526.79553,
+				"y": 155.76523,
+				"z": 255.83594
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_5",
+		"mAnchorPosition": {
+			"x": -503.1009,
+			"y": 156.37225,
+			"z": 193.55798
+		},
+		"mClaimed": false,
+		"mGuid": "d7d25b47-3e29-4ae7-a8be-d23fbee62406",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -398.33423,
+				"y": 153.38437,
+				"z": 228.74023
+			},
+			{
+				"x": -317.08398,
+				"y": 153.38437,
+				"z": 204.19458
+			},
+			{
+				"x": -251.97046,
+				"y": 153.38437,
+				"z": 171.8894
+			},
+			{
+				"x": -225.25757,
+				"y": 153.38437,
+				"z": 134.28271
+			},
+			{
+				"x": -211.29285,
+				"y": 153.65707,
+				"z": 76.46875
+			},
+			{
+				"x": -227.85925,
+				"y": 153.38437,
+				"z": 5.722412
+			},
+			{
+				"x": -281.04114,
+				"y": 153.38437,
+				"z": 65.66028
+			},
+			{
+				"x": -309.45422,
+				"y": 153.38437,
+				"z": 113.648926
+			},
+			{
+				"x": -373.5338,
+				"y": 153.38437,
+				"z": 164.1471
+			},
+			{
+				"x": -391.47766,
+				"y": 153.38437,
+				"z": 208.61987
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_6",
+		"mAnchorPosition": {
+			"x": -398.33423,
+			"y": 153.38437,
+			"z": 228.74023
+		},
+		"mClaimed": false,
+		"mGuid": "24841b2b-ea6d-4145-a934-4e0a27c3a23a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -443.47702,
+				"y": 159.48997,
+				"z": 124.82711
+			},
+			{
+				"x": -243.55334,
+				"y": 153.97867,
+				"z": 232.37585
+			},
+			{
+				"x": -312.75427,
+				"y": 153.38437,
+				"z": 95.37866
+			},
+			{
+				"x": -203.66296,
+				"y": 153.38437,
+				"z": 116.4563
+			},
+			{
+				"x": -254.67859,
+				"y": 153.38437,
+				"z": 28.473999
+			},
+			{
+				"x": -147.97437,
+				"y": 155.988,
+				"z": -13.581177
+			},
+			{
+				"x": -240.18994,
+				"y": 153.38437,
+				"z": 77.70398
+			},
+			{
+				"x": -319.66284,
+				"y": 153.38437,
+				"z": 78.68713
+			},
+			{
+				"x": -315.8529,
+				"y": 153.38437,
+				"z": 184.01025
+			},
+			{
+				"x": -401.3308,
+				"y": 153.38435,
+				"z": 206.04028
+			},
+			{
+				"x": -386.83105,
+				"y": 154.4537,
+				"z": 266.5973
+			},
+			{
+				"x": -260.68665,
+				"y": 153.38437,
+				"z": 186.97449
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_7",
+		"mAnchorPosition": {
+			"x": -443.47702,
+			"y": 159.48997,
+			"z": 124.82711
+		},
+		"mClaimed": false,
+		"mGuid": "151417a2-e00a-46b1-950a-e597d97ad66d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -649.5436,
+				"y": 169.28326,
+				"z": 6.095459
+			},
+			{
+				"x": -611.0472,
+				"y": 167.00262,
+				"z": -33.14087
+			},
+			{
+				"x": -562.40186,
+				"y": 165.37659,
+				"z": -55.16992
+			},
+			{
+				"x": -534.9868,
+				"y": 165.89987,
+				"z": -2.475586
+			},
+			{
+				"x": -533.6884,
+				"y": 162.99985,
+				"z": 38.977905
+			},
+			{
+				"x": -632.113,
+				"y": 167.28741,
+				"z": 63.028687
+			},
+			{
+				"x": -664.77234,
+				"y": 167.85165,
+				"z": 35.676025
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_8",
+		"mAnchorPosition": {
+			"x": -649.5436,
+			"y": 169.28326,
+			"z": 6.095459
+		},
+		"mClaimed": false,
+		"mGuid": "065947d9-194e-4c48-a542-0ace93a5215f",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -692.5108,
+				"y": 168.04977,
+				"z": -2.5158691
+			},
+			{
+				"x": -706.93774,
+				"y": 167.81427,
+				"z": 55.934937
+			},
+			{
+				"x": -653.00604,
+				"y": 166.72449,
+				"z": 83.72107
+			},
+			{
+				"x": -555.73474,
+				"y": 157.68536,
+				"z": 82.96912
+			},
+			{
+				"x": -474.89905,
+				"y": 162.09998,
+				"z": 38.557495
+			},
+			{
+				"x": -435.8944,
+				"y": 159.53802,
+				"z": -19.64209
+			},
+			{
+				"x": -498.02283,
+				"y": 163.06723,
+				"z": -85.21655
+			},
+			{
+				"x": -592.0646,
+				"y": 164.38333,
+				"z": -104.29773
+			},
+			{
+				"x": -697.90894,
+				"y": 167.87405,
+				"z": -75.266235
+			},
+			{
+				"x": -720.4152,
+				"y": 168.96158,
+				"z": -25.966919
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_9",
+		"mAnchorPosition": {
+			"x": -692.5108,
+			"y": 168.04977,
+			"z": -2.5158691
+		},
+		"mClaimed": false,
+		"mGuid": "84641742-a3cf-44b2-b012-c0dd664e9862",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -487.6607,
+				"y": 165.43344,
+				"z": -488.80835
+			},
+			{
+				"x": -439.73218,
+				"y": 160.7272,
+				"z": -478.54175
+			},
+			{
+				"x": -378.9984,
+				"y": 156.48718,
+				"z": -456.4934
+			},
+			{
+				"x": -353.7295,
+				"y": 156.19852,
+				"z": -425.62708
+			},
+			{
+				"x": -354.0597,
+				"y": 156.12262,
+				"z": -391.39075
+			},
+			{
+				"x": -410.98206,
+				"y": 156.09366,
+				"z": -369.97717
+			},
+			{
+				"x": -467.73804,
+				"y": 160.04483,
+				"z": -351.8153
+			},
+			{
+				"x": -520.7502,
+				"y": 163.19083,
+				"z": -329.02637
+			},
+			{
+				"x": -598.32526,
+				"y": 162.68146,
+				"z": -343.86792
+			},
+			{
+				"x": -668.70966,
+				"y": 168.87982,
+				"z": -390.3805
+			},
+			{
+				"x": -688.9097,
+				"y": 174.92416,
+				"z": -456.66748
+			},
+			{
+				"x": -661.8389,
+				"y": 171.75546,
+				"z": -489.21765
+			},
+			{
+				"x": -551.736,
+				"y": 174.28726,
+				"z": -534.40546
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_10",
+		"mAnchorPosition": {
+			"x": -487.6607,
+			"y": 165.43344,
+			"z": -488.80835
+		},
+		"mClaimed": false,
+		"mGuid": "b972f91d-af87-4f59-ad1b-3243343fccc3",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -249.77441,
+				"y": 154.97476,
+				"z": -513.5633
+			},
+			{
+				"x": -249.99097,
+				"y": 158.43756,
+				"z": -425.17505
+			},
+			{
+				"x": -247.98572,
+				"y": 160.54822,
+				"z": -370.11035
+			},
+			{
+				"x": -187.76306,
+				"y": 160.69513,
+				"z": -345.2047
+			},
+			{
+				"x": -94.34253,
+				"y": 157.03146,
+				"z": -211.6914
+			},
+			{
+				"x": -31.65149,
+				"y": 159.374,
+				"z": -136.9668
+			},
+			{
+				"x": -55.407227,
+				"y": 154.58578,
+				"z": -80.697876
+			},
+			{
+				"x": -130.08496,
+				"y": 157.56644,
+				"z": -135.91138
+			},
+			{
+				"x": -209.24707,
+				"y": 155.09238,
+				"z": -193.68835
+			},
+			{
+				"x": -231.27856,
+				"y": 156.1875,
+				"z": -229.693
+			},
+			{
+				"x": -320.96936,
+				"y": 156.66608,
+				"z": -329.90808
+			},
+			{
+				"x": -345.58765,
+				"y": 156.93674,
+				"z": -367.40076
+			},
+			{
+				"x": -425.86902,
+				"y": 154.35004,
+				"z": -552.1194
+			},
+			{
+				"x": -319.64417,
+				"y": 157.18289,
+				"z": -509.56982
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "central_11",
+		"mAnchorPosition": {
+			"x": -249.77441,
+			"y": 154.97476,
+			"z": -513.5633
+		},
+		"mClaimed": false,
+		"mGuid": "03e3f19f-a90c-4966-82db-42ae39c5cd09",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -1191.4315,
+				"y": 249.61676,
+				"z": -111.40141
+			},
+			{
+				"x": -1248.2207,
+				"y": 259.7752,
+				"z": -243.31287
+			},
+			{
+				"x": -1161.5999,
+				"y": 267.1891,
+				"z": -352.9928
+			},
+			{
+				"x": -1099.5579,
+				"y": 269.8515,
+				"z": -440.47363
+			},
+			{
+				"x": -1095.1053,
+				"y": 270.56036,
+				"z": -555.80316
+			},
+			{
+				"x": -1024.4622,
+				"y": 281.11414,
+				"z": -597.81244
+			},
+			{
+				"x": -1037.1659,
+				"y": 278.5852,
+				"z": -536.4971
+			},
+			{
+				"x": -1074.7788,
+				"y": 267.1231,
+				"z": -411.10938
+			},
+			{
+				"x": -1011.34265,
+				"y": 273.01276,
+				"z": -355.23474
+			},
+			{
+				"x": -1002.0502,
+				"y": 260.34668,
+				"z": -321.19543
+			},
+			{
+				"x": -1047.6785,
+				"y": 269.14902,
+				"z": -326.49597
+			},
+			{
+				"x": -1107.5122,
+				"y": 271.27362,
+				"z": -347.6443
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "west_1",
+		"mAnchorPosition": {
+			"x": -1191.4315,
+			"y": 249.61676,
+			"z": -111.40141
+		},
+		"mClaimed": false,
+		"mGuid": "6b8fe76e-5818-4ab2-9077-d60ff649161d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -1105.9261,
+				"y": 269.21448,
+				"z": -409.16003
+			},
+			{
+				"x": -1071.1345,
+				"y": 316.94873,
+				"z": -431.31888
+			},
+			{
+				"x": -1021.57764,
+				"y": 280.2442,
+				"z": -380.91626
+			},
+			{
+				"x": -989.3813,
+				"y": 258.42212,
+				"z": -322.15698
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "west_2",
+		"mAnchorPosition": {
+			"x": -1105.9261,
+			"y": 269.21448,
+			"z": -409.16003
+		},
+		"mClaimed": false,
+		"mGuid": "027db759-5b07-4552-b5c7-62e539992043",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": -919.3231,
+				"y": 221.93042,
+				"z": -289.07764
+			},
+			{
+				"x": -974.60815,
+				"y": 218.1962,
+				"z": -218.29419
+			},
+			{
+				"x": -1033.342,
+				"y": 227.79695,
+				"z": -194.77551
+			},
+			{
+				"x": -1086.3016,
+				"y": 256.73718,
+				"z": -248.86682
+			},
+			{
+				"x": -1166.8129,
+				"y": 271.16397,
+				"z": -292.63562
+			},
+			{
+				"x": -1044.604,
+				"y": 274.76376,
+				"z": -380.27924
+			},
+			{
+				"x": -969.08203,
+				"y": 255.08864,
+				"z": -321.41504
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "west_3",
+		"mAnchorPosition": {
+			"x": -919.3231,
+			"y": 221.93042,
+			"z": -289.07764
+		},
+		"mClaimed": false,
+		"mGuid": "ce94e380-0e79-4651-a2df-e38137b5bc44",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 925.45874,
+				"y": 173.19183,
+				"z": -182.14551
+			},
+			{
+				"x": 1154.6946,
+				"y": 199.84462,
+				"z": -207.62012
+			},
+			{
+				"x": 1213.7253,
+				"y": 199.74086,
+				"z": -85.75171
+			},
+			{
+				"x": 1134.7671,
+				"y": 191.2146,
+				"z": 16.738403
+			},
+			{
+				"x": 990.32886,
+				"y": 171.92175,
+				"z": 44.6886
+			},
+			{
+				"x": 918.77673,
+				"y": 183.77432,
+				"z": -27.809448
+			},
+			{
+				"x": 1049.1089,
+				"y": 184.67273,
+				"z": -160.24646
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_1",
+		"mAnchorPosition": {
+			"x": 925.45874,
+			"y": 173.19183,
+			"z": -182.14551
+		},
+		"mClaimed": false,
+		"mGuid": "f26f20df-b38f-4eb7-b90b-4eb80dd0d57e",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 799.47314,
+				"y": 168.46622,
+				"z": -98.88721
+			},
+			{
+				"x": 903.4734,
+				"y": 164.8276,
+				"z": 25.880615
+			},
+			{
+				"x": 880.6687,
+				"y": 173.12491,
+				"z": -171.38013
+			},
+			{
+				"x": 1059.3484,
+				"y": 181.08978,
+				"z": -23.283447
+			},
+			{
+				"x": 1015.20703,
+				"y": 186.21939,
+				"z": -222.44495
+			},
+			{
+				"x": 1219.926,
+				"y": 199.45221,
+				"z": -50.023438
+			},
+			{
+				"x": 1201.635,
+				"y": 224.2433,
+				"z": -391.5786
+			},
+			{
+				"x": 1071.5586,
+				"y": 177.88513,
+				"z": -85.10303
+			},
+			{
+				"x": 961.22485,
+				"y": 180.10016,
+				"z": -267.4668
+			},
+			{
+				"x": 983.8606,
+				"y": 168.45773,
+				"z": -20.311768
+			},
+			{
+				"x": 1197.7412,
+				"y": 195.60223,
+				"z": 72.45642
+			},
+			{
+				"x": 1179.231,
+				"y": 188.76813,
+				"z": 162.51526
+			},
+			{
+				"x": 1068.7642,
+				"y": 172.10745,
+				"z": 134.76477
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_2",
+		"mAnchorPosition": {
+			"x": 799.47314,
+			"y": 168.46622,
+			"z": -98.88721
+		},
+		"mClaimed": false,
+		"mGuid": "d9d19c69-5616-4e96-a1d4-6e203d76f619",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 1082.6968,
+				"y": 182.4123,
+				"z": 76.33655
+			},
+			{
+				"x": 1157.8076,
+				"y": 190.73029,
+				"z": 114.0293
+			},
+			{
+				"x": 1209.2031,
+				"y": 188.23755,
+				"z": 253.92432
+			},
+			{
+				"x": 1168.4834,
+				"y": 190.64487,
+				"z": 372.54504
+			},
+			{
+				"x": 1098.3091,
+				"y": 203.17285,
+				"z": 333.59656
+			},
+			{
+				"x": 1126.4863,
+				"y": 210.32837,
+				"z": 264.42212
+			},
+			{
+				"x": 1081.3276,
+				"y": 191.866,
+				"z": 192.71533
+			},
+			{
+				"x": 1100.4336,
+				"y": 180.37326,
+				"z": 119.150024
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_3",
+		"mAnchorPosition": {
+			"x": 1082.6968,
+			"y": 182.4123,
+			"z": 76.33655
+		},
+		"mClaimed": false,
+		"mGuid": "23e46ae0-7aea-43b4-a6ef-e03e891045f7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 1160.6497,
+				"y": 188.95898,
+				"z": 520.2422
+			},
+			{
+				"x": 1036.9248,
+				"y": 179.8125,
+				"z": 553.124
+			},
+			{
+				"x": 925.3213,
+				"y": 170.06671,
+				"z": 649.4983
+			},
+			{
+				"x": 1008.114,
+				"y": 188.67838,
+				"z": 746.0569
+			},
+			{
+				"x": 1112.7827,
+				"y": 196.72188,
+				"z": 803.8855
+			},
+			{
+				"x": 1179.2178,
+				"y": 207.50476,
+				"z": 717.50146
+			},
+			{
+				"x": 1230.7236,
+				"y": 208.64685,
+				"z": 588.04175
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_4",
+		"mAnchorPosition": {
+			"x": 1160.6497,
+			"y": 188.95898,
+			"z": 520.2422
+		},
+		"mClaimed": false,
+		"mGuid": "bc8e98f1-9373-4b82-bec2-0d36305b6893",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 1228.227,
+				"y": 208.71051,
+				"z": 918.10913
+			},
+			{
+				"x": 1217.5281,
+				"y": 210.97913,
+				"z": 740.1968
+			},
+			{
+				"x": 1233.1077,
+				"y": 210.24669,
+				"z": 626.7446
+			},
+			{
+				"x": 1255.3645,
+				"y": 191.65662,
+				"z": 460.81445
+			},
+			{
+				"x": 1233.9348,
+				"y": 190.79657,
+				"z": 292.5669
+			},
+			{
+				"x": 1162.6812,
+				"y": 191.57587,
+				"z": 97.511475
+			},
+			{
+				"x": 1217.0366,
+				"y": 199.64265,
+				"z": -56.64026
+			},
+			{
+				"x": 1171.9263,
+				"y": 209.4005,
+				"z": -252.93835
+			},
+			{
+				"x": 1044.5249,
+				"y": 193.66425,
+				"z": -337.771
+			},
+			{
+				"x": 926.3054,
+				"y": 173.02148,
+				"z": -196.84985
+			},
+			{
+				"x": 982.70215,
+				"y": 166.91681,
+				"z": -28.61206
+			},
+			{
+				"x": 1041.1763,
+				"y": 169.21927,
+				"z": 128.18689
+			},
+			{
+				"x": 1117.0554,
+				"y": 222.91547,
+				"z": 521.3583
+			},
+			{
+				"x": 970.3274,
+				"y": 177.1394,
+				"z": 641.33716
+			},
+			{
+				"x": 959.42126,
+				"y": 254.70892,
+				"z": 772.27234
+			},
+			{
+				"x": 1141.4558,
+				"y": 203.86668,
+				"z": 919.7588
+			},
+			{
+				"x": 1155.4473,
+				"y": 202.33287,
+				"z": 784.51807
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_5",
+		"mAnchorPosition": {
+			"x": 1228.227,
+			"y": 208.71051,
+			"z": 918.10913
+		},
+		"mClaimed": false,
+		"mGuid": "03bf1dea-f336-433e-a8d4-2c0e90d5bd2c",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 1235,
+				"y": 210.94334,
+				"z": 835.3823
+			},
+			{
+				"x": 1104.6974,
+				"y": 212.34576,
+				"z": 916.64954
+			},
+			{
+				"x": 937.3506,
+				"y": 179.00247,
+				"z": 849.3308
+			},
+			{
+				"x": 929.22656,
+				"y": 174.19418,
+				"z": 680.729
+			},
+			{
+				"x": 970.87305,
+				"y": 170.10272,
+				"z": 578.16284
+			},
+			{
+				"x": 1090,
+				"y": 190.44595,
+				"z": 545.8297
+			},
+			{
+				"x": 1205.2346,
+				"y": 202.81824,
+				"z": 565.7322
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_6",
+		"mAnchorPosition": {
+			"x": 1235,
+			"y": 210.94334,
+			"z": 835.3823
+		},
+		"mClaimed": false,
+		"mGuid": "99b15740-f3bc-4efc-8a60-bbe7d4d85a1a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 918.39185,
+				"y": 176.79233,
+				"z": 894.5198
+			},
+			{
+				"x": 984.2871,
+				"y": 188.43582,
+				"z": 855.3721
+			},
+			{
+				"x": 1075.7825,
+				"y": 195.2097,
+				"z": 884.4116
+			},
+			{
+				"x": 1069.1399,
+				"y": 190.46646,
+				"z": 957.0825
+			},
+			{
+				"x": 978.5283,
+				"y": 195.13414,
+				"z": 1007.66724
+			},
+			{
+				"x": 961.5051,
+				"y": 191.8212,
+				"z": 975.87964
+			},
+			{
+				"x": 1003.7888,
+				"y": 191.66068,
+				"z": 974.37744
+			},
+			{
+				"x": 1054.3367,
+				"y": 189.10246,
+				"z": 968.91064
+			},
+			{
+				"x": 1069.2852,
+				"y": 195.56894,
+				"z": 929.03467
+			},
+			{
+				"x": 1039.7446,
+				"y": 195.7622,
+				"z": 873.55225
+			},
+			{
+				"x": 944.1206,
+				"y": 179.23811,
+				"z": 876.25366
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_7",
+		"mAnchorPosition": {
+			"x": 918.39185,
+			"y": 176.79233,
+			"z": 894.5198
+		},
+		"mClaimed": false,
+		"mGuid": "f54c72bd-c87e-44b2-83ab-43e268cd8661",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 946.70044,
+				"y": 183.18634,
+				"z": 1144.1462
+			},
+			{
+				"x": 993.0322,
+				"y": 200.70145,
+				"z": 1193.8713
+			},
+			{
+				"x": 1047.1531,
+				"y": 207.2177,
+				"z": 1215.0522
+			},
+			{
+				"x": 1055.7131,
+				"y": 219.71448,
+				"z": 1281.513
+			},
+			{
+				"x": 1215.032,
+				"y": 226.06306,
+				"z": 1253.7288
+			},
+			{
+				"x": 1161.2354,
+				"y": 223.22136,
+				"z": 1197.3779
+			},
+			{
+				"x": 1218.5112,
+				"y": 211.76013,
+				"z": 1167.3188
+			},
+			{
+				"x": 1129.5115,
+				"y": 213.54898,
+				"z": 1142.1948
+			},
+			{
+				"x": 1061.5576,
+				"y": 200.39949,
+				"z": 1156.4604
+			},
+			{
+				"x": 1006.2429,
+				"y": 200.45786,
+				"z": 1170.3884
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_8",
+		"mAnchorPosition": {
+			"x": 946.70044,
+			"y": 183.18634,
+			"z": 1144.1462
+		},
+		"mClaimed": false,
+		"mGuid": "c3bb68a8-fc56-4ae2-b07b-0573b8b9db35",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mPathPoints": [
+			{
+				"x": 1109.6028,
+				"y": 217.24063,
+				"z": 1171.8188
+			},
+			{
+				"x": 1155.1592,
+				"y": 222.08612,
+				"z": 1201.1204
+			},
+			{
+				"x": 1114.0132,
+				"y": 219.31583,
+				"z": 1255.2163
+			},
+			{
+				"x": 1051.158,
+				"y": 214.97441,
+				"z": 1251.9373
+			},
+			{
+				"x": 1034.6753,
+				"y": 202.1681,
+				"z": 1207.2966
+			},
+			{
+				"x": 1104.0054,
+				"y": 222.36261,
+				"z": 1214.3457
+			},
+			{
+				"x": 1039.1486,
+				"y": 244.48438,
+				"z": 1143.0638
+			},
+			{
+				"x": 1133.0012,
+				"y": 217.6852,
+				"z": 1167.2087
+			},
+			{
+				"x": 1194.1492,
+				"y": 207.92049,
+				"z": 1156.0508
+			}
+		],
+		"mWanderPathType": "IndividualPath",
+		"mName": "east_9",
+		"mAnchorPosition": {
+			"x": 1109.6028,
+			"y": 217.24063,
+			"z": 1171.8188
+		},
+		"mClaimed": false,
+		"mGuid": "470d4668-9594-4fdb-85b7-eaf4ec77f9db",
+		"mScene": "AirfieldRegion"
 	}
 ]
