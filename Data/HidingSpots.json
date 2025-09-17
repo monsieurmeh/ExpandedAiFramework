@@ -2769,5 +2769,2113 @@
 		"mClaimed": false,
 		"mGuid": "f57f4b22-d6d4-4135-8889-03708802d023",
 		"mScene": "LakeRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.93617314,
+			"z": 0,
+			"w": -0.35153925
+		},
+		"mName": "fa_1",
+		"mAnchorPosition": {
+			"x": 512.6488,
+			"y": 274.13284,
+			"z": -1231.5505
+		},
+		"mClaimed": false,
+		"mGuid": "346dcf72-fdbc-418c-9911-aeec653ccdd2",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.85681164,
+			"z": 0,
+			"w": 0.5156295
+		},
+		"mName": "fa_2",
+		"mAnchorPosition": {
+			"x": 449.03836,
+			"y": 283.24567,
+			"z": -1228.139
+		},
+		"mClaimed": false,
+		"mGuid": "e6896596-8edf-4e37-a1a3-fe2fd0a99558",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.3671983,
+			"z": -0,
+			"w": 0.9301427
+		},
+		"mName": "fa_3",
+		"mAnchorPosition": {
+			"x": 75.913086,
+			"y": 266.64877,
+			"z": -1283.061
+		},
+		"mClaimed": false,
+		"mGuid": "1d4aa598-ce40-4d27-b555-a02b0d0acc63",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.15938231,
+			"z": -0,
+			"w": 0.98721695
+		},
+		"mName": "fa_4",
+		"mAnchorPosition": {
+			"x": -122.63843,
+			"y": 265.47638,
+			"z": -1394.6086
+		},
+		"mClaimed": false,
+		"mGuid": "63297f87-5d37-4894-b71b-4a888c8ebcb4",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8695328,
+			"z": 0,
+			"w": 0.49387527
+		},
+		"mName": "fa_5",
+		"mAnchorPosition": {
+			"x": -299.57263,
+			"y": 285.06827,
+			"z": -1319.3813
+		},
+		"mClaimed": false,
+		"mGuid": "6d7d59c3-785e-4864-8ff1-f5cec40a23ac",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.94575727,
+			"z": 0,
+			"w": -0.32487407
+		},
+		"mName": "fa_6",
+		"mAnchorPosition": {
+			"x": -526.4781,
+			"y": 275.72098,
+			"z": -1239.2034
+		},
+		"mClaimed": false,
+		"mGuid": "7c9795e7-9093-4eea-b7e2-20b25b72954d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.626232,
+			"z": -0,
+			"w": 0.7796368
+		},
+		"mName": "fa_7",
+		"mAnchorPosition": {
+			"x": -614.24005,
+			"y": 280.9771,
+			"z": -1091.6586
+		},
+		"mClaimed": false,
+		"mGuid": "bdc58726-d971-4922-af36-70386ee2d7f0",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.4028771,
+			"z": 0,
+			"w": 0.9152541
+		},
+		"mName": "fa_8",
+		"mAnchorPosition": {
+			"x": -818.2694,
+			"y": 287.49408,
+			"z": -1330.2954
+		},
+		"mClaimed": false,
+		"mGuid": "9a436b5a-9832-4ebd-9d83-23fb7db67598",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7507337,
+			"z": 0,
+			"w": 0.660605
+		},
+		"mName": "fa_9",
+		"mAnchorPosition": {
+			"x": -1035.8938,
+			"y": 246.73682,
+			"z": -1216.6036
+		},
+		"mClaimed": false,
+		"mGuid": "37c17ef3-b021-4419-bcc1-c844611f7ed8",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7035907,
+			"z": -0,
+			"w": 0.7106055
+		},
+		"mName": "fa_10",
+		"mAnchorPosition": {
+			"x": -982.43494,
+			"y": 244.76971,
+			"z": -1172.002
+		},
+		"mClaimed": false,
+		"mGuid": "0b455a3c-61c8-4e5b-9296-fb3c8ed4a9e4",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.1641784,
+			"z": -0,
+			"w": 0.9864307
+		},
+		"mName": "fa_11",
+		"mAnchorPosition": {
+			"x": -1055.4446,
+			"y": 233.65022,
+			"z": -1073.8054
+		},
+		"mClaimed": false,
+		"mGuid": "e39dcf3b-d4ca-41cc-a062-07c782fccf0a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.28623652,
+			"z": -0,
+			"w": 0.958159
+		},
+		"mName": "fa_12",
+		"mAnchorPosition": {
+			"x": -1079.1744,
+			"y": 234.68956,
+			"z": -1074.282
+		},
+		"mClaimed": false,
+		"mGuid": "01cc003e-c034-45bd-81ca-337de4f49131",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9946242,
+			"z": 0,
+			"w": -0.10355065
+		},
+		"mName": "fa_13",
+		"mAnchorPosition": {
+			"x": -1070.4985,
+			"y": 240.12337,
+			"z": -989.274
+		},
+		"mClaimed": false,
+		"mGuid": "1db46335-bc2f-474e-9781-df864e4ed261",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9976618,
+			"z": 0,
+			"w": -0.068344206
+		},
+		"mName": "fa_14",
+		"mAnchorPosition": {
+			"x": -1229.753,
+			"y": 243.23415,
+			"z": -955.81714
+		},
+		"mClaimed": false,
+		"mGuid": "5d39b0b9-2ff8-4ac5-acb1-67911835e4c7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.999789,
+			"z": 0,
+			"w": 0.02054212
+		},
+		"mName": "fa_15",
+		"mAnchorPosition": {
+			"x": -945.68317,
+			"y": 189.93716,
+			"z": -843.8179
+		},
+		"mClaimed": false,
+		"mGuid": "f49b7290-ceac-4711-9eb0-b2daedc4e3d6",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.79323566,
+			"z": 0,
+			"w": 0.6089148
+		},
+		"mName": "fa_16",
+		"mAnchorPosition": {
+			"x": -795.21857,
+			"y": 176.92836,
+			"z": -733.16235
+		},
+		"mClaimed": false,
+		"mGuid": "5c22d3da-43d9-40f2-ab16-46560618bc35",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7999339,
+			"z": 0,
+			"w": 0.6000882
+		},
+		"mName": "fa_17",
+		"mAnchorPosition": {
+			"x": -671.2922,
+			"y": 176.2138,
+			"z": -818.60693
+		},
+		"mClaimed": false,
+		"mGuid": "e0bad707-31c8-472b-a7e5-313847bd0386",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8778178,
+			"z": 0,
+			"w": -0.4789947
+		},
+		"mName": "fa_18",
+		"mAnchorPosition": {
+			"x": -500.61194,
+			"y": 138.67233,
+			"z": -897.68787
+		},
+		"mClaimed": false,
+		"mGuid": "99eb01a7-e0a5-4859-a247-69a31404721a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9752505,
+			"z": 0,
+			"w": -0.22110285
+		},
+		"mName": "fa_19",
+		"mAnchorPosition": {
+			"x": -434.77795,
+			"y": 187.06465,
+			"z": -1010.5703
+		},
+		"mClaimed": false,
+		"mGuid": "304eec73-f458-41d5-b388-716b35108096",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.38193765,
+			"z": 0,
+			"w": 0.92418814
+		},
+		"mName": "fa_20",
+		"mAnchorPosition": {
+			"x": -250.55505,
+			"y": 160.80971,
+			"z": -1125.0083
+		},
+		"mClaimed": false,
+		"mGuid": "eb875465-d0ec-4863-aaa2-a1922c1cdb31",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.43759212,
+			"z": 0,
+			"w": 0.8991736
+		},
+		"mName": "fa_21",
+		"mAnchorPosition": {
+			"x": -297.55078,
+			"y": 138.52972,
+			"z": -1114.3352
+		},
+		"mClaimed": false,
+		"mGuid": "b9ea90a4-0d78-4ddf-91e1-d4ea7dbabd3a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99898136,
+			"z": 0,
+			"w": -0.045124818
+		},
+		"mName": "fa_22",
+		"mAnchorPosition": {
+			"x": -360.47498,
+			"y": 177.4428,
+			"z": -875.62
+		},
+		"mClaimed": false,
+		"mGuid": "40f1443f-7a38-4160-9d93-fccfe8b6e313",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.55653983,
+			"z": 0,
+			"w": 0.830821
+		},
+		"mName": "fa_23",
+		"mAnchorPosition": {
+			"x": -359.92664,
+			"y": 155.05661,
+			"z": -764.3443
+		},
+		"mClaimed": false,
+		"mGuid": "70515d82-1495-4416-8f2c-5635b1254b2e",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5031394,
+			"z": -0,
+			"w": 0.8642053
+		},
+		"mName": "fa_24",
+		"mAnchorPosition": {
+			"x": -589.7466,
+			"y": 179.03377,
+			"z": -554.6785
+		},
+		"mClaimed": false,
+		"mGuid": "8310c4c8-f85d-44b1-9822-2d45f4b615d7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.61035895,
+			"z": 0,
+			"w": 0.7921249
+		},
+		"mName": "fa_25",
+		"mAnchorPosition": {
+			"x": -878.7794,
+			"y": 211.92078,
+			"z": -411.6599
+		},
+		"mClaimed": false,
+		"mGuid": "31264f98-1ae4-4677-ba71-e23f8a0ed91d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97959733,
+			"z": 0,
+			"w": -0.20097038
+		},
+		"mName": "fa_26",
+		"mAnchorPosition": {
+			"x": -1150.3804,
+			"y": 154.35616,
+			"z": -748.85156
+		},
+		"mClaimed": false,
+		"mGuid": "ed929598-bce6-4d2d-b075-b491a77d5d00",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8886619,
+			"z": 0,
+			"w": -0.4585631
+		},
+		"mName": "fa_27",
+		"mAnchorPosition": {
+			"x": -1016.53345,
+			"y": 177.05823,
+			"z": -757.3935
+		},
+		"mClaimed": false,
+		"mGuid": "d4eb07bc-ef40-47a2-a2fd-d2fca4cf8c26",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.4260633,
+			"z": -0,
+			"w": 0.90469337
+		},
+		"mName": "fa_28",
+		"mAnchorPosition": {
+			"x": 7.1433105,
+			"y": 137.8464,
+			"z": -1012.7143
+		},
+		"mClaimed": false,
+		"mGuid": "dd04b273-e081-4acb-aeaf-8a1b0753314d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.96711355,
+			"z": 0,
+			"w": 0.25434497
+		},
+		"mName": "fa_29",
+		"mAnchorPosition": {
+			"x": -93.062256,
+			"y": 134.3786,
+			"z": -1176.5437
+		},
+		"mClaimed": false,
+		"mGuid": "0cfb729b-c74f-48e0-ba30-e98770ef02d1",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.67476076,
+			"z": -0,
+			"w": 0.7380365
+		},
+		"mName": "fa_30",
+		"mAnchorPosition": {
+			"x": -84.652466,
+			"y": 134.85269,
+			"z": -1193.2704
+		},
+		"mClaimed": false,
+		"mGuid": "bf660e6e-15f7-4438-93cf-0be6fe4bdfb0",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.4764155,
+			"z": -0,
+			"w": 0.8792203
+		},
+		"mName": "fa_31",
+		"mAnchorPosition": {
+			"x": -99.65288,
+			"y": 169.31522,
+			"z": -845.65405
+		},
+		"mClaimed": false,
+		"mGuid": "2a69d5ca-628d-4e33-a37f-3d2bfab60261",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.34608856,
+			"z": -0,
+			"w": 0.9382019
+		},
+		"mName": "fa_32",
+		"mAnchorPosition": {
+			"x": -605.8756,
+			"y": 169.65712,
+			"z": -403.07983
+		},
+		"mClaimed": false,
+		"mGuid": "bfeb1217-e5c3-41c5-8675-f9f01c19d2b5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.12727147,
+			"z": 0,
+			"w": 0.99186796
+		},
+		"mName": "fa_33",
+		"mAnchorPosition": {
+			"x": -403.07202,
+			"y": 161.914,
+			"z": -422.26392
+		},
+		"mClaimed": false,
+		"mGuid": "4addd21f-951d-45d7-abd7-6bcc946ee59c",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.54774404,
+			"z": 0,
+			"w": 0.83664596
+		},
+		"mName": "fa_34",
+		"mAnchorPosition": {
+			"x": -448.021,
+			"y": 154.06323,
+			"z": -594.3113
+		},
+		"mClaimed": false,
+		"mGuid": "8e73347e-7e9a-4100-a8e8-e83988cccfe7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.76289296,
+			"z": 0,
+			"w": 0.6465248
+		},
+		"mName": "fa_35",
+		"mAnchorPosition": {
+			"x": -101.35642,
+			"y": 160.71419,
+			"z": -378.83643
+		},
+		"mClaimed": false,
+		"mGuid": "897b064c-4ce0-43a8-8772-ad592e2817ee",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7927139,
+			"z": 0,
+			"w": 0.60959387
+		},
+		"mName": "fa_36",
+		"mAnchorPosition": {
+			"x": 36.87451,
+			"y": 160.66411,
+			"z": -301.93848
+		},
+		"mClaimed": false,
+		"mGuid": "9984c95d-df92-4667-a120-1aa08534c13e",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.92976284,
+			"z": 0,
+			"w": 0.36815906
+		},
+		"mName": "fa_37",
+		"mAnchorPosition": {
+			"x": 45.493732,
+			"y": 160.91577,
+			"z": -279.71527
+		},
+		"mClaimed": false,
+		"mGuid": "ae6e13b0-a72c-4eab-8bac-6def2abe44e9",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.19381407,
+			"z": -0,
+			"w": 0.9810383
+		},
+		"mName": "fa_38",
+		"mAnchorPosition": {
+			"x": 92.658966,
+			"y": 161.64726,
+			"z": -445.67178
+		},
+		"mClaimed": false,
+		"mGuid": "f695572b-3728-417a-973d-2347a36b63d9",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.43132764,
+			"z": 0,
+			"w": 0.9021954
+		},
+		"mName": "fa_39",
+		"mAnchorPosition": {
+			"x": 100.99263,
+			"y": 160.40619,
+			"z": -572.01514
+		},
+		"mClaimed": false,
+		"mGuid": "66e1cbbf-6d63-4e3e-97aa-fe601963a2b3",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6136973,
+			"z": 0,
+			"w": 0.7895414
+		},
+		"mName": "fa_40",
+		"mAnchorPosition": {
+			"x": 135.32335,
+			"y": 160.9637,
+			"z": -497.28818
+		},
+		"mClaimed": false,
+		"mGuid": "83fb6d86-f16e-4a00-a739-cf188b070bc3",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9106158,
+			"z": 0,
+			"w": -0.41325402
+		},
+		"mName": "fa_41",
+		"mAnchorPosition": {
+			"x": 226.6565,
+			"y": 160.42836,
+			"z": -462.4193
+		},
+		"mClaimed": false,
+		"mGuid": "d1c880a2-1c88-484f-a9a0-5668e1ca54d8",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.81414604,
+			"z": 0,
+			"w": 0.5806603
+		},
+		"mName": "fa_42",
+		"mAnchorPosition": {
+			"x": 207.21542,
+			"y": 162.29602,
+			"z": -645.0929
+		},
+		"mClaimed": false,
+		"mGuid": "d2796b58-0fdb-45e4-adbe-741ea2b212cb",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6631313,
+			"z": 0,
+			"w": 0.7485031
+		},
+		"mName": "fa_43",
+		"mAnchorPosition": {
+			"x": 101.86389,
+			"y": 167.1165,
+			"z": -797.2246
+		},
+		"mClaimed": false,
+		"mGuid": "9757efd7-78b8-456f-bc62-231d4b24b3e6",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.93357956,
+			"z": 0,
+			"w": -0.35837027
+		},
+		"mName": "fa_44",
+		"mAnchorPosition": {
+			"x": 944.496,
+			"y": 181.19676,
+			"z": -392.591
+		},
+		"mClaimed": false,
+		"mGuid": "71aefc98-0034-48b0-aeee-72e8a9f51275",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.05548597,
+			"z": 0,
+			"w": 0.9984595
+		},
+		"mName": "fa_45",
+		"mAnchorPosition": {
+			"x": 940.9702,
+			"y": 176.7782,
+			"z": -396.5067
+		},
+		"mClaimed": false,
+		"mGuid": "c43d3036-ad63-4f43-9f69-fbed060cd0c9",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.1639497,
+			"z": -0,
+			"w": 0.98646873
+		},
+		"mName": "fa_46",
+		"mAnchorPosition": {
+			"x": 899.90894,
+			"y": 246.44685,
+			"z": -816.0691
+		},
+		"mClaimed": false,
+		"mGuid": "853ee69c-eb91-418d-9b84-948cfd4c26b0",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.54673165,
+			"z": -0,
+			"w": 0.8373079
+		},
+		"mName": "fa_47",
+		"mAnchorPosition": {
+			"x": 1085.5198,
+			"y": 284.54034,
+			"z": -905.9461
+		},
+		"mClaimed": false,
+		"mGuid": "2c00cead-8ebd-4144-8049-2914fac8acc5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5134757,
+			"z": -0,
+			"w": 0.85810417
+		},
+		"mName": "fa_48",
+		"mAnchorPosition": {
+			"x": 600.1377,
+			"y": 301.3944,
+			"z": -917.88525
+		},
+		"mClaimed": false,
+		"mGuid": "ec4fe1dc-123e-48a8-8bd7-d215726a895c",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9469377,
+			"z": 0,
+			"w": 0.32141736
+		},
+		"mName": "fa_49",
+		"mAnchorPosition": {
+			"x": 615.53735,
+			"y": 308.83673,
+			"z": -935.6077
+		},
+		"mClaimed": false,
+		"mGuid": "81907026-94db-4f72-a847-37231df23d84",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.021189615,
+			"z": 0,
+			"w": 0.99977547
+		},
+		"mName": "fa_50",
+		"mAnchorPosition": {
+			"x": 1027.6683,
+			"y": 311.93286,
+			"z": -1013.14215
+		},
+		"mClaimed": false,
+		"mGuid": "422bcacb-3a7c-4757-9a1f-97812bca9cb5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9111569,
+			"z": 0,
+			"w": 0.4120596
+		},
+		"mName": "fa_51",
+		"mAnchorPosition": {
+			"x": 908.4942,
+			"y": 315.4885,
+			"z": -929.87177
+		},
+		"mClaimed": false,
+		"mGuid": "64ee1690-80f0-4288-a885-e9ed9be3bab8",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5911582,
+			"z": -0,
+			"w": 0.8065556
+		},
+		"mName": "fa_52",
+		"mAnchorPosition": {
+			"x": 1166.6099,
+			"y": 299.58112,
+			"z": -716.5008
+		},
+		"mClaimed": false,
+		"mGuid": "f9a00767-d7b3-4f07-bb59-5340d9a35621",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.40828097,
+			"z": 0,
+			"w": 0.91285634
+		},
+		"mName": "fa_53",
+		"mAnchorPosition": {
+			"x": 568.5371,
+			"y": 176.79172,
+			"z": -380.75357
+		},
+		"mClaimed": false,
+		"mGuid": "9c7d5200-27da-41d5-9573-88853388d90a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.07518021,
+			"z": -0,
+			"w": 0.99717
+		},
+		"mName": "fa_54",
+		"mAnchorPosition": {
+			"x": 1148.8667,
+			"y": 211.41724,
+			"z": -268.00293
+		},
+		"mClaimed": false,
+		"mGuid": "f351d793-dc59-445f-ab3c-809460e51c49",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97876674,
+			"z": 0,
+			"w": -0.20497733
+		},
+		"mName": "fa_55",
+		"mAnchorPosition": {
+			"x": 1072.0115,
+			"y": 201.9229,
+			"z": 247.81775
+		},
+		"mClaimed": false,
+		"mGuid": "e72294a3-6458-417b-972a-b9d84cec7933",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.16816615,
+			"z": -0,
+			"w": 0.98575866
+		},
+		"mName": "fa_56",
+		"mAnchorPosition": {
+			"x": 1409.2559,
+			"y": 234.34676,
+			"z": 156.32166
+		},
+		"mClaimed": false,
+		"mGuid": "35e43dab-ca9d-4e59-8725-a6ee5e0d0292",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.68535817,
+			"z": 0,
+			"w": 0.72820616
+		},
+		"mName": "fa_57",
+		"mAnchorPosition": {
+			"x": 1297.4226,
+			"y": 229.23792,
+			"z": 138.47778
+		},
+		"mClaimed": false,
+		"mGuid": "7feeecfb-21d9-4e31-a98d-da1e4b37d10a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.89954674,
+			"z": 0,
+			"w": -0.4368246
+		},
+		"mName": "fa_58",
+		"mAnchorPosition": {
+			"x": 1248.3145,
+			"y": 201.97543,
+			"z": -10.657227
+		},
+		"mClaimed": false,
+		"mGuid": "028cbdea-9dec-4ab1-94bf-8e7d53f2ddbc",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.080818206,
+			"z": -0,
+			"w": 0.99672884
+		},
+		"mName": "fa_59",
+		"mAnchorPosition": {
+			"x": 1260.8213,
+			"y": 193.57552,
+			"z": 413.8672
+		},
+		"mClaimed": false,
+		"mGuid": "0d0b9312-7019-47cc-b166-c251b16d1554",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8779718,
+			"z": 0,
+			"w": -0.47871238
+		},
+		"mName": "fa_60",
+		"mAnchorPosition": {
+			"x": 1298.662,
+			"y": 204.42172,
+			"z": 414.4976
+		},
+		"mClaimed": false,
+		"mGuid": "b4997a82-5a7d-47e9-88f0-de588149e23a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99856937,
+			"z": 0,
+			"w": -0.053472243
+		},
+		"mName": "fa_61",
+		"mAnchorPosition": {
+			"x": 1017.4707,
+			"y": 151.03035,
+			"z": 280.10522
+		},
+		"mClaimed": false,
+		"mGuid": "34cb9965-5e42-401d-a079-74eec9a90e2d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.03245287,
+			"z": -0,
+			"w": 0.9994733
+		},
+		"mName": "fa_62",
+		"mAnchorPosition": {
+			"x": 1056.5396,
+			"y": 183.75595,
+			"z": 484.83475
+		},
+		"mClaimed": false,
+		"mGuid": "de2dd552-3430-4a57-8d20-1ae6fc529929",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.39571562,
+			"z": -0,
+			"w": 0.9183731
+		},
+		"mName": "fa_63",
+		"mAnchorPosition": {
+			"x": -230.60364,
+			"y": 160.03488,
+			"z": -148.2926
+		},
+		"mClaimed": false,
+		"mGuid": "9b2e7b91-b468-4a20-a7e4-f4f8e7c99ae2",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8901839,
+			"z": 0,
+			"w": 0.4556014
+		},
+		"mName": "fa_64",
+		"mAnchorPosition": {
+			"x": -439.79443,
+			"y": 157.4972,
+			"z": 172.99377
+		},
+		"mClaimed": false,
+		"mGuid": "896bc4bd-ab24-4de2-b9dd-0e26c8254c44",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9397671,
+			"z": 0,
+			"w": 0.34181544
+		},
+		"mName": "fa_65",
+		"mAnchorPosition": {
+			"x": -507.24274,
+			"y": 153.67491,
+			"z": 293.10254
+		},
+		"mClaimed": false,
+		"mGuid": "b7c16c54-c3c1-409c-ae64-5f795f1e48a4",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.0015566156,
+			"z": -0,
+			"w": 0.9999988
+		},
+		"mName": "fa_66",
+		"mAnchorPosition": {
+			"x": -591.5182,
+			"y": 172.90785,
+			"z": -7.7132545
+		},
+		"mClaimed": false,
+		"mGuid": "f3f1c2d6-ce01-4f1c-ab10-d469ecc2ebe8",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.3313839,
+			"z": 0,
+			"w": 0.943496
+		},
+		"mName": "fa_67",
+		"mAnchorPosition": {
+			"x": -956.0011,
+			"y": 206.10126,
+			"z": -180.35535
+		},
+		"mClaimed": false,
+		"mGuid": "a0128cd6-2336-4d94-9e39-3b423a558cc0",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.14825733,
+			"z": -0,
+			"w": 0.9889488
+		},
+		"mName": "fa_68",
+		"mAnchorPosition": {
+			"x": -1112.2874,
+			"y": 278.03528,
+			"z": -596.90686
+		},
+		"mClaimed": false,
+		"mGuid": "6d69b183-1f07-4aa3-9713-a10df3df7e8a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6676836,
+			"z": 0,
+			"w": 0.7444452
+		},
+		"mName": "fa_69",
+		"mAnchorPosition": {
+			"x": -1129.5002,
+			"y": 273.38605,
+			"z": -518.8363
+		},
+		"mClaimed": false,
+		"mGuid": "268c7d6e-15b8-46a9-9686-15cca64fd4b3",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.18324703,
+			"z": -0,
+			"w": 0.9830669
+		},
+		"mName": "fa_70",
+		"mAnchorPosition": {
+			"x": -964.92883,
+			"y": 320.8022,
+			"z": -461.61853
+		},
+		"mClaimed": false,
+		"mGuid": "7d88f13c-facb-43fd-a64d-263d438e9c5a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.47802338,
+			"z": -0,
+			"w": 0.8783471
+		},
+		"mName": "fa_71",
+		"mAnchorPosition": {
+			"x": -1063.4636,
+			"y": 280.0232,
+			"z": -318.73346
+		},
+		"mClaimed": false,
+		"mGuid": "8d5c9e38-7356-4be0-8354-77b40ee7bdb5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.13943626,
+			"z": 0,
+			"w": 0.9902311
+		},
+		"mName": "fa_72",
+		"mAnchorPosition": {
+			"x": -987.0523,
+			"y": 180.68402,
+			"z": 96.98425
+		},
+		"mClaimed": false,
+		"mGuid": "70e15502-9fb4-4835-840b-55f9c6d39e96",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.57393557,
+			"z": -0,
+			"w": 0.81890047
+		},
+		"mName": "fa_73",
+		"mAnchorPosition": {
+			"x": -989.9712,
+			"y": 180.58449,
+			"z": 185.56665
+		},
+		"mClaimed": false,
+		"mGuid": "740571cd-57f1-4bed-a661-b3440e30d616",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8642763,
+			"z": 0,
+			"w": 0.5030175
+		},
+		"mName": "fa_74",
+		"mAnchorPosition": {
+			"x": -1233.5713,
+			"y": 202.31071,
+			"z": 279.82755
+		},
+		"mClaimed": false,
+		"mGuid": "baf88d72-7d79-446b-a235-45e5d350d2b8",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.85816365,
+			"z": 0,
+			"w": 0.51337624
+		},
+		"mName": "fa_75",
+		"mAnchorPosition": {
+			"x": -1078.6595,
+			"y": 193.38126,
+			"z": 675.4446
+		},
+		"mClaimed": false,
+		"mGuid": "c892f6f1-7eab-4631-a8f3-102170cce5f5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5577804,
+			"z": 0,
+			"w": 0.8299886
+		},
+		"mName": "fa_76",
+		"mAnchorPosition": {
+			"x": -1133.7399,
+			"y": 242.26154,
+			"z": 834.85486
+		},
+		"mClaimed": false,
+		"mGuid": "50dd0995-b0bb-48c7-bc46-5b1b71124b47",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.92843115,
+			"z": 0,
+			"w": 0.37150458
+		},
+		"mName": "fa_77",
+		"mAnchorPosition": {
+			"x": -1294.1716,
+			"y": 276.1549,
+			"z": 900.89056
+		},
+		"mClaimed": false,
+		"mGuid": "4af2d9a8-185f-4a2e-b0e0-2a414e2ee33e",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99035376,
+			"z": 0,
+			"w": -0.13856234
+		},
+		"mName": "fa_78",
+		"mAnchorPosition": {
+			"x": -780.0735,
+			"y": 185.79533,
+			"z": 765.75006
+		},
+		"mClaimed": false,
+		"mGuid": "d292ac9f-3cdd-41bd-8658-4be0b1a8fdda",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9954992,
+			"z": 0,
+			"w": -0.094770275
+		},
+		"mName": "fa_79",
+		"mAnchorPosition": {
+			"x": -1040.3833,
+			"y": 279.41168,
+			"z": 1084.8809
+		},
+		"mClaimed": false,
+		"mGuid": "01f5a47b-f3a2-43a6-8660-82af72c4dd05",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.4631791,
+			"z": -0,
+			"w": 0.88626474
+		},
+		"mName": "fa_80",
+		"mAnchorPosition": {
+			"x": -742.97394,
+			"y": 293.7063,
+			"z": 1140.0918
+		},
+		"mClaimed": false,
+		"mGuid": "298d8077-037e-4976-a729-0c1be720dee0",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.29082644,
+			"z": -0,
+			"w": 0.95677584
+		},
+		"mName": "fa_81",
+		"mAnchorPosition": {
+			"x": -814.3702,
+			"y": 283.895,
+			"z": 1137.1188
+		},
+		"mClaimed": false,
+		"mGuid": "ac3ec2a2-77f3-48bb-8c4b-2bf39b84c91b",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.11222877,
+			"z": -0,
+			"w": 0.9936824
+		},
+		"mName": "fa_82",
+		"mAnchorPosition": {
+			"x": -920.703,
+			"y": 277.25858,
+			"z": 1089.6135
+		},
+		"mClaimed": false,
+		"mGuid": "518f36ab-a7f9-47fe-b06c-3572c3ec5a2d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.988603,
+			"z": 0,
+			"w": 0.15054604
+		},
+		"mName": "fa_83",
+		"mAnchorPosition": {
+			"x": -919.4918,
+			"y": 276.9683,
+			"z": 1084.8655
+		},
+		"mClaimed": false,
+		"mGuid": "09552505-d054-48dc-b95f-874e7e515dd8",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9997363,
+			"z": 0,
+			"w": 0.022963269
+		},
+		"mName": "fa_84",
+		"mAnchorPosition": {
+			"x": -1007.02686,
+			"y": 286.22974,
+			"z": 1385.109
+		},
+		"mClaimed": false,
+		"mGuid": "fe2bf6c9-ba5c-4c5c-b43f-4f242cc03325",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.927691,
+			"z": 0,
+			"w": 0.37334907
+		},
+		"mName": "fa_85",
+		"mAnchorPosition": {
+			"x": -1164.9084,
+			"y": 277.6751,
+			"z": 1176.6382
+		},
+		"mClaimed": false,
+		"mGuid": "50112692-1032-4767-bcb7-d5cdb609c1d5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.09917016,
+			"z": 0,
+			"w": 0.9950705
+		},
+		"mName": "fa_86",
+		"mAnchorPosition": {
+			"x": -1254.4896,
+			"y": 280.95325,
+			"z": 1026.9543
+		},
+		"mClaimed": false,
+		"mGuid": "cf5c7678-80e7-432f-9d75-15ebf70433cd",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7365309,
+			"z": 0,
+			"w": 0.67640394
+		},
+		"mName": "fa_87",
+		"mAnchorPosition": {
+			"x": -431.6798,
+			"y": 298.3955,
+			"z": 1342.0854
+		},
+		"mClaimed": false,
+		"mGuid": "248c48c3-37be-44d4-9099-39b980d2e964",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99549353,
+			"z": 0,
+			"w": -0.09482977
+		},
+		"mName": "fa_88",
+		"mAnchorPosition": {
+			"x": -726.2563,
+			"y": 218.72202,
+			"z": 1201.0715
+		},
+		"mClaimed": false,
+		"mGuid": "d60aa829-ccbc-481a-81bf-ecad76f916dc",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97073555,
+			"z": 0,
+			"w": 0.24015099
+		},
+		"mName": "fa_89",
+		"mAnchorPosition": {
+			"x": -466.49963,
+			"y": 208.75497,
+			"z": 1284.8467
+		},
+		"mClaimed": false,
+		"mGuid": "55ac094b-bc8b-4edf-9eba-9ccc4087a608",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.27862927,
+			"z": -0,
+			"w": 0.96039873
+		},
+		"mName": "fa_90",
+		"mAnchorPosition": {
+			"x": -416.53577,
+			"y": 204.24783,
+			"z": 1172.2974
+		},
+		"mClaimed": false,
+		"mGuid": "c4d7c975-6638-4293-b197-ee34de854ef3",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8224274,
+			"z": 0,
+			"w": 0.5688702
+		},
+		"mName": "fa_91",
+		"mAnchorPosition": {
+			"x": -566.2763,
+			"y": 204.09862,
+			"z": 1092.2032
+		},
+		"mClaimed": false,
+		"mGuid": "b5d39aef-5e3d-41bf-bd44-f4fddbb50ed5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.107843325,
+			"z": 0,
+			"w": 0.9941679
+		},
+		"mName": "fa_92",
+		"mAnchorPosition": {
+			"x": -546.2677,
+			"y": 171.53986,
+			"z": 792.43604
+		},
+		"mClaimed": false,
+		"mGuid": "056d239f-d124-439d-9b44-04efcc6b4e6b",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99027777,
+			"z": 0,
+			"w": 0.13910393
+		},
+		"mName": "fa_93",
+		"mAnchorPosition": {
+			"x": -453.84433,
+			"y": 173.19191,
+			"z": 928.1633
+		},
+		"mClaimed": false,
+		"mGuid": "1455fc52-649d-4d68-8f8b-f7cf28403612",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9962804,
+			"z": 0,
+			"w": -0.08617109
+		},
+		"mName": "fa_94",
+		"mAnchorPosition": {
+			"x": -8.17166,
+			"y": 151.42175,
+			"z": 1117.6267
+		},
+		"mClaimed": false,
+		"mGuid": "bc0065b1-89f7-42eb-b68f-86005833a5e5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8794263,
+			"z": 0,
+			"w": -0.47603515
+		},
+		"mName": "fa_95",
+		"mAnchorPosition": {
+			"x": 237.07082,
+			"y": 151.77449,
+			"z": 1067.9573
+		},
+		"mClaimed": false,
+		"mGuid": "e8884a71-ebdb-4706-9c02-4c0bcec7ed7b",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97873354,
+			"z": 0,
+			"w": 0.20513584
+		},
+		"mName": "fa_96",
+		"mAnchorPosition": {
+			"x": 41.060104,
+			"y": 163.69238,
+			"z": 1300.8057
+		},
+		"mClaimed": false,
+		"mGuid": "a1c0aea0-db9a-4c92-9014-cbb9532ec20a",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.95115125,
+			"z": 0,
+			"w": 0.30872524
+		},
+		"mName": "fa_97",
+		"mAnchorPosition": {
+			"x": -27.007494,
+			"y": 170.77844,
+			"z": 1261.6626
+		},
+		"mClaimed": false,
+		"mGuid": "4c6f836c-3b9d-4656-a509-aa0b4e15da9d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.34014294,
+			"z": -0,
+			"w": 0.9403738
+		},
+		"mName": "fa_98",
+		"mAnchorPosition": {
+			"x": 42.619263,
+			"y": 153.80846,
+			"z": 787.32983
+		},
+		"mClaimed": false,
+		"mGuid": "c57d1007-4b01-4c0a-8321-16f7b1a8417d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.98008394,
+			"z": 0,
+			"w": 0.1985838
+		},
+		"mName": "fa_99",
+		"mAnchorPosition": {
+			"x": 60.806396,
+			"y": 158.35298,
+			"z": 768.31494
+		},
+		"mClaimed": false,
+		"mGuid": "aca26e20-f30d-48a6-a4a0-bb9cc46eecd5",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.86599773,
+			"z": 0,
+			"w": 0.50004804
+		},
+		"mName": "fa_100",
+		"mAnchorPosition": {
+			"x": -124.55311,
+			"y": 156.6475,
+			"z": 748.0396
+		},
+		"mClaimed": false,
+		"mGuid": "13328ce8-d1a4-4598-b1ec-39210091041d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6240165,
+			"z": 0,
+			"w": 0.7814112
+		},
+		"mName": "fa_101",
+		"mAnchorPosition": {
+			"x": 38.49524,
+			"y": 155.3116,
+			"z": 384.93665
+		},
+		"mClaimed": false,
+		"mGuid": "5d4caefe-e957-421e-bb59-697bfff34aa2",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9589587,
+			"z": 0,
+			"w": 0.28354597
+		},
+		"mName": "fa_102",
+		"mAnchorPosition": {
+			"x": 53.738037,
+			"y": 152.55022,
+			"z": 370.11108
+		},
+		"mClaimed": false,
+		"mGuid": "ab71dbe3-4e33-457a-9b59-dd9d601729b7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.036370497,
+			"z": 0,
+			"w": 0.9993384
+		},
+		"mName": "fa_103",
+		"mAnchorPosition": {
+			"x": 295.21497,
+			"y": 153.15051,
+			"z": 51.882202
+		},
+		"mClaimed": false,
+		"mGuid": "447c5ac6-aec7-43d9-87a2-60ad10db66ab",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5803568,
+			"z": -0,
+			"w": 0.8143624
+		},
+		"mName": "fa_104",
+		"mAnchorPosition": {
+			"x": 220.63492,
+			"y": 153.76663,
+			"z": 28.504623
+		},
+		"mClaimed": false,
+		"mGuid": "d97aace1-5206-4660-8fc6-9639977d8a56",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.527679,
+			"z": -0,
+			"w": 0.84944385
+		},
+		"mName": "fa_105",
+		"mAnchorPosition": {
+			"x": 159.92815,
+			"y": 153.80457,
+			"z": -81.90693
+		},
+		"mClaimed": false,
+		"mGuid": "25a173fc-e288-45fd-bf93-35f65d0eb249",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9991532,
+			"z": 0,
+			"w": 0.04114552
+		},
+		"mName": "fa_106",
+		"mAnchorPosition": {
+			"x": 81.342125,
+			"y": 162.1595,
+			"z": -121.793755
+		},
+		"mClaimed": false,
+		"mGuid": "b3ead155-1bc2-4402-8ad2-fe627420ba4e",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6507262,
+			"z": -0,
+			"w": 0.7593125
+		},
+		"mName": "fa_107",
+		"mAnchorPosition": {
+			"x": 693.78046,
+			"y": 157.76784,
+			"z": 62.210056
+		},
+		"mClaimed": false,
+		"mGuid": "12c8e4f2-692b-4ee0-84d1-63b38461fb83",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.78599304,
+			"z": 0,
+			"w": 0.61823535
+		},
+		"mName": "fa_108",
+		"mAnchorPosition": {
+			"x": 955.9081,
+			"y": 164.15933,
+			"z": 97.73669
+		},
+		"mClaimed": false,
+		"mGuid": "ed617082-451a-4206-ab77-b579468bccc2",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.94676656,
+			"z": 0,
+			"w": -0.32192093
+		},
+		"mName": "fa_109",
+		"mAnchorPosition": {
+			"x": 828.2689,
+			"y": 152.92662,
+			"z": 643.1438
+		},
+		"mClaimed": false,
+		"mGuid": "c289b988-11f0-4771-a3b1-98c9668942a4",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.4257576,
+			"z": -0,
+			"w": 0.90483725
+		},
+		"mName": "fa_110",
+		"mAnchorPosition": {
+			"x": 552.34204,
+			"y": 152.2804,
+			"z": 775.1907
+		},
+		"mClaimed": false,
+		"mGuid": "e6d3ca6c-dcdc-4d99-a3dc-886196c9d6aa",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.94920665,
+			"z": 0,
+			"w": -0.31465352
+		},
+		"mName": "fa_111",
+		"mAnchorPosition": {
+			"x": 385.91443,
+			"y": 158.68292,
+			"z": 771.07227
+		},
+		"mClaimed": false,
+		"mGuid": "5a6be7eb-1c6e-45ef-a58f-5f5276345d29",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.46981335,
+			"z": -0,
+			"w": 0.88276577
+		},
+		"mName": "fa_112",
+		"mAnchorPosition": {
+			"x": 365.5548,
+			"y": 154.54506,
+			"z": 913.5415
+		},
+		"mClaimed": false,
+		"mGuid": "f089c06c-269d-494d-a480-3cd6f784ccb7",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.82899225,
+			"z": 0,
+			"w": 0.5592601
+		},
+		"mName": "fa_113",
+		"mAnchorPosition": {
+			"x": 395.0127,
+			"y": 166.36751,
+			"z": 1181.6287
+		},
+		"mClaimed": false,
+		"mGuid": "691e2e67-955a-412d-98d4-a1fc0576ab47",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.84494734,
+			"z": 0,
+			"w": 0.5348496
+		},
+		"mName": "fa_114",
+		"mAnchorPosition": {
+			"x": 1192.5085,
+			"y": 229.23608,
+			"z": 1278.5463
+		},
+		"mClaimed": false,
+		"mGuid": "8d74fb63-5824-4f18-a551-ce87c08669ad",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8272492,
+			"z": 0,
+			"w": 0.5618351
+		},
+		"mName": "fa_115",
+		"mAnchorPosition": {
+			"x": 1309.4741,
+			"y": 176.13422,
+			"z": 1108.8477
+		},
+		"mClaimed": false,
+		"mGuid": "184e59e2-dd82-4dc6-85ef-72b75731b809",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97560835,
+			"z": 0,
+			"w": -0.21951844
+		},
+		"mName": "fa_116",
+		"mAnchorPosition": {
+			"x": 1136.8137,
+			"y": 181.81,
+			"z": 1068.7637
+		},
+		"mClaimed": false,
+		"mGuid": "7030050c-7e26-4de1-8157-f1b2c50d2924",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9996821,
+			"z": 0,
+			"w": 0.025211912
+		},
+		"mName": "fa_117",
+		"mAnchorPosition": {
+			"x": 1061.1597,
+			"y": 181.53773,
+			"z": 1098.941
+		},
+		"mClaimed": false,
+		"mGuid": "124eb455-e4f3-40a7-b043-8ca2735ed288",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.69670457,
+			"z": -0,
+			"w": 0.7173582
+		},
+		"mName": "fa_118",
+		"mAnchorPosition": {
+			"x": 1282.0732,
+			"y": 215.41693,
+			"z": 667.2244
+		},
+		"mClaimed": false,
+		"mGuid": "93fa4ca8-25f6-4fe7-89db-746a53c6a95d",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.37848997,
+			"z": 0,
+			"w": 0.9256054
+		},
+		"mName": "fa_119",
+		"mAnchorPosition": {
+			"x": 1129.3594,
+			"y": 186.46356,
+			"z": 419.60815
+		},
+		"mClaimed": false,
+		"mGuid": "5266acb0-af31-4892-a579-b9119410a3e3",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9677025,
+			"z": 0,
+			"w": -0.25209504
+		},
+		"mName": "fa_120",
+		"mAnchorPosition": {
+			"x": 630.7178,
+			"y": 200.20493,
+			"z": 884.8855
+		},
+		"mClaimed": false,
+		"mGuid": "67168d36-1025-4ee1-8f67-55dfe8765a68",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5635349,
+			"z": 0,
+			"w": 0.82609224
+		},
+		"mName": "fa_121",
+		"mAnchorPosition": {
+			"x": 562.91943,
+			"y": 194.93436,
+			"z": 882.4011
+		},
+		"mClaimed": false,
+		"mGuid": "33beb90a-5a48-4fe6-bc23-55522ee86e51",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.62100875,
+			"z": 0,
+			"w": 0.78380364
+		},
+		"mName": "fa_122",
+		"mAnchorPosition": {
+			"x": 435.33832,
+			"y": 185.20352,
+			"z": 975.0661
+		},
+		"mClaimed": false,
+		"mGuid": "9ace8ada-d2b0-4043-b07c-06ab16a89088",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.98284096,
+			"z": 0,
+			"w": 0.18445493
+		},
+		"mName": "fa_123",
+		"mAnchorPosition": {
+			"x": 330.06445,
+			"y": 206.42703,
+			"z": 1045.3718
+		},
+		"mClaimed": false,
+		"mGuid": "b161114b-01d1-4d1f-87b7-187bb6ffde89",
+		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.589444,
+			"z": 0,
+			"w": 0.8078093
+		},
+		"mName": "fa_124",
+		"mAnchorPosition": {
+			"x": 328.66846,
+			"y": 207.46771,
+			"z": 1008.33984
+		},
+		"mClaimed": false,
+		"mGuid": "a0bdbe99-e23d-4e16-829e-be8b21626b5e",
+		"mScene": "AirfieldRegion"
 	}
 ]
