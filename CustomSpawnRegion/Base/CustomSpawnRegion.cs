@@ -661,12 +661,11 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.gameObject.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"Null mSpawnRegion.gameObject");
+                this.LogTraceInstanced($"Null mSpawnRegion.gameObject; this is an ACTUAL error!");
                 return 0;
             }
-            if (!mSpawnRegion.gameObject.activeSelf)
+            if (!mSpawnRegion.gameObject.activeSelf || !mSpawnRegion.isActiveAndEnabled)
             {
-                this.LogErrorInstanced($"Inactive mSpawnRegion.gameObject");
                 return 0;
             }
             return GetCurrentActivePopulation(mSpawnRegion.m_WildlifeMode);
