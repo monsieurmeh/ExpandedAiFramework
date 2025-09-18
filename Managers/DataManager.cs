@@ -25,10 +25,13 @@ namespace ExpandedAiFramework
 #else
         private ModDataManager mModData = new ModDataManager(ModName, false);
 #endif
-       
+
 
         public ModDataManager ModData { get { return mModData; } }
         public DataManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        public SpawnRegionModDataProxyManager SpawnRegionModDataProxyManager { get { return mSpawnRegionModDataProxyManager; } }
+        public SpawnModDataProxyManager[] SpawnModDataProxyManagers { get { return mSpawnModDataProxyManagers; } }
+        public Dictionary<Type, IMapDataManager> MapDataManagers { get { return mMapDataManagers; } }
 
         #endregion
 
