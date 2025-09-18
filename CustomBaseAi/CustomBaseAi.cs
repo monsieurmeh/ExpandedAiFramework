@@ -1092,7 +1092,7 @@ namespace ExpandedAiFramework
             {
                 if (!BaseAi.ShouldAlwaysFleeFromCurrentTarget())
                 {
-                    this.LogVerboseInstanced($"Feeding and should always flee from current target, fleeing");
+                    this.LogTraceInstanced($"Feeding and should always flee from current target, fleeing");
                     SetAiMode(AiMode.Flee);
                 }
                 return;
@@ -1192,7 +1192,7 @@ namespace ExpandedAiFramework
 
             if (Utils.RollChance(fleeChance))
             {
-                this.LogVerboseInstanced($"Random roll with fleeChance {fleeChance} triggered fleeing");
+                this.LogTraceInstanced($"Random roll with fleeChance {fleeChance} triggered fleeing");
                 SetAiMode(AiMode.Flee);
                 return;
             }

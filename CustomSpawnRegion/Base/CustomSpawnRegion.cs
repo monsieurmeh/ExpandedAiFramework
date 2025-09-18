@@ -697,13 +697,13 @@ namespace ExpandedAiFramework
                         this.LogVerboseInstanced($"NOT adjusting other wildlife mode and spawn mode does NOT match called mode, wildlifeMode matched for despawn");
                         canDespawn = true;
                     }
-                    if (canDespawn
-                        && spawn.GetAiMode() != AiMode.Flee
-                        && spawn.GetAiMode() != AiMode.Dead)
-                    {
-                        this.LogVerboseInstanced($"Can despawn && and spawn is not fleeing or dead, setting flee");
-                        spawn.SetAiMode(AiMode.Flee);
-                    }
+                    //if (canDespawn
+                    //    && spawn.GetAiMode() != AiMode.Flee
+                    //    && spawn.GetAiMode() != AiMode.Dead)
+                    //{
+                    //    this.LogTraceInstanced($"Can despawn && and spawn is not fleeing or dead, setting flee");
+                    //    spawn.SetAiMode(AiMode.Flee);
+                    //}
                     Vector3 spawnPos = spawn.m_CachedTransform.position;
                     bool canDespawnDueToProximity = playerGhost;
                     if (canDespawnDueToProximity)

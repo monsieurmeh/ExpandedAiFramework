@@ -297,7 +297,7 @@ namespace ExpandedAiFramework
                         this.LogVerboseInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
                         continue;
                     }
-                    this.LogTraceInstanced($"Loading {newData.DisplayName}");
+                    this.LogVerboseInstanced($"Loading {newData.DisplayName}");
                     if (!mDataContainer.TryAddData(newData))
                     {
                         this.LogWarningInstanced($"Failed to add {newData.DisplayName}!");

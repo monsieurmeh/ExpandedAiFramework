@@ -459,13 +459,13 @@ namespace ExpandedAiFramework.CompanionWolfMod
             }
             if (mBaseAi.m_TimeInModeSeconds >= 10.0f)
             {
-                //this.LogVerboseInstanced($"Player took too long to drop food clos to an untamed companion wolf, running away!");
+                this.LogTraceInstanced($"Player took too long to drop food clos to an untamed companion wolf, running away!");
                 SetAiMode(AiMode.Flee);
                 return false;
             }
             if (Vector3.Distance(mBaseAi.transform.position, mBaseAi.m_CurrentTarget.transform.position) <= MinPlayerDistanceFromWolf)
             {
-                //this.LogVerboseInstanced($"Player got too close to an untamed companion wolf, running away!"); 
+                this.LogTraceInstanced($"Player got too close to an untamed companion wolf, running away!"); 
                 SetAiMode(AiMode.Flee);
                 return false;
             }
