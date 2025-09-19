@@ -9,16 +9,18 @@ namespace ExpandedAiFramework
         protected Vector3 mPosition;
         protected int mExtraNearestCandidatesToMaybePickFrom;
         protected bool mHasAdditionalFilters = false;
-        protected Func<T, bool> mAdditionalFilters = null;
+        protected Func<T, bool> mManagerScopeFilter = null;
+        protected Func<T, bool> mRequestScopeFilter = null;
 
         public override string InstanceInfo { get { return $"{mPosition} in {mScene}"; } }
         public override string TypeInfo { get { return $"GetNearestMapData<{typeof(T)}>"; } }
 
-        public GetNearestMapDataRequest(Vector3 position, string scene, Action<T, RequestResult> callback, bool callbackIsThreadSafe, int extraNearestCandidatesToMaybePickFrom = 0) : base(callback, true, callbackIsThreadSafe)
+        public GetNearestMapDataRequest(Vector3 position, string scene, Action<T, RequestResult> callback, bool callbackIsThreadSafe, Func<T, bool> additionalFilter = null, int extraNearestCandidatesToMaybePickFrom = 0) : base(callback, true, callbackIsThreadSafe)
         {
             mScene = scene;
             mPosition = position;
             mExtraNearestCandidatesToMaybePickFrom = extraNearestCandidatesToMaybePickFrom;
+            mRequestScopeFilter = additionalFilter;
         }
 
         public override void Preprocess(ISubDataManager manager)
@@ -26,9 +28,9 @@ namespace ExpandedAiFramework
             base.Preprocess(manager);
             if (manager is ISerializedDataFilterProvider<T> filterProvider)
             {
-                mAdditionalFilters = filterProvider.GetAdditionalDataFilters();
-                mHasAdditionalFilters = mAdditionalFilters != null;
+                mManagerScopeFilter = filterProvider.GetAdditionalDataFilters();
             }
+            mHasAdditionalFilters = mManagerScopeFilter != null || mRequestScopeFilter != null;
         }
 
 
@@ -57,10 +59,6 @@ namespace ExpandedAiFramework
             mPayload = GetMapData();
             return mPayload != null ? RequestResult.Succeeded : RequestResult.Failed;
         }
-
-
-        public void AttachAdditionalFilters(Func<T, bool> filter) => mAdditionalFilters = filter;
-
 
         protected virtual T GetMapData()
         {
@@ -92,7 +90,26 @@ namespace ExpandedAiFramework
             
         }
 
-        private bool ValidEntry(T data) => ValidEntryInternal(data) && (mHasAdditionalFilters ? mAdditionalFilters.Invoke(data) : true);
+        private bool ValidEntry(T data)
+        {
+            if (!ValidEntryInternal(data))
+            {
+                return false;
+            }
+            if (mHasAdditionalFilters)
+            {
+                if (mRequestScopeFilter?.Invoke(data) ?? false)
+                {
+                    return false;
+                }
+                if (mManagerScopeFilter?.Invoke(data) ?? false)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         protected virtual bool ValidEntryInternal(T data) => !data.Claimed;
         protected virtual float OrderBy(T data) => Vector3.SqrMagnitude(mPosition - data.AnchorPosition);
     }

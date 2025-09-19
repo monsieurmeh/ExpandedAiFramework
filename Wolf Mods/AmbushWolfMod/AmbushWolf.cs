@@ -67,7 +67,7 @@ proxy)
             {
                 this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
                 AttachHidingSpot(nearestSpot);
-            }, false, 3));
+            }, false, null, 3));
             
         }
 
@@ -97,7 +97,7 @@ proxy)
                     {
                         this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
                         AttachHidingSpot(nearestSpot);
-                    }, false, 3));
+                    }, false, null, 3));
                 }
                 else
                 {

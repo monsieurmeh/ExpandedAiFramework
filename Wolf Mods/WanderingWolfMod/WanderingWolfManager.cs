@@ -35,7 +35,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
                         return;
                     }
                     ClaimWanderPath(proxy, path);
-                }, false, 3));
+                }, false, null, 3));
             }
             else
             {
