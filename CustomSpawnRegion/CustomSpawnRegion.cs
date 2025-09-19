@@ -379,6 +379,7 @@ namespace ExpandedAiFramework
             {
                 return null;
             }
+            modDataProxy.Spawned = true; //Ensure that it sticks around until the AI perishes
             return customBaseAi;
         }
 

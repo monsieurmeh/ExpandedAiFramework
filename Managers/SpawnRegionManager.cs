@@ -119,6 +119,7 @@ namespace ExpandedAiFramework
 
 
         #region API
+        //todo: get rid of this, it's a pass-through to aimanager which we should just inject to custom spawn regions as a dependency.
 
         public bool TryWrapNewSpawn(BaseAi baseAi, SpawnRegion spawnRegion, out CustomBaseAi newCustomBaseAi, SpawnModDataProxy proxy)
         {

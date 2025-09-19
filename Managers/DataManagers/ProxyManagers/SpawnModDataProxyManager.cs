@@ -66,6 +66,7 @@ namespace ExpandedAiFramework
             {
                 return false;
             }
+            proxy.Spawned = true; // if it made it's way into serialization, it spawned at some point already!
             OnRegister(proxy);
             return true;
         }

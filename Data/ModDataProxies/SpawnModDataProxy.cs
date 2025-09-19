@@ -10,6 +10,7 @@ namespace ExpandedAiFramework
         [Exclude] public bool Disconnected = false;
         [Exclude] public bool AsyncProcessing = false;
         [Exclude] public bool Available = true;
+        [Exclude] public bool Spawned = false;
         public Guid ParentGuid = Guid.Empty;
         public Quaternion CurrentRotation;
         public AiSubType AiSubType;
