@@ -26,13 +26,11 @@ namespace ExpandedAiFramework
         protected Task mTask;
         protected bool mLoaded;
         protected bool mKeepTaskRunning = false;
-        protected bool mActive;
         protected string mCurrentScene;
         protected Queue<Action> mInternalActionQueue = new Queue<Action>();
         protected Queue<IRequest> mRequests = new Queue<IRequest>();
         protected SerializedDataContainer<T> mDataContainer = new SerializedDataContainer<T>();
 
-        public bool Active => mActive;
         public virtual string InstanceInfo { get { return string.Empty; } }
         public abstract string TypeInfo { get; }
 
@@ -65,7 +63,10 @@ namespace ExpandedAiFramework
                 return;
             }
             mKeepTaskRunning = false;
-            mWorkAvailable.Set(); // Wake up the worker to exit
+            lock (mRequestQueueLock)
+            {
+                mWorkAvailable.Set(); // Wake up the worker to exit
+            }
             try
             {
                 mTask?.Wait();
@@ -76,7 +77,10 @@ namespace ExpandedAiFramework
             }
             finally
             {
-                mWorkAvailable.Dispose();
+                lock (mRequestQueueLock)
+                {
+                    mWorkAvailable.Dispose();
+                }
             }
         }
 
@@ -86,6 +90,8 @@ namespace ExpandedAiFramework
             {
                 mRequests.Clear();
                 mInternalActionQueue.Clear();
+                mActiveRequest = null;
+                mActiveAction = null;
             }
         }
 
@@ -121,11 +127,9 @@ namespace ExpandedAiFramework
             {
                 mWorkAvailable.Wait();
                 if (!mKeepTaskRunning) break;
-                mActive = true;
                 HandleInternalActions();
                 GetActiveRequest();
                 HandleActiveRequest();
-                mActive = false;
             }
         }
         
@@ -160,7 +164,10 @@ namespace ExpandedAiFramework
                 else
                 {
                     IRequest dispatchedRequest = mActiveRequest;
-                    mDispatcher.Dispatch(() => ProcessRequest(dispatchedRequest));
+                    if (mDispatcher != null)
+                    {
+                        mDispatcher.Dispatch(() => ProcessRequest(dispatchedRequest));
+                    }
                 }
                 mActiveRequest = null;
             }
@@ -195,10 +202,13 @@ namespace ExpandedAiFramework
         
         private void CallbackWithExecutionLog(IRequest request)
         {
-            request.CallbackStartTime = DateTime.Now.Ticks;
-            request.Callback();
-            request.CallbackCompleteTime = DateTime.Now.Ticks;
-            //request.LogExecutionInfo(BuildQueueExecutionInfo());
+            if (request != null)
+            {
+                request.CallbackStartTime = DateTime.Now.Ticks;
+                request.Callback();
+                request.CallbackCompleteTime = DateTime.Now.Ticks;
+                //request.LogExecutionInfo(BuildQueueExecutionInfo());
+            }
         }
 
         private string BuildQueueExecutionInfo()
@@ -227,6 +237,7 @@ namespace ExpandedAiFramework
                 }
                 mActiveAction.Invoke();
                 mActiveAction = null;
+                lock (mRequestQueueLock)
                 {
                     requestCount = mInternalActionQueue.Count;
                 }

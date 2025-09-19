@@ -23,6 +23,10 @@ namespace ExpandedAiFramework
         protected override void SaveJsonToPath(string json, string dataLocation) => mManager.ModData.Save(json, dataLocation);
         protected override string LoadJsonFromPath(string dataLocation) => mManager.ModData.Load(dataLocation);
 
-        public void OnQuitToMainMenu() => mLoaded = false;
+        public void OnQuitToMainMenu() 
+        {
+            ClearRequests();
+            mLoaded = false;
+        }
     }
 }
