@@ -33,6 +33,7 @@ namespace ExpandedAiFramework
         public const string CommandString_Info = "info";
         public const string CommandString_Paint = "paint";
         public const string CommandString_Set = "set";
+        public const string CommandString_DebugMenu = "debugmenu";
 
         public const string CommandString_NavMesh = "navmesh";
         public const string CommandString_WanderPath = "wanderpath";
@@ -56,7 +57,8 @@ namespace ExpandedAiFramework
             $"{CommandString_Hide} " +
             $"{CommandString_List} " +
             $"{CommandString_Paint}" +
-            $"{CommandString_Set}";
+            $"{CommandString_Set}" +
+            $"{CommandString_DebugMenu}";
 
         public const string CommandString_HelpSupportedCommands =
             $"{CommandString_Create} " +
@@ -70,7 +72,8 @@ namespace ExpandedAiFramework
             $"{CommandString_Hide} " +
             $"{CommandString_List} "+
             $"{CommandString_Paint}" +
-            $"{CommandString_Set}";
+            $"{CommandString_Set}" +
+            $"{CommandString_DebugMenu}";
 
         public const string CommandString_CreateSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_DeleteSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";

@@ -1,6 +1,7 @@
 using UnityEngine.AI;
 using UnityEngine;
 using Il2Cpp;
+using ExpandedAiFramework.DebugMenu;
 
 
 namespace ExpandedAiFramework
@@ -57,6 +58,7 @@ namespace ExpandedAiFramework
                 case CommandString_List: ProcessRoutedCommand(CommandString_List, args); break;
                 case CommandString_Paint: ProcessPaint(args); break;
                 case CommandString_Set: ProcessSet(args); break;
+                case CommandString_DebugMenu: ProcessDebugMenu(args); break;
                 case "unlock": GameManager.GetFeatMasterHunter().Unlock(); break;
                 default: LogAlways($"Unknown command: {command}. Type '{CommandString} {CommandString_Help}' for supported commands."); break;
             }
@@ -88,6 +90,9 @@ namespace ExpandedAiFramework
                     break;
                 case CommandString_Set:
                     LogAlways($"{CommandString_Set} <target> <property> <value> - Sets properties. Use 'paint_<type>' as target to set paint manager properties");
+                    break;
+                case CommandString_DebugMenu:
+                    LogAlways($"{CommandString_DebugMenu} - Opens the EAF debug menu interface");
                     break;
                 default:
                     LogAlways($"No help available for: {helpTopic}");
@@ -542,6 +547,32 @@ namespace ExpandedAiFramework
         {
             GameObject marker = CreateMarker(localPosition, color, name, height, diameter);
             marker.transform.SetParent(transform, false);
+        }
+
+        private void ProcessDebugMenu(string[] args)
+        {
+            // Create or get the debug menu GameObject
+            GameObject debugMenuObj = GameObject.Find("EAFDebugMenu");
+            DebugMenuManager debugMenu = null;
+            
+            if (debugMenuObj == null)
+            {
+                debugMenuObj = new GameObject("EAFDebugMenu");
+                debugMenu = debugMenuObj.AddComponent<DebugMenuManager>();
+                LogAlways("Debug menu created.");
+            }
+            else
+            {
+                debugMenu = debugMenuObj.GetComponent<DebugMenuManager>();
+                if (debugMenu == null)
+                {
+                    LogError("Debug menu GameObject found but DebugMenu component is missing!");
+                    return;
+                }
+            }
+
+            // Process the command through the debug menu
+            debugMenu.ProcessCommand(args);
         }
 
         private void RegisterDefaultPaintManagers()

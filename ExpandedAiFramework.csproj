@@ -98,7 +98,10 @@
     <Reference Include="Unity.TextMeshPro" />
     <Reference Include="UnityEngine.AssetBundleModule" />
     <Reference Include="UnityEngine.CoreModule" />
-    <Reference Include="UnityEngine" />
+    <Reference Include="UnityEngine" />    
+    <Reference Include="UnityEngine.UI" />
+    <Reference Include="UnityEngine.UIModule" />
+    <Reference Include="UnityEngine.TextRenderingModule" />
     <Reference Include="UnityEngine.AIModule" />
     <Reference Include="UnityEngine.AnimationModule" />
     <Reference Include="UnityEngine.PhysicsModule" />
