@@ -49,6 +49,7 @@ namespace ExpandedAiFramework
         private BaseSubManager[] mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
         private Dictionary<Type, ISubManager> mSubManagerDict = new Dictionary<Type, ISubManager>();
         private ISubManager[] mSubManagers = new ISubManager[0];
+        private Dictionary<string, BasePaintManager> mPaintManagerDict = new Dictionary<string, BasePaintManager>();
         private float mLastPlayerStruggleTime = 0.0f;
         private string mCurrentScene = string.Empty;
         private bool mGameLoaded = false;
@@ -104,10 +105,15 @@ namespace ExpandedAiFramework
         public Dictionary<int, CustomBaseAi> CustomAis => mAiManager.CustomAis;
         public WeightedTypePicker<BaseAi> TypePicker => mAiManager.TypePicker;
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
+        public Dictionary<string, BasePaintManager> PaintManagers => mPaintManagerDict;
 
 
         public void Shutdown()
         {
+            foreach (var paintManager in mPaintManagerDict.Values)
+            {
+                paintManager.Shutdown();
+            }
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].Shutdown();
@@ -262,6 +268,24 @@ namespace ExpandedAiFramework
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
         public bool TrySetAiMode(BaseAi baseAi, AiMode aiMode) => mAiManager.TrySetAiMode(baseAi, aiMode);
         public bool TryApplyDamage(BaseAi baseAi, float damage, float bleedOutTime, DamageSource damageSource) => mAiManager.TryApplyDamage(baseAi, damage, bleedOutTime, damageSource);
+
+
+        public void RegisterPaintManager(BasePaintManager paintManager)
+        {
+            if (mPaintManagerDict.TryGetValue(paintManager.TypeName.ToLower(), out BasePaintManager existing))
+            {
+                LogError($"Paint manager for type {paintManager.TypeName} already registered!");
+                return;
+            }
+            LogTrace($"Registering paint manager for type {paintManager.TypeName}");
+            paintManager.Initialize();
+            mPaintManagerDict.Add(paintManager.TypeName.ToLower(), paintManager);
+        }
+
+        public bool TryGetPaintManager(string typeName, out BasePaintManager paintManager)
+        {
+            return mPaintManagerDict.TryGetValue(typeName.ToLower(), out paintManager);
+        }
        
         
         /* This section needs a rework, possibly its own interop platform specifically for prefix bool patches
