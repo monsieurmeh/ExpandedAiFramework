@@ -9,7 +9,6 @@ namespace ExpandedAiFramework
     {
 
         private GameObject mNavmeshObj = null;
-        private List<GameObject> mDebugShownSpawnRegions = new List<GameObject>();
         private BasePaintManager mActivePaintManager = null;
         
         public ConsoleCommandManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) 
@@ -179,7 +178,7 @@ namespace ExpandedAiFramework
             switch (typeName)
             {
                 case CommandString_NavMesh: ShowNavMesh(); break;
-                case CommandString_SpawnRegion: ShowSpawnRegions(); break;
+                case CommandString_SpawnRegion: ShowSpawnRegions(remainingArgs); break;
                 case CommandString_Ai: ShowAi(remainingArgs); break;
                 default:
                     if (mManager.TryGetPaintManager(typeName, out BasePaintManager paintManager))
@@ -209,7 +208,7 @@ namespace ExpandedAiFramework
             switch (typeName)
             {
                 case CommandString_NavMesh: HideNavMesh(); break;
-                case CommandString_SpawnRegion: HideSpawnRegions(); break;
+                case CommandString_SpawnRegion: HideSpawnRegions(remainingArgs); break;
                 case CommandString_Ai: HideAi(remainingArgs); break;
                 default:
                     if (mManager.TryGetPaintManager(typeName, out BasePaintManager paintManager))
@@ -362,29 +361,72 @@ namespace ExpandedAiFramework
             }
         }
 
-        private void ShowSpawnRegions()
+        private void ShowSpawnRegions(string[] args)
         {
-            foreach (SpawnRegion spawnRegion in GameManager.m_SpawnRegionManager.m_SpawnRegions)
+            if (args.Length == 0)
             {
-                if (spawnRegion == null) continue;
-                
-                lock (mDebugShownSpawnRegions)
+                foreach (CustomSpawnRegion customSpawnRegion in mManager.SpawnRegionManager.CustomSpawnRegions.Values)
                 {
-                    GameObject marker = CreateMarker(spawnRegion.transform.position, GetSpawnRegionColor(spawnRegion), $"{spawnRegion.m_AiSubTypeSpawned} SpawnRegion Marker at {spawnRegion.transform.position}", 1000, 10);
-                    mDebugShownSpawnRegions.Add(marker);
+                    if (customSpawnRegion?.VanillaSpawnRegion == null) continue;
+                    
+                    SpawnRegion spawnRegion = customSpawnRegion.VanillaSpawnRegion;
+                    AttachMarker(spawnRegion.transform, Vector3.zero, GetSpawnRegionColor(spawnRegion), "SpawnRegionDebugMarker", 1000, 10);
+                }
+            }
+            else
+            {
+                string name = args[0];
+                foreach (CustomSpawnRegion customSpawnRegion in mManager.SpawnRegionManager.CustomSpawnRegions.Values)
+                {
+                    if (customSpawnRegion?.VanillaSpawnRegion == null) continue;
+                    
+                    if ($"{customSpawnRegion.VanillaSpawnRegion.GetHashCode()}" == name || $"{customSpawnRegion.ModDataProxy.Guid}" == name)
+                    {
+                        SpawnRegion spawnRegion = customSpawnRegion.VanillaSpawnRegion;
+                        AttachMarker(spawnRegion.transform, Vector3.zero, GetSpawnRegionColor(spawnRegion), "SpawnRegionDebugMarker", 1000, 10);
+                    }
                 }
             }
         }
 
-        private void HideSpawnRegions()
+        private void HideSpawnRegions(string[] args)
         {
-            lock (mDebugShownSpawnRegions)
+            if (args.Length == 0)
             {
-                foreach (GameObject obj in mDebugShownSpawnRegions)
+                foreach (CustomSpawnRegion customSpawnRegion in mManager.SpawnRegionManager.CustomSpawnRegions.Values)
                 {
-                    UnityEngine.Object.Destroy(obj);
+                    if (customSpawnRegion?.VanillaSpawnRegion == null) continue;
+                    
+                    foreach (Transform child in customSpawnRegion.VanillaSpawnRegion.GetComponentsInChildren<Transform>(true))
+                    {
+                        if (child.name.Contains("SpawnRegionDebugMarker"))
+                        {
+                            GameObject.Destroy(child.gameObject);
+                            break;
+                        }
+                    }
                 }
-                mDebugShownSpawnRegions.Clear();
+            }
+            else
+            {
+                string name = args[0];
+                foreach (CustomSpawnRegion customSpawnRegion in mManager.SpawnRegionManager.CustomSpawnRegions.Values)
+                {
+                    if (customSpawnRegion?.VanillaSpawnRegion == null) continue;
+                    
+                    if ($"{customSpawnRegion.VanillaSpawnRegion.GetHashCode()}" == name || $"{customSpawnRegion.ModDataProxy.Guid}" == name)
+                    {
+                        foreach (Transform child in customSpawnRegion.VanillaSpawnRegion.GetComponentsInChildren<Transform>(true))
+                        {
+                            if (child.name.Contains("SpawnRegionDebugMarker"))
+                            {
+                                GameObject.Destroy(child.gameObject);
+                                break;
+                            }
+                        }
+                        return;
+                    }
+                }
             }
         }
 
@@ -506,6 +548,7 @@ namespace ExpandedAiFramework
         {
             mManager.RegisterPaintManager(new WanderPathPaintManager(mManager));
             mManager.RegisterPaintManager(new HidingSpotPaintManager(mManager));
+            mManager.RegisterPaintManager(new SpawnRegionPaintManager(mManager));
         }
     }
 }
