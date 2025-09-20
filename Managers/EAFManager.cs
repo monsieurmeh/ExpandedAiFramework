@@ -362,13 +362,14 @@ namespace ExpandedAiFramework
             FlaggedLoggingLevel logLevel,
             string callerType,
             string callerInstanceInfo = "",
-            [CallerMemberName] string callerName = "")
+            [CallerMemberName] string callerName = "",
+            bool toUConsole = false)
         {
             callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
             lock (mLoggerLock)
             {
                 DateTime now = DateTime.Now;
-                mLogDispatcher.Dispatch(() => mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {now}"));
+                mLogDispatcher.Dispatch(() => mLogger.Log(message, logLevel, toUConsole ? LoggingSubType.uConsole : LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {now}"));
             }
         }
 
@@ -378,9 +379,10 @@ namespace ExpandedAiFramework
             FlaggedLoggingLevel logLevel,
             string callerType,
             string callerInstanceInfo = "",
-            [CallerMemberName] string callerName = "")
+            [CallerMemberName] string callerName = "",
+            bool toUConsole = false)
         {
-            Manager.Log(message, logLevel, callerType, callerInstanceInfo, callerName);
+            Manager.Log(message, logLevel, callerType, callerInstanceInfo, callerName, toUConsole);
         }
 #endregion
 

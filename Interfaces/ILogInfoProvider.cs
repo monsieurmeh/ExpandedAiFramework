@@ -44,13 +44,13 @@ namespace ExpandedAiFramework
 
         public static void LogErrorInstanced(this ILogInfoProvider provider, string message, FlaggedLoggingLevel additionalFlags = 0U, [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Error | additionalFlags, provider.TypeInfo, provider.InstanceInfo, memberName);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Error | additionalFlags, provider.TypeInfo, provider.InstanceInfo, memberName, true);
         }
 
 
         public static void LogAlwaysInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Always, provider.TypeInfo, provider.InstanceInfo, memberName);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Always, provider.TypeInfo, provider.InstanceInfo, memberName, true);
         }
     }
 }
