@@ -557,8 +557,8 @@ namespace ExpandedAiFramework
             
             if (debugMenuObj == null)
             {
-                LogError("Debug menu GameObject not found! It should have been created during initialization.");
-                return;
+                debugMenuObj = new GameObject("EAFDebugMenu");
+                LogAlways("Debug menu created.");
             }
             
             debugMenu = debugMenuObj.GetComponent<DebugMenuManager>();
