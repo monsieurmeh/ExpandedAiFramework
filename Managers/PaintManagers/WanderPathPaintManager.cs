@@ -9,6 +9,7 @@ namespace ExpandedAiFramework
         private List<GameObject> mCurrentWanderPathPointMarkers = new List<GameObject>();
         private bool mRecordingPath = false;
         private bool mJustFinishedPath = false;
+        private WanderPathTypes mWanderPathType = WanderPathTypes.IndividualPath;
 
         public override string TypeName => CommandString_WanderPath;
 
@@ -310,7 +311,7 @@ namespace ExpandedAiFramework
 
             mCurrentWanderPathPointMarkers.Add(ConnectMarkers(mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 1], mCurrentWanderPathPoints[0], Color.blue, $"{mCurrentDataName}.Connector {mCurrentWanderPathPoints.Count - 1} -> {0}", 100));
             
-            WanderPath newPath = new WanderPath(mCurrentDataName, mCurrentWanderPathPoints.ToArray(), mManager.CurrentScene);
+            WanderPath newPath = new WanderPath(mCurrentDataName, mCurrentWanderPathPoints.ToArray(), mManager.CurrentScene, mWanderPathType);
             RegisterMapData(newPath, (registeredPath, result) =>
             {
                 if (result != RequestResult.Succeeded)
@@ -334,6 +335,33 @@ namespace ExpandedAiFramework
                 });
             });
         }
+
+        protected override void ProcessSetCustom(string property, string value)
+        {
+            switch (property)
+            {
+                case "wanderpathtype":
+                    if (!Enum.TryParse(value, out mWanderPathType))
+                    {
+                        if (!int.TryParse(value, out int intValue))
+                        {
+                            this.LogErrorInstanced($"Invalid wander path type: {value} AND cannot parse as int");
+                            return;
+                        }
+                        mWanderPathType = (WanderPathTypes)intValue;
+                    }
+                    else
+                    {
+                        mWanderPathType = (WanderPathTypes)Enum.Parse(typeof(WanderPathTypes), value);
+                    }
+                    this.LogAlwaysInstanced($"Set wander path type to {mWanderPathType}");
+                    break;
+                default:
+                    this.LogWarningInstanced($"Unknown property: {property}");
+                    break;
+            }
+        }
+
 
         private void DiscardCurrentPath()
         {
