@@ -558,14 +558,12 @@ namespace ExpandedAiFramework
             if (debugMenuObj == null)
             {
                 debugMenuObj = new GameObject("EAFDebugMenu");
-                LogAlways("Debug menu created.");
             }
             
             debugMenu = debugMenuObj.GetComponent<DebugMenuManager>();
             if (debugMenu == null)
             {
-                LogError("Debug menu GameObject found but DebugMenuManager component is missing!");
-                return;
+                debugMenu = debugMenuObj.AddComponent<DebugMenuManager>();
             }
             
             // Process the command through the debug menu
