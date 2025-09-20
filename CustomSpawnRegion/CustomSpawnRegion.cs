@@ -55,14 +55,6 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_HasBeenDisabledByAurora = mModDataProxy?.HasBeenDisabledByAurora ?? false;
             mSpawnRegion.m_WasActiveBeforeAurora = mModDataProxy?.WasActiveBeforeAurora ?? true;
             mSpawnRegion.m_CooldownTimerHours = mModDataProxy?.CooldownTimerHours ?? 0f;
-            if (mModDataProxy != null && ModDataProxy.CurrentPosition != Vector3.zero)
-            {
-                mSpawnRegion.m_Center = mModDataProxy.CurrentPosition;
-                mManager.Manager.DispatchManager.Dispatch(() =>
-                {
-                    mSpawnRegion.transform.position = mSpawnRegion.m_Center;
-                });
-            }
 
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
@@ -123,10 +115,20 @@ namespace ExpandedAiFramework
             }
             mSpawnRegion.m_PathManagers = (Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<PathManager>)mSpawnRegion.GetComponentsInChildren<PathManager>(false);
             mSpawnRegion.m_Den = mSpawnRegion.GetComponent<Den>();
-            mSpawnRegion.m_Center = mSpawnRegion.transform.position;
+            if (mModDataProxy != null && ModDataProxy.CurrentPosition != Vector3.zero)
+            {
+                mSpawnRegion.m_Center = mModDataProxy.CurrentPosition;
+                mManager.Manager.DispatchManager.Dispatch(() =>
+                {
+                    mSpawnRegion.transform.position = mSpawnRegion.m_Center;
+                });
+            }
+            else 
+            {
+                mSpawnRegion.m_Center = mSpawnRegion.transform.position;
+            }
             if (mSpawnRegion.m_PathManagers == null)
             {
-                this.LogErrorInstanced($"Could not construct mSpawnRegion.m_PathManagers");
                 return;
             }
 

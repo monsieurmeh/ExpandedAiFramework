@@ -208,6 +208,8 @@ namespace ExpandedAiFramework
             
             Vector3 newPosition = mPaintMarkerPosition;
             mSelectedSpawnRegion.VanillaSpawnRegion.transform.position = newPosition;
+            mSelectedSpawnRegion.VanillaSpawnRegion.m_Center = newPosition;
+                mSelectedSpawnRegion.ModDataProxy.CurrentPosition = newPosition;
             
             // Re-enable the collider now that we're done moving
             if (mSpawnRegionMarkers.TryGetValue(mSelectedSpawnRegion, out GameObject marker))
@@ -232,6 +234,8 @@ namespace ExpandedAiFramework
             if (!updatePosition)
             {
                 mSelectedSpawnRegion.VanillaSpawnRegion.transform.position = mOriginalPosition;
+                mSelectedSpawnRegion.VanillaSpawnRegion.m_Center = mOriginalPosition;
+                mSelectedSpawnRegion.ModDataProxy.CurrentPosition = mOriginalPosition;
                 this.LogAlwaysInstanced($"Dropped spawn region {mSelectedSpawnRegion.VanillaSpawnRegion.GetHashCode()} back to original position {mOriginalPosition}");
             }
             
