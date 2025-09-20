@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
 
         public MapDataPaintManager(EAFManager manager) : base(manager) 
         {
-            mDefaultDataPath = Path.Combine(GetDataFolderPath(), $"{typeof(T).Name}s.json");
+            mDefaultDataPath = Path.Combine(DataFolderPath, $"{typeof(T).Name}s.json");
         }
 
         public override void Initialize()
