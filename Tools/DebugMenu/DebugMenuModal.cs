@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using Il2Cpp;
+using static ExpandedAiFramework.DebugMenu.Extensions;
 
 namespace ExpandedAiFramework.DebugMenu
 {
@@ -28,9 +29,32 @@ namespace ExpandedAiFramework.DebugMenu
 
         void CreateUI()
         {
+            // Create a separate Canvas for the modal with higher sorting order
+            var modalCanvas = new GameObject("ModalCanvas");
+            modalCanvas.transform.SetParent(transform, false);
+            
+            // Ensure the modal canvas RectTransform fills the screen
+            var modalCanvasRect = modalCanvas.DefinitelyGetComponent<RectTransform>();
+            modalCanvasRect.anchorMin = Vector2.zero;
+            modalCanvasRect.anchorMax = Vector2.one;
+            modalCanvasRect.offsetMin = Vector2.zero;
+            modalCanvasRect.offsetMax = Vector2.zero;
+            
+            var canvas = modalCanvas.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 1001; // Higher than main menu (1000)
+            
+            modalCanvas.AddComponent<GraphicRaycaster>();
+            
+            var canvasScaler = modalCanvas.AddComponent<CanvasScaler>();
+            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvasScaler.referenceResolution = new Vector2(1920, 1080);
+            canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            canvasScaler.matchWidthOrHeight = 0.5f;
+            
             // Modal background (covers entire screen)
             mModalPanel = new GameObject("ModalPanel");
-            mModalPanel.transform.SetParent(transform, false);
+            mModalPanel.transform.SetParent(modalCanvas.transform, false);
             
             var modalRect = mModalPanel.DefinitelyGetComponent<RectTransform>();
             modalRect.anchorMin = Vector2.zero;
@@ -39,32 +63,73 @@ namespace ExpandedAiFramework.DebugMenu
             modalRect.offsetMax = Vector2.zero;
             
             var modalImage = mModalPanel.AddComponent<Image>();
-            modalImage.color = new Color(0, 0, 0, 0.7f); // Semi-transparent background
+            modalImage.color = new Color(0, 0, 0, 0.8f); // More opaque background
             
             // Make background clickable to close
             var modalButton = mModalPanel.AddComponent<Button>();
             modalButton.onClick.AddListener((UnityEngine.Events.UnityAction)Hide);
 
-            // Content panel (centered)
+            // Content panel (much wider, centered)
             mContentPanel = new GameObject("ContentPanel");
             mContentPanel.transform.SetParent(mModalPanel.transform, false);
             
             var contentRect = mContentPanel.DefinitelyGetComponent<RectTransform>();
-            contentRect.anchorMin = new Vector2(0.2f, 0.2f);
-            contentRect.anchorMax = new Vector2(0.8f, 0.8f);
-            contentRect.offsetMin = Vector2.zero;
-            contentRect.offsetMax = Vector2.zero;
+            contentRect.anchorMin = new Vector2(0.5f, 0.5f); // Center anchor
+            contentRect.anchorMax = new Vector2(0.5f, 0.5f);
+            contentRect.pivot = new Vector2(0.5f, 0.5f);
+            contentRect.sizeDelta = new Vector2(1200, 800); // Initial size
+            contentRect.anchoredPosition = Vector2.zero;
             
             var contentImage = mContentPanel.AddComponent<Image>();
-            contentImage.color = new Color(0.15f, 0.15f, 0.15f, 0.95f);
+            contentImage.color = new Color(0.15f, 0.15f, 0.15f, 1f); // Fully opaque background
+            
+            // Add border outline
+            var outline = mContentPanel.AddComponent<Outline>();
+            outline.effectColor = new Color(0.4f, 0.4f, 0.4f, 1f);
+            outline.effectDistance = new Vector2(2, 2);
 
             // Prevent content panel clicks from closing modal
             var contentButton = mContentPanel.AddComponent<Button>();
 
+            CreateTitleBar();
             CreateScrollArea();
-            CreateCloseButton();
 
             mModalPanel.SetActive(false);
+        }
+
+        void CreateTitleBar()
+        {
+            var titleBar = new GameObject("TitleBar");
+            titleBar.transform.SetParent(mContentPanel.transform, false);
+            
+            var titleRect = titleBar.DefinitelyGetComponent<RectTransform>();
+            titleRect.anchorMin = new Vector2(0, 0.9f);
+            titleRect.anchorMax = new Vector2(1, 1);
+            titleRect.offsetMin = Vector2.zero;
+            titleRect.offsetMax = Vector2.zero;
+            
+            var titleBg = titleBar.AddComponent<Image>();
+            titleBg.color = new Color(0.2f, 0.2f, 0.2f, 1f);
+            
+            // Title text
+            var titleTextObj = new GameObject("TitleText");
+            titleTextObj.transform.SetParent(titleBar.transform, false);
+            
+            var titleTextRect = titleTextObj.DefinitelyGetComponent<RectTransform>();
+            titleTextRect.anchorMin = new Vector2(0, 0);
+            titleTextRect.anchorMax = new Vector2(0.8f, 1);
+            titleTextRect.offsetMin = new Vector2(15, 0);
+            titleTextRect.offsetMax = new Vector2(0, 0);
+            
+            var titleText = titleTextObj.AddComponent<Text>();
+            titleText.text = "Item Details - Drag to Move";
+            titleText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            titleText.fontSize = 14;
+            titleText.color = Color.white;
+            titleText.alignment = TextAnchor.MiddleLeft;
+            titleText.fontStyle = FontStyle.Bold;
+            
+            CreateCloseButton(titleBar);
         }
 
         void CreateScrollArea()
@@ -74,14 +139,24 @@ namespace ExpandedAiFramework.DebugMenu
             scrollObj.transform.SetParent(mContentPanel.transform, false);
             
             var scrollRect = scrollObj.DefinitelyGetComponent<RectTransform>();
-            scrollRect.anchorMin = new Vector2(0, 0.1f);
-            scrollRect.anchorMax = new Vector2(1, 1);
-            scrollRect.offsetMin = new Vector2(20, 10);
-            scrollRect.offsetMax = new Vector2(-20, -10);
+            scrollRect.anchorMin = new Vector2(0, 0);
+            scrollRect.anchorMax = new Vector2(1, 0.9f);
+            scrollRect.offsetMin = new Vector2(15, 15);
+            scrollRect.offsetMax = new Vector2(-15, -10);
             
             mScrollRect = scrollObj.AddComponent<ScrollRect>();
             mScrollRect.horizontal = false;
             mScrollRect.vertical = true;
+            mScrollRect.scrollSensitivity = 20f; // Increase scroll wheel sensitivity
+            mScrollRect.movementType = ScrollRect.MovementType.Clamped;
+            
+            // Add background to scroll area
+            var scrollBg = scrollObj.AddComponent<Image>();
+            scrollBg.color = new Color(0.08f, 0.08f, 0.08f, 1f);
+            
+            // Add mask to prevent content bleeding
+            var mask = scrollObj.AddComponent<Mask>();
+            mask.showMaskGraphic = true;
             
             // Scroll content
             mScrollContent = new GameObject("ScrollContent");
@@ -101,59 +176,70 @@ namespace ExpandedAiFramework.DebugMenu
             var textObj = new GameObject("DetailText");
             textObj.transform.SetParent(mScrollContent.transform, false);
             
-            mDetailText = textObj.AddComponent<Text>();
-            mDetailText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            mDetailText.fontSize = 12;
-            mDetailText.color = Color.white;
-            mDetailText.alignment = TextAnchor.UpperLeft;
-            
-            var textRect = textObj.GetComponent<RectTransform>();
+            var textRect = textObj.DefinitelyGetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = Vector2.zero;
-            textRect.offsetMax = Vector2.zero;
+            textRect.offsetMin = new Vector2(10, 0);
+            textRect.offsetMax = new Vector2(-10, 0);
+            
+            mDetailText = textObj.AddComponent<Text>();
+            mDetailText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            mDetailText.fontSize = 11;
+            mDetailText.color = new Color(0.95f, 0.95f, 0.95f, 1f);
+            mDetailText.alignment = TextAnchor.UpperLeft;
+            mDetailText.supportRichText = true;
             
             var textSizeFitter = textObj.AddComponent<ContentSizeFitter>();
             textSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         }
 
-        void CreateCloseButton()
+        void CreateCloseButton(GameObject titleBar)
         {
             var buttonObj = new GameObject("CloseButton");
-            buttonObj.transform.SetParent(mContentPanel.transform, false);
+            buttonObj.transform.SetParent(titleBar.transform, false);
             
             var buttonRect = buttonObj.DefinitelyGetComponent<RectTransform>();
-            buttonRect.anchorMin = new Vector2(0.8f, 0);
-            buttonRect.anchorMax = new Vector2(1, 0.1f);
-            buttonRect.offsetMin = new Vector2(-10, 10);
-            buttonRect.offsetMax = new Vector2(-10, -10);
+            buttonRect.anchorMin = new Vector2(0.92f, 0.1f);
+            buttonRect.anchorMax = new Vector2(0.98f, 0.9f);
+            buttonRect.offsetMin = Vector2.zero;
+            buttonRect.offsetMax = Vector2.zero;
             
             mCloseButton = buttonObj.AddComponent<Button>();
             var buttonImage = buttonObj.AddComponent<Image>();
-            buttonImage.color = new Color(0.6f, 0.3f, 0.3f, 1f);
+            buttonImage.color = new Color(0.7f, 0.2f, 0.2f, 1f);
             
-            // Button text
+            // Button hover colors
+            var colors = mCloseButton.colors;
+            colors.normalColor = new Color(0.7f, 0.2f, 0.2f, 1f);
+            colors.highlightedColor = new Color(0.9f, 0.3f, 0.3f, 1f);
+            colors.pressedColor = new Color(0.5f, 0.1f, 0.1f, 1f);
+            mCloseButton.colors = colors;
+            
+            // Button text (X)
             var textObj = new GameObject("Text");
             textObj.transform.SetParent(buttonObj.transform, false);
             
-            var buttonText = textObj.AddComponent<Text>();
-            buttonText.text = "Close";
-            buttonText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            buttonText.fontSize = 12;
-            buttonText.color = Color.white;
-            buttonText.alignment = TextAnchor.MiddleCenter;
-            
-            var textRect = textObj.GetComponent<RectTransform>();
+            var textRect = textObj.DefinitelyGetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
             textRect.offsetMin = Vector2.zero;
             textRect.offsetMax = Vector2.zero;
+            
+            var buttonText = textObj.AddComponent<Text>();
+            buttonText.text = "✕";
+            buttonText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            buttonText.fontSize = 16;
+            buttonText.color = Color.white;
+            buttonText.alignment = TextAnchor.MiddleCenter;
+            buttonText.fontStyle = FontStyle.Bold;
             
             mCloseButton.onClick.AddListener((UnityEngine.Events.UnityAction)Hide);
         }
 
         public void ShowItemDetails<T>(T item) where T : ISerializedData
         {
+            LogWarning($"Modal ShowItemDetails called for: {item?.DisplayName ?? "null"}");
+            
             if (item == null)
             {
                 LogWarning("Cannot show details for null item");
@@ -161,8 +247,16 @@ namespace ExpandedAiFramework.DebugMenu
             }
 
             string detailText = GenerateDetailText(item);
-            mDetailText.text = detailText;
+            LogWarning($"Generated detail text length: {detailText?.Length ?? 0}");
             
+            if (mDetailText == null)
+            {
+                LogWarning("mDetailText is null!");
+                return;
+            }
+            
+            mDetailText.text = detailText;
+            LogWarning("About to call Show()...");
             Show();
         }
 
@@ -255,11 +349,21 @@ namespace ExpandedAiFramework.DebugMenu
 
         public void Show()
         {
+            LogWarning("Modal Show() called");
             mIsVisible = true;
-            if (mModalPanel != null)
+            
+            if (mModalPanel == null)
             {
-                mModalPanel.SetActive(true);
+                LogWarning("mModalPanel is null!");
+                return;
             }
+            
+            // Ensure modal is on top when shown
+            transform.SetAsLastSibling();
+            
+            LogWarning("Setting modal panel active...");
+            mModalPanel.SetActive(true);
+            LogWarning("Modal should now be visible");
         }
 
         public void Hide()

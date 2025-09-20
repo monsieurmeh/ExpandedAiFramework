@@ -8,48 +8,25 @@ namespace ExpandedAiFramework.DebugMenu
 {
     public class SpawnModDataProxyTabProvider : DebugMenuTabContentProvider<SpawnModDataProxy>
     {
-        // Sub-tab management
-        private GameObject mSubTabPanel;
+        // Mode selection
         private Button mNormalButton;
         private Button mAuroraButton;
         private WildlifeMode mCurrentMode = WildlifeMode.Normal;
 
-        protected override void CreateUI(GameObject parentContentArea)
+        protected override void CreateFilterPanel()
         {
-            base.CreateUI(parentContentArea);
-            CreateSubTabPanel();
+            base.CreateFilterPanel();
+            AddModeButtonsToFilter();
         }
 
-        void CreateSubTabPanel()
+        void AddModeButtonsToFilter()
         {
-            mSubTabPanel = new GameObject("SubTabPanel");
-            mSubTabPanel.transform.SetParent(mRootPanel.transform, false);
-            
-            var subTabRect = mSubTabPanel.AddComponent<RectTransform>();
-            subTabRect.anchorMin = new Vector2(0, 0.75f);
-            subTabRect.anchorMax = new Vector2(0.5f, 0.85f);
-            subTabRect.offsetMin = new Vector2(5, -5);
-            subTabRect.offsetMax = new Vector2(-5, -5);
-            
-            var subTabLayout = mSubTabPanel.AddComponent<HorizontalLayoutGroup>();
-            subTabLayout.spacing = 5;
-            subTabLayout.childControlWidth = true;
-            subTabLayout.childControlHeight = true;
-
-            mNormalButton = CreateButton("Normal", mSubTabPanel.transform, new Action(() => SwitchMode(WildlifeMode.Normal)));
-            mAuroraButton = CreateButton("Aurora", mSubTabPanel.transform, new Action(() => SwitchMode(WildlifeMode.Aurora)));
+            // Add mode selection group to filter panel
+            var modeGroup = CreateFilterGroup("Wildlife Mode");
+            mNormalButton = CreateButton("Normal", modeGroup.transform, new Action(() => SwitchMode(WildlifeMode.Normal)));
+            mAuroraButton = CreateButton("Aurora", modeGroup.transform, new Action(() => SwitchMode(WildlifeMode.Aurora)));
             
             UpdateSubTabButtons();
-
-            // Adjust filter panel position
-            var filterRect = mFilterPanel.GetComponent<RectTransform>();
-            filterRect.anchorMin = new Vector2(0, 0.65f);
-            filterRect.anchorMax = new Vector2(1, 0.75f);
-
-            // Adjust list panel position
-            var listRect = mListPanel.GetComponent<RectTransform>();
-            listRect.anchorMin = new Vector2(0, 0.05f);
-            listRect.anchorMax = new Vector2(1, 0.65f);
         }
 
         void SwitchMode(WildlifeMode mode)

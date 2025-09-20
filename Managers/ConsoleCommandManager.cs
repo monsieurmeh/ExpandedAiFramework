@@ -551,26 +551,23 @@ namespace ExpandedAiFramework
 
         private void ProcessDebugMenu(string[] args)
         {
-            // Create or get the debug menu GameObject
+            // Get the debug menu GameObject (should already exist from initialization)
             GameObject debugMenuObj = GameObject.Find("EAFDebugMenu");
             DebugMenuManager debugMenu = null;
             
             if (debugMenuObj == null)
             {
-                debugMenuObj = new GameObject("EAFDebugMenu");
-                debugMenu = debugMenuObj.AddComponent<DebugMenuManager>();
-                LogAlways("Debug menu created.");
+                LogError("Debug menu GameObject not found! It should have been created during initialization.");
+                return;
             }
-            else
+            
+            debugMenu = debugMenuObj.GetComponent<DebugMenuManager>();
+            if (debugMenu == null)
             {
-                debugMenu = debugMenuObj.GetComponent<DebugMenuManager>();
-                if (debugMenu == null)
-                {
-                    LogError("Debug menu GameObject found but DebugMenu component is missing!");
-                    return;
-                }
+                LogError("Debug menu GameObject found but DebugMenuManager component is missing!");
+                return;
             }
-
+            
             // Process the command through the debug menu
             debugMenu.ProcessCommand(args);
         }

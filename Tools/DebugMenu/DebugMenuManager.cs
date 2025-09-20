@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using Il2Cpp;
+using static ExpandedAiFramework.DebugMenu.Extensions;
 
 namespace ExpandedAiFramework.DebugMenu
 {
@@ -47,6 +48,15 @@ namespace ExpandedAiFramework.DebugMenu
 
             CreateUI();
             RegisterTabProviders();
+        }
+
+        void Update()
+        {
+            // F2 key binding to toggle debug menu
+            if (Input.GetKeyDown(KeyCode.F2))
+            {
+                ToggleMenu();
+            }
         }
 
         void OnDestroy()
@@ -141,6 +151,15 @@ namespace ExpandedAiFramework.DebugMenu
         {
             var modalObj = new GameObject("DebugMenuModal");
             modalObj.transform.SetParent(mCanvasObject.transform, false);
+            
+            // Ensure modal is rendered on top
+            var modalRect = modalObj.DefinitelyGetComponent<RectTransform>();
+            modalRect.anchorMin = Vector2.zero;
+            modalRect.anchorMax = Vector2.one;
+            modalRect.offsetMin = Vector2.zero;
+            modalRect.offsetMax = Vector2.zero;
+            modalRect.SetAsLastSibling(); // Render on top
+            
             mModal = modalObj.AddComponent<DebugMenuModal>();
         }
 
@@ -181,8 +200,8 @@ namespace ExpandedAiFramework.DebugMenu
             buttonObj.transform.SetParent(mTabButtonsPanel.transform, false);
             
             // Add RectTransform first
-            var buttonRect = buttonObj.AddComponent<RectTransform>();
-            buttonRect.sizeDelta = new Vector2(120, 30);
+            var buttonRect = buttonObj.DefinitelyGetComponent<RectTransform>();
+            buttonRect.sizeDelta = new Vector2(120, 15);
             
             var button = buttonObj.AddComponent<Button>();
             var buttonImage = buttonObj.AddComponent<Image>();
@@ -193,7 +212,7 @@ namespace ExpandedAiFramework.DebugMenu
             textObj.transform.SetParent(buttonObj.transform, false);
             
             // Add RectTransform for text first
-            var textRect = textObj.AddComponent<RectTransform>();
+            var textRect = textObj.DefinitelyGetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
             textRect.offsetMin = Vector2.zero;
@@ -242,10 +261,16 @@ namespace ExpandedAiFramework.DebugMenu
 
         public void ShowItemDetails<T>(T item) where T : ISerializedData
         {
-            if (mModal != null)
+            LogDebug($"ShowItemDetails called for: {item?.DisplayName ?? "null"}");
+            
+            if (mModal == null)
             {
-                mModal.ShowItemDetails(item);
+                LogError("mModal is null!");
+                return;
             }
+            
+            LogDebug("Calling mModal.ShowItemDetails...");
+            mModal.ShowItemDetails(item);
         }
 
         public void ToggleMenu()
@@ -295,6 +320,7 @@ namespace ExpandedAiFramework.DebugMenu
             // For now, just toggle the menu since we have GUI controls
             ToggleMenu();
         }
+        // STOP ADDING LOGGING YOU TURD. ITS GLOBALLY AVAILABLE.
     }
 
     public static class Extensions

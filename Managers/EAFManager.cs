@@ -87,6 +87,7 @@ namespace ExpandedAiFramework
             mSettings = settings;
             InitializeLogger();
             RegisterBaseSubManagers();
+            InitializeDebugMenu();
         }
 
 
@@ -359,6 +360,16 @@ namespace ExpandedAiFramework
         private ComplexLogger<Main> mLogger;
         public ComplexLogger<Main> Logger => mLogger;
         private void InitializeLogger() => mLogger = new ComplexLogger<Main>();
+
+        private void InitializeDebugMenu()
+        {
+            // Create the debug menu GameObject and manager during initialization
+            // This ensures F2 key binding always works, but menu starts hidden
+            var debugMenuObj = new GameObject("EAFDebugMenu");
+            UnityEngine.Object.DontDestroyOnLoad(debugMenuObj);
+            debugMenuObj.AddComponent<DebugMenu.DebugMenuManager>();
+            LogStatic("Debug menu initialized (hidden)", FlaggedLoggingLevel.Debug, nameof(EAFManager));
+        }
 
         public FlaggedLoggingLevel CurrentLogLevel => ComplexLogger.Main.CurrentLevel;
 

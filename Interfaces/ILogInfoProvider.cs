@@ -44,7 +44,7 @@ namespace ExpandedAiFramework
 
         public static void LogErrorInstanced(this ILogInfoProvider provider, string message, FlaggedLoggingLevel additionalFlags = 0U, [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Error | additionalFlags, provider.TypeInfo, provider.InstanceInfo, memberName, true);
+            EAFManager.LogStatic(message, FlaggedLoggingLevel.Error | additionalFlags, provider.TypeInfo, provider.InstanceInfo, memberName, false);
         }
 
 

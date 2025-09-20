@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using Il2Cpp;
+using static ExpandedAiFramework.DebugMenu.Extensions;
 
 namespace ExpandedAiFramework.DebugMenu
 {
@@ -63,29 +64,62 @@ namespace ExpandedAiFramework.DebugMenu
             mFilterPanel = new GameObject("FilterPanel");
             mFilterPanel.transform.SetParent(mRootPanel.transform, false);
             
-            var filterRect = mFilterPanel.AddComponent<RectTransform>();
-            filterRect.anchorMin = new Vector2(0, 0.85f);
+            var filterRect = mFilterPanel.DefinitelyGetComponent<RectTransform>();
+            filterRect.anchorMin = new Vector2(0, 0.95f);
             filterRect.anchorMax = new Vector2(1, 1);
-            filterRect.offsetMin = new Vector2(5, -5);
-            filterRect.offsetMax = new Vector2(-5, -5);
+            filterRect.offsetMin = new Vector2(10, -10);
+            filterRect.offsetMax = new Vector2(-10, -10);
+            
+            // Add background
+            var filterBg = mFilterPanel.AddComponent<Image>();
+            filterBg.color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
             
             var filterLayout = mFilterPanel.AddComponent<HorizontalLayoutGroup>();
-            filterLayout.spacing = 10;
+            filterLayout.spacing = 5;
+            filterLayout.padding = new RectOffset(5, 5, 2, 2);
             filterLayout.childControlWidth = false;
             filterLayout.childControlHeight = true;
+            filterLayout.childForceExpandHeight = false;
 
-            // Scene filter
-            CreateLabel("Scene:", mFilterPanel.transform, 60);
-            mSceneFilterInput = CreateInputField("", mFilterPanel.transform, 150, OnSceneFilterChanged);
+            // Scene filter group
+            var sceneGroup = CreateFilterGroup("Scene Filter");
+            CreateLabel("Scene:", sceneGroup.transform, 50);
+            mSceneFilterInput = CreateInputField("", sceneGroup.transform, 120, OnSceneFilterChanged);
             
-            // Name filter
-            CreateLabel("Name:", mFilterPanel.transform, 60);
-            mNameFilterInput = CreateInputField("", mFilterPanel.transform, 150, OnNameFilterChanged);
+            // Name filter group  
+            var nameGroup = CreateFilterGroup("Name Filter");
+            CreateLabel("Name:", nameGroup.transform, 50);
+            mNameFilterInput = CreateInputField("", nameGroup.transform, 120, OnNameFilterChanged);
             
-            // Filter buttons
-            mApplyFilterButton = CreateButton("Apply", mFilterPanel.transform, OnApplyFilterClicked);
-            mClearFilterButton = CreateButton("Clear", mFilterPanel.transform, OnClearFilterClicked);
-            mRefreshButton = CreateButton("Refresh", mFilterPanel.transform, OnRefreshClicked);
+            // Button group
+            var buttonGroup = CreateFilterGroup("Actions");
+            mApplyFilterButton = CreateButton("Apply", buttonGroup.transform, OnApplyFilterClicked);
+            mClearFilterButton = CreateButton("Clear", buttonGroup.transform, OnClearFilterClicked);
+            mRefreshButton = CreateButton("Refresh", buttonGroup.transform, OnRefreshClicked);
+        }
+
+        protected virtual GameObject CreateFilterGroup(string groupName)
+        {
+            var group = new GameObject(groupName);
+            group.transform.SetParent(mFilterPanel.transform, false);
+            
+            var groupRect = group.DefinitelyGetComponent<RectTransform>();
+            if (groupName == "Actions")
+                groupRect.sizeDelta = new Vector2(250, 35); // Much wider for 3 buttons
+            else if (groupName == "Wildlife Mode")
+                groupRect.sizeDelta = new Vector2(160, 35); // Wide enough for 2 mode buttons
+            else
+                groupRect.sizeDelta = new Vector2(180, 35); // Wide enough for label + input
+            
+            var groupLayout = group.AddComponent<HorizontalLayoutGroup>();
+            groupLayout.spacing = 5;
+            groupLayout.padding = new RectOffset(5, 5, 2, 2);
+            groupLayout.childControlWidth = false;
+            groupLayout.childControlHeight = false;
+            groupLayout.childForceExpandWidth = false;
+            groupLayout.childForceExpandHeight = false;
+            
+            return group;
         }
 
         protected virtual void CreateListPanel()
@@ -93,9 +127,9 @@ namespace ExpandedAiFramework.DebugMenu
             mListPanel = new GameObject("ListPanel");
             mListPanel.transform.SetParent(mRootPanel.transform, false);
             
-            var listRect = mListPanel.AddComponent<RectTransform>();
+            var listRect = mListPanel.DefinitelyGetComponent<RectTransform>();
             listRect.anchorMin = new Vector2(0, 0.05f);
-            listRect.anchorMax = new Vector2(1, 0.85f);
+            listRect.anchorMax = new Vector2(1, 0.95f);
             listRect.offsetMin = new Vector2(10, 10);
             listRect.offsetMax = new Vector2(-10, -10);
             
@@ -103,24 +137,31 @@ namespace ExpandedAiFramework.DebugMenu
             mScrollRect = mListPanel.AddComponent<ScrollRect>();
             mScrollRect.horizontal = false;
             mScrollRect.vertical = true;
+            mScrollRect.scrollSensitivity = 20f; // Increase scroll wheel sensitivity
+            mScrollRect.movementType = ScrollRect.MovementType.Clamped;
             
             var scrollImage = mListPanel.AddComponent<Image>();
-            scrollImage.color = new Color(0.05f, 0.05f, 0.05f, 0.8f);
+            scrollImage.color = new Color(0.08f, 0.08f, 0.08f, 0.95f);
+            
+            // Add mask to prevent content bleeding
+            var mask = mListPanel.AddComponent<Mask>();
+            mask.showMaskGraphic = true;
             
             // Scroll content
             mScrollContent = new GameObject("ScrollContent");
             mScrollContent.transform.SetParent(mListPanel.transform, false);
             
-            var contentRect = mScrollContent.AddComponent<RectTransform>();
+            var contentRect = mScrollContent.DefinitelyGetComponent<RectTransform>();
             contentRect.anchorMin = new Vector2(0, 1);
             contentRect.anchorMax = new Vector2(1, 1);
             contentRect.pivot = new Vector2(0, 1);
             
             var contentLayout = mScrollContent.AddComponent<VerticalLayoutGroup>();
-            contentLayout.spacing = 2;
+            contentLayout.spacing = 1;
             contentLayout.childControlWidth = true;
             contentLayout.childControlHeight = false;
-            contentLayout.padding = new RectOffset(5, 5, 5, 5);
+            contentLayout.padding = new RectOffset(8, 8, 8, 8);
+            contentLayout.childForceExpandWidth = true;
             
             var contentSizeFitter = mScrollContent.AddComponent<ContentSizeFitter>();
             contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
@@ -152,15 +193,23 @@ namespace ExpandedAiFramework.DebugMenu
             var labelObj = new GameObject($"Label_{text}");
             labelObj.transform.SetParent(parent, false);
             
-            var labelRect = labelObj.AddComponent<RectTransform>();
-            labelRect.sizeDelta = new Vector2(width, 25);
+            var labelRect = labelObj.DefinitelyGetComponent<RectTransform>();
+            labelRect.sizeDelta = new Vector2(width, 22);
+            
+            // Add LayoutElement to maintain size in layout groups
+            var layoutElement = labelObj.AddComponent<LayoutElement>();
+            layoutElement.preferredWidth = width;
+            layoutElement.preferredHeight = 22;
+            layoutElement.flexibleWidth = 0;
+            layoutElement.flexibleHeight = 0;
             
             var label = labelObj.AddComponent<Text>();
             label.text = text;
             label.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            label.fontSize = 12;
-            label.color = Color.white;
+            label.fontSize = 11;
+            label.color = new Color(0.9f, 0.9f, 0.9f, 1f);
             label.alignment = TextAnchor.MiddleLeft;
+            label.fontStyle = FontStyle.Bold;
             
             return label;
         }
@@ -179,23 +228,31 @@ namespace ExpandedAiFramework.DebugMenu
         {
             var inputObj = new GameObject($"InputField_{placeholder}");
             inputObj.transform.SetParent(parent, false);
-            var inputRect = inputObj.AddComponent<RectTransform>();
-            inputRect.sizeDelta = new Vector2(width, 25);
+            var inputRect = inputObj.DefinitelyGetComponent<RectTransform>();
+            inputRect.sizeDelta = new Vector2(width, 50);
+            
+            // Add LayoutElement to maintain size in layout groups
+            var layoutElement = inputObj.AddComponent<LayoutElement>();
+            layoutElement.preferredWidth = width;
+            layoutElement.preferredHeight = 50;
+            layoutElement.flexibleWidth = 0;
+            layoutElement.flexibleHeight = 0;
+            
             var inputImage = inputObj.AddComponent<Image>();
-            inputImage.color = new Color(0.2f, 0.2f, 0.2f, 1f);
+            inputImage.color = new Color(0.25f, 0.25f, 0.25f, 1f);
             var inputField = inputObj.AddComponent<InputField>();
             var textObj = new GameObject("Text");
             textObj.transform.SetParent(inputObj.transform, false);
             var inputText = textObj.AddComponent<Text>();
             inputText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            inputText.fontSize = 12;            
+            inputText.fontSize = 10;            
             inputText.color = Color.white;
             inputText.supportRichText = false;
-            var textRect = textObj.GetComponent<RectTransform>();
+            var textRect = textObj.DefinitelyGetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(5, 2);
-            textRect.offsetMax = new Vector2(-5, -2);
+            textRect.offsetMin = new Vector2(6, 2);
+            textRect.offsetMax = new Vector2(-6, -2);
             inputField.textComponent = inputText;
             inputField.text = "";
             if (onValueChanged != null)
@@ -220,29 +277,44 @@ namespace ExpandedAiFramework.DebugMenu
             var buttonObj = new GameObject($"Button_{text}");
             buttonObj.transform.SetParent(parent, false);
             
-            var buttonRect = buttonObj.AddComponent<RectTransform>();
-            buttonRect.sizeDelta = new Vector2(80, 25);
+            var buttonRect = buttonObj.DefinitelyGetComponent<RectTransform>();
+            buttonRect.sizeDelta = new Vector2(70, 28);
+            
+            // Add LayoutElement to maintain size in layout groups
+            var layoutElement = buttonObj.AddComponent<LayoutElement>();
+            layoutElement.preferredWidth = 70;
+            layoutElement.preferredHeight = 28;
+            layoutElement.flexibleWidth = 0;
+            layoutElement.flexibleHeight = 0;
             
             var button = buttonObj.AddComponent<Button>();
             var buttonImage = buttonObj.AddComponent<Image>();
-            buttonImage.color = new Color(0.3f, 0.3f, 0.3f, 1f);
+            buttonImage.color = new Color(0.4f, 0.4f, 0.4f, 1f);
             
             // Button text
             var textObj = new GameObject("Text");
             textObj.transform.SetParent(buttonObj.transform, false);
             
+            var textRect = textObj.DefinitelyGetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(2, 2);
+            textRect.offsetMax = new Vector2(-2, -2);
+            
             var buttonText = textObj.AddComponent<Text>();
             buttonText.text = text;
             buttonText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            buttonText.fontSize = 10;
+            buttonText.fontSize = 9;
             buttonText.color = Color.white;
             buttonText.alignment = TextAnchor.MiddleCenter;
+            buttonText.fontStyle = FontStyle.Bold;
             
-            var textRect = textObj.GetComponent<RectTransform>();
-            textRect.anchorMin = Vector2.zero;
-            textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = Vector2.zero;
-            textRect.offsetMax = Vector2.zero;
+            // Button hover colors
+            var colors = button.colors;
+            colors.normalColor = new Color(0.4f, 0.4f, 0.4f, 1f);
+            colors.highlightedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+            colors.pressedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+            button.colors = colors;
             
             button.onClick.AddListener(onClick);
             
@@ -254,12 +326,21 @@ namespace ExpandedAiFramework.DebugMenu
             var itemObj = new GameObject($"ListItem_{index}");
             itemObj.transform.SetParent(mScrollContent.transform, false);
             
-            var itemRect = itemObj.AddComponent<RectTransform>();
+            var itemRect = itemObj.DefinitelyGetComponent<RectTransform>();
             itemRect.sizeDelta = new Vector2(0, GetItemHeight());
             
             var button = itemObj.AddComponent<Button>();
             var buttonImage = itemObj.AddComponent<Image>();
-            buttonImage.color = new Color(0.25f, 0.25f, 0.25f, 1f);
+            buttonImage.color = index % 2 == 0 ? 
+                new Color(0.22f, 0.22f, 0.22f, 1f) : 
+                new Color(0.18f, 0.18f, 0.18f, 1f);
+            
+            // Button hover colors
+            var colors = button.colors;
+            colors.normalColor = buttonImage.color;
+            colors.highlightedColor = new Color(0.35f, 0.35f, 0.35f, 1f);
+            colors.pressedColor = new Color(0.15f, 0.15f, 0.15f, 1f);
+            button.colors = colors;
             
             // Item content
             PopulateListItem(itemObj, item, index);
@@ -304,10 +385,16 @@ namespace ExpandedAiFramework.DebugMenu
 
         protected virtual void OnItemClicked(T item)
         {
-            if (DebugMenuManager.Instance != null)
+            LogDebug($"Item clicked: {item?.DisplayName ?? "null"}");
+            
+            if (DebugMenuManager.Instance == null)
             {
-                DebugMenuManager.Instance.ShowItemDetails(item);
+                LogError("DebugMenuManager.Instance is null!");
+                return;
             }
+            
+            LogDebug("Calling ShowItemDetails...");
+            DebugMenuManager.Instance.ShowItemDetails(item);
         }
 
         // Public interface
