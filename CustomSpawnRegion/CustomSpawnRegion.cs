@@ -55,6 +55,14 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_HasBeenDisabledByAurora = mModDataProxy?.HasBeenDisabledByAurora ?? false;
             mSpawnRegion.m_WasActiveBeforeAurora = mModDataProxy?.WasActiveBeforeAurora ?? true;
             mSpawnRegion.m_CooldownTimerHours = mModDataProxy?.CooldownTimerHours ?? 0f;
+            if (mModDataProxy != null && ModDataProxy.CurrentPosition != Vector3.zero)
+            {
+                mSpawnRegion.m_Center = mModDataProxy.CurrentPosition;
+                mManager.Manager.DispatchManager.Dispatch(() =>
+                {
+                    mSpawnRegion.transform.position = mSpawnRegion.m_Center;
+                });
+            }
 
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
