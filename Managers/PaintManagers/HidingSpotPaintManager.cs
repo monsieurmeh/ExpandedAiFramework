@@ -21,7 +21,7 @@ namespace ExpandedAiFramework
             {
                 mCurrentDataPath = args[1];
             }
-
+            mCurrentDataNameBase = baseName; // Store the base name for continuation
             GetUniqueMapDataName(baseName, (uniqueName) =>
             {
                 if (InitializePaintHidingSpot(uniqueName))

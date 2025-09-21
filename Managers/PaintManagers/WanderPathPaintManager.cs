@@ -24,6 +24,7 @@ namespace ExpandedAiFramework
             }
 
             string baseName = args.Length > 0 ? args[0] : "WanderPath";
+            mCurrentDataNameBase = baseName; // Store the base name for continuation
             if (args.Length > 1 && !string.IsNullOrEmpty(args[1]))
             {
                 mCurrentDataPath = args[1];
