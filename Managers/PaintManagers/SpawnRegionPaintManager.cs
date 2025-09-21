@@ -43,6 +43,7 @@ namespace ExpandedAiFramework
             HideAllSpawnRegions();
             mCurrentPaintMode = PaintMode.Inactive;
             CleanupPaintMarker();
+            mManager.ConsoleCommandManager.ClearActivePaintManager(this);
             this.LogAlwaysInstanced("Spawn Region Paint Mode deactivated.");
         }
 

@@ -89,6 +89,7 @@ namespace ExpandedAiFramework
             DiscardCurrentPath();
             mCurrentPaintMode = PaintMode.Inactive;
             CleanupPaintMarker();
+            mManager.ConsoleCommandManager.ClearActivePaintManager(this);
         }
 
 

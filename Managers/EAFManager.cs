@@ -102,6 +102,7 @@ namespace ExpandedAiFramework
         public DataManager DataManager => mDataManager;
         public SpawnRegionManager SpawnRegionManager => mSpawnRegionManager;
         public AiManager AiManager => mAiManager;
+        public ConsoleCommandManager ConsoleCommandManager => mConsoleCommandManager;
         public DispatchManager DispatchManager => mDispatchManager;
         public Dictionary<int, CustomBaseAi> CustomAis => mAiManager.CustomAis;
         public WeightedTypePicker<BaseAi> TypePicker => mAiManager.TypePicker;

@@ -72,6 +72,7 @@ namespace ExpandedAiFramework
             mSelectingRotation = false;
             mCurrentPaintMode = PaintMode.Inactive;
             CleanupPaintMarker();
+            mManager.ConsoleCommandManager.ClearActivePaintManager(this);
         }
 
         protected override void UpdatePaintMarkerInternal()

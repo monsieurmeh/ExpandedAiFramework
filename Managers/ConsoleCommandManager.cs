@@ -242,11 +242,7 @@ namespace ExpandedAiFramework
 
             if (mManager.TryGetPaintManager(typeName, out BasePaintManager paintManager))
             {
-                if (mActivePaintManager != null && mActivePaintManager != paintManager)
-                {
-                    mActivePaintManager.ExitPaint();
-                }
-                mActivePaintManager = paintManager;
+                SetActivePaintManager(paintManager);
                 paintManager.StartPaint(remainingArgs);
             }
             else
@@ -568,6 +564,23 @@ namespace ExpandedAiFramework
             
             // Process the command through the debug menu
             debugMenu.ProcessCommand(args);
+        }
+
+        public void SetActivePaintManager(BasePaintManager paintManager)
+        {
+            if (mActivePaintManager != null && mActivePaintManager != paintManager)
+            {
+                mActivePaintManager.ExitPaint();
+            }
+            mActivePaintManager = paintManager;
+        }
+
+        public void ClearActivePaintManager(BasePaintManager paintManager = null)
+        {
+            if (paintManager == null || mActivePaintManager == paintManager)
+            {
+                mActivePaintManager = null;
+            }
         }
 
         private void RegisterDefaultPaintManagers()
