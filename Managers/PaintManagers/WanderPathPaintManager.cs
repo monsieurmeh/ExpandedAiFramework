@@ -44,7 +44,7 @@ namespace ExpandedAiFramework
 
         public override void HandlePaintInput()
         {
-            if (mCurrentPaintMode != PaintMode.Active || !mRecordingPath) return;
+            if (mCurrentPaintMode != PaintMode.Active) return;
             base.HandlePaintInput();
         }
 
@@ -268,6 +268,12 @@ namespace ExpandedAiFramework
 
         private void AddWanderPathPoint()
         {
+            if (!mRecordingPath)
+            {
+                this.LogWarningInstanced("Cannot add wander path point - not currently recording a path");
+                return;
+            }
+            
             AiUtils.GetClosestNavmeshPos(out Vector3 actualPos, mPaintMarkerPosition, mPaintMarkerPosition);
             mCurrentWanderPathPoints.Add(actualPos);
             mCurrentWanderPathPointMarkers.Add(CreateMarker(actualPos, Color.blue, $"{mCurrentDataName}.Position {mCurrentWanderPathPoints.Count} Marker", 100));
@@ -282,7 +288,7 @@ namespace ExpandedAiFramework
 
         private void RemoveLastWanderPathPoint()
         {
-            if (mCurrentWanderPathPoints.Count == 0) return;
+            if (!mRecordingPath || mCurrentWanderPathPoints.Count == 0) return;
 
             GameObject marker = mCurrentWanderPathPointMarkers[^1];
             mCurrentWanderPathPointMarkers.Remove(marker);
