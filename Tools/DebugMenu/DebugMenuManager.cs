@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Il2Cpp;
 using static ExpandedAiFramework.DebugMenu.Extensions;
 using ExpandedAiFramework.StolenCode;
+using ExpandedAiFramework.UI;
 
 namespace ExpandedAiFramework.DebugMenu
 {
@@ -16,8 +17,9 @@ namespace ExpandedAiFramework.DebugMenu
         private Canvas mCanvas;
         private GameObject mMainPanel;
         private GameObject mTabButtonsPanel;
+        private GameObject mUnifiedButtonBar;
         private GameObject mContentArea;
-        private DebugMenuModal mModal;
+        private DebugMenuEntityModal mEntityModal;
         private DebugMenuSettingsModal mSettingsModal;
 
         // Tab management
@@ -32,6 +34,9 @@ namespace ExpandedAiFramework.DebugMenu
         // Singleton
         private static DebugMenuManager sInstance;
         public static DebugMenuManager Instance => sInstance;
+        
+        // Public access to unified button bar for tab providers
+        public GameObject UnifiedButtonBar => mUnifiedButtonBar;
 
         public DebugMenuManager(IntPtr ptr) : base(ptr) { }
 
@@ -73,24 +78,10 @@ namespace ExpandedAiFramework.DebugMenu
         {
             try
             {
-                // Create Canvas
-                mCanvasObject = new GameObject("EAFDebugMenuCanvas");
-                mCanvasObject.transform.SetParent(transform);
-                
-                mCanvas = mCanvasObject.AddComponent<Canvas>();
-                mCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                mCanvas.sortingOrder = 1000;
-                
-                var canvasScaler = mCanvasObject.AddComponent<CanvasScaler>();
-                canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-                canvasScaler.referenceResolution = new Vector2(1920, 1080);
-                
-                mCanvasObject.AddComponent<GraphicRaycaster>();
-
+                // Create Canvas using factory
+                mCanvasObject = CreateCanvas();
                 CreateMainPanel();
-                CreateTabButtonsPanel();
-                CreateContentArea();
-                CreateModal();
+                CreateEntityModal();
                 CreateSettingsModal();
                 
                 // Initially hide the menu
@@ -104,81 +95,99 @@ namespace ExpandedAiFramework.DebugMenu
             }
         }
 
+        GameObject CreateCanvas()
+        {
+            var canvasObj = new GameObject("EAFDebugMenuCanvas");
+            canvasObj.transform.SetParent(transform);
+            
+            mCanvas = canvasObj.AddComponent<Canvas>();
+            mCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            mCanvas.sortingOrder = 1000;
+            
+            var canvasScaler = canvasObj.AddComponent<CanvasScaler>();
+            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvasScaler.referenceResolution = new Vector2(1920, 1080);
+            
+            canvasObj.AddComponent<GraphicRaycaster>();
+            
+            return canvasObj;
+        }
+
         void CreateMainPanel()
         {
-            mMainPanel = new GameObject("MainPanel");
-            mMainPanel.transform.SetParent(mCanvasObject.transform, false);
+            var mainPanelOptions = PanelOptions.RootContainerPanel(PanelLayoutType.Vertical);
+            mainPanelOptions.Name = "MainPanel";
+            mainPanelOptions.ImageOptions = new ImageOptions { Color = new Color(0.1f, 0.1f, 0.1f, 0.95f) };
+            mainPanelOptions.LayoutGroupOptions = LayoutGroupOptions.Vertical(0, new RectOffset(0, 0, 0, 0));
             
-            // Add RectTransform first
-            var panelRect = mMainPanel.AddComponent<RectTransform>();
-            panelRect.anchorMin = new Vector2(0.05f, 0.05f); // Leave 25px margin (roughly 5% on 1920x1080)
-            panelRect.anchorMax = new Vector2(0.95f, 0.95f);
-            panelRect.offsetMin = Vector2.zero;
-            panelRect.offsetMax = Vector2.zero;
+            mMainPanel = PanelFactory.CreatePanel(mCanvasObject.transform, mainPanelOptions);
             
-            var panelImage = mMainPanel.AddComponent<Image>();
-            panelImage.color = new Color(0.1f, 0.1f, 0.1f, 0.95f);
+            CreateTabButtonsPanel();
+            CreateUnifiedButtonBar();
+            CreateContentArea();
         }
 
         void CreateTabButtonsPanel()
         {
-            mTabButtonsPanel = new GameObject("TabButtonsPanel");
-            mTabButtonsPanel.transform.SetParent(mMainPanel.transform, false);
+            var tabButtonsPanelOptions = PanelOptions.Default(PanelLayoutType.Horizontal);
+            tabButtonsPanelOptions.Name = "TabButtonsPanel";
+            tabButtonsPanelOptions.LayoutElementOptions = LayoutElementOptions.PreferredSize(-1, 50, 1, 0);
+            tabButtonsPanelOptions.LayoutGroupOptions = LayoutGroupOptions.Horizontal(5, new RectOffset(10, 10, 5, 5));
+            tabButtonsPanelOptions.LayoutGroupOptions.childForceExpandWidth = false;
+            tabButtonsPanelOptions.LayoutGroupOptions.childControlWidth = true;
+            tabButtonsPanelOptions.ImageOptions = new ImageOptions { Color = new Color(0.12f, 0.12f, 0.12f, 0.9f) };
             
-            var tabPanelRect = mTabButtonsPanel.AddComponent<RectTransform>();
-            tabPanelRect.anchorMin = new Vector2(0, 0.9f);
-            tabPanelRect.anchorMax = new Vector2(1, 1);
-            tabPanelRect.offsetMin = new Vector2(10, -10);
-            tabPanelRect.offsetMax = new Vector2(-10, -10);
+            mTabButtonsPanel = PanelFactory.CreatePanel(mMainPanel.transform, tabButtonsPanelOptions);
+        }
+
+        void CreateUnifiedButtonBar()
+        {
+            var buttonBarOptions = PanelOptions.Default(PanelLayoutType.Horizontal);
+            buttonBarOptions.Name = "UnifiedButtonBar";
+            buttonBarOptions.LayoutElementOptions = LayoutElementOptions.PreferredSize(-1, 50, 1, 0);
+            buttonBarOptions.LayoutGroupOptions = LayoutGroupOptions.Horizontal(3, new RectOffset(3, 3, 1, 1));
+            buttonBarOptions.LayoutGroupOptions.childControlWidth = true;
+            buttonBarOptions.LayoutGroupOptions.childControlHeight = true;
+            buttonBarOptions.LayoutGroupOptions.childForceExpandWidth = false;
+            buttonBarOptions.LayoutGroupOptions.childForceExpandHeight = false;
+            buttonBarOptions.ImageOptions = new ImageOptions { Color = new Color(0.15f, 0.15f, 0.15f, 0.9f) };
             
-            var tabLayout = mTabButtonsPanel.AddComponent<HorizontalLayoutGroup>();
-            tabLayout.spacing = 5;
-            tabLayout.childControlWidth = true;
-            tabLayout.childControlHeight = true;
+            mUnifiedButtonBar = PanelFactory.CreatePanel(mMainPanel.transform, buttonBarOptions);
+            
+            // Add a Mask component to ensure children don't extend beyond bounds
+            var mask = mUnifiedButtonBar.AddComponent<Mask>();
+            mask.showMaskGraphic = false; // Don't show the mask graphic itself
         }
 
         void CreateContentArea()
         {
-            mContentArea = new GameObject("ContentArea");
-            mContentArea.transform.SetParent(mMainPanel.transform, false);
+            var contentAreaOptions = PanelOptions.Default(PanelLayoutType.None);
+            contentAreaOptions.Name = "ContentArea";
+            contentAreaOptions.LayoutElementOptions = LayoutElementOptions.Flexible(1, 1);
+            contentAreaOptions.ImageOptions = new ImageOptions { Color = new Color(0.08f, 0.08f, 0.08f, 0.3f) };
             
-            // Add RectTransform first
-            var contentRect = mContentArea.AddComponent<RectTransform>();
-            contentRect.anchorMin = new Vector2(0, 0);
-            contentRect.anchorMax = new Vector2(1, 0.9f);
-            contentRect.offsetMin = new Vector2(10, 10);
-            contentRect.offsetMax = new Vector2(-10, -10);
+            mContentArea = PanelFactory.CreatePanel(mMainPanel.transform, contentAreaOptions);
         }
 
-        void CreateModal()
+        void CreateEntityModal()
         {
-            var modalObj = new GameObject("DebugMenuModal");
-            modalObj.transform.SetParent(mCanvasObject.transform, false);
+            var modalOptions = PanelOptions.RootContainerPanel(PanelLayoutType.None);
+            modalOptions.Name = "DebugMenuEntityModal";
+            modalOptions.HasBackground = false;
             
-            // Ensure modal is rendered on top
-            var modalRect = modalObj.DefinitelyGetComponent<RectTransform>();
-            modalRect.anchorMin = Vector2.zero;
-            modalRect.anchorMax = Vector2.one;
-            modalRect.offsetMin = Vector2.zero;
-            modalRect.offsetMax = Vector2.zero;
-            modalRect.SetAsLastSibling(); // Render on top
-            
-            mModal = modalObj.AddComponent<DebugMenuModal>();
+            var modalObj = PanelFactory.CreatePanel(mCanvasObject.transform, modalOptions);
+            modalObj.transform.SetAsLastSibling();
+            mEntityModal = modalObj.AddComponent<DebugMenuEntityModal>();
         }
 
         void CreateSettingsModal()
         {
-            var settingsModalObj = new GameObject("DebugMenuSettingsModal");
-            settingsModalObj.transform.SetParent(mCanvasObject.transform, false);
+            var settingsModalOptions = PanelOptions.RootContainerPanel(PanelLayoutType.None);
+            settingsModalOptions.Name = "DebugMenuSettingsModal";
+            settingsModalOptions.HasBackground = false;
             
-            // Ensure settings modal is rendered on top of everything
-            var settingsModalRect = settingsModalObj.DefinitelyGetComponent<RectTransform>();
-            settingsModalRect.anchorMin = Vector2.zero;
-            settingsModalRect.anchorMax = Vector2.one;
-            settingsModalRect.offsetMin = Vector2.zero;
-            settingsModalRect.offsetMax = Vector2.zero;
-            settingsModalRect.SetAsLastSibling(); // Render on top
-            
+            var settingsModalObj = PanelFactory.CreatePanel(mCanvasObject.transform, settingsModalOptions);
+            settingsModalObj.transform.SetAsLastSibling();
             mSettingsModal = settingsModalObj.AddComponent<DebugMenuSettingsModal>();
         }
 
@@ -215,36 +224,14 @@ namespace ExpandedAiFramework.DebugMenu
 
         void CreateTabButton(string tabName)
         {
-            var buttonObj = new GameObject($"TabButton_{tabName}");
-            buttonObj.transform.SetParent(mTabButtonsPanel.transform, false);
+            // Create tab button using new factory system
+            var buttonOptions = ButtonOptions.TextButton(tabName, 120, 40);
+            buttonOptions.textOptions = TextOptions.Default(tabName, 12);
+            buttonOptions.layoutElement = LayoutElementOptions.Fixed(120, 40);
             
-            // Add RectTransform first
-            var buttonRect = buttonObj.DefinitelyGetComponent<RectTransform>();
-            buttonRect.sizeDelta = new Vector2(120, 15);
+            var button = ButtonFactory.CreateButton(mTabButtonsPanel.transform, buttonOptions, () => SwitchTab(tabName));
+            button.name = $"TabButton_{tabName}";
             
-            var button = buttonObj.AddComponent<Button>();
-            var buttonImage = buttonObj.AddComponent<Image>();
-            buttonImage.color = new Color(0.3f, 0.3f, 0.3f, 1f);
-            
-            // Button text
-            var textObj = new GameObject("Text");
-            textObj.transform.SetParent(buttonObj.transform, false);
-            
-            // Add RectTransform for text first
-            var textRect = textObj.DefinitelyGetComponent<RectTransform>();
-            textRect.anchorMin = Vector2.zero;
-            textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = Vector2.zero;
-            textRect.offsetMax = Vector2.zero;
-            
-            var buttonText = textObj.AddComponent<Text>();
-            buttonText.text = tabName;
-            buttonText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            buttonText.fontSize = 12;
-            buttonText.color = Color.white;
-            buttonText.alignment = TextAnchor.MiddleCenter;
-            
-            button.onClick.AddListener(new Action(() => SwitchTab(tabName)));
             mTabButtons[tabName] = button;
         }
 
@@ -282,14 +269,20 @@ namespace ExpandedAiFramework.DebugMenu
         {
             LogDebug($"ShowItemDetails called for: {item?.DisplayName ?? "null"}");
             
-            if (mModal == null)
+            if (mEntityModal == null)
             {
-                LogError("mModal is null!");
+                LogError("mEntityModal is null!");
                 return;
             }
             
-            LogDebug("Calling mModal.ShowItemDetails...");
-            mModal.ShowItemDetails(item);
+            if (mCurrentTabProvider == null)
+            {
+                LogError("mCurrentTabProvider is null!");
+                return;
+            }
+            
+            LogDebug("Calling mEntityModal.ShowEntityDetails...");
+            mEntityModal.ShowEntityDetails(item, mCurrentTabProvider);
         }
 
         public void ShowTabSettings(string tabName, Dictionary<string, string> settings, Dictionary<string, System.Action<string>> callbacks)

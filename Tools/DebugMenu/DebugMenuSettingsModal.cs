@@ -75,7 +75,7 @@ namespace ExpandedAiFramework.DebugMenu
             var modalButton = mModalPanel.AddComponent<Button>();
             modalButton.onClick.AddListener((UnityEngine.Events.UnityAction)Hide);
 
-            // Content panel (smaller than main modal)
+            // Content panel (bigger modal)
             mContentPanel = new GameObject("SettingsContentPanel");
             mContentPanel.transform.SetParent(mModalPanel.transform, false);
             
@@ -83,7 +83,7 @@ namespace ExpandedAiFramework.DebugMenu
             contentRect.anchorMin = new Vector2(0.5f, 0.5f); // Center anchor
             contentRect.anchorMax = new Vector2(0.5f, 0.5f);
             contentRect.pivot = new Vector2(0.5f, 0.5f);
-            contentRect.sizeDelta = new Vector2(600, 400); // Smaller than main modal
+            contentRect.sizeDelta = new Vector2(700, 500); // Made bigger: was 600x400, now 700x500
             contentRect.anchoredPosition = Vector2.zero;
             
             var contentImage = mContentPanel.AddComponent<Image>();
@@ -146,7 +146,7 @@ namespace ExpandedAiFramework.DebugMenu
             scrollObj.transform.SetParent(mContentPanel.transform, false);
             
             var scrollRect = scrollObj.DefinitelyGetComponent<RectTransform>();
-            scrollRect.anchorMin = new Vector2(0, 0.15f);
+            scrollRect.anchorMin = new Vector2(0, 0.19f); // Updated to match new button area height
             scrollRect.anchorMax = new Vector2(1, 0.85f);
             scrollRect.offsetMin = new Vector2(15, 10);
             scrollRect.offsetMax = new Vector2(-15, -10);
@@ -194,7 +194,7 @@ namespace ExpandedAiFramework.DebugMenu
             
             var buttonRect = buttonArea.DefinitelyGetComponent<RectTransform>();
             buttonRect.anchorMin = new Vector2(0, 0);
-            buttonRect.anchorMax = new Vector2(1, 0.15f);
+            buttonRect.anchorMax = new Vector2(1, 0.19f); // Increased from 0.15f to 0.19f (25% taller)
             buttonRect.offsetMin = new Vector2(15, 15);
             buttonRect.offsetMax = new Vector2(-15, -5);
             

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Il2Cpp;
 using static ExpandedAiFramework.DebugMenu.Extensions;
+using ExpandedAiFramework.UI;
 
 namespace ExpandedAiFramework.DebugMenu
 {
@@ -11,7 +12,6 @@ namespace ExpandedAiFramework.DebugMenu
     {
         // UI Components
         protected GameObject mRootPanel;
-        protected GameObject mFilterPanel;
         protected GameObject mListPanel;
         protected ScrollRect mScrollRect;
         protected GameObject mScrollContent;
@@ -47,94 +47,89 @@ namespace ExpandedAiFramework.DebugMenu
 
         protected virtual void CreateUI(GameObject parentContentArea)
         {
-            // Root panel
-            mRootPanel = new GameObject($"{GetType().Name}_RootPanel");
-            mRootPanel.transform.SetParent(parentContentArea.transform, false);
+            // Create root panel using new factory system with vertical layout
+            var rootPanelOptions = PanelOptions.FlexiblePanel(1, 1, PanelLayoutType.Vertical);
+            rootPanelOptions.Name = $"{GetType().Name}_RootPanel";
+            rootPanelOptions.LayoutGroupOptions = LayoutGroupOptions.Vertical(0, new RectOffset(0, 0, 0, 0));
+            rootPanelOptions.HasBackground = false;
             
-            var rootRect = mRootPanel.AddComponent<RectTransform>();
-            rootRect.anchorMin = Vector2.zero;
-            rootRect.anchorMax = Vector2.one;
-            rootRect.offsetMin = Vector2.zero;
-            rootRect.offsetMax = Vector2.zero;
+            mRootPanel = PanelFactory.CreatePanel(parentContentArea.transform, rootPanelOptions);
 
-            CreateUnifiedButtonBar();
             CreateListPanel();
             CreateStatusText();
 
             mRootPanel.SetActive(false);
         }
 
-        protected virtual void CreateUnifiedButtonBar()
+        protected virtual void PopulateUnifiedButtonBar()
         {
-            // Create unified button bar that combines filter, action, and tab-specific buttons
-            mFilterPanel = new GameObject("UnifiedButtonBar");
-            mFilterPanel.transform.SetParent(mRootPanel.transform, false);
-            
-            var buttonBarRect = mFilterPanel.DefinitelyGetComponent<RectTransform>();
-            buttonBarRect.anchorMin = new Vector2(0, 0.9f);
-            buttonBarRect.anchorMax = new Vector2(1, 1);
-            buttonBarRect.offsetMin = new Vector2(10, -10);
-            buttonBarRect.offsetMax = new Vector2(-10, -10);
-            
-            // Add background
-            var buttonBarBg = mFilterPanel.AddComponent<Image>();
-            buttonBarBg.color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
-            
-            var buttonBarLayout = mFilterPanel.AddComponent<HorizontalLayoutGroup>();
-            buttonBarLayout.spacing = 5;
-            buttonBarLayout.padding = new RectOffset(5, 5, 2, 2);
-            buttonBarLayout.childControlWidth = false;
-            buttonBarLayout.childControlHeight = true;
-            buttonBarLayout.childForceExpandWidth = false;
-            buttonBarLayout.childForceExpandHeight = false;
-            buttonBarLayout.childAlignment = TextAnchor.MiddleLeft; // Left-align buttons
+            // Get reference to the shared unified button bar
+            var buttonBar = DebugMenuManager.Instance?.UnifiedButtonBar;
+            if (buttonBar == null)
+            {
+                LogError("Unified button bar not found in DebugMenuManager");
+                return;
+            }
+
+            // Clear existing children
+            ClearButtonBar(buttonBar);
 
             // Create filter controls first (always present)
-            CreateFilterControls();
+            CreateFilterControls(buttonBar);
             
             // Create global action buttons (always present)
-            CreateGlobalActionButtons();
+            CreateGlobalActionButtons(buttonBar);
             
             // Create tab-specific buttons (will be added by derived classes)
-            CreateTabSpecificButtons();
+            CreateTabSpecificButtons(buttonBar);
         }
 
-        protected virtual void CreateFilterControls()
+        protected virtual void ClearButtonBar(GameObject buttonBar)
+        {
+            // Clear all children from the button bar
+            for (int i = buttonBar.transform.childCount - 1; i >= 0; i--)
+            {
+                var child = buttonBar.transform.GetChild(i);
+                UnityEngine.Object.DestroyImmediate(child.gameObject);
+            }
+        }
+
+        protected virtual void CreateFilterControls(GameObject buttonBar)
         {
             // Scene filter group
-            var sceneGroup = CreateButtonGroup("Scene Filter", 180);
+            var sceneGroup = CreateButtonGroup("Scene Filter", 180, buttonBar);
             CreateLabel("Scene:", sceneGroup.transform, 50);
             mSceneFilterInput = CreateInputField("", sceneGroup.transform, 120, OnSceneFilterChanged);
             
             // Name filter group  
-            var nameGroup = CreateButtonGroup("Name Filter", 180);
+            var nameGroup = CreateButtonGroup("Name Filter", 180, buttonBar);
             CreateLabel("Name:", nameGroup.transform, 50);
             mNameFilterInput = CreateInputField("", nameGroup.transform, 120, OnNameFilterChanged);
             
             // Filter action buttons
-            var filterButtonGroup = CreateButtonGroup("Filter Actions", 220);
+            var filterButtonGroup = CreateButtonGroup("Filter Actions", 140, buttonBar);
             mApplyFilterButton = CreateButton("Apply", filterButtonGroup.transform, OnApplyFilterClicked);
             mClearFilterButton = CreateButton("Clear", filterButtonGroup.transform, OnClearFilterClicked);
         }
 
-        protected virtual void CreateGlobalActionButtons()
+        protected virtual void CreateGlobalActionButtons(GameObject buttonBar)
         {
             // Global action buttons (Save, Load, Refresh)
-            var globalGroup = CreateButtonGroup("Global Actions", 220);
+            var globalGroup = CreateButtonGroup("Global Actions", 200, buttonBar);
             var saveButton = CreateButton("Save", globalGroup.transform, OnSaveClicked);
             var loadButton = CreateButton("Load", globalGroup.transform, OnLoadClicked);
             mRefreshButton = CreateButton("Refresh", globalGroup.transform, OnRefreshClicked);
         }
 
-        protected virtual void CreateTabSpecificButtons()
+        protected virtual void CreateTabSpecificButtons(GameObject buttonBar)
         {
             // Always add settings button at the end
-            CreateSettingsButton();
+            CreateSettingsButton(buttonBar);
         }
 
-        protected virtual void CreateSettingsButton()
+        protected virtual void CreateSettingsButton(GameObject buttonBar)
         {
-            var settingsGroup = CreateButtonGroup("Settings", 60);
+            var settingsGroup = CreateButtonGroup("Settings", 60, buttonBar);
             var settingsButton = CreateButton("+", settingsGroup.transform, OnSettingsClicked);
         }
 
@@ -152,134 +147,91 @@ namespace ExpandedAiFramework.DebugMenu
         protected abstract Dictionary<string, string> GetTabSettings();
         protected abstract Dictionary<string, System.Action<string>> GetTabSettingsCallbacks();
 
-        protected virtual GameObject CreateButtonGroup(string groupName, float width)
+        protected virtual GameObject CreateButtonGroup(string groupName, float width, GameObject buttonBar)
         {
-            var group = new GameObject(groupName);
-            group.transform.SetParent(mFilterPanel.transform, false);
+            var groupOptions = PanelOptions.Default(PanelLayoutType.Horizontal);
+            groupOptions.Name = groupName;
+            groupOptions.LayoutElementOptions = LayoutElementOptions.Fixed(width, 40);
+            groupOptions.LayoutGroupOptions = LayoutGroupOptions.Horizontal(3, new RectOffset(3, 3, 5, 5));
+            groupOptions.LayoutGroupOptions.childControlWidth = true;
+            groupOptions.LayoutGroupOptions.childControlHeight = true;
+            groupOptions.LayoutGroupOptions.childForceExpandWidth = false;
+            groupOptions.LayoutGroupOptions.childForceExpandHeight = false;
+            groupOptions.LayoutGroupOptions.childAlignment = TextAnchor.MiddleCenter;
+            groupOptions.HasBackground = false;
             
-            var groupRect = group.DefinitelyGetComponent<RectTransform>();
-            groupRect.sizeDelta = new Vector2(width, 35);
+            var buttonGroup = PanelFactory.CreatePanel(buttonBar.transform, groupOptions);
             
-            // Add LayoutElement to maintain consistent sizing
-            var layoutElement = group.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = width;
-            layoutElement.preferredHeight = 35;
-            layoutElement.flexibleWidth = 0;
-            layoutElement.flexibleHeight = 0;
+            // Add a Mask component to ensure children don't extend beyond bounds
+            var mask = buttonGroup.AddComponent<Mask>();
+            mask.showMaskGraphic = false; // Don't show the mask graphic itself
             
-            var groupLayout = group.AddComponent<HorizontalLayoutGroup>();
-            groupLayout.spacing = 5;
-            groupLayout.padding = new RectOffset(5, 5, 2, 2);
-            groupLayout.childControlWidth = false;
-            groupLayout.childControlHeight = false;
-            groupLayout.childForceExpandWidth = false;
-            groupLayout.childForceExpandHeight = false;
-            groupLayout.childAlignment = TextAnchor.MiddleLeft; // Left-align within group
-            
-            return group;
+            return buttonGroup;
         }
 
         // Legacy method for backward compatibility
         protected virtual GameObject CreateFilterGroup(string groupName)
         {
+            var buttonBar = DebugMenuManager.Instance?.UnifiedButtonBar;
+            if (buttonBar == null) return null;
+            
             if (groupName == "Actions")
-                return CreateButtonGroup(groupName, 250);
+                return CreateButtonGroup(groupName, 180, buttonBar);
             else if (groupName == "Wildlife Mode")
-                return CreateButtonGroup(groupName, 160);
+                return CreateButtonGroup(groupName, 140, buttonBar);
             else
-                return CreateButtonGroup(groupName, 180);
+                return CreateButtonGroup(groupName, 120, buttonBar);
         }
 
 
         protected virtual void CreateListPanel()
         {
-            mListPanel = new GameObject("ListPanel");
-            mListPanel.transform.SetParent(mRootPanel.transform, false);
+            // Create list panel using new factory system with scroll view
+            var scrollOptions = ScrollViewOptions.Vertical();
+            scrollOptions.name = "ListPanel";
+            scrollOptions.layoutElement = LayoutElementOptions.Flexible(1, 1); // Fill remaining space between button bar and status
+            scrollOptions.backgroundImage = new ImageOptions { Color = new Color(0.08f, 0.08f, 0.08f, 0.95f) };
+            scrollOptions.scrollSensitivity = 20f;
+            scrollOptions.contentLayout = LayoutGroupOptions.Vertical(1, new RectOffset(8, 8, 8, 8));
+            // These guys are special, because they are NOT using layout elements.
+            scrollOptions.contentLayout.childControlWidth = true;
+            scrollOptions.contentLayout.childControlHeight = false;
+            scrollOptions.contentLayout.childForceExpandWidth = true;
+            scrollOptions.contentLayout.childForceExpandHeight = false;
             
-            var listRect = mListPanel.DefinitelyGetComponent<RectTransform>();
-            listRect.anchorMin = new Vector2(0, 0.05f);
-            listRect.anchorMax = new Vector2(1, 0.9f); // Adjust to account for unified button bar
-            listRect.offsetMin = new Vector2(10, 10);
-            listRect.offsetMax = new Vector2(-10, -10);
+            mScrollRect = ScrollViewFactory.CreateScrollView(mRootPanel.transform, scrollOptions);
             
-            // Scroll rect
-            mScrollRect = mListPanel.AddComponent<ScrollRect>();
-            mScrollRect.horizontal = false;
-            mScrollRect.vertical = true;
-            mScrollRect.scrollSensitivity = 20f; // Increase scroll wheel sensitivity
-            mScrollRect.movementType = ScrollRect.MovementType.Clamped;
-            
-            var scrollImage = mListPanel.AddComponent<Image>();
-            scrollImage.color = new Color(0.08f, 0.08f, 0.08f, 0.95f);
-            
-            // Add mask to prevent content bleeding
-            var mask = mListPanel.AddComponent<Mask>();
-            mask.showMaskGraphic = true;
-            
-            // Scroll content
-            mScrollContent = new GameObject("ScrollContent");
-            mScrollContent.transform.SetParent(mListPanel.transform, false);
-            
-            var contentRect = mScrollContent.DefinitelyGetComponent<RectTransform>();
-            contentRect.anchorMin = new Vector2(0, 1);
-            contentRect.anchorMax = new Vector2(1, 1);
-            contentRect.pivot = new Vector2(0, 1);
-            
-            var contentLayout = mScrollContent.AddComponent<VerticalLayoutGroup>();
-            contentLayout.spacing = 1;
-            contentLayout.childControlWidth = true;
-            contentLayout.childControlHeight = false;
-            contentLayout.padding = new RectOffset(8, 8, 8, 8);
-            contentLayout.childForceExpandWidth = true;
-            
-            var contentSizeFitter = mScrollContent.AddComponent<ContentSizeFitter>();
-            contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            
-            mScrollRect.content = contentRect;
+            // Get references for compatibility
+            mListPanel = mScrollRect.gameObject;
+            mScrollContent = mScrollRect.content.gameObject;
         }
 
         protected virtual void CreateStatusText()
         {
-            var statusObj = new GameObject("StatusText");
-            statusObj.transform.SetParent(mRootPanel.transform, false);
+            // Create status text using new factory system
+            var textOptions = TextOptions.Default("Loading...", 12);
+            textOptions.color = Color.white;
+            textOptions.alignment = TextAnchor.MiddleLeft;
             
-            var statusRect = statusObj.AddComponent<RectTransform>();
-            statusRect.anchorMin = new Vector2(0, 0);
-            statusRect.anchorMax = new Vector2(1, 0.05f);
-            statusRect.offsetMin = new Vector2(5, 0);
-            statusRect.offsetMax = new Vector2(-5, 0);
+            var textFieldOptions = TextFieldOptions.Default(textOptions);
+            textFieldOptions.layoutElement = LayoutElementOptions.Fixed(0, 30); // Fixed height for status bar
             
-            mStatusText = statusObj.AddComponent<Text>();
-            mStatusText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            mStatusText.fontSize = 12;
-            mStatusText.color = Color.white;
-            mStatusText.alignment = TextAnchor.MiddleLeft;
-            mStatusText.text = "Loading...";
+            mStatusText = TextFactory.CreateTextField(mRootPanel.transform, textFieldOptions);
+            mStatusText.name = "StatusText";
         }
 
         protected virtual Text CreateLabel(string text, Transform parent, float width)
         {
-            var labelObj = new GameObject($"Label_{text}");
-            labelObj.transform.SetParent(parent, false);
+            var textOptions = TextOptions.Default(text, 11);
+            textOptions.color = new Color(0.7f, 0.7f, 0.7f, 1f); // TextSecondary equivalent
+            textOptions.alignment = TextAnchor.MiddleLeft;
+            textOptions.fontStyle = FontStyle.Bold;
             
-            var labelRect = labelObj.DefinitelyGetComponent<RectTransform>();
-            labelRect.sizeDelta = new Vector2(width, 22);
+            var textFieldOptions = TextFieldOptions.Label(textOptions, width);
+            textFieldOptions.layoutElement = LayoutElementOptions.Fixed(width, 22);
             
-            // Add LayoutElement to maintain size in layout groups
-            var layoutElement = labelObj.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = width;
-            layoutElement.preferredHeight = 22;
-            layoutElement.flexibleWidth = 0;
-            layoutElement.flexibleHeight = 0;
-            
-            var label = labelObj.AddComponent<Text>();
-            label.text = text;
-            label.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            label.fontSize = 11;
-            label.color = new Color(0.9f, 0.9f, 0.9f, 1f);
-            label.alignment = TextAnchor.MiddleLeft;
-            label.fontStyle = FontStyle.Bold;
-            
+            var label = TextFactory.CreateTextField(parent, textFieldOptions);
+            label.name = $"Label_{text}";
             return label;
         }
 
@@ -288,46 +240,36 @@ namespace ExpandedAiFramework.DebugMenu
             return CreateInputFieldInternal(placeholder, parent, width, (UnityEngine.Events.UnityAction<string>)onValueChanged);
         }
 
-        private InputField CreateInputField(string placeholder, Transform parent, float width, UnityEngine.Events.UnityAction<string> onValueChanged)
-        {
-            return CreateInputFieldInternal(placeholder, parent, width, onValueChanged);
-        }
 
         protected virtual InputField CreateInputFieldInternal(string placeholder, Transform parent, float width, UnityEngine.Events.UnityAction<string> onValueChanged)
         {
-            var inputObj = new GameObject($"InputField_{placeholder}");
-            inputObj.transform.SetParent(parent, false);
-            var inputRect = inputObj.DefinitelyGetComponent<RectTransform>();
-            inputRect.sizeDelta = new Vector2(width, 50);
+            var inputOptions = InputFieldOptions.Default();
             
-            // Add LayoutElement to maintain size in layout groups
-            var layoutElement = inputObj.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = width;
-            layoutElement.preferredHeight = 50;
-            layoutElement.flexibleWidth = 0;
-            layoutElement.flexibleHeight = 0;
+            // Configure text field options
+            var textOptions = TextOptions.Default(placeholder, 10);
+            textOptions.color = Color.white;
+            inputOptions.textFieldOptions = TextFieldOptions.Default(textOptions);
+            inputOptions.textFieldOptions.layoutElement = LayoutElementOptions.Fixed(width, 30);
             
-            var inputImage = inputObj.AddComponent<Image>();
-            inputImage.color = new Color(0.25f, 0.25f, 0.25f, 1f);
-            var inputField = inputObj.AddComponent<InputField>();
-            var textObj = new GameObject("Text");
-            textObj.transform.SetParent(inputObj.transform, false);
-            var inputText = textObj.AddComponent<Text>();
-            inputText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            inputText.fontSize = 10;            
-            inputText.color = Color.white;
-            inputText.supportRichText = false;
-            var textRect = textObj.DefinitelyGetComponent<RectTransform>();
-            textRect.anchorMin = Vector2.zero;
-            textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(6, 2);
-            textRect.offsetMax = new Vector2(-6, -2);
-            inputField.textComponent = inputText;
-            inputField.text = "";
-            if (onValueChanged != null)
+            // Configure background
+            inputOptions.backgroundImageOptions = new ImageOptions { Color = new Color(0.3f, 0.3f, 0.3f, 1f) }; // MediumBackground equivalent
+            
+            var inputField = InputFieldFactory.CreateInputField(parent, inputOptions, onValueChanged != null ? (value) => onValueChanged.Invoke(value) : null);
+            inputField.name = $"InputField_{placeholder}";
+            
+            // Set placeholder text if provided
+            if (!string.IsNullOrEmpty(placeholder))
             {
-                inputField.onValueChanged.AddListener(onValueChanged);
+                inputField.placeholder = inputField.textComponent;
+                inputField.textComponent.text = "";
+                var placeholderText = inputField.placeholder as Text;
+                if (placeholderText != null)
+                {
+                    placeholderText.text = placeholder;
+                    placeholderText.color = new Color(0.7f, 0.7f, 0.7f, 0.5f);
+                }
             }
+            
             return inputField;
         }
 
@@ -343,115 +285,20 @@ namespace ExpandedAiFramework.DebugMenu
 
         private Button CreateButtonInternal(string text, Transform parent, UnityEngine.Events.UnityAction onClick)
         {
-            var buttonObj = new GameObject($"Button_{text}");
-            buttonObj.transform.SetParent(parent, false);
+            var buttonOptions = ButtonOptions.TextButton(text, 55, 30); // Slightly smaller width, taller for better fit
+            buttonOptions.textOptions = TextOptions.Default(text, 9);
+            buttonOptions.layoutElement = LayoutElementOptions.Fixed(55, 30);
             
-            var buttonRect = buttonObj.DefinitelyGetComponent<RectTransform>();
-            buttonRect.sizeDelta = new Vector2(70, 28);
-            
-            // Add LayoutElement to maintain size in layout groups
-            var layoutElement = buttonObj.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = 70;
-            layoutElement.preferredHeight = 28;
-            layoutElement.flexibleWidth = 0;
-            layoutElement.flexibleHeight = 0;
-            
-            var button = buttonObj.AddComponent<Button>();
-            var buttonImage = buttonObj.AddComponent<Image>();
-            buttonImage.color = new Color(0.4f, 0.4f, 0.4f, 1f);
-            
-            // Button text
-            var textObj = new GameObject("Text");
-            textObj.transform.SetParent(buttonObj.transform, false);
-            
-            var textRect = textObj.DefinitelyGetComponent<RectTransform>();
-            textRect.anchorMin = Vector2.zero;
-            textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(2, 2);
-            textRect.offsetMax = new Vector2(-2, -2);
-            
-            var buttonText = textObj.AddComponent<Text>();
-            buttonText.text = text;
-            buttonText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            buttonText.fontSize = 9;
-            buttonText.color = Color.white;
-            buttonText.alignment = TextAnchor.MiddleCenter;
-            buttonText.fontStyle = FontStyle.Bold;
-            
-            // Button hover colors
-            var colors = button.colors;
-            colors.normalColor = new Color(0.4f, 0.4f, 0.4f, 1f);
-            colors.highlightedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
-            colors.pressedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
-            button.colors = colors;
-            
-            button.onClick.AddListener(onClick);
-            
+            var button = ButtonFactory.CreateButton(parent, buttonOptions, onClick != null ? () => onClick.Invoke() : null);
+            button.name = $"Button_{text}";
             return button;
         }
 
         protected virtual GameObject CreateListItem(T item, int index)
         {
-            var itemObj = new GameObject($"ListItem_{index}");
-            itemObj.transform.SetParent(mScrollContent.transform, false);
-            
-            var itemRect = itemObj.DefinitelyGetComponent<RectTransform>();
-            itemRect.sizeDelta = new Vector2(0, GetItemHeight());
-            
-            // Main content area
-            var contentArea = new GameObject("ContentArea");
-            contentArea.transform.SetParent(itemObj.transform, false);
-            
-            var contentRect = contentArea.DefinitelyGetComponent<RectTransform>();
-            contentRect.anchorMin = new Vector2(0, 0);
-            contentRect.anchorMax = new Vector2(0.75f, 1); // Leave space for buttons
-            contentRect.offsetMin = Vector2.zero;
-            contentRect.offsetMax = Vector2.zero;
-            
-            var contentButton = contentArea.AddComponent<Button>();
-            var contentImage = contentArea.AddComponent<Image>();
-            contentImage.color = index % 2 == 0 ? 
-                new Color(0.22f, 0.22f, 0.22f, 1f) : 
-                new Color(0.18f, 0.18f, 0.18f, 1f);
-            
-            // Button hover colors
-            var colors = contentButton.colors;
-            colors.normalColor = contentImage.color;
-            colors.highlightedColor = new Color(0.35f, 0.35f, 0.35f, 1f);
-            colors.pressedColor = new Color(0.15f, 0.15f, 0.15f, 1f);
-            contentButton.colors = colors;
-            
-            // Item content
-            PopulateListItem(contentArea, item, index);
-            
-            // Click handler
-            contentButton.onClick.AddListener(new Action(() => OnItemClicked(item)));
-            
-            // Entity action buttons area
-            var buttonArea = new GameObject("ButtonArea");
-            buttonArea.transform.SetParent(itemObj.transform, false);
-            
-            var buttonRect = buttonArea.DefinitelyGetComponent<RectTransform>();
-            buttonRect.anchorMin = new Vector2(0.75f, 0);
-            buttonRect.anchorMax = new Vector2(1, 1);
-            buttonRect.offsetMin = Vector2.zero;
-            buttonRect.offsetMax = Vector2.zero;
-            
-            var buttonBg = buttonArea.AddComponent<Image>();
-            buttonBg.color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
-            
-            var buttonLayout = buttonArea.AddComponent<HorizontalLayoutGroup>();
-            buttonLayout.spacing = 2;
-            buttonLayout.padding = new RectOffset(5, 5, 5, 5);
-            buttonLayout.childControlWidth = true;
-            buttonLayout.childControlHeight = false;
-            buttonLayout.childForceExpandWidth = true;
-            buttonLayout.childForceExpandHeight = false;
-            
-            // Create entity action buttons
-            CreateEntityActionButtons(buttonArea, item, index);
-            
-            return itemObj;
+            // Create list item without per-entity buttons - only clickable content area
+            return DebugMenuListViewItem.CreateListItem(item, index, mScrollContent.transform, GetItemHeight(),
+                PopulateListItem, OnItemClicked, null); // Remove per-entity buttons as requested
         }
 
         // Event handlers
@@ -511,22 +358,7 @@ namespace ExpandedAiFramework.DebugMenu
             {
                 if (mListItems[i] != null)
                 {
-                    var image = mListItems[i].GetComponent<Image>();
-                    if (image != null)
-                    {
-                        if (i == mSelectedIndex)
-                        {
-                            // Highlight selected item
-                            image.color = new Color(0.4f, 0.6f, 0.8f, 1f);
-                        }
-                        else
-                        {
-                            // Normal alternating colors
-                            image.color = i % 2 == 0 ? 
-                                new Color(0.22f, 0.22f, 0.22f, 1f) : 
-                                new Color(0.18f, 0.18f, 0.18f, 1f);
-                        }
-                    }
+                    DebugMenuListViewItem.SetItemSelected(mListItems[i], i == mSelectedIndex, i);
                 }
             }
         }
@@ -559,24 +391,8 @@ namespace ExpandedAiFramework.DebugMenu
             }
         }
 
-        protected virtual void CreateEntityActionButtons(GameObject buttonArea, T item, int index)
-        {
-            // GoTo button
-            var gotoButton = CreateButton("GoTo", buttonArea.transform, () => OnGoToClicked(item));
-            
-            // Delete button
-            var deleteButton = CreateButton("Delete", buttonArea.transform, () => OnDeleteClicked(item));
-        }
-
-        protected virtual void OnGoToClicked(T item)
-        {
-            LogDebug($"GoTo clicked for {GetItemName(item)} - override in derived class for specific behavior");
-        }
-
-        protected virtual void OnDeleteClicked(T item)
-        {
-            LogDebug($"Delete clicked for {GetItemName(item)} - override in derived class for specific behavior");
-        }
+        // Removed CreateEntityActionButtons, OnGoToClicked, and OnDeleteClicked methods
+        // Per-entity buttons have been removed as requested - actions now handled through modals
 
         // Public interface
         public virtual void Show()
@@ -586,6 +402,9 @@ namespace ExpandedAiFramework.DebugMenu
             {
                 mRootPanel.SetActive(true);
             }
+            
+            // Populate the shared unified button bar for this tab
+            PopulateUnifiedButtonBar();
         }
 
         public virtual void Hide()
@@ -719,5 +538,106 @@ namespace ExpandedAiFramework.DebugMenu
 
         // SubDataManager integration - to be set by derived classes
         protected abstract ISubDataManager GetSubDataManager();
+
+        // IDebugMenuEntityModalProvider implementation
+        public virtual void PopulateEntityModal<TEntity>(TEntity entity, GameObject modalContent, System.Action<string, object> onValueChanged) where TEntity : ISerializedData
+        {
+            if (entity is T typedEntity)
+            {
+                PopulateEntityModalForType(typedEntity, modalContent, onValueChanged);
+            }
+            else
+            {
+                PopulateGenericEntityModal(entity, modalContent, onValueChanged);
+            }
+        }
+
+        protected virtual void PopulateEntityModalForType(T entity, GameObject modalContent, System.Action<string, object> onValueChanged)
+        {
+            // Default implementation - create basic fields for common ISerializedData properties
+            PopulateGenericEntityModal(entity, modalContent, onValueChanged);
+        }
+
+        protected virtual void PopulateGenericEntityModal<TEntity>(TEntity entity, GameObject modalContent, System.Action<string, object> onValueChanged) where TEntity : ISerializedData
+        {
+            // Create fields for basic ISerializedData properties with automatic read-only detection
+            var entityType = entity.GetType();
+            
+            var guidField = FormFieldFactory.CreateTextField("GUID", entity.Guid.ToString(), modalContent.transform, null, true);
+            var sceneField = FormFieldFactory.CreateTextField("Scene", entity.Scene, modalContent.transform, onValueChanged, false);
+            var dataLocationField = FormFieldFactory.CreateTextField("Data Location", entity.DataLocation, modalContent.transform, onValueChanged, false);
+            var displayNameField = FormFieldFactory.CreateTextField("Display Name", entity.DisplayName, modalContent.transform, null, false);
+
+            // Register the fields with the modal
+            var entityModal = modalContent.GetComponentInParent<DebugMenuEntityModal>();
+            if (entityModal != null)
+            {
+                entityModal.RegisterFormField("GUID", guidField);
+                entityModal.RegisterFormField("Scene", sceneField);
+                entityModal.RegisterFormField("Data Location", dataLocationField);
+                entityModal.RegisterFormField("Display Name", displayNameField);
+            }
+        }
+
+        public virtual bool ApplyEntityChanges<TEntity>(TEntity entity, Dictionary<string, object> fieldValues) where TEntity : ISerializedData
+        {
+            if (entity is T typedEntity)
+            {
+                return ApplyEntityChangesForType(typedEntity, fieldValues);
+            }
+            else
+            {
+                return ApplyGenericEntityChanges(entity, fieldValues);
+            }
+        }
+
+        protected virtual bool ApplyEntityChangesForType(T entity, Dictionary<string, object> fieldValues)
+        {
+            // Default implementation - apply basic fields
+            return ApplyGenericEntityChanges(entity, fieldValues);
+        }
+
+        protected virtual bool ApplyGenericEntityChanges<TEntity>(TEntity entity, Dictionary<string, object> fieldValues) where TEntity : ISerializedData
+        {
+            try
+            {
+                // Apply basic ISerializedData changes
+                if (fieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
+                {
+                    // Scene is typically read-only in most implementations
+                    LogDebug("Scene changes are typically not supported");
+                }
+
+                if (fieldValues.TryGetValue("Data Location", out var dataLocationValue) && dataLocationValue is string dataLocationString)
+                {
+                    entity.DataLocation = dataLocationString;
+                }
+
+                LogDebug($"Applied basic entity changes to {entity.DisplayName}");
+                return true;
+            }
+            catch (Exception e)
+            {
+                LogError($"Failed to apply entity changes: {e.Message}");
+                return false;
+            }
+        }
+
+        public virtual string GetEntityModalTitle<TEntity>(TEntity entity) where TEntity : ISerializedData
+        {
+            if (entity is T typedEntity)
+            {
+                return GetEntityModalTitleForType(typedEntity);
+            }
+            else
+            {
+                return $"{entity.GetType().Name} Details - {entity.DisplayName}";
+            }
+        }
+
+        protected virtual string GetEntityModalTitleForType(T entity)
+        {
+            return $"{GetTabDisplayName()} - {GetItemName(entity)}";
+        }
     }
 }

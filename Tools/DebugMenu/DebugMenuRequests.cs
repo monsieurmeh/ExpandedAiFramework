@@ -6,59 +6,77 @@ using Il2Cpp;
 
 namespace ExpandedAiFramework
 {
-    // Base request for debug menu queries
-    public abstract class DebugMenuRequest : Request
+    // Base request for debug menu queries - extends DataRequest<T> for proper thread safety
+    public abstract class DebugMenuRequest<T> : DataRequest<T> where T : ISerializedData, new()
     {
-        protected DebugMenuRequest(bool threadSafe = true, bool threadSafeCallback = false) : base(threadSafe, threadSafeCallback) { }
+        protected DebugMenuRequest(Action<T, RequestResult> callback, bool threadSafe = true, bool threadSafeCallback = false) 
+            : base(callback, threadSafe, threadSafeCallback) { }
+    }
+
+    // List-based request for debug menu queries that return multiple items
+    public abstract class DebugMenuListRequest<T> : Request where T : ISerializedData, new()
+    {
+        protected Action<List<T>, RequestResult> mCallback;
+        protected SerializedDataContainer<T> mDataContainer;
+        protected List<T> mResults;
+
+        public override string InstanceInfo { get { return string.Empty; } }
+        public override string TypeInfo { get { return $"DebugMenuListRequest<{typeof(T)}>"; } }
+
+        protected DebugMenuListRequest(Action<List<T>, RequestResult> callback, bool threadSafe = true, bool threadSafeCallback = false) 
+            : base(threadSafe, threadSafeCallback) 
+        {
+            mCallback = callback;
+            mResults = new List<T>();
+        }
+
+        public override void Callback() => mCallback?.Invoke(mResults, mResult);
+
+        public override void Preprocess(ISubDataManager manager)
+        {
+            if (manager is ISerializedDataProvider<T> dataProvider)
+            {
+                mDataContainer = dataProvider.GetDataContainer();
+            }
+        }
+
+        protected override bool Validate()
+        {
+            if (mDataContainer == null)
+            {
+                this.LogTraceInstanced($"null mDataContainer");
+                return false;
+            }
+            return ValidateInternal();
+        }
+
+        protected virtual bool ValidateInternal() => true;
     }
 
     // Request to get all SpawnModDataProxies with filtering
-    public class GetSpawnModDataProxiesRequest : DebugMenuRequest
+    public class GetSpawnModDataProxiesRequest : DebugMenuListRequest<SpawnModDataProxy>
     {
-        private Action<List<SpawnModDataProxy>, RequestResult> mCallback;
         private WildlifeMode mWildlifeMode;
         private string mSceneFilter;
         private AiSubType? mAiSubTypeFilter;
-        private List<SpawnModDataProxy> mResults;
-        private SpawnModDataProxyManager mManager;
+
+        public override string InstanceInfo { get { return $"Wildlife:{mWildlifeMode} Scene:{mSceneFilter ?? "All"} AiSubType:{mAiSubTypeFilter?.ToString() ?? "All"}"; } }
 
         public GetSpawnModDataProxiesRequest(
             WildlifeMode wildlifeMode, 
             Action<List<SpawnModDataProxy>, RequestResult> callback,
             string sceneFilter = null,
-            AiSubType? aiSubTypeFilter = null) : base()
+            AiSubType? aiSubTypeFilter = null,
+            bool callbackIsThreadSafe = false) : base(callback, true, callbackIsThreadSafe)
         {
             mWildlifeMode = wildlifeMode;
-            mCallback = callback;
             mSceneFilter = sceneFilter;
             mAiSubTypeFilter = aiSubTypeFilter;
-            mResults = new List<SpawnModDataProxy>();
-        }
-
-        public override void Preprocess(ISubDataManager manager)
-        {
-            if (manager is SpawnModDataProxyManager proxyManager)
-            {
-                mManager = proxyManager;
-            }
         }
 
         protected override RequestResult PerformRequestInternal()
         {
-            if (mManager == null)
-            {
-                LogError("SpawnModDataProxyManager not found");
-                return RequestResult.Failed;
-            }
-
-            var container = mManager.GetDataContainer();
-            if (container == null)
-            {
-                LogError("Data container is null");
-                return RequestResult.Failed;
-            }
-
-            var allData = container.EnumerateContents();
+            var allData = mDataContainer.EnumerateContents();
             mResults.Clear();
 
             foreach (var proxy in allData)
@@ -77,60 +95,32 @@ namespace ExpandedAiFramework
 
             return RequestResult.Succeeded;
         }
-
-        public override void Callback()
-        {
-            mCallback?.Invoke(mResults, mResult);
-        }
     }
 
     // Request to get all SpawnRegionModDataProxies with filtering
-    public class GetSpawnRegionModDataProxiesRequest : DebugMenuRequest
+    public class GetSpawnRegionModDataProxiesRequest : DebugMenuListRequest<SpawnRegionModDataProxy>
     {
-        private Action<List<SpawnRegionModDataProxy>, RequestResult> mCallback;
         private string mSceneFilter;
         private AiType? mAiTypeFilter;
         private AiSubType? mAiSubTypeFilter;
-        private List<SpawnRegionModDataProxy> mResults;
-        private SpawnRegionModDataProxyManager mManager;
+
+        public override string InstanceInfo { get { return $"Scene:{mSceneFilter ?? "All"} AiType:{mAiTypeFilter?.ToString() ?? "All"} AiSubType:{mAiSubTypeFilter?.ToString() ?? "All"}"; } }
 
         public GetSpawnRegionModDataProxiesRequest(
             Action<List<SpawnRegionModDataProxy>, RequestResult> callback,
             string sceneFilter = null,
             AiType? aiTypeFilter = null,
-            AiSubType? aiSubTypeFilter = null) : base()
+            AiSubType? aiSubTypeFilter = null,
+            bool callbackIsThreadSafe = false) : base(callback, true, callbackIsThreadSafe)
         {
-            mCallback = callback;
             mSceneFilter = sceneFilter;
             mAiTypeFilter = aiTypeFilter;
             mAiSubTypeFilter = aiSubTypeFilter;
-            mResults = new List<SpawnRegionModDataProxy>();
-        }
-
-        public override void Preprocess(ISubDataManager manager)
-        {
-            if (manager is SpawnRegionModDataProxyManager proxyManager)
-            {
-                mManager = proxyManager;
-            }
         }
 
         protected override RequestResult PerformRequestInternal()
         {
-            if (mManager == null)
-            {
-                LogError("SpawnRegionModDataProxyManager not found");
-                return RequestResult.Failed;
-            }
-
-            var container = mManager.GetDataContainer();
-            if (container == null)
-            {
-                LogError("Data container is null");
-                return RequestResult.Failed;
-            }
-
-            var allData = container.EnumerateContents();
+            var allData = mDataContainer.EnumerateContents();
             mResults.Clear();
 
             foreach (var proxy in allData)
@@ -149,57 +139,29 @@ namespace ExpandedAiFramework
 
             return RequestResult.Succeeded;
         }
-
-        public override void Callback()
-        {
-            mCallback?.Invoke(mResults, mResult);
-        }
     }
 
     // Request to get HidingSpots with filtering
-    public class GetHidingSpotsRequest : DebugMenuRequest
+    public class GetHidingSpotsRequest : DebugMenuListRequest<HidingSpot>
     {
-        private Action<List<HidingSpot>, RequestResult> mCallback;
         private string mSceneFilter;
         private string mNameFilter;
-        private List<HidingSpot> mResults;
-        private HidingSpotManager mManager;
+
+        public override string InstanceInfo { get { return $"Scene:{mSceneFilter ?? "All"} Name:{mNameFilter ?? "All"}"; } }
 
         public GetHidingSpotsRequest(
             Action<List<HidingSpot>, RequestResult> callback,
             string sceneFilter = null,
-            string nameFilter = null) : base()
+            string nameFilter = null,
+            bool callbackIsThreadSafe = false) : base(callback, true, callbackIsThreadSafe)
         {
-            mCallback = callback;
             mSceneFilter = sceneFilter;
             mNameFilter = nameFilter;
-            mResults = new List<HidingSpot>();
-        }
-
-        public override void Preprocess(ISubDataManager manager)
-        {
-            if (manager is HidingSpotManager hidingSpotManager)
-            {
-                mManager = hidingSpotManager;
-            }
         }
 
         protected override RequestResult PerformRequestInternal()
         {
-            if (mManager == null)
-            {
-                LogError("HidingSpotManager not found");
-                return RequestResult.Failed;
-            }
-
-            var container = mManager.GetDataContainer();
-            if (container == null)
-            {
-                LogError("Data container is null");
-                return RequestResult.Failed;
-            }
-
-            var allData = container.EnumerateContents();
+            var allData = mDataContainer.EnumerateContents();
             mResults.Clear();
 
             foreach (var spot in allData)
@@ -215,60 +177,32 @@ namespace ExpandedAiFramework
 
             return RequestResult.Succeeded;
         }
-
-        public override void Callback()
-        {
-            mCallback?.Invoke(mResults, mResult);
-        }
     }
 
     // Request to get WanderPaths with filtering
-    public class GetWanderPathsRequest : DebugMenuRequest
+    public class GetWanderPathsRequest : DebugMenuListRequest<WanderPath>
     {
-        private Action<List<WanderPath>, RequestResult> mCallback;
         private string mSceneFilter;
         private string mNameFilter;
         private WanderPathTypes? mTypeFilter;
-        private List<WanderPath> mResults;
-        private WanderPathManager mManager;
+
+        public override string InstanceInfo { get { return $"Scene:{mSceneFilter ?? "All"} Name:{mNameFilter ?? "All"} Type:{mTypeFilter?.ToString() ?? "All"}"; } }
 
         public GetWanderPathsRequest(
             Action<List<WanderPath>, RequestResult> callback,
             string sceneFilter = null,
             string nameFilter = null,
-            WanderPathTypes? typeFilter = null) : base()
+            WanderPathTypes? typeFilter = null,
+            bool callbackIsThreadSafe = false) : base(callback, true, callbackIsThreadSafe)
         {
-            mCallback = callback;
             mSceneFilter = sceneFilter;
             mNameFilter = nameFilter;
             mTypeFilter = typeFilter;
-            mResults = new List<WanderPath>();
-        }
-
-        public override void Preprocess(ISubDataManager manager)
-        {
-            if (manager is WanderPathManager wanderPathManager)
-            {
-                mManager = wanderPathManager;
-            }
         }
 
         protected override RequestResult PerformRequestInternal()
         {
-            if (mManager == null)
-            {
-                LogError("WanderPathManager not found");
-                return RequestResult.Failed;
-            }
-
-            var container = mManager.GetDataContainer();
-            if (container == null)
-            {
-                LogError("Data container is null");
-                return RequestResult.Failed;
-            }
-
-            var allData = container.EnumerateContents();
+            var allData = mDataContainer.EnumerateContents();
             mResults.Clear();
 
             foreach (var path in allData)
@@ -287,86 +221,505 @@ namespace ExpandedAiFramework
 
             return RequestResult.Succeeded;
         }
-
-        public override void Callback()
-        {
-            mCallback?.Invoke(mResults, mResult);
-        }
     }
 
-    // Request to update SpawnModDataProxy
-    public class UpdateSpawnModDataProxyRequest : DebugMenuRequest
+    // Request to update SpawnModDataProxy with field-based changes
+    public class UpdateSpawnModDataProxyRequest : DebugMenuRequest<SpawnModDataProxy>
     {
-        private Action<SpawnModDataProxy, RequestResult> mCallback;
-        private SpawnModDataProxy mProxy;
-        private SpawnModDataProxyManager mManager;
+        private string mProxyGuid;
+        private Dictionary<string, object> mFieldValues;
 
-        public UpdateSpawnModDataProxyRequest(SpawnModDataProxy proxy, Action<SpawnModDataProxy, RequestResult> callback) : base()
+        public override string InstanceInfo { get { return $"Proxy:{mProxyGuid}"; } }
+
+        public UpdateSpawnModDataProxyRequest(string proxyGuid, Dictionary<string, object> fieldValues, Action<SpawnModDataProxy, RequestResult> callback, bool callbackIsThreadSafe = false) 
+            : base(callback, true, callbackIsThreadSafe)
         {
-            mProxy = proxy;
-            mCallback = callback;
+            mProxyGuid = proxyGuid;
+            mFieldValues = fieldValues;
         }
 
-        public override void Preprocess(ISubDataManager manager)
+        protected override bool Validate()
         {
-            if (manager is SpawnModDataProxyManager proxyManager)
+            if (mDataContainer == null)
             {
-                mManager = proxyManager;
+                this.LogTraceInstanced($"null mDataContainer");
+                return false;
             }
+            if (string.IsNullOrEmpty(mProxyGuid))
+            {
+                this.LogTraceInstanced($"null or empty proxy GUID");
+                return false;
+            }
+            if (mFieldValues == null || mFieldValues.Count == 0)
+            {
+                this.LogTraceInstanced($"null or empty field values");
+                return false;
+            }
+            return true;
         }
 
         protected override RequestResult PerformRequestInternal()
         {
-            if (mManager == null || mProxy == null)
+            // Find the proxy in the container by GUID
+            SpawnModDataProxy proxy = null;
+            if (Guid.TryParse(mProxyGuid, out Guid guid))
             {
+                foreach (var item in mDataContainer.EnumerateContents())
+                {
+                    if (item.Guid == guid)
+                    {
+                        proxy = item;
+                        break;
+                    }
+                }
+            }
+            
+            if (proxy == null)
+            {
+                this.LogTraceInstanced($"SpawnModDataProxy with GUID {mProxyGuid} not found");
                 return RequestResult.Failed;
             }
 
-            // The proxy should already be updated in the container since we're modifying the reference
-            // This request mainly serves as a way to trigger save operations if needed
-            return RequestResult.Succeeded;
-        }
+            try
+            {
+                // Apply field changes to the proxy in worker thread
+                if (mFieldValues.TryGetValue("Position", out var positionValue) && positionValue is Vector3 position)
+                {
+                    proxy.CurrentPosition = position;
+                }
 
-        public override void Callback()
-        {
-            mCallback?.Invoke(mProxy, mResult);
+                if (mFieldValues.TryGetValue("Rotation (Euler)", out var rotationValue) && rotationValue is Vector3 rotation)
+                {
+                    proxy.CurrentRotation = Quaternion.Euler(rotation);
+                }
+
+                if (mFieldValues.TryGetValue("AiSubType", out var aiSubTypeValue) && aiSubTypeValue is AiSubType aiSubType)
+                {
+                    proxy.AiSubType = aiSubType;
+                }
+
+                if (mFieldValues.TryGetValue("AiMode", out var aiModeValue) && aiModeValue is AiMode aiMode)
+                {
+                    proxy.AiMode = aiMode;
+                }
+
+                if (mFieldValues.TryGetValue("WildlifeMode", out var wildlifeModeValue) && wildlifeModeValue is WildlifeMode wildlifeMode)
+                {
+                    proxy.WildlifeMode = wildlifeMode;
+                }
+
+                if (mFieldValues.TryGetValue("ForceSpawn", out var forceSpawnValue) && forceSpawnValue is bool forceSpawn)
+                {
+                    proxy.ForceSpawn = forceSpawn;
+                }
+
+                if (mFieldValues.TryGetValue("Available", out var availableValue) && availableValue is bool available)
+                {
+                    proxy.Available = available;
+                }
+
+                if (mFieldValues.TryGetValue("Spawned", out var spawnedValue) && spawnedValue is bool spawned)
+                {
+                    proxy.Spawned = spawned;
+                }
+
+                if (mFieldValues.TryGetValue("Disconnected", out var disconnectedValue) && disconnectedValue is bool disconnected)
+                {
+                    proxy.Disconnected = disconnected;
+                }
+
+                if (mFieldValues.TryGetValue("Parent GUID", out var parentGuidValue) && parentGuidValue is string parentGuidStr)
+                {
+                    if (Guid.TryParse(parentGuidStr, out Guid parentGuid))
+                    {
+                        proxy.ParentGuid = parentGuid;
+                    }
+                }
+
+                if (mFieldValues.TryGetValue("Last Despawn Time", out var despawnTimeValue) && despawnTimeValue is string despawnTime)
+                {
+                    if (float.TryParse(despawnTime, out float despawnFloat))
+                    {
+                        proxy.LastDespawnTime = despawnFloat;
+                    }
+                }
+
+                // Handle generic ISerializedData fields (from ApplyGenericEntityChanges)
+                if (mFieldValues.TryGetValue("Data Location", out var dataLocationValue) && dataLocationValue is string dataLocation)
+                {
+                    proxy.DataLocation = dataLocation;
+                }
+
+                // Note: Scene is typically read-only in most implementations
+                if (mFieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
+                {
+                    LogDebug($"Scene change requested: {sceneString} (typically read-only)");
+                }
+
+                mPayload = proxy;
+                return RequestResult.Succeeded;
+            }
+            catch (Exception e)
+            {
+                this.LogTraceInstanced($"Failed to update SpawnModDataProxy: {e.Message}");
+                return RequestResult.Failed;
+            }
         }
     }
 
-    // Request to update SpawnRegionModDataProxy
-    public class UpdateSpawnRegionModDataProxyRequest : DebugMenuRequest
+    // Request to update SpawnRegionModDataProxy with field-based changes
+    public class UpdateSpawnRegionModDataProxyRequest : DebugMenuRequest<SpawnRegionModDataProxy>
     {
-        private Action<SpawnRegionModDataProxy, RequestResult> mCallback;
-        private SpawnRegionModDataProxy mProxy;
-        private SpawnRegionModDataProxyManager mManager;
+        private string mProxyGuid;
+        private Dictionary<string, object> mFieldValues;
 
-        public UpdateSpawnRegionModDataProxyRequest(SpawnRegionModDataProxy proxy, Action<SpawnRegionModDataProxy, RequestResult> callback) : base()
+        public override string InstanceInfo { get { return $"Proxy:{mProxyGuid}"; } }
+
+        public UpdateSpawnRegionModDataProxyRequest(string proxyGuid, Dictionary<string, object> fieldValues, Action<SpawnRegionModDataProxy, RequestResult> callback, bool callbackIsThreadSafe = false) 
+            : base(callback, true, callbackIsThreadSafe)
         {
-            mProxy = proxy;
-            mCallback = callback;
+            mProxyGuid = proxyGuid;
+            mFieldValues = fieldValues;
         }
 
-        public override void Preprocess(ISubDataManager manager)
+        protected override bool Validate()
         {
-            if (manager is SpawnRegionModDataProxyManager proxyManager)
+            if (mDataContainer == null)
             {
-                mManager = proxyManager;
+                this.LogTraceInstanced($"null mDataContainer");
+                return false;
             }
+            if (string.IsNullOrEmpty(mProxyGuid))
+            {
+                this.LogTraceInstanced($"null or empty proxy GUID");
+                return false;
+            }
+            if (mFieldValues == null || mFieldValues.Count == 0)
+            {
+                this.LogTraceInstanced($"null or empty field values");
+                return false;
+            }
+            return true;
         }
 
         protected override RequestResult PerformRequestInternal()
         {
-            if (mManager == null || mProxy == null)
+            // Find the proxy in the container by GUID
+            SpawnRegionModDataProxy proxy = null;
+            if (Guid.TryParse(mProxyGuid, out Guid guid))
             {
+                foreach (var item in mDataContainer.EnumerateContents())
+                {
+                    if (item.Guid == guid)
+                    {
+                        proxy = item;
+                        break;
+                    }
+                }
+            }
+            
+            if (proxy == null)
+            {
+                this.LogTraceInstanced($"SpawnRegionModDataProxy with GUID {mProxyGuid} not found");
                 return RequestResult.Failed;
             }
 
-            return RequestResult.Succeeded;
+            try
+            {
+                // Apply field changes in worker thread
+                if (mFieldValues.TryGetValue("Position", out var positionValue) && positionValue is Vector3 position)
+                {
+                    proxy.CurrentPosition = position;
+                }
+
+                if (mFieldValues.TryGetValue("AiType", out var aiTypeValue) && aiTypeValue is AiType aiType)
+                {
+                    proxy.AiType = aiType;
+                }
+
+                if (mFieldValues.TryGetValue("AiSubType", out var aiSubTypeValue) && aiSubTypeValue is AiSubType aiSubType)
+                {
+                    proxy.AiSubType = aiSubType;
+                }
+
+                if (mFieldValues.TryGetValue("WildlifeMode", out var wildlifeModeValue) && wildlifeModeValue is WildlifeMode wildlifeMode)
+                {
+                    proxy.WildlifeMode = wildlifeMode;
+                }
+
+                if (mFieldValues.TryGetValue("Is Active", out var isActiveValue) && isActiveValue is bool isActive)
+                {
+                    proxy.IsActive = isActive;
+                }
+
+                if (mFieldValues.TryGetValue("Connected", out var connectedValue) && connectedValue is bool connected)
+                {
+                    proxy.Connected = connected;
+                }
+
+                if (mFieldValues.TryGetValue("Pending Force Spawns", out var pendingValue) && pendingValue is bool pending)
+                {
+                    proxy.PendingForceSpawns = pending;
+                }
+
+                if (mFieldValues.TryGetValue("HasBeenDisabledByAurora", out var disabledValue) && disabledValue is bool disabled)
+                {
+                    proxy.HasBeenDisabledByAurora = disabled;
+                }
+
+                if (mFieldValues.TryGetValue("WasActiveBeforeAurora", out var wasActiveValue) && wasActiveValue is bool wasActive)
+                {
+                    proxy.WasActiveBeforeAurora = wasActive;
+                }
+
+                // Handle numeric fields with string parsing
+                if (mFieldValues.TryGetValue("Hours Played", out var hoursValue) && hoursValue is string hoursStr && float.TryParse(hoursStr, out float hours))
+                {
+                    proxy.HoursPlayed = hours;
+                }
+
+                if (mFieldValues.TryGetValue("Last Despawn Time", out var despawnValue) && despawnValue is string despawnStr && float.TryParse(despawnStr, out float despawn))
+                {
+                    proxy.LastDespawnTime = despawn;
+                }
+
+                if (mFieldValues.TryGetValue("Cooldown Timer Hours", out var cooldownValue) && cooldownValue is string cooldownStr && float.TryParse(cooldownStr, out float cooldown))
+                {
+                    proxy.CooldownTimerHours = cooldown;
+                }
+
+                // Note: MaxSpawns and NumSpawns properties don't exist on SpawnRegionModDataProxy
+                // These would need to be added to the data structure if needed
+
+                // Handle generic ISerializedData fields (from ApplyGenericEntityChanges)
+                if (mFieldValues.TryGetValue("Data Location", out var dataLocationValue) && dataLocationValue is string dataLocation)
+                {
+                    proxy.DataLocation = dataLocation;
+                }
+
+                // Note: Scene is typically read-only in most implementations
+                if (mFieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
+                {
+                    LogDebug($"Scene change requested: {sceneString} (typically read-only)");
+                }
+
+                mPayload = proxy;
+                return RequestResult.Succeeded;
+            }
+            catch (Exception e)
+            {
+                this.LogTraceInstanced($"Failed to update SpawnRegionModDataProxy: {e.Message}");
+                return RequestResult.Failed;
+            }
+        }
+    }
+
+    // Request to update HidingSpot with field-based changes
+    public class UpdateHidingSpotRequest : DebugMenuRequest<HidingSpot>
+    {
+        private string mHidingSpotGuid;
+        private Dictionary<string, object> mFieldValues;
+
+        public override string InstanceInfo { get { return $"HidingSpot:{mHidingSpotGuid}"; } }
+
+        public UpdateHidingSpotRequest(string hidingSpotGuid, Dictionary<string, object> fieldValues, Action<HidingSpot, RequestResult> callback, bool callbackIsThreadSafe = false) 
+            : base(callback, true, callbackIsThreadSafe)
+        {
+            mHidingSpotGuid = hidingSpotGuid;
+            mFieldValues = fieldValues;
         }
 
-        public override void Callback()
+        protected override bool Validate()
         {
-            mCallback?.Invoke(mProxy, mResult);
+            if (mDataContainer == null)
+            {
+                this.LogTraceInstanced($"null mDataContainer");
+                return false;
+            }
+            if (string.IsNullOrEmpty(mHidingSpotGuid))
+            {
+                this.LogTraceInstanced($"null or empty hiding spot GUID");
+                return false;
+            }
+            if (mFieldValues == null || mFieldValues.Count == 0)
+            {
+                this.LogTraceInstanced($"null or empty field values");
+                return false;
+            }
+            return true;
+        }
+
+        protected override RequestResult PerformRequestInternal()
+        {
+            // Find the hiding spot in the container by GUID
+            HidingSpot hidingSpot = null;
+            if (Guid.TryParse(mHidingSpotGuid, out Guid guid))
+            {
+                foreach (var item in mDataContainer.EnumerateContents())
+                {
+                    if (item.Guid == guid)
+                    {
+                        hidingSpot = item;
+                        break;
+                    }
+                }
+            }
+            
+            if (hidingSpot == null)
+            {
+                this.LogTraceInstanced($"HidingSpot with GUID {mHidingSpotGuid} not found");
+                return RequestResult.Failed;
+            }
+
+            try
+            {
+                // Apply field changes in worker thread
+                // Note: Name, Position, and Rotation are read-only properties on HidingSpot
+                // These would require direct field access or making the properties settable
+                if (mFieldValues.TryGetValue("Name", out var nameValue) && nameValue is string name)
+                {
+                    // hidingSpot.Name = name; // Read-only property
+                    LogDebug($"Name change requested: {name} (property is read-only)");
+                }
+
+                if (mFieldValues.TryGetValue("Position", out var positionValue) && positionValue is Vector3 position)
+                {
+                    // hidingSpot.Position = position; // Read-only property
+                    LogDebug($"Position change requested: {position} (property is read-only)");
+                }
+
+                if (mFieldValues.TryGetValue("Rotation (Euler)", out var rotationValue) && rotationValue is Vector3 rotation)
+                {
+                    // hidingSpot.Rotation = Quaternion.Euler(rotation); // Read-only property
+                    LogDebug($"Rotation change requested: {rotation} (property is read-only)");
+                }
+
+                // Handle generic ISerializedData fields (from ApplyGenericEntityChanges)
+                if (mFieldValues.TryGetValue("Data Location", out var dataLocationValue) && dataLocationValue is string dataLocation)
+                {
+                    hidingSpot.DataLocation = dataLocation;
+                }
+
+                // Note: Scene is typically read-only in most implementations
+                if (mFieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
+                {
+                    LogDebug($"Scene change requested: {sceneString} (typically read-only)");
+                }
+
+                mPayload = hidingSpot;
+                return RequestResult.Succeeded;
+            }
+            catch (Exception e)
+            {
+                this.LogTraceInstanced($"Failed to update HidingSpot: {e.Message}");
+                return RequestResult.Failed;
+            }
+        }
+    }
+
+    // Request to update WanderPath with field-based changes
+    public class UpdateWanderPathRequest : DebugMenuRequest<WanderPath>
+    {
+        private string mWanderPathGuid;
+        private Dictionary<string, object> mFieldValues;
+
+        public override string InstanceInfo { get { return $"WanderPath:{mWanderPathGuid}"; } }
+
+        public UpdateWanderPathRequest(string wanderPathGuid, Dictionary<string, object> fieldValues, Action<WanderPath, RequestResult> callback, bool callbackIsThreadSafe = false) 
+            : base(callback, true, callbackIsThreadSafe)
+        {
+            mWanderPathGuid = wanderPathGuid;
+            mFieldValues = fieldValues;
+        }
+
+        protected override bool Validate()
+        {
+            if (mDataContainer == null)
+            {
+                this.LogTraceInstanced($"null mDataContainer");
+                return false;
+            }
+            if (string.IsNullOrEmpty(mWanderPathGuid))
+            {
+                this.LogTraceInstanced($"null or empty wander path GUID");
+                return false;
+            }
+            if (mFieldValues == null || mFieldValues.Count == 0)
+            {
+                this.LogTraceInstanced($"null or empty field values");
+                return false;
+            }
+            return true;
+        }
+
+        protected override RequestResult PerformRequestInternal()
+        {
+            // Find the wander path in the container by GUID
+            WanderPath wanderPath = null;
+            if (Guid.TryParse(mWanderPathGuid, out Guid guid))
+            {
+                foreach (var item in mDataContainer.EnumerateContents())
+                {
+                    if (item.Guid == guid)
+                    {
+                        wanderPath = item;
+                        break;
+                    }
+                }
+            }
+            
+            if (wanderPath == null)
+            {
+                this.LogTraceInstanced($"WanderPath with GUID {mWanderPathGuid} not found");
+                return RequestResult.Failed;
+            }
+
+            try
+            {
+                // Apply field changes in worker thread
+                // Note: Name and WanderPathType are read-only properties on WanderPath
+                if (mFieldValues.TryGetValue("Name", out var nameValue) && nameValue is string name)
+                {
+                    // wanderPath.Name = name; // Read-only property
+                    LogDebug($"Name change requested: {name} (property is read-only)");
+                }
+
+                if (mFieldValues.TryGetValue("Wander Path Type", out var typeValue) && typeValue is WanderPathTypes pathType)
+                {
+                    // wanderPath.WanderPathType = pathType; // Read-only property
+                    LogDebug($"WanderPathType change requested: {pathType} (property is read-only)");
+                }
+
+                // Handle generic ISerializedData fields (from ApplyGenericEntityChanges)
+                if (mFieldValues.TryGetValue("Data Location", out var dataLocationValue) && dataLocationValue is string dataLocation)
+                {
+                    wanderPath.DataLocation = dataLocation;
+                }
+
+                // Note: Scene is typically read-only in most implementations
+                if (mFieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
+                {
+                    LogDebug($"Scene change requested: {sceneString} (typically read-only)");
+                }
+
+                // Update path points (first 5 editable)
+                // Note: PathPoints array is read-only, but individual elements can be modified
+                for (int i = 0; i < 5 && i < wanderPath.PathPoints.Length; i++)
+                {
+                    if (mFieldValues.TryGetValue($"Path Point {i}", out var pointValue) && pointValue is Vector3 point)
+                    {
+                        wanderPath.PathPoints[i] = point;
+                    }
+                }
+
+                mPayload = wanderPath;
+                return RequestResult.Succeeded;
+            }
+            catch (Exception e)
+            {
+                this.LogTraceInstanced($"Failed to update WanderPath: {e.Message}");
+                return RequestResult.Failed;
+            }
         }
     }
 }

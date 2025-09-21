@@ -3,7 +3,7 @@ using System;
 
 namespace ExpandedAiFramework.DebugMenu
 {
-    public interface IDebugMenuTabContentProvider
+    public interface IDebugMenuTabContentProvider : IDebugMenuEntityModalProvider
     {
         void Initialize(GameObject parentContentArea);
         void Show();
