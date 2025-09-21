@@ -7,6 +7,11 @@ namespace ExpandedAiFramework.DebugMenu
 {
     public class SpawnRegionModDataProxyTabProvider : DebugMenuTabContentProvider<SpawnRegionModDataProxy>
     {
+        public override void Initialize(GameObject parentContentArea)
+        {
+            mSubDataManager = GetSubDataManager();
+            base.Initialize(parentContentArea);
+        }
         protected override void LoadData()
         {
             string sceneFilter = string.IsNullOrEmpty(mSceneFilter) ? null : mSceneFilter;
@@ -48,6 +53,57 @@ namespace ExpandedAiFramework.DebugMenu
         protected override float GetItemHeight()
         {
             return 50f;
+        }
+
+        protected override ISubDataManager GetSubDataManager()
+        {
+            return Manager.DataManager.SpawnRegionModDataProxyManager;
+        }
+        
+        protected override void CreateGlobalActionGroup(GameObject parent)
+        {
+            base.CreateGlobalActionGroup(parent);
+            
+            var globalGroup = parent.transform.GetChild(0).gameObject; // Get the group we just created
+            
+            // Add Paint button
+            var paintButton = CreateButton("Paint", globalGroup.transform, OnPaintClicked);
+        }
+        
+        protected virtual void OnPaintClicked()
+        {
+            var paintManager = Manager.PaintManagers.TryGetValue("spawnregion", out var pm) ? pm : null;
+            if (paintManager != null)
+            {
+                string[] args = { "NewSpawnRegion" };
+                paintManager.StartPaint(args);
+                LogDebug($"Started paint mode for {GetTabDisplayName()}");
+            }
+            else
+            {
+                LogError($"No paint manager found for {GetTabDisplayName()}");
+            }
+        }
+        
+        protected override void OnGoToClicked(SpawnRegionModDataProxy item)
+        {
+            var paintManager = Manager.PaintManagers.TryGetValue("spawnregion", out var pm) ? pm : null;
+            if (paintManager != null)
+            {
+                string[] args = { GetItemName(item) };
+                paintManager.ProcessCommand("goto", args);
+                LogDebug($"Going to {GetItemName(item)}");
+            }
+            else
+            {
+                LogError($"No paint manager found for {GetTabDisplayName()}");
+            }
+        }
+        
+        protected override void OnDeleteClicked(SpawnRegionModDataProxy item)
+        {
+            // Delete operation disabled for spawn region proxies - should handle entire spawn region instead
+            LogDebug($"Delete not available for SpawnRegionModDataProxy items - use spawn region management to handle entire spawn region");
         }
     }
 }

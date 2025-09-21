@@ -12,6 +12,12 @@ namespace ExpandedAiFramework.DebugMenu
         private Button mNormalButton;
         private Button mAuroraButton;
         private WildlifeMode mCurrentMode = WildlifeMode.Normal;
+        
+        public override void Initialize(GameObject parentContentArea)
+        {
+            mSubDataManager = GetSubDataManager();
+            base.Initialize(parentContentArea);
+        }
 
         protected override void CreateFilterPanel()
         {
@@ -105,6 +111,23 @@ namespace ExpandedAiFramework.DebugMenu
         {
             // Additional filtering can be added here
             return item.WildlifeMode == mCurrentMode;
+        }
+
+        protected override ISubDataManager GetSubDataManager()
+        {
+            return Manager.DataManager.SpawnModDataProxyManagers[(int)mCurrentMode];
+        }
+        
+        protected override void OnGoToClicked(SpawnModDataProxy item)
+        {
+            // SpawnModDataProxy doesn't have direct goto functionality
+            LogDebug($"GoTo not available for SpawnModDataProxy items");
+        }
+        
+        protected override void OnDeleteClicked(SpawnModDataProxy item)
+        {
+            // SpawnModDataProxy deletion would need special handling
+            LogDebug($"Delete not available for SpawnModDataProxy items - use spawn region management instead");
         }
     }
 }

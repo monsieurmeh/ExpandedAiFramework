@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Il2Cpp;
 using static ExpandedAiFramework.DebugMenu.Extensions;
+using ExpandedAiFramework.StolenCode;
 
 namespace ExpandedAiFramework.DebugMenu
 {
@@ -298,7 +299,6 @@ namespace ExpandedAiFramework.DebugMenu
             {
                 mCurrentTabProvider.Refresh();
             }
-
             InputBLocker.LockPosition(true);
         }
 

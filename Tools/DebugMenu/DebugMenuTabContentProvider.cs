@@ -28,12 +28,17 @@ namespace ExpandedAiFramework.DebugMenu
         protected List<T> mData = new List<T>();
         protected List<T> mFilteredData = new List<T>();
         protected List<GameObject> mListItems = new List<GameObject>();
+        protected T mSelectedItem = default(T);
+        protected int mSelectedIndex = -1;
 
         // State
         protected bool mIsVisible = false;
         protected bool mIsLoading = false;
         protected string mSceneFilter = "";
         protected string mNameFilter = "";
+
+        // SubDataManager for CRUD operations
+        protected ISubDataManager mSubDataManager;
 
         public virtual void Initialize(GameObject parentContentArea)
         {
@@ -53,6 +58,7 @@ namespace ExpandedAiFramework.DebugMenu
             rootRect.offsetMax = Vector2.zero;
 
             CreateFilterPanel();
+            CreateActionPanel();
             CreateListPanel();
             CreateStatusText();
 
@@ -122,6 +128,67 @@ namespace ExpandedAiFramework.DebugMenu
             return group;
         }
 
+        protected virtual void CreateActionPanel()
+        {
+            var actionPanel = new GameObject("ActionPanel");
+            actionPanel.transform.SetParent(mRootPanel.transform, false);
+            
+            var actionRect = actionPanel.DefinitelyGetComponent<RectTransform>();
+            actionRect.anchorMin = new Vector2(0, 0.85f);
+            actionRect.anchorMax = new Vector2(1, 0.95f);
+            actionRect.offsetMin = new Vector2(10, -10);
+            actionRect.offsetMax = new Vector2(-10, -10);
+            
+            // Add background
+            var actionBg = actionPanel.AddComponent<Image>();
+            actionBg.color = new Color(0.12f, 0.12f, 0.12f, 0.9f);
+            
+            var actionLayout = actionPanel.AddComponent<HorizontalLayoutGroup>();
+            actionLayout.spacing = 10;
+            actionLayout.padding = new RectOffset(10, 10, 5, 5);
+            actionLayout.childControlWidth = false;
+            actionLayout.childControlHeight = false;
+            actionLayout.childForceExpandWidth = false;
+            actionLayout.childForceExpandHeight = false;
+
+            // Create global action button group only
+            CreateGlobalActionGroup(actionPanel);
+        }
+
+        protected virtual void CreateGlobalActionGroup(GameObject parent)
+        {
+            var globalGroup = CreateActionGroup("Global Actions", parent);
+            
+            // Save button
+            var saveButton = CreateButton("Save", globalGroup.transform, OnSaveClicked);
+            
+            // Load button
+            var loadButton = CreateButton("Load", globalGroup.transform, OnLoadClicked);
+            
+            // Refresh button
+            var refreshButton = CreateButton("Refresh", globalGroup.transform, OnRefreshClicked);
+        }
+
+
+        protected virtual GameObject CreateActionGroup(string groupName, GameObject parent)
+        {
+            var group = new GameObject(groupName);
+            group.transform.SetParent(parent.transform, false);
+            
+            var groupRect = group.DefinitelyGetComponent<RectTransform>();
+            groupRect.sizeDelta = new Vector2(300, 35);
+            
+            var groupLayout = group.AddComponent<HorizontalLayoutGroup>();
+            groupLayout.spacing = 5;
+            groupLayout.padding = new RectOffset(5, 5, 2, 2);
+            groupLayout.childControlWidth = false;
+            groupLayout.childControlHeight = false;
+            groupLayout.childForceExpandWidth = false;
+            groupLayout.childForceExpandHeight = false;
+            
+            return group;
+        }
+
         protected virtual void CreateListPanel()
         {
             mListPanel = new GameObject("ListPanel");
@@ -129,7 +196,7 @@ namespace ExpandedAiFramework.DebugMenu
             
             var listRect = mListPanel.DefinitelyGetComponent<RectTransform>();
             listRect.anchorMin = new Vector2(0, 0.05f);
-            listRect.anchorMax = new Vector2(1, 0.95f);
+            listRect.anchorMax = new Vector2(1, 0.85f);
             listRect.offsetMin = new Vector2(10, 10);
             listRect.offsetMax = new Vector2(-10, -10);
             
@@ -329,24 +396,58 @@ namespace ExpandedAiFramework.DebugMenu
             var itemRect = itemObj.DefinitelyGetComponent<RectTransform>();
             itemRect.sizeDelta = new Vector2(0, GetItemHeight());
             
-            var button = itemObj.AddComponent<Button>();
-            var buttonImage = itemObj.AddComponent<Image>();
-            buttonImage.color = index % 2 == 0 ? 
+            // Main content area
+            var contentArea = new GameObject("ContentArea");
+            contentArea.transform.SetParent(itemObj.transform, false);
+            
+            var contentRect = contentArea.DefinitelyGetComponent<RectTransform>();
+            contentRect.anchorMin = new Vector2(0, 0);
+            contentRect.anchorMax = new Vector2(0.75f, 1); // Leave space for buttons
+            contentRect.offsetMin = Vector2.zero;
+            contentRect.offsetMax = Vector2.zero;
+            
+            var contentButton = contentArea.AddComponent<Button>();
+            var contentImage = contentArea.AddComponent<Image>();
+            contentImage.color = index % 2 == 0 ? 
                 new Color(0.22f, 0.22f, 0.22f, 1f) : 
                 new Color(0.18f, 0.18f, 0.18f, 1f);
             
             // Button hover colors
-            var colors = button.colors;
-            colors.normalColor = buttonImage.color;
+            var colors = contentButton.colors;
+            colors.normalColor = contentImage.color;
             colors.highlightedColor = new Color(0.35f, 0.35f, 0.35f, 1f);
             colors.pressedColor = new Color(0.15f, 0.15f, 0.15f, 1f);
-            button.colors = colors;
+            contentButton.colors = colors;
             
             // Item content
-            PopulateListItem(itemObj, item, index);
+            PopulateListItem(contentArea, item, index);
             
             // Click handler
-            button.onClick.AddListener(new Action(() => OnItemClicked(item)));
+            contentButton.onClick.AddListener(new Action(() => OnItemClicked(item)));
+            
+            // Entity action buttons area
+            var buttonArea = new GameObject("ButtonArea");
+            buttonArea.transform.SetParent(itemObj.transform, false);
+            
+            var buttonRect = buttonArea.DefinitelyGetComponent<RectTransform>();
+            buttonRect.anchorMin = new Vector2(0.75f, 0);
+            buttonRect.anchorMax = new Vector2(1, 1);
+            buttonRect.offsetMin = Vector2.zero;
+            buttonRect.offsetMax = Vector2.zero;
+            
+            var buttonBg = buttonArea.AddComponent<Image>();
+            buttonBg.color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
+            
+            var buttonLayout = buttonArea.AddComponent<HorizontalLayoutGroup>();
+            buttonLayout.spacing = 2;
+            buttonLayout.padding = new RectOffset(5, 5, 5, 5);
+            buttonLayout.childControlWidth = true;
+            buttonLayout.childControlHeight = false;
+            buttonLayout.childForceExpandWidth = true;
+            buttonLayout.childForceExpandHeight = false;
+            
+            // Create entity action buttons
+            CreateEntityActionButtons(buttonArea, item, index);
             
             return itemObj;
         }
@@ -387,6 +488,11 @@ namespace ExpandedAiFramework.DebugMenu
         {
             LogDebug($"Item clicked: {item?.DisplayName ?? "null"}");
             
+            // Update selection
+            mSelectedItem = item;
+            mSelectedIndex = mFilteredData.IndexOf(item);
+            UpdateListItemSelection();
+            
             if (DebugMenuManager.Instance == null)
             {
                 LogError("DebugMenuManager.Instance is null!");
@@ -395,6 +501,79 @@ namespace ExpandedAiFramework.DebugMenu
             
             LogDebug("Calling ShowItemDetails...");
             DebugMenuManager.Instance.ShowItemDetails(item);
+        }
+
+        protected virtual void UpdateListItemSelection()
+        {
+            for (int i = 0; i < mListItems.Count; i++)
+            {
+                if (mListItems[i] != null)
+                {
+                    var image = mListItems[i].GetComponent<Image>();
+                    if (image != null)
+                    {
+                        if (i == mSelectedIndex)
+                        {
+                            // Highlight selected item
+                            image.color = new Color(0.4f, 0.6f, 0.8f, 1f);
+                        }
+                        else
+                        {
+                            // Normal alternating colors
+                            image.color = i % 2 == 0 ? 
+                                new Color(0.22f, 0.22f, 0.22f, 1f) : 
+                                new Color(0.18f, 0.18f, 0.18f, 1f);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Action event handlers
+        protected virtual void OnSaveClicked()
+        {
+            if (mSubDataManager != null)
+            {
+                mSubDataManager.ScheduleSave();
+                LogDebug($"Saved data for {GetTabDisplayName()}");
+            }
+            else
+            {
+                LogError($"No SubDataManager found for {GetTabDisplayName()}");
+            }
+        }
+
+        protected virtual void OnLoadClicked()
+        {
+            if (mSubDataManager != null)
+            {
+                mSubDataManager.ScheduleLoad();
+                LogDebug($"Loaded data for {GetTabDisplayName()}");
+                Refresh(); // Refresh the list after loading
+            }
+            else
+            {
+                LogError($"No SubDataManager found for {GetTabDisplayName()}");
+            }
+        }
+
+        protected virtual void CreateEntityActionButtons(GameObject buttonArea, T item, int index)
+        {
+            // GoTo button
+            var gotoButton = CreateButton("GoTo", buttonArea.transform, () => OnGoToClicked(item));
+            
+            // Delete button
+            var deleteButton = CreateButton("Delete", buttonArea.transform, () => OnDeleteClicked(item));
+        }
+
+        protected virtual void OnGoToClicked(T item)
+        {
+            LogDebug($"GoTo clicked for {GetItemName(item)} - override in derived class for specific behavior");
+        }
+
+        protected virtual void OnDeleteClicked(T item)
+        {
+            LogDebug($"Delete clicked for {GetItemName(item)} - override in derived class for specific behavior");
         }
 
         // Public interface
@@ -535,5 +714,8 @@ namespace ExpandedAiFramework.DebugMenu
         protected abstract string GetTabDisplayName();
         protected abstract float GetItemHeight();
         protected virtual bool PassesCustomFilter(T item) => true;
+
+        // SubDataManager integration - to be set by derived classes
+        protected abstract ISubDataManager GetSubDataManager();
     }
 }
