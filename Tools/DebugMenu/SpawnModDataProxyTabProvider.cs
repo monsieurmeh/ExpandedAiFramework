@@ -19,16 +19,10 @@ namespace ExpandedAiFramework.DebugMenu
             base.Initialize(parentContentArea);
         }
 
-        protected override void CreateFilterPanel()
+        protected override void CreateTabSpecificButtons()
         {
-            base.CreateFilterPanel();
-            AddModeButtonsToFilter();
-        }
-
-        void AddModeButtonsToFilter()
-        {
-            // Add mode selection group to filter panel
-            var modeGroup = CreateFilterGroup("Wildlife Mode");
+            // Add Wildlife Mode selection buttons
+            var modeGroup = CreateButtonGroup("Wildlife Mode", 160);
             mNormalButton = CreateButton("Normal", modeGroup.transform, new Action(() => SwitchMode(WildlifeMode.Normal)));
             mAuroraButton = CreateButton("Aurora", modeGroup.transform, new Action(() => SwitchMode(WildlifeMode.Aurora)));
             

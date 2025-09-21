@@ -60,14 +60,11 @@ namespace ExpandedAiFramework.DebugMenu
             return Manager.DataManager.SpawnRegionModDataProxyManager;
         }
         
-        protected override void CreateGlobalActionGroup(GameObject parent)
+        protected override void CreateTabSpecificButtons()
         {
-            base.CreateGlobalActionGroup(parent);
-            
-            var globalGroup = parent.transform.GetChild(0).gameObject; // Get the group we just created
-            
-            // Add Paint button
-            var paintButton = CreateButton("Paint", globalGroup.transform, OnPaintClicked);
+            // Add Paint button for spawn regions
+            var paintGroup = CreateButtonGroup("Paint Actions", 80);
+            var paintButton = CreateButton("Paint", paintGroup.transform, OnPaintClicked);
         }
         
         protected virtual void OnPaintClicked()

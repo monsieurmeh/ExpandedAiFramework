@@ -62,14 +62,11 @@ namespace ExpandedAiFramework.DebugMenu
             return Manager.DataManager.MapDataManagers.TryGetValue(typeof(HidingSpot), out var manager) ? manager as ISubDataManager : null;
         }
         
-        protected override void CreateGlobalActionGroup(GameObject parent)
+        protected override void CreateTabSpecificButtons()
         {
-            base.CreateGlobalActionGroup(parent);
-            
-            var globalGroup = parent.transform.GetChild(0).gameObject; // Get the group we just created
-            
-            // Add Paint button
-            var paintButton = CreateButton("Paint", globalGroup.transform, OnPaintClicked);
+            // Add Paint button for hiding spots
+            var paintGroup = CreateButtonGroup("Paint Actions", 80);
+            var paintButton = CreateButton("Paint", paintGroup.transform, OnPaintClicked);
         }
         
         protected virtual void OnPaintClicked()

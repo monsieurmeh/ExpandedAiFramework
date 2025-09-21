@@ -57,137 +57,118 @@ namespace ExpandedAiFramework.DebugMenu
             rootRect.offsetMin = Vector2.zero;
             rootRect.offsetMax = Vector2.zero;
 
-            CreateFilterPanel();
-            CreateActionPanel();
+            CreateUnifiedButtonBar();
             CreateListPanel();
             CreateStatusText();
 
             mRootPanel.SetActive(false);
         }
 
-        protected virtual void CreateFilterPanel()
+        protected virtual void CreateUnifiedButtonBar()
         {
-            mFilterPanel = new GameObject("FilterPanel");
+            // Create unified button bar that combines filter, action, and tab-specific buttons
+            mFilterPanel = new GameObject("UnifiedButtonBar");
             mFilterPanel.transform.SetParent(mRootPanel.transform, false);
             
-            var filterRect = mFilterPanel.DefinitelyGetComponent<RectTransform>();
-            filterRect.anchorMin = new Vector2(0, 0.95f);
-            filterRect.anchorMax = new Vector2(1, 1);
-            filterRect.offsetMin = new Vector2(10, -10);
-            filterRect.offsetMax = new Vector2(-10, -10);
+            var buttonBarRect = mFilterPanel.DefinitelyGetComponent<RectTransform>();
+            buttonBarRect.anchorMin = new Vector2(0, 0.9f);
+            buttonBarRect.anchorMax = new Vector2(1, 1);
+            buttonBarRect.offsetMin = new Vector2(10, -10);
+            buttonBarRect.offsetMax = new Vector2(-10, -10);
             
             // Add background
-            var filterBg = mFilterPanel.AddComponent<Image>();
-            filterBg.color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
+            var buttonBarBg = mFilterPanel.AddComponent<Image>();
+            buttonBarBg.color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
             
-            var filterLayout = mFilterPanel.AddComponent<HorizontalLayoutGroup>();
-            filterLayout.spacing = 5;
-            filterLayout.padding = new RectOffset(5, 5, 2, 2);
-            filterLayout.childControlWidth = false;
-            filterLayout.childControlHeight = true;
-            filterLayout.childForceExpandHeight = false;
+            var buttonBarLayout = mFilterPanel.AddComponent<HorizontalLayoutGroup>();
+            buttonBarLayout.spacing = 5;
+            buttonBarLayout.padding = new RectOffset(5, 5, 2, 2);
+            buttonBarLayout.childControlWidth = false;
+            buttonBarLayout.childControlHeight = true;
+            buttonBarLayout.childForceExpandWidth = false;
+            buttonBarLayout.childForceExpandHeight = false;
+            buttonBarLayout.childAlignment = TextAnchor.MiddleLeft; // Left-align buttons
 
+            // Create filter controls first (always present)
+            CreateFilterControls();
+            
+            // Create global action buttons (always present)
+            CreateGlobalActionButtons();
+            
+            // Create tab-specific buttons (will be added by derived classes)
+            CreateTabSpecificButtons();
+        }
+
+        protected virtual void CreateFilterControls()
+        {
             // Scene filter group
-            var sceneGroup = CreateFilterGroup("Scene Filter");
+            var sceneGroup = CreateButtonGroup("Scene Filter", 180);
             CreateLabel("Scene:", sceneGroup.transform, 50);
             mSceneFilterInput = CreateInputField("", sceneGroup.transform, 120, OnSceneFilterChanged);
             
             // Name filter group  
-            var nameGroup = CreateFilterGroup("Name Filter");
+            var nameGroup = CreateButtonGroup("Name Filter", 180);
             CreateLabel("Name:", nameGroup.transform, 50);
             mNameFilterInput = CreateInputField("", nameGroup.transform, 120, OnNameFilterChanged);
             
-            // Button group
-            var buttonGroup = CreateFilterGroup("Actions");
-            mApplyFilterButton = CreateButton("Apply", buttonGroup.transform, OnApplyFilterClicked);
-            mClearFilterButton = CreateButton("Clear", buttonGroup.transform, OnClearFilterClicked);
-            mRefreshButton = CreateButton("Refresh", buttonGroup.transform, OnRefreshClicked);
+            // Filter action buttons
+            var filterButtonGroup = CreateButtonGroup("Filter Actions", 220);
+            mApplyFilterButton = CreateButton("Apply", filterButtonGroup.transform, OnApplyFilterClicked);
+            mClearFilterButton = CreateButton("Clear", filterButtonGroup.transform, OnClearFilterClicked);
         }
 
-        protected virtual GameObject CreateFilterGroup(string groupName)
+        protected virtual void CreateGlobalActionButtons()
+        {
+            // Global action buttons (Save, Load, Refresh)
+            var globalGroup = CreateButtonGroup("Global Actions", 220);
+            var saveButton = CreateButton("Save", globalGroup.transform, OnSaveClicked);
+            var loadButton = CreateButton("Load", globalGroup.transform, OnLoadClicked);
+            mRefreshButton = CreateButton("Refresh", globalGroup.transform, OnRefreshClicked);
+        }
+
+        protected virtual void CreateTabSpecificButtons()
+        {
+            // Override in derived classes to add tab-specific buttons
+        }
+
+        protected virtual GameObject CreateButtonGroup(string groupName, float width)
         {
             var group = new GameObject(groupName);
             group.transform.SetParent(mFilterPanel.transform, false);
             
             var groupRect = group.DefinitelyGetComponent<RectTransform>();
+            groupRect.sizeDelta = new Vector2(width, 35);
+            
+            // Add LayoutElement to maintain consistent sizing
+            var layoutElement = group.AddComponent<LayoutElement>();
+            layoutElement.preferredWidth = width;
+            layoutElement.preferredHeight = 35;
+            layoutElement.flexibleWidth = 0;
+            layoutElement.flexibleHeight = 0;
+            
+            var groupLayout = group.AddComponent<HorizontalLayoutGroup>();
+            groupLayout.spacing = 5;
+            groupLayout.padding = new RectOffset(5, 5, 2, 2);
+            groupLayout.childControlWidth = false;
+            groupLayout.childControlHeight = false;
+            groupLayout.childForceExpandWidth = false;
+            groupLayout.childForceExpandHeight = false;
+            groupLayout.childAlignment = TextAnchor.MiddleLeft; // Left-align within group
+            
+            return group;
+        }
+
+        // Legacy method for backward compatibility
+        protected virtual GameObject CreateFilterGroup(string groupName)
+        {
             if (groupName == "Actions")
-                groupRect.sizeDelta = new Vector2(250, 35); // Much wider for 3 buttons
+                return CreateButtonGroup(groupName, 250);
             else if (groupName == "Wildlife Mode")
-                groupRect.sizeDelta = new Vector2(160, 35); // Wide enough for 2 mode buttons
+                return CreateButtonGroup(groupName, 160);
             else
-                groupRect.sizeDelta = new Vector2(180, 35); // Wide enough for label + input
-            
-            var groupLayout = group.AddComponent<HorizontalLayoutGroup>();
-            groupLayout.spacing = 5;
-            groupLayout.padding = new RectOffset(5, 5, 2, 2);
-            groupLayout.childControlWidth = false;
-            groupLayout.childControlHeight = false;
-            groupLayout.childForceExpandWidth = false;
-            groupLayout.childForceExpandHeight = false;
-            
-            return group;
+                return CreateButtonGroup(groupName, 180);
         }
 
-        protected virtual void CreateActionPanel()
-        {
-            var actionPanel = new GameObject("ActionPanel");
-            actionPanel.transform.SetParent(mRootPanel.transform, false);
-            
-            var actionRect = actionPanel.DefinitelyGetComponent<RectTransform>();
-            actionRect.anchorMin = new Vector2(0, 0.85f);
-            actionRect.anchorMax = new Vector2(1, 0.95f);
-            actionRect.offsetMin = new Vector2(10, -10);
-            actionRect.offsetMax = new Vector2(-10, -10);
-            
-            // Add background
-            var actionBg = actionPanel.AddComponent<Image>();
-            actionBg.color = new Color(0.12f, 0.12f, 0.12f, 0.9f);
-            
-            var actionLayout = actionPanel.AddComponent<HorizontalLayoutGroup>();
-            actionLayout.spacing = 10;
-            actionLayout.padding = new RectOffset(10, 10, 5, 5);
-            actionLayout.childControlWidth = false;
-            actionLayout.childControlHeight = false;
-            actionLayout.childForceExpandWidth = false;
-            actionLayout.childForceExpandHeight = false;
-
-            // Create global action button group only
-            CreateGlobalActionGroup(actionPanel);
-        }
-
-        protected virtual void CreateGlobalActionGroup(GameObject parent)
-        {
-            var globalGroup = CreateActionGroup("Global Actions", parent);
-            
-            // Save button
-            var saveButton = CreateButton("Save", globalGroup.transform, OnSaveClicked);
-            
-            // Load button
-            var loadButton = CreateButton("Load", globalGroup.transform, OnLoadClicked);
-            
-            // Refresh button
-            var refreshButton = CreateButton("Refresh", globalGroup.transform, OnRefreshClicked);
-        }
-
-
-        protected virtual GameObject CreateActionGroup(string groupName, GameObject parent)
-        {
-            var group = new GameObject(groupName);
-            group.transform.SetParent(parent.transform, false);
-            
-            var groupRect = group.DefinitelyGetComponent<RectTransform>();
-            groupRect.sizeDelta = new Vector2(300, 35);
-            
-            var groupLayout = group.AddComponent<HorizontalLayoutGroup>();
-            groupLayout.spacing = 5;
-            groupLayout.padding = new RectOffset(5, 5, 2, 2);
-            groupLayout.childControlWidth = false;
-            groupLayout.childControlHeight = false;
-            groupLayout.childForceExpandWidth = false;
-            groupLayout.childForceExpandHeight = false;
-            
-            return group;
-        }
 
         protected virtual void CreateListPanel()
         {
@@ -196,7 +177,7 @@ namespace ExpandedAiFramework.DebugMenu
             
             var listRect = mListPanel.DefinitelyGetComponent<RectTransform>();
             listRect.anchorMin = new Vector2(0, 0.05f);
-            listRect.anchorMax = new Vector2(1, 0.85f);
+            listRect.anchorMax = new Vector2(1, 0.9f); // Adjust to account for unified button bar
             listRect.offsetMin = new Vector2(10, 10);
             listRect.offsetMax = new Vector2(-10, -10);
             
