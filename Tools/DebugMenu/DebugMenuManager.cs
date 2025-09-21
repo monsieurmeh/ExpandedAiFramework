@@ -298,6 +298,8 @@ namespace ExpandedAiFramework.DebugMenu
             {
                 mCurrentTabProvider.Refresh();
             }
+
+            InputBLocker.LockPosition(true);
         }
 
         public void HideMenu()
@@ -307,6 +309,7 @@ namespace ExpandedAiFramework.DebugMenu
             {
                 mCanvasObject.SetActive(false);
             }
+            InputBLocker.LockPosition(false);
         }
 
         public void ProcessCommand(string[] args)
