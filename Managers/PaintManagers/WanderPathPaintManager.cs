@@ -27,6 +27,7 @@ namespace ExpandedAiFramework
             if (args.Length > 1 && !string.IsNullOrEmpty(args[1]))
             {
                 mCurrentDataPath = args[1];
+                this.LogAlwaysInstanced($"Using custom data path: {mCurrentDataPath}");
             }
 
             GetUniqueMapDataName(baseName, (uniqueName) =>

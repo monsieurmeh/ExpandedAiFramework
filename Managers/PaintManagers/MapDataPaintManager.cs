@@ -22,7 +22,11 @@ namespace ExpandedAiFramework
         public override void Initialize()
         {
             base.Initialize();
-            mCurrentDataPath = mDefaultDataPath;
+            // Only set default path if no custom path has been set
+            if (string.IsNullOrEmpty(mCurrentDataPath))
+            {
+                mCurrentDataPath = mDefaultDataPath;
+            }
         }
 
         public override void ProcessCommand(string command, string[] args)
