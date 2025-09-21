@@ -9,14 +9,14 @@ using System.Resources;
 using MelonLoader.TinyJSON;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.11.7", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.11.8", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 namespace ExpandedAiFramework
 {
     public class Main : MelonMod
     {
-        private const string CurrentVersion = "0.11.7";
+        private const string CurrentVersion = "0.11.8";
         protected EAFManager mManager;
 
         public override void OnInitializeMelon()
@@ -57,19 +57,22 @@ namespace ExpandedAiFramework
                 shouldRefreshEmbeddedData = true;
                 File.WriteAllText(Path.Combine(basePath, "VersionInfo.txt"), CurrentVersion, System.Text.Encoding.UTF8);
             }
-            if (shouldRefreshEmbeddedData || !File.Exists(Path.Combine(basePath, "HidingSpots.json")))
-            {
-                EmbeddedResourceExtractor.Extract("HidingSpots.Json", Path.Combine(basePath, "HidingSpots.Json"));
-            }
-            if (shouldRefreshEmbeddedData || !File.Exists(Path.Combine(basePath, "WanderPaths.Json")))
-            {
-                EmbeddedResourceExtractor.Extract("WanderPaths.Json", Path.Combine(basePath, "WanderPaths.Json"));
-            }
+
+            RefreshEmbeddedData(basePath, "HidingSpots.Json", shouldRefreshEmbeddedData);
+            RefreshEmbeddedData(basePath, "WanderPaths.Json", shouldRefreshEmbeddedData);
+            RefreshEmbeddedData(basePath, "assets", shouldRefreshEmbeddedData);
             mManager = EAFManager.Instance;
             mManager?.Initialize(new ExpandedAiFrameworkSettings(Path.Combine(DataFolderPath, $"Settings")));
             return mManager != null;
         }
 
+        private void RefreshEmbeddedData(string basePath, string fileName, bool force) 
+        {
+            if (force || !File.Exists(Path.Combine(basePath, fileName)))
+            {
+                EmbeddedResourceExtractor.Extract(fileName, Path.Combine(basePath, fileName));
+            }
+        }
 
         public override void OnUpdate()
         {

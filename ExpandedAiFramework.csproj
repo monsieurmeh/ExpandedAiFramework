@@ -50,6 +50,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\HidingSpots.json" />
     <EmbeddedResource Include="Data\WanderPaths.json" />
+    <EmbeddedResource Include="Data\assets" />
   </ItemGroup>
   
   <ItemGroup>

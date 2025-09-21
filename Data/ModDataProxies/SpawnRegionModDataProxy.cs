@@ -13,7 +13,9 @@ namespace ExpandedAiFramework
         //Mod Data
         public AiType AiType; 
         public AiSubType AiSubType;
+        public WolfType WolfType;
         public float LastDespawnTime;
+        public string Name;
 
         //Vanilla Data
         public float HoursPlayed;
@@ -58,6 +60,22 @@ namespace ExpandedAiFramework
             WasActiveBeforeAurora = spawnRegion.VanillaSpawnRegion.m_WasActiveBeforeAurora;
             CooldownTimerHours = spawnRegion.VanillaSpawnRegion.m_CooldownTimerHours;
             CurrentPosition = spawnRegion.VanillaSpawnRegion.m_Center;
+            BaseAi baseAi = spawnRegion.VanillaSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>();
+            if (baseAi != null)
+            {
+                if (baseAi.m_AiSubType == AiSubType.Wolf)
+                {
+                    WolfType = baseAi.NormalWolf == null ? WolfType.Timberwolf : WolfType.Normal;
+                }
+                else if (baseAi.m_AiSubType == AiSubType.Rabbit)
+                {
+                    WolfType = baseAi.Ptarmigan == null ? WolfType.Timberwolf : WolfType.Normal;
+                }
+                else
+                {
+                    WolfType = WolfType.Normal;
+                }
+            }
         }
     }
 }

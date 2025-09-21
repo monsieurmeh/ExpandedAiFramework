@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.IO;
 using static ExpandedAiFramework.DebugMenu.Extensions;
 using ExpandedAiFramework.UI;
 
@@ -44,8 +45,8 @@ namespace ExpandedAiFramework.DebugMenu
             // 1. Show/Hide toggle (tiny, first)
             CreateShowHideToggle(itemObj.transform, item, index);
             
-            // 2. Icon (small square)
-            CreateIcon(itemObj.transform, itemHeight);
+            // 2. Icon (small square with wildlife icon)
+            CreateIcon(itemObj.transform, itemHeight, item);
             
             // 3. Name and Position (takes up most space)
             CreateDisplayName(itemObj.transform, GetItemDisplayText(item), onItemClicked != null ? () => onItemClicked(item) : null);
@@ -53,50 +54,130 @@ namespace ExpandedAiFramework.DebugMenu
             return itemObj;
         }
         
+
         /// <summary>
-        /// Gets the display text for an item (Name and Position if available)
+        /// Gets the display text for an item: Name (SceneName) @ Position
         /// </summary>
         private static string GetItemDisplayText<T>(T item) where T : ISerializedData
+        {            
+            switch (item)
+            {
+                case HidingSpot hidingSpot:
+                    return hidingSpot.Name;
+                case WanderPath wanderPath:
+                    return wanderPath.Name;
+                case SpawnModDataProxy spawnModDataProxy:
+                    return spawnModDataProxy.VariantSpawnType.Name;
+                case SpawnRegionModDataProxy spawnRegionModDataProxy:
+                    return spawnRegionModDataProxy.Name;
+                default:
+                    return item.DisplayName;
+            }
+        }
+
+        private struct SpriteInfo 
         {
-            var name = "";
-            var position = "";
-            
-            // Try to get name from various properties
-            var type = item.GetType();
-            var nameProperty = type.GetProperty("Name");
-            if (nameProperty != null)
-            {
-                name = nameProperty.GetValue(item)?.ToString() ?? "";
-            }
-            else
-            {
-                name = item.DisplayName; // Fallback to DisplayName
-            }
-            
-            // Try to get position
-            var positionProperty = type.GetProperty("Position");
-            if (positionProperty != null && positionProperty.PropertyType == typeof(UnityEngine.Vector3))
-            {
-                var pos = (UnityEngine.Vector3)positionProperty.GetValue(item);
-                position = $" ({pos.x:F1}, {pos.y:F1}, {pos.z:F1})";
-            }
-            else
-            {
-                var currentPositionProperty = type.GetProperty("CurrentPosition");
-                if (currentPositionProperty != null && currentPositionProperty.PropertyType == typeof(UnityEngine.Vector3))
-                {
-                    var pos = (UnityEngine.Vector3)currentPositionProperty.GetValue(item);
-                    position = $" ({pos.x:F1}, {pos.y:F1}, {pos.z:F1})";
-                }
-            }
-            
-            return name + position;
+            public string SpriteName;
+            public string AtlasName;
+            public bool UseAtlas;
         }
         
         /// <summary>
-        /// Creates a small square icon with white background
+        /// Gets the wildlife icon name based on the data item
         /// </summary>
-        private static void CreateIcon(Transform parent, float itemHeight)
+        private static SpriteInfo GetIconInfo<T>(T item) where T : ISerializedData
+        {
+            var type = item.GetType();
+            switch (type.Name)
+            {
+                case "SpawnModDataProxy":
+                    if (item is not SpawnModDataProxy spawnModDataProxy)
+                    {
+                        return new SpriteInfo { SpriteName = "Default", AtlasName = "Default", UseAtlas = false };
+                    }
+                     return new SpriteInfo { SpriteName = MapAiSubTypeToIcon(GetAiTypeString(spawnModDataProxy), spawnModDataProxy.WildlifeMode.ToString()), AtlasName = "", UseAtlas = false };
+                case "SpawnRegionModDataProxy":
+                    if (item is not SpawnRegionModDataProxy spawnRegionModDataProxy)
+                    {   
+                        return new SpriteInfo { SpriteName = "Default", AtlasName = "Default", UseAtlas = false };
+                    }
+                     return new SpriteInfo { SpriteName = MapAiSubTypeToIcon(GetAiTypeString(spawnRegionModDataProxy), spawnRegionModDataProxy.WildlifeMode.ToString()), AtlasName = "", UseAtlas = false };
+                default:
+                    return new SpriteInfo { SpriteName = "Default", AtlasName = "Default", UseAtlas = false };
+            }
+        }
+
+        private static string GetAiTypeString(SpawnModDataProxy spawnModDataProxy)
+        {
+            if (spawnModDataProxy.AiSubType == AiSubType.Wolf)
+            {
+                return spawnModDataProxy.WolfType == WolfType.Timberwolf ? "timberwolf" : "wolf";
+            }
+            else if (spawnModDataProxy.AiSubType == AiSubType.Rabbit)
+            {
+                return spawnModDataProxy.WolfType == WolfType.Timberwolf ? "ptarmigan" : "rabbit";
+            }
+            return spawnModDataProxy.AiSubType.ToString();
+        }
+
+        private static string GetAiTypeString(SpawnRegionModDataProxy spawnRegionModDataProxy)
+        {
+            if (spawnRegionModDataProxy.AiSubType == AiSubType.Wolf)
+            {
+                return spawnRegionModDataProxy.WolfType == WolfType.Timberwolf ? "timberwolf" : "wolf";
+            }
+            else if (spawnRegionModDataProxy.AiSubType == AiSubType.Rabbit)
+            {
+                return spawnRegionModDataProxy.WolfType == WolfType.Timberwolf ? "ptarmigan" : "rabbit";
+            }
+            return spawnRegionModDataProxy.AiSubType.ToString();
+        }
+        
+        /// <summary>
+        /// Maps AiSubType and WildlifeMode to icon sprite names
+        /// </summary>
+        private static string MapAiSubTypeToIcon(string aiSubType, string wildlifeMode)
+        {
+            if (string.IsNullOrEmpty(aiSubType)) return null;
+            
+            // Handle aurora mode variants
+            bool isAurora = wildlifeMode?.Contains("Aurora") == true;
+            
+            switch (aiSubType.ToLower())
+            {
+                case "bear":
+                    return isAurora ? "Ico_DeadlyBear" : "Ico_Bear";
+                    
+                case "cougar":
+                    return isAurora ? "Ico_FuckingCougar" : "Ico_Cougar";
+                    
+                case "timberwolf":
+                    return isAurora ? "Ico_LaggyTimberwolf" : "Ico_Timberwolf";
+                    
+                case "wolf":
+                    return isAurora ? "Ico_WolfAurora" : "Ico_Wolf";
+                    
+                case "rabbit":
+                    return isAurora ? "Ico_HIM" : "Ico_RabbitHop";
+                    
+                case "ptarmigan":
+                    return isAurora ? "Ico_DeadlyBirb" : "Ico_Ptarmigan";
+                    
+                case "deer":
+                    return isAurora ? "Ico_HIM" : "Ico_RabbitHop";
+                    
+                case "moose":
+                    return isAurora ? "Ico_HIM" : "Ico_RabbitHop";
+                    
+                default:
+                    return isAurora ? "Ico_DeadlyBirb" : "Ico_Ptarmigan";
+            }
+        }
+        
+        /// <summary>
+        /// Creates a small square icon with wildlife sprite
+        /// </summary>
+        private static void CreateIcon<T>(Transform parent, float itemHeight, T item) where T : ISerializedData
         {
             var iconObj = new GameObject("Icon");
             iconObj.transform.SetParent(parent, false);
@@ -109,9 +190,67 @@ namespace ExpandedAiFramework.DebugMenu
             layoutElement.flexibleWidth = 0;
             layoutElement.flexibleHeight = 0;
             
-            var iconImage = iconObj.AddComponent<Image>();
-            iconImage.color = Color.white;
+            // Add background and mask to contain the icon properly
+            var backgroundImage = iconObj.AddComponent<Image>();
+            backgroundImage.color = new Color(0.1f, 0.1f, 0.1f, 0.3f); // Subtle background
+            
+            // Add mask to clip content to bounds
+            var mask = iconObj.AddComponent<Mask>();
+            mask.showMaskGraphic = true; // Show the background
+            
+
+            var iconInfo = GetIconInfo(item);
+            
+            // Create child object for the actual sprite (so it gets masked)
+            var spriteObj = new GameObject("Sprite");
+            spriteObj.transform.SetParent(iconObj.transform, false);
+            
+            var spriteRect = spriteObj.DefinitelyGetComponent<RectTransform>();
+            spriteRect.anchorMin = Vector2.zero;
+            spriteRect.anchorMax = Vector2.one;
+            spriteRect.offsetMin = new Vector2(2, 2); // Small padding
+            spriteRect.offsetMax = new Vector2(-2, -2);
+            
+            try
+            {
+                // Try to load sprite from AssetBundle (individual sprites, no atlas)
+                string assetBundlePath = Path.Combine(MelonLoader.Utils.MelonEnvironment.ModsDirectory, "EAF", "assets");
+                Sprite sprite = null;
+                
+                if (iconInfo.UseAtlas && !string.IsNullOrEmpty(iconInfo.AtlasName))
+                {
+                    sprite = ImageFactory.LoadSpriteFromAtlas(assetBundlePath, iconInfo.AtlasName, iconInfo.SpriteName);
+                }
+                else
+                {
+                    sprite = ImageFactory.LoadSpriteFromAssetBundle(assetBundlePath, iconInfo.SpriteName);
+                }
+                
+                // Create the sprite image
+                var spriteImage = spriteObj.AddComponent<Image>();
+                spriteImage.sprite = sprite;
+                spriteImage.type = Image.Type.Simple;
+                spriteImage.preserveAspect = true;
+                spriteImage.raycastTarget = false;
+                
+                // Set color - white for sprites, fallback color if no sprite
+                if (sprite != null)
+                {
+                    spriteImage.color = Color.white;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                // Fallback to colored square if AssetBundle loading fails
+                MelonLoader.MelonLogger.Warning($"Failed to load wildlife icon '{iconInfo.SpriteName}': {ex.Message}");
+                var spriteImage = spriteObj.AddComponent<Image>();
+                spriteImage.color = Color.white;
+                spriteImage.type = Image.Type.Simple;
+                spriteImage.preserveAspect = true;
+                spriteImage.raycastTarget = false;
+            }
         }
+
         
         /// <summary>
         /// Creates the display name text with optional click handler - takes up most of the space
@@ -184,16 +323,32 @@ namespace ExpandedAiFramework.DebugMenu
             var checkImage = checkmarkObj.AddComponent<Image>();
             checkImage.color = Color.green;
             
+            // Check if current scene matches item's scene
+            var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            var itemScene = item.Scene;
+            var isCurrentScene = string.Equals(currentScene, itemScene, System.StringComparison.OrdinalIgnoreCase);
+            
             // Setup toggle
             toggle.targetGraphic = bgImage;
             toggle.graphic = checkImage;
             toggle.isOn = true; // Default to visible/shown
+            toggle.interactable = isCurrentScene; // Disable if scene mismatch
+            
+            // Visual feedback for disabled state
+            if (!isCurrentScene)
+            {
+                bgImage.color = new Color(0.2f, 0.2f, 0.2f, 0.5f); // Darker, more transparent
+                checkImage.color = new Color(0.5f, 0.5f, 0.5f, 0.5f); // Grayed out
+            }
             
             // Add toggle functionality (this would need to be connected to actual show/hide logic)
             toggle.onValueChanged.AddListener(new Action<bool>((value) => {
                 // TODO: Connect to actual show/hide functionality
-                // For now, just change the checkmark color
-                checkImage.color = value ? Color.green : Color.red;
+                // For now, just change the checkmark color (only if enabled)
+                if (toggle.interactable)
+                {
+                    checkImage.color = value ? Color.green : Color.red;
+                }
             }));
         }
         
@@ -275,19 +430,19 @@ namespace ExpandedAiFramework.DebugMenu
         public static void SetItemSelected(GameObject listItem, bool isSelected, int originalIndex)
         {
             var image = listItem.GetComponent<Image>();
-            if (image != null)
-            {
-                if (isSelected)
+                if (image != null)
                 {
-                    // Highlight selected item
-                    image.color = new Color(0.4f, 0.6f, 0.8f, 1f);
-                }
-                else
-                {
-                    // Normal alternating colors
-                    image.color = originalIndex % 2 == 0 ? 
-                        new Color(0.22f, 0.22f, 0.22f, 1f) : 
-                        new Color(0.18f, 0.18f, 0.18f, 1f);
+                    if (isSelected)
+                    {
+                        // Highlight selected item
+                        image.color = new Color(0.4f, 0.6f, 0.8f, 1f);
+                    }
+                    else
+                    {
+                        // Normal alternating colors
+                        image.color = originalIndex % 2 == 0 ? 
+                            new Color(0.22f, 0.22f, 0.22f, 1f) : 
+                            new Color(0.18f, 0.18f, 0.18f, 1f);
                 }
             }
         }

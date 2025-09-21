@@ -294,7 +294,7 @@ namespace ExpandedAiFramework
                 string dataString = LoadJsonFromPath(dataPath);
                 if (dataString == null)
                 {
-                    this.LogVerboseInstanced($"No data found at path: {dataPath}");
+                    this.LogTraceInstanced($"No data found at path: {dataPath}");
                     return false;
                 }
                 Variant dataVariant = JSON.Load(dataString);
@@ -305,14 +305,14 @@ namespace ExpandedAiFramework
                     newData.DataLocation = dataPath;
                     if (!PostProcessDataAfterLoad(newData))
                     {
-                        this.LogVerboseInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
+                        this.LogTraceInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
                         continue;
                     }
-                    this.LogVerboseInstanced($"Loading {newData.DisplayName}");
                     if (!mDataContainer.TryAddData(newData))
                     {
-                        this.LogWarningInstanced($"Failed to add {newData.DisplayName}!");
+                        this.LogTraceInstanced($"Failed to add {newData.DisplayName}!");
                     }
+                    this.LogVerboseInstanced($"Loaded {newData.DisplayName} from {dataPath}");
                 }
                 this.LogVerboseInstanced($"Loaded from path: {dataPath}");
                 return true;

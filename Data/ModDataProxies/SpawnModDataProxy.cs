@@ -14,6 +14,7 @@ namespace ExpandedAiFramework
         public Guid ParentGuid = Guid.Empty;
         public Quaternion CurrentRotation;
         public AiSubType AiSubType;
+        public WolfType WolfType;
         public WildlifeMode WildlifeMode;
         public float LastDespawnTime;
         public string VariantSpawnTypeString;
@@ -97,6 +98,18 @@ namespace ExpandedAiFramework
         public virtual void Save(CustomBaseAi baseAi)
         {
             LastDespawnTime = GetCurrentTimelinePoint();
+            if (baseAi.BaseAi.m_AiSubType == AiSubType.Wolf)
+            {
+                WolfType = baseAi.BaseAi.NormalWolf == null ? WolfType.Timberwolf : WolfType.Normal;
+            }
+            else if (baseAi.BaseAi.m_AiSubType == AiSubType.Rabbit)
+            {
+                WolfType = baseAi.BaseAi.Ptarmigan == null ? WolfType.Timberwolf : WolfType.Normal;
+            }
+            else
+            {
+                WolfType = WolfType.Normal;
+            }
             AiUtils.GetClosestNavmeshPos(out mCurrentPosition, baseAi.transform.position, baseAi.transform.position, 5, 5);
             CurrentRotation = baseAi.transform.rotation;
         }
