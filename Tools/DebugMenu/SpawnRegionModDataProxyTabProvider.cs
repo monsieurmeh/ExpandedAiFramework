@@ -65,7 +65,14 @@ namespace ExpandedAiFramework.DebugMenu
             // Add Paint button for spawn regions
             var paintGroup = CreateButtonGroup("Paint Actions", 80);
             var paintButton = CreateButton("Paint", paintGroup.transform, OnPaintClicked);
+            
+            // Call base to add settings button
+            base.CreateTabSpecificButtons();
         }
+
+        protected override Dictionary<string, string> GetTabSettings() => new Dictionary<string, string>(); //not a lot here yet.
+            
+        protected override Dictionary<string, System.Action<string>> GetTabSettingsCallbacks() => new Dictionary<string, System.Action<string>>(); //not a lot here yet.
         
         protected virtual void OnPaintClicked()
         {
@@ -73,8 +80,12 @@ namespace ExpandedAiFramework.DebugMenu
             if (paintManager != null)
             {
                 string[] args = { "NewSpawnRegion" };
+                Manager.ConsoleCommandManager.SetActivePaintManager(paintManager);
                 paintManager.StartPaint(args);
                 LogDebug($"Started paint mode for {GetTabDisplayName()}");
+                
+                // Hide the debug menu
+                DebugMenu.DebugMenuManager.Instance?.HideMenu();
             }
             else
             {

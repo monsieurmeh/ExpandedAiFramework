@@ -18,6 +18,7 @@ namespace ExpandedAiFramework.DebugMenu
         private GameObject mTabButtonsPanel;
         private GameObject mContentArea;
         private DebugMenuModal mModal;
+        private DebugMenuSettingsModal mSettingsModal;
 
         // Tab management
         private Dictionary<string, IDebugMenuTabContentProvider> mTabProviders;
@@ -90,6 +91,7 @@ namespace ExpandedAiFramework.DebugMenu
                 CreateTabButtonsPanel();
                 CreateContentArea();
                 CreateModal();
+                CreateSettingsModal();
                 
                 // Initially hide the menu
                 mCanvasObject.SetActive(false);
@@ -162,6 +164,22 @@ namespace ExpandedAiFramework.DebugMenu
             modalRect.SetAsLastSibling(); // Render on top
             
             mModal = modalObj.AddComponent<DebugMenuModal>();
+        }
+
+        void CreateSettingsModal()
+        {
+            var settingsModalObj = new GameObject("DebugMenuSettingsModal");
+            settingsModalObj.transform.SetParent(mCanvasObject.transform, false);
+            
+            // Ensure settings modal is rendered on top of everything
+            var settingsModalRect = settingsModalObj.DefinitelyGetComponent<RectTransform>();
+            settingsModalRect.anchorMin = Vector2.zero;
+            settingsModalRect.anchorMax = Vector2.one;
+            settingsModalRect.offsetMin = Vector2.zero;
+            settingsModalRect.offsetMax = Vector2.zero;
+            settingsModalRect.SetAsLastSibling(); // Render on top
+            
+            mSettingsModal = settingsModalObj.AddComponent<DebugMenuSettingsModal>();
         }
 
         void RegisterTabProviders()
@@ -272,6 +290,20 @@ namespace ExpandedAiFramework.DebugMenu
             
             LogDebug("Calling mModal.ShowItemDetails...");
             mModal.ShowItemDetails(item);
+        }
+
+        public void ShowTabSettings(string tabName, Dictionary<string, string> settings, Dictionary<string, System.Action<string>> callbacks)
+        {
+            LogDebug($"ShowTabSettings called for tab: {tabName}");
+            
+            if (mSettingsModal == null)
+            {
+                LogError("mSettingsModal is null!");
+                return;
+            }
+            
+            LogDebug("Calling mSettingsModal.ShowSettings...");
+            mSettingsModal.ShowSettings(tabName, settings, callbacks);
         }
 
         public void ToggleMenu()

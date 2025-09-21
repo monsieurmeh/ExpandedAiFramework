@@ -9,6 +9,19 @@ namespace ExpandedAiFramework
         protected string mCurrentDataNameBase = string.Empty;
         protected string mCurrentDataPath = string.Empty;
         protected string mDefaultDataPath = string.Empty;
+
+        // Public accessors for settings
+        public string CurrentDataPath => mCurrentDataPath;
+        public string DefaultDataPath => mDefaultDataPath;
+        public string CurrentDataName => mCurrentDataName;
+        public string CurrentDataNameBase => mCurrentDataNameBase;
+
+        // Public setters for settings
+        public void SetDataPath(string path)
+        {
+            mCurrentDataPath = path;
+            this.LogAlwaysInstanced($"Data path set to: {path}");
+        }
         protected List<GameObject> mDebugShownObjects = new List<GameObject>();
         protected DataManager DataManager => mManager.DataManager;
 

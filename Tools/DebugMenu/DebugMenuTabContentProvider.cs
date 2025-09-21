@@ -128,8 +128,29 @@ namespace ExpandedAiFramework.DebugMenu
 
         protected virtual void CreateTabSpecificButtons()
         {
-            // Override in derived classes to add tab-specific buttons
+            // Always add settings button at the end
+            CreateSettingsButton();
         }
+
+        protected virtual void CreateSettingsButton()
+        {
+            var settingsGroup = CreateButtonGroup("Settings", 60);
+            var settingsButton = CreateButton("+", settingsGroup.transform, OnSettingsClicked);
+        }
+
+        protected virtual void OnSettingsClicked()
+        {
+            var settings = GetTabSettings();
+            var callbacks = GetTabSettingsCallbacks();
+            
+            if (DebugMenuManager.Instance != null)
+            {
+                DebugMenuManager.Instance.ShowTabSettings(GetTabDisplayName(), settings, callbacks);
+            }
+        }
+
+        protected abstract Dictionary<string, string> GetTabSettings();
+        protected abstract Dictionary<string, System.Action<string>> GetTabSettingsCallbacks();
 
         protected virtual GameObject CreateButtonGroup(string groupName, float width)
         {

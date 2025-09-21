@@ -67,6 +67,44 @@ namespace ExpandedAiFramework.DebugMenu
             // Add Paint button for hiding spots
             var paintGroup = CreateButtonGroup("Paint Actions", 80);
             var paintButton = CreateButton("Paint", paintGroup.transform, OnPaintClicked);
+            
+            // Call base to add settings button
+            base.CreateTabSpecificButtons();
+        }
+
+        protected override Dictionary<string, string> GetTabSettings()
+        {
+            var settings = new Dictionary<string, string>();
+            
+            var paintManager = Manager.PaintManagers.TryGetValue("hidingspot", out var pm) ? pm as HidingSpotPaintManager : null;
+            if (paintManager != null)
+            {
+                settings.Add("Data Path", paintManager.CurrentDataPath ?? paintManager.DefaultDataPath);
+                settings.Add("Current Data Name", paintManager.CurrentDataName ?? "");
+                settings.Add("Current Data Name Base", paintManager.CurrentDataNameBase ?? "HidingSpot");
+            }
+            
+            return settings;
+        }
+
+        protected override Dictionary<string, System.Action<string>> GetTabSettingsCallbacks()
+        {
+            var callbacks = new Dictionary<string, System.Action<string>>();
+            
+            var paintManager = Manager.PaintManagers.TryGetValue("hidingspot", out var pm) ? pm as HidingSpotPaintManager : null;
+            if (paintManager != null)
+            {
+                callbacks.Add("Data Path", (value) => {
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        paintManager.SetDataPath(value);
+                    }
+                });
+                
+                // Note: Current Data Name and Base Name are read-only for display purposes
+            }
+            
+            return callbacks;
         }
         
         protected virtual void OnPaintClicked()
@@ -75,8 +113,12 @@ namespace ExpandedAiFramework.DebugMenu
             if (paintManager != null)
             {
                 string[] args = { "NewHidingSpot" };
+                Manager.ConsoleCommandManager.SetActivePaintManager(paintManager);
                 paintManager.StartPaint(args);
                 LogDebug($"Started paint mode for {GetTabDisplayName()}");
+                
+                // Hide the debug menu
+                DebugMenu.DebugMenuManager.Instance?.HideMenu();
             }
             else
             {

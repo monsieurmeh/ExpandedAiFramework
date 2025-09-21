@@ -27,6 +27,47 @@ namespace ExpandedAiFramework.DebugMenu
             mAuroraButton = CreateButton("Aurora", modeGroup.transform, new Action(() => SwitchMode(WildlifeMode.Aurora)));
             
             UpdateSubTabButtons();
+            
+            // Call base to add settings button
+            base.CreateTabSpecificButtons();
+        }
+
+        protected override Dictionary<string, string> GetTabSettings()
+        {
+            var settings = new Dictionary<string, string>();
+            
+            // SpawnModDataProxy doesn't have a paint manager, but has wildlife mode
+            settings.Add("Wildlife Mode", mCurrentMode.ToString());
+            settings.Add("Scene Filter", mSceneFilter ?? "");
+            settings.Add("Name Filter", mNameFilter ?? "");
+            
+            return settings;
+        }
+
+        protected override Dictionary<string, System.Action<string>> GetTabSettingsCallbacks()
+        {
+            var callbacks = new Dictionary<string, System.Action<string>>();
+            
+            callbacks.Add("Wildlife Mode", (value) => {
+                if (System.Enum.TryParse<WildlifeMode>(value, out var mode))
+                {
+                    SwitchMode(mode);
+                }
+            });
+            
+            callbacks.Add("Scene Filter", (value) => {
+                mSceneFilter = value;
+                mSceneFilterInput.text = value;
+                OnSceneFilterChanged(value);
+            });
+            
+            callbacks.Add("Name Filter", (value) => {
+                mNameFilter = value;
+                mNameFilterInput.text = value;
+                OnNameFilterChanged(value);
+            });
+            
+            return callbacks;
         }
 
         void SwitchMode(WildlifeMode mode)
