@@ -13,7 +13,7 @@ namespace ExpandedAiFramework.DebugMenu
     public static class DebugMenuListViewItem
     {
         /// <summary>
-        /// Creates an efficient list item with manual anchor positioning
+        /// Creates a simple horizontal list item: Icon + Display Name + Show/Hide toggle
         /// </summary>
         public static GameObject CreateListItem<T>(T item, int index, Transform parent, float itemHeight, 
             Action<GameObject, T, int> populateCallback, Action<T> onItemClicked, Action<GameObject, T, int> createButtonsCallback) 
@@ -25,64 +25,176 @@ namespace ExpandedAiFramework.DebugMenu
             var itemRect = itemObj.DefinitelyGetComponent<RectTransform>();
             itemRect.sizeDelta = new Vector2(0, itemHeight);
             
-            // Main content area (clickable)
-            var contentArea = new GameObject("ContentArea");
-            contentArea.transform.SetParent(itemObj.transform, false);
-            
-            var contentRect = contentArea.DefinitelyGetComponent<RectTransform>();
-            contentRect.anchorMin = new Vector2(0, 0);
-            // Use full width if no buttons, otherwise leave space for buttons
-            contentRect.anchorMax = createButtonsCallback == null ? new Vector2(1, 1) : new Vector2(0.75f, 1);
-            contentRect.offsetMin = Vector2.zero;
-            contentRect.offsetMax = Vector2.zero;
-            
-            var contentButton = contentArea.AddComponent<Button>();
-            var contentImage = contentArea.AddComponent<Image>();
-            contentImage.color = index % 2 == 0 ? 
+            // Background
+            var backgroundImage = itemObj.AddComponent<Image>();
+            backgroundImage.color = index % 2 == 0 ? 
                 new Color(0.22f, 0.22f, 0.22f, 1f) : 
                 new Color(0.18f, 0.18f, 0.18f, 1f);
             
-            // Button hover colors
-            var colors = contentButton.colors;
-            colors.normalColor = contentImage.color;
-            colors.highlightedColor = new Color(0.35f, 0.35f, 0.35f, 1f);
-            colors.pressedColor = new Color(0.15f, 0.15f, 0.15f, 1f);
-            contentButton.colors = colors;
+            // Horizontal layout for the entire item
+            var layout = itemObj.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 20;
+            layout.padding = new RectOffset(5, 5, 2, 2);
+            layout.childControlWidth = true;  // Control child widths
+            layout.childControlHeight = true;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+            layout.childAlignment = TextAnchor.MiddleLeft;
             
-            // Populate item content using callback
-            populateCallback?.Invoke(contentArea, item, index);
+            // 1. Show/Hide toggle (tiny, first)
+            CreateShowHideToggle(itemObj.transform, item, index);
             
-            // Click handler for main content
-            contentButton.onClick.AddListener(new Action(() => onItemClicked?.Invoke(item)));
+            // 2. Icon (small square)
+            CreateIcon(itemObj.transform, itemHeight);
             
-            // Entity action buttons area (only create if callback provided)
-            if (createButtonsCallback != null)
-            {
-                var buttonArea = new GameObject("ButtonArea");
-                buttonArea.transform.SetParent(itemObj.transform, false);
-                
-                var buttonRect = buttonArea.DefinitelyGetComponent<RectTransform>();
-                buttonRect.anchorMin = new Vector2(0.75f, 0);
-                buttonRect.anchorMax = new Vector2(1, 1);
-                buttonRect.offsetMin = Vector2.zero;
-                buttonRect.offsetMax = Vector2.zero;
-                
-                var buttonBg = buttonArea.AddComponent<Image>();
-                buttonBg.color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
-                
-                var buttonLayout = buttonArea.AddComponent<HorizontalLayoutGroup>();
-                buttonLayout.spacing = 2;
-                buttonLayout.padding = new RectOffset(5, 5, 5, 5);
-                buttonLayout.childControlWidth = true;
-                buttonLayout.childControlHeight = false;
-                buttonLayout.childForceExpandWidth = true;
-                buttonLayout.childForceExpandHeight = false;
-                
-                // Create action buttons using callback
-                createButtonsCallback.Invoke(buttonArea, item, index);
-            }
+            // 3. Name and Position (takes up most space)
+            CreateDisplayName(itemObj.transform, GetItemDisplayText(item), onItemClicked != null ? () => onItemClicked(item) : null);
             
             return itemObj;
+        }
+        
+        /// <summary>
+        /// Gets the display text for an item (Name and Position if available)
+        /// </summary>
+        private static string GetItemDisplayText<T>(T item) where T : ISerializedData
+        {
+            var name = "";
+            var position = "";
+            
+            // Try to get name from various properties
+            var type = item.GetType();
+            var nameProperty = type.GetProperty("Name");
+            if (nameProperty != null)
+            {
+                name = nameProperty.GetValue(item)?.ToString() ?? "";
+            }
+            else
+            {
+                name = item.DisplayName; // Fallback to DisplayName
+            }
+            
+            // Try to get position
+            var positionProperty = type.GetProperty("Position");
+            if (positionProperty != null && positionProperty.PropertyType == typeof(UnityEngine.Vector3))
+            {
+                var pos = (UnityEngine.Vector3)positionProperty.GetValue(item);
+                position = $" ({pos.x:F1}, {pos.y:F1}, {pos.z:F1})";
+            }
+            else
+            {
+                var currentPositionProperty = type.GetProperty("CurrentPosition");
+                if (currentPositionProperty != null && currentPositionProperty.PropertyType == typeof(UnityEngine.Vector3))
+                {
+                    var pos = (UnityEngine.Vector3)currentPositionProperty.GetValue(item);
+                    position = $" ({pos.x:F1}, {pos.y:F1}, {pos.z:F1})";
+                }
+            }
+            
+            return name + position;
+        }
+        
+        /// <summary>
+        /// Creates a small square icon with white background
+        /// </summary>
+        private static void CreateIcon(Transform parent, float itemHeight)
+        {
+            var iconObj = new GameObject("Icon");
+            iconObj.transform.SetParent(parent, false);
+            
+            var iconSize = 35; // Fixed small square icon
+            
+            var layoutElement = iconObj.AddComponent<LayoutElement>();
+            layoutElement.preferredWidth = iconSize;
+            layoutElement.preferredHeight = iconSize;
+            layoutElement.flexibleWidth = 0;
+            layoutElement.flexibleHeight = 0;
+            
+            var iconImage = iconObj.AddComponent<Image>();
+            iconImage.color = Color.white;
+        }
+        
+        /// <summary>
+        /// Creates the display name text with optional click handler - takes up most of the space
+        /// </summary>
+        private static void CreateDisplayName(Transform parent, string displayName, System.Action onClicked)
+        {
+            var nameObj = new GameObject("DisplayName");
+            nameObj.transform.SetParent(parent, false);
+            
+            var layoutElement = nameObj.AddComponent<LayoutElement>();
+            layoutElement.flexibleWidth = 1; // Take all remaining space
+            layoutElement.preferredHeight = -1;
+            
+            var nameText = nameObj.AddComponent<Text>();
+            nameText.text = displayName;
+            nameText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            nameText.fontSize = 32; // Much bigger font
+            nameText.color = Color.white;
+            nameText.alignment = TextAnchor.MiddleLeft;
+            nameText.fontStyle = FontStyle.Normal;
+            
+            // Add click handler if provided
+            if (onClicked != null)
+            {
+                var button = nameObj.AddComponent<Button>();
+                button.targetGraphic = null; // No visual feedback, just clickable
+                button.onClick.AddListener(new Action(() => onClicked()));
+            }
+        }
+        
+        /// <summary>
+        /// Creates a tiny show/hide toggle
+        /// </summary>
+        private static void CreateShowHideToggle<T>(Transform parent, T item, int index) where T : ISerializedData
+        {
+            var toggleObj = new GameObject("ShowHideToggle");
+            toggleObj.transform.SetParent(parent, false);
+            
+            var layoutElement = toggleObj.AddComponent<LayoutElement>();
+            layoutElement.preferredWidth = 16; // Even tinier
+            layoutElement.preferredHeight = 16;
+            layoutElement.flexibleWidth = 0;
+            layoutElement.flexibleHeight = 0;
+            
+            var toggle = toggleObj.AddComponent<Toggle>();
+            
+            // Background
+            var backgroundObj = new GameObject("Background");
+            backgroundObj.transform.SetParent(toggleObj.transform, false);
+            
+            var bgRect = backgroundObj.DefinitelyGetComponent<RectTransform>();
+            bgRect.anchorMin = Vector2.zero;
+            bgRect.anchorMax = Vector2.one;
+            bgRect.offsetMin = Vector2.zero;
+            bgRect.offsetMax = Vector2.zero;
+            
+            var bgImage = backgroundObj.AddComponent<Image>();
+            bgImage.color = new Color(0.3f, 0.3f, 0.3f, 1f);
+            
+            // Checkmark
+            var checkmarkObj = new GameObject("Checkmark");
+            checkmarkObj.transform.SetParent(backgroundObj.transform, false);
+            
+            var checkRect = checkmarkObj.DefinitelyGetComponent<RectTransform>();
+            checkRect.anchorMin = new Vector2(0.1f, 0.1f);
+            checkRect.anchorMax = new Vector2(0.9f, 0.9f);
+            checkRect.offsetMin = Vector2.zero;
+            checkRect.offsetMax = Vector2.zero;
+            
+            var checkImage = checkmarkObj.AddComponent<Image>();
+            checkImage.color = Color.green;
+            
+            // Setup toggle
+            toggle.targetGraphic = bgImage;
+            toggle.graphic = checkImage;
+            toggle.isOn = true; // Default to visible/shown
+            
+            // Add toggle functionality (this would need to be connected to actual show/hide logic)
+            toggle.onValueChanged.AddListener(new Action<bool>((value) => {
+                // TODO: Connect to actual show/hide functionality
+                // For now, just change the checkmark color
+                checkImage.color = value ? Color.green : Color.red;
+            }));
         }
         
         /// <summary>
@@ -162,24 +274,20 @@ namespace ExpandedAiFramework.DebugMenu
         /// </summary>
         public static void SetItemSelected(GameObject listItem, bool isSelected, int originalIndex)
         {
-            var contentArea = listItem.transform.Find("ContentArea");
-            if (contentArea != null)
+            var image = listItem.GetComponent<Image>();
+            if (image != null)
             {
-                var image = contentArea.GetComponent<Image>();
-                if (image != null)
+                if (isSelected)
                 {
-                    if (isSelected)
-                    {
-                        // Highlight selected item
-                        image.color = new Color(0.4f, 0.6f, 0.8f, 1f);
-                    }
-                    else
-                    {
-                        // Normal alternating colors
-                        image.color = originalIndex % 2 == 0 ? 
-                            new Color(0.22f, 0.22f, 0.22f, 1f) : 
-                            new Color(0.18f, 0.18f, 0.18f, 1f);
-                    }
+                    // Highlight selected item
+                    image.color = new Color(0.4f, 0.6f, 0.8f, 1f);
+                }
+                else
+                {
+                    // Normal alternating colors
+                    image.color = originalIndex % 2 == 0 ? 
+                        new Color(0.22f, 0.22f, 0.22f, 1f) : 
+                        new Color(0.18f, 0.18f, 0.18f, 1f);
                 }
             }
         }

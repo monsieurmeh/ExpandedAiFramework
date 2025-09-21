@@ -44,7 +44,7 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer");
+                // Validation failed
                 return false;
             }
             return ValidateInternal();
@@ -242,17 +242,14 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer");
                 return false;
             }
             if (string.IsNullOrEmpty(mProxyGuid))
             {
-                this.LogTraceInstanced($"null or empty proxy GUID");
                 return false;
             }
             if (mFieldValues == null || mFieldValues.Count == 0)
             {
-                this.LogTraceInstanced($"null or empty field values");
                 return false;
             }
             return true;
@@ -276,7 +273,7 @@ namespace ExpandedAiFramework
             
             if (proxy == null)
             {
-                this.LogTraceInstanced($"SpawnModDataProxy with GUID {mProxyGuid} not found");
+                // Entity not found
                 return RequestResult.Failed;
             }
 
@@ -353,15 +350,15 @@ namespace ExpandedAiFramework
                 // Note: Scene is typically read-only in most implementations
                 if (mFieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
                 {
-                    LogDebug($"Scene change requested: {sceneString} (typically read-only)");
+                    // Scene changes are typically not supported
                 }
 
                 mPayload = proxy;
                 return RequestResult.Succeeded;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.LogTraceInstanced($"Failed to update SpawnModDataProxy: {e.Message}");
+                // Update failed
                 return RequestResult.Failed;
             }
         }
@@ -386,17 +383,17 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer");
+                // Validation failed
                 return false;
             }
             if (string.IsNullOrEmpty(mProxyGuid))
             {
-                this.LogTraceInstanced($"null or empty proxy GUID");
+                // Validation failed
                 return false;
             }
             if (mFieldValues == null || mFieldValues.Count == 0)
             {
-                this.LogTraceInstanced($"null or empty field values");
+                // Validation failed
                 return false;
             }
             return true;
@@ -420,7 +417,7 @@ namespace ExpandedAiFramework
             
             if (proxy == null)
             {
-                this.LogTraceInstanced($"SpawnRegionModDataProxy with GUID {mProxyGuid} not found");
+                // Entity not found
                 return RequestResult.Failed;
             }
 
@@ -500,15 +497,15 @@ namespace ExpandedAiFramework
                 // Note: Scene is typically read-only in most implementations
                 if (mFieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
                 {
-                    LogDebug($"Scene change requested: {sceneString} (typically read-only)");
+                    // Scene changes are typically not supported
                 }
 
                 mPayload = proxy;
                 return RequestResult.Succeeded;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.LogTraceInstanced($"Failed to update SpawnRegionModDataProxy: {e.Message}");
+                // Update failed
                 return RequestResult.Failed;
             }
         }
@@ -533,17 +530,17 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer");
+                // Validation failed
                 return false;
             }
             if (string.IsNullOrEmpty(mHidingSpotGuid))
             {
-                this.LogTraceInstanced($"null or empty hiding spot GUID");
+                // Validation failed
                 return false;
             }
             if (mFieldValues == null || mFieldValues.Count == 0)
             {
-                this.LogTraceInstanced($"null or empty field values");
+                // Validation failed
                 return false;
             }
             return true;
@@ -567,7 +564,7 @@ namespace ExpandedAiFramework
             
             if (hidingSpot == null)
             {
-                this.LogTraceInstanced($"HidingSpot with GUID {mHidingSpotGuid} not found");
+                // Entity not found
                 return RequestResult.Failed;
             }
 
@@ -579,19 +576,19 @@ namespace ExpandedAiFramework
                 if (mFieldValues.TryGetValue("Name", out var nameValue) && nameValue is string name)
                 {
                     // hidingSpot.Name = name; // Read-only property
-                    LogDebug($"Name change requested: {name} (property is read-only)");
+                    // Name property is read-only
                 }
 
                 if (mFieldValues.TryGetValue("Position", out var positionValue) && positionValue is Vector3 position)
                 {
                     // hidingSpot.Position = position; // Read-only property
-                    LogDebug($"Position change requested: {position} (property is read-only)");
+                    // Position property is read-only
                 }
 
                 if (mFieldValues.TryGetValue("Rotation (Euler)", out var rotationValue) && rotationValue is Vector3 rotation)
                 {
                     // hidingSpot.Rotation = Quaternion.Euler(rotation); // Read-only property
-                    LogDebug($"Rotation change requested: {rotation} (property is read-only)");
+                    // Rotation property is read-only
                 }
 
                 // Handle generic ISerializedData fields (from ApplyGenericEntityChanges)
@@ -603,15 +600,15 @@ namespace ExpandedAiFramework
                 // Note: Scene is typically read-only in most implementations
                 if (mFieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
                 {
-                    LogDebug($"Scene change requested: {sceneString} (typically read-only)");
+                    // Scene changes are typically not supported
                 }
 
                 mPayload = hidingSpot;
                 return RequestResult.Succeeded;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.LogTraceInstanced($"Failed to update HidingSpot: {e.Message}");
+                // Update failed
                 return RequestResult.Failed;
             }
         }
@@ -636,17 +633,17 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer");
+                // Validation failed
                 return false;
             }
             if (string.IsNullOrEmpty(mWanderPathGuid))
             {
-                this.LogTraceInstanced($"null or empty wander path GUID");
+                // Validation failed
                 return false;
             }
             if (mFieldValues == null || mFieldValues.Count == 0)
             {
-                this.LogTraceInstanced($"null or empty field values");
+                // Validation failed
                 return false;
             }
             return true;
@@ -670,7 +667,7 @@ namespace ExpandedAiFramework
             
             if (wanderPath == null)
             {
-                this.LogTraceInstanced($"WanderPath with GUID {mWanderPathGuid} not found");
+                // Entity not found
                 return RequestResult.Failed;
             }
 
@@ -681,13 +678,13 @@ namespace ExpandedAiFramework
                 if (mFieldValues.TryGetValue("Name", out var nameValue) && nameValue is string name)
                 {
                     // wanderPath.Name = name; // Read-only property
-                    LogDebug($"Name change requested: {name} (property is read-only)");
+                    // Name property is read-only
                 }
 
                 if (mFieldValues.TryGetValue("Wander Path Type", out var typeValue) && typeValue is WanderPathTypes pathType)
                 {
                     // wanderPath.WanderPathType = pathType; // Read-only property
-                    LogDebug($"WanderPathType change requested: {pathType} (property is read-only)");
+                    // WanderPathType property is read-only
                 }
 
                 // Handle generic ISerializedData fields (from ApplyGenericEntityChanges)
@@ -699,7 +696,7 @@ namespace ExpandedAiFramework
                 // Note: Scene is typically read-only in most implementations
                 if (mFieldValues.TryGetValue("Scene", out var sceneValue) && sceneValue is string sceneString)
                 {
-                    LogDebug($"Scene change requested: {sceneString} (typically read-only)");
+                    // Scene changes are typically not supported
                 }
 
                 // Update path points (first 5 editable)
@@ -715,9 +712,9 @@ namespace ExpandedAiFramework
                 mPayload = wanderPath;
                 return RequestResult.Succeeded;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                this.LogTraceInstanced($"Failed to update WanderPath: {e.Message}");
+                // Update failed
                 return RequestResult.Failed;
             }
         }

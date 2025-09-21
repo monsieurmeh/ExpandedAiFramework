@@ -296,9 +296,9 @@ namespace ExpandedAiFramework.DebugMenu
 
         protected virtual GameObject CreateListItem(T item, int index)
         {
-            // Create list item without per-entity buttons - only clickable content area
+            // Create simple horizontal list item: Icon + Display Name + Show/Hide toggle
             return DebugMenuListViewItem.CreateListItem(item, index, mScrollContent.transform, GetItemHeight(),
-                PopulateListItem, OnItemClicked, null); // Remove per-entity buttons as requested
+                null, OnItemClicked, null); // Using new simplified format
         }
 
         // Event handlers
@@ -530,7 +530,6 @@ namespace ExpandedAiFramework.DebugMenu
 
         // Abstract methods to be implemented by derived classes
         protected abstract void LoadData();
-        protected abstract void PopulateListItem(GameObject itemObj, T item, int index);
         protected abstract string GetItemName(T item);
         protected abstract string GetTabDisplayName();
         protected abstract float GetItemHeight();

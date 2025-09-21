@@ -438,6 +438,13 @@ namespace ExpandedAiFramework.DebugMenu
             // Ensure modal is on top when shown
             transform.SetAsLastSibling();
             
+            // Also ensure the modal canvas is on top
+            var modalCanvas = mModalPanel.transform.parent;
+            if (modalCanvas != null)
+            {
+                modalCanvas.SetAsLastSibling();
+            }
+            
             mModalPanel.SetActive(true);
         }
 

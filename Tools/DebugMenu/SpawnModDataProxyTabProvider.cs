@@ -104,26 +104,6 @@ namespace ExpandedAiFramework.DebugMenu
             Manager.DataManager.ScheduleSpawnModDataProxyRequest(request, mCurrentMode);
         }
 
-        protected override void PopulateListItem(GameObject itemObj, SpawnModDataProxy item, int index)
-        {
-            var textObj = new GameObject("Text");
-            textObj.transform.SetParent(itemObj.transform, false);
-            
-            var text = textObj.AddComponent<Text>();
-            text.text = $"[{index}] {item.DisplayName}\n" +
-                       $"Scene: {item.Scene} | SubType: {item.AiSubType}\n" +
-                       $"Available: {item.Available} | Spawned: {item.Spawned}";
-            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            text.fontSize = 10;
-            text.color = Color.white;
-            text.alignment = TextAnchor.MiddleLeft;
-            
-            var textRect = textObj.GetComponent<RectTransform>();
-            textRect.anchorMin = Vector2.zero;
-            textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(10, 0);
-            textRect.offsetMax = new Vector2(-10, 0);
-        }
 
         protected override string GetItemName(SpawnModDataProxy item)
         {
