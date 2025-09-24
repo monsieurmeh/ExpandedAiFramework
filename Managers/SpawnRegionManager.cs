@@ -796,7 +796,7 @@ namespace ExpandedAiFramework
                 LogError($"Could not get base ai from spawn region!");
                 return null;
             }
-            if (baseAi.m_AiSubType == AiSubType.Wolf && !baseAi.NormalWolf.IsNullOrDestroyed())
+            if (baseAi.m_AiSubType == AiSubType.Wolf)
             {
                 return new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay);
             }
