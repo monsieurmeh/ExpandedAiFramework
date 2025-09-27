@@ -1192,16 +1192,20 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_HoursNextTrapReset > GetCurrentTimelinePoint())
             {
-                this.LogTraceInstanced($"Not yet time, do not decrement trapped count");
+                this.LogTraceInstanced($"Not yet time");
                 return;
             }
             if (mSpawnRegion.m_NumTrapped > 0)
             {
-                this.LogDebugInstanced($"Decrementing trapped count to {mSpawnRegion.m_NumTrapped - 1}");
                 mSpawnRegion.m_NumTrapped--;
+                mSpawnRegion.m_HoursNextTrapReset += GetNumHoursBetweenRespawns();
+                this.LogDebugInstanced($"Decrementing trapped count to {mSpawnRegion.m_NumTrapped} and updating hours next trap reset to {mSpawnRegion.m_HoursNextTrapReset}");
             }
-            mSpawnRegion.m_HoursNextTrapReset += GetNumHoursBetweenRespawns();
-            this.LogDebugInstanced($"Updated hours next trap reset to {mSpawnRegion.m_HoursNextTrapReset}");
+            else
+            {
+                mSpawnRegion.m_HoursNextTrapReset = GetCurrentTimelinePoint() + GetNumHoursBetweenRespawns();
+                this.LogDebugInstanced($"No trapped animals, resetting hours next trap reset to {mSpawnRegion.m_HoursNextTrapReset}");
+            }
         }
 
         #endregion
