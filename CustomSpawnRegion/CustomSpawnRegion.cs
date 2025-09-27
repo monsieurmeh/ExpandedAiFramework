@@ -592,7 +592,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public  int CalculateTargetPopulation()
+        public int CalculateTargetPopulation()
         {
             if (SpawningSuppressedByExperienceMode())
             {
@@ -613,9 +613,9 @@ namespace ExpandedAiFramework
             int maxSimultaneousSpawns = GameManager.m_TimeOfDay.IsDay()
                 ? GetMaxSimultaneousSpawnsDay()
                 : GetMaxSimultaneousSpawnsNight();
-            int adjustedMaxSimultaneousSpawns = maxSimultaneousSpawns - mSpawnRegion.m_NumTrapped - mSpawnRegion.m_NumRespawnsPending;
-            adjustedMaxSimultaneousSpawns = Math.Max(adjustedMaxSimultaneousSpawns, 0);
-            return Math.Min(adjustedMaxSimultaneousSpawns, mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay + AdditionalSimultaneousSpawnAllowance());
+            maxSimultaneousSpawns -= mSpawnRegion.m_NumTrapped;
+            maxSimultaneousSpawns -= mSpawnRegion.m_NumRespawnsPending;
+            return Math.Max(maxSimultaneousSpawns, 0);
         }
 
         protected virtual int AdditionalSimultaneousSpawnAllowance() => 0;
@@ -650,7 +650,7 @@ namespace ExpandedAiFramework
                 this.LogErrorInstanced($"Null mSpawnRegion.m_DifficultySettings");
                 return 0;
             }
-            return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay;
+            return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay + AdditionalSimultaneousSpawnAllowance();
         }
 
 
@@ -661,7 +661,7 @@ namespace ExpandedAiFramework
                 this.LogErrorInstanced($"Null mSpawnRegion.m_DifficultySettings");
                 return 0;
             }
-            return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsNight;
+            return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsNight + AdditionalSimultaneousSpawnAllowance();
         }
 
 
