@@ -1167,6 +1167,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_WasActiveBeforeAurora)
             {
+                this.LogTraceInstanced($"Aurora enabled, activating previously active spawn region");
                 mSpawnRegion.gameObject.SetActive(true);
             }
             mSpawnRegion.m_HasBeenDisabledByAurora = false;
@@ -1176,11 +1177,11 @@ namespace ExpandedAiFramework
 
         private void MaybeSuspendForAurora()
         {
-            if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Cougar)
+            if (mSpawnRegion.m_AiTypeSpawned == AiType.Predator)
             {
-                this.LogTraceInstanced($"Cougar override");
                 return;
             }
+            this.LogTraceInstanced($"Aurora enabled, maybe suspending ambient spawn region");
             mSpawnRegion.m_WasActiveBeforeAurora = mSpawnRegion.gameObject.activeInHierarchy;
             mSpawnRegion.m_HasBeenDisabledByAurora = true;
             mSpawnRegion.gameObject.SetActive(false);
@@ -1191,26 +1192,16 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_WildlifeMode == (enabled ? WildlifeMode.Aurora : WildlifeMode.Normal))
             {
-                this.LogTraceInstanced($"WildlifeMode match, ignoring");
+                // early-out for no change needed, no log needed either.
                 return;
             }
-
             if (enabled)
             {
-                if (mSpawnRegion.m_AiTypeSpawned != AiType.Predator)
-                {
-                    this.LogTraceInstanced($"Aurora enabled, maybe suspending ambient spawn region");
-                    MaybeSuspendForAurora();
-                }
+                MaybeSuspendForAurora();
             }
             else
             {
-                if (mSpawnRegion.m_WasActiveBeforeAurora)
-                {
-                    this.LogTraceInstanced($"Aurora enabled, activating previously active spawn region");
-                    mSpawnRegion.gameObject.SetActive(true);
-                }
-                mSpawnRegion.m_HasBeenDisabledByAurora = false;
+                MaybeResumeAfterAurora();
             }
             RemoveActiveSpawns(GetCurrentActivePopulation(mSpawnRegion.m_WildlifeMode), mSpawnRegion.m_WildlifeMode, true);
             mSpawnRegion.m_WildlifeMode = enabled ? WildlifeMode.Aurora : WildlifeMode.Normal;
