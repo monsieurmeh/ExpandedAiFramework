@@ -32,7 +32,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public override void Update()
+        public override void UpdateFromManager()
         {
             lock (mQueueLock)
             {

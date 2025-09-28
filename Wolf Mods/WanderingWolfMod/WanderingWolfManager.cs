@@ -19,7 +19,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public void OnInitializedScene(string sceneName) { }
         public void OnSaveGame() { }
         public void OnQuitToMainMenu() { }
-        public void Update() { }
+        public void UpdateFromManager() { }
         public Type SpawnType { get { return typeof(WanderingWolf); } }
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {

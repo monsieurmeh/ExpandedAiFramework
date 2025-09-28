@@ -29,7 +29,7 @@ namespace ExpandedAiFramework
 
         public virtual void Initialize() { }
         public virtual void Shutdown() { CleanupPaintMarker(); }
-        public virtual void Update() { UpdatePaintMarker(); }
+        public virtual void UpdateFromManager() { UpdatePaintMarker(); }
 
         public abstract void StartPaint(string[] args);
         public abstract void ExitPaint();

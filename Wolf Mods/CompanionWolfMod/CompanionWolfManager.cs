@@ -126,7 +126,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         }
 
 
-        public void Update()
+        public void UpdateFromManager()
         {
             if (mShouldCheckForSpawnTamedCompanion && Time.time - mLastTriggeredCheckForSpawnTamedCompanionTime > 2.0f)
             {

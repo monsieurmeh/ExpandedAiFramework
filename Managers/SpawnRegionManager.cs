@@ -102,9 +102,9 @@ namespace ExpandedAiFramework
         }
 
 
-        public override void Update()
+        public override void UpdateFromManager()
         {
-            base.Update();
+            base.UpdateFromManager();
             VanillaUpdate();
         }
 

@@ -131,11 +131,11 @@ namespace ExpandedAiFramework
         {
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
-                mBaseSubManagers[i].Update();
+                mBaseSubManagers[i].UpdateFromManager();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
-                mSubManagers[i].Update();
+                mSubManagers[i].UpdateFromManager();
             }
         }
 

@@ -30,7 +30,7 @@ namespace ExpandedAiFramework
         public virtual void OnInitializedScene(string sceneName) { }
         public virtual void OnSaveGame() { }
         public virtual void OnLoadGame() { }
-        public virtual void Update() { }
+        public virtual void UpdateFromManager() { }
         public virtual void OnQuitToMainMenu() { }
     }
 }
