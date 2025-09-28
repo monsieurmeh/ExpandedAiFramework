@@ -10,17 +10,19 @@ namespace ExpandedAiFramework
 
         #region SpawnRegionManager
 
-        public static void SpawnRegionManager_AddNoSpawnRegion(NoSpawnRegion nsr) => Manager.SpawnRegionManager.Add(nsr);
-        public static void SpawnRegionManager_Deserialize(string text) => Manager.SpawnRegionManager.Deserialize(text);
+        public static bool SpawnRegionManager_AddNoSpawnRegion(NoSpawnRegion nsr) => !Manager.SpawnRegionManager.Add(nsr);
+        public static bool SpawnRegionManager_AddSpawnRegion(SpawnRegion sr ) => !Manager.SpawnRegionManager.Add(sr);
+        public static bool SpawnRegionManager_RemoveSpawnRegion(SpawnRegion sr) => !Manager.SpawnRegionManager.Remove(sr);
+        public static bool SpawnRegionManager_Deserialize(string text) => !Manager.SpawnRegionManager.Deserialize(text);
         public static SpawnRegion SpawnRegionManager_FindSpawnRegionByGuid(string text) => Manager.SpawnRegionManager.FindSpawnRegionByGuid(text);
         public static SpawnRegion SpawnRegionManager_FindSpawnRegionByPosition(SpawnRegionSaveData saveData) => Manager.SpawnRegionManager.FindSpawnRegionByPosition(saveData);
         public static GameObject SpawnRegionManager_GetClosestActiveSpawn(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.GetClosestActiveSpawn(pos, filterSpawnablePrefabName);
-        public static void SpawnRegionManager_MaybeEnableSpawnRegionsInRange(SpawnRegion otherSpawnRegion, float range, bool enable) => Manager.SpawnRegionManager.MaybeEnableSpawnRegionsInRange(otherSpawnRegion, range, enable);
-        public static void SpawnRegionManager_OnAuroraEnabled(bool enabled) => Manager.SpawnRegionManager.OnAuroraEnabled(enabled);
+        public static bool SpawnRegionManager_MaybeEnableSpawnRegionsInRange(SpawnRegion otherSpawnRegion, float range, bool enable) => !Manager.SpawnRegionManager.MaybeEnableSpawnRegionsInRange(otherSpawnRegion, range, enable);
+        public static bool SpawnRegionManager_OnAuroraEnabled(bool enabled) => !Manager.SpawnRegionManager.OnAuroraEnabled(enabled);
         public static SpawnRegion SpawnRegionManager_PointInsideActiveSpawnRegion(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.PointInsideActiveSpawnRegion(pos, filterSpawnablePrefabName);
         public static SpawnRegion SpawnRegionManager_PointInsideSpawnRegion(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
-        public static bool SpawnRegionManager_PointInsideNoSpawnRegion(Vector3 pos) => Manager.SpawnRegionManager.PointInsideNoSpawnRegion(pos);
-        public static void SpawnRegionManager_Start() => Manager.SpawnRegionManager.Start();
+        public static NoSpawnRegion SpawnRegionManager_PointInsideNoSpawnRegion(Vector3 pos) => Manager.SpawnRegionManager.PointInsideNoSpawnRegion(pos);
+        public static bool SpawnRegionManager_Start() => !Manager.SpawnRegionManager.Start();
 
         #endregion
 

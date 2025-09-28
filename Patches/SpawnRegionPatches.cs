@@ -20,6 +20,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
+            EAFManager.LogWithStackTrace($"WARNING: This method is obsolete with EAF. Place any field adjustment patches on awake instead.");
             return false;
         }
     }
@@ -31,18 +32,6 @@ namespace ExpandedAiFramework
         internal static bool Prefix(SpawnRegion __instance, Vector3 pos, ref GameObject __result)
         {
             return SpawnRegion_GetClosestActiveSpawn(__instance, pos, ref __result);
-        }
-    }
-
-
-
-    [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.GetDenSleepDurationInHours))]
-    internal class SpawnRegionPatches_GetDenSleepDurationInHours
-    {
-        internal static bool Prefix(SpawnRegion __instance, ref float __result)
-        {
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
-            return false; 
         }
     }
 
@@ -81,7 +70,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
+            EAFManager.LogWithStackTrace($"WARNING: This method is obsolete with EAF. Do not call it.");
             return false; 
         }
     }
@@ -91,7 +80,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
+            EAFManager.LogWithStackTrace($"WARNING: EAF handles ai updates, there is no reason to be calling this method from a mod. Find the EAF custom variant and use that.");
             return false;
         }
     }
@@ -102,16 +91,6 @@ namespace ExpandedAiFramework
         internal static bool Prefix(SpawnRegion __instance)
         {
             return SpawnRegion_SetRandomWaypointCircuit(__instance);
-        }
-    }
-
-    [HarmonyPatch(typeof(SpawnRegion), nameof(SpawnRegion.ShouldSleepInDenAfterWaypointLoop))]
-    internal class SpawnRegionPatches_ShouldSleepInDenAfterWaypointLoop
-    {
-        internal static bool Prefix(SpawnRegion __instance, ref bool __result)
-        {
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
-            return false;
         }
     }
 
@@ -157,8 +136,8 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
-            return false; //return SpawnRegion_MaybeReRollActive(__instance);
+            EAFManager.LogWithStackTrace($"WARNING: This method is obsolete with EAF. Do not call it.");
+            return false; 
         }
     }
 
@@ -168,8 +147,8 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance, string text)
         {
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
-            return false; //return SpawnRegion_Deserialize(__instance, text);
+            EAFManager.LogWithStackTrace($"WARNING: EAF does not support vanilla deserialization. If you are seeing this, there is a mod conflict!");
+            return false;
         }
     }
 }

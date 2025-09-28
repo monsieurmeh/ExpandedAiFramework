@@ -11,8 +11,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion sr)
         {
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
-            return false;
+            return SpawnRegionManager_AddSpawnRegion(sr);
         }
     }
 
@@ -22,8 +21,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(NoSpawnRegion nsr)
         {
-            SpawnRegionManager_AddNoSpawnRegion(nsr);
-            return false;
+            return SpawnRegionManager_AddNoSpawnRegion(nsr);
         }
     }
 
@@ -33,8 +31,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(string text)
         {
-            SpawnRegionManager_Deserialize(text);
-            return false;
+            return SpawnRegionManager_Deserialize(text);
         }
     }
 
@@ -44,8 +41,13 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(string guid, ref SpawnRegion __result)
         {
-            __result = SpawnRegionManager_FindSpawnRegionByGuid(guid);
-            return false;
+            SpawnRegion someResult = SpawnRegionManager_FindSpawnRegionByGuid(guid);
+            if (someResult != null)
+            {
+                __result = someResult;
+                return false;
+            }
+            return true;
         }
     }
 
@@ -55,8 +57,13 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegionSaveData saveData, ref SpawnRegion __result)
         {
-            __result = SpawnRegionManager_FindSpawnRegionByPosition(saveData);
-            return false;
+            SpawnRegion someResult = SpawnRegionManager_FindSpawnRegionByPosition(saveData);
+            if (someResult != null)
+            {
+                __result = someResult;
+                return false;
+            }
+            return true;
         }
     }
 
@@ -66,8 +73,13 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref GameObject __result)
         {
-            __result = SpawnRegionManager_GetClosestActiveSpawn(pos, filterSpawnablePrefabName);
-            return false;
+            GameObject someResult = SpawnRegionManager_GetClosestActiveSpawn(pos, filterSpawnablePrefabName);
+            if (someResult != null)
+            {
+                __result = someResult;
+                return false;
+            }
+            return true;
         }
     }
 
@@ -77,9 +89,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion otherSpawnRegion, float range, bool enable)
         {
-            SpawnRegionManager_MaybeEnableSpawnRegionsInRange(otherSpawnRegion, range, enable);
-            //EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF IS GOING TO cut this method off, expect malfunction from calling mod SOON!");
-            return false;
+            return SpawnRegionManager_MaybeEnableSpawnRegionsInRange(otherSpawnRegion, range, enable);
         }
     }
 
@@ -89,8 +99,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(bool enabled)
         {
-            SpawnRegionManager_OnAuroraEnabled(enabled);
-            return false;
+            return SpawnRegionManager_OnAuroraEnabled(enabled);
         }
     }
 
@@ -100,9 +109,13 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref SpawnRegion __result)
         {
-            __result = SpawnRegionManager_PointInsideActiveSpawnRegion(pos, filterSpawnablePrefabName);
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF IS GOING TO cut this method off, expect malfunction from calling mod SOON!");
-            return false;
+            SpawnRegion someResult = SpawnRegionManager_PointInsideActiveSpawnRegion(pos, filterSpawnablePrefabName);
+            if (someResult != null)
+            {
+                __result = someResult;
+                return false;
+            }
+            return true;
         }
     }
 
@@ -114,9 +127,13 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref SpawnRegion __result)
         {
-            __result = SpawnRegionManager_PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF IS GOING TO cut this method off, expect malfunction from calling mod SOON!");
-            return false;
+            SpawnRegion someResult = SpawnRegionManager_PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
+            if (someResult != null)
+            {
+                __result = someResult;
+                return false;
+            }
+            return true;
         }
     }
 
@@ -126,9 +143,13 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(Vector3 pos, ref bool __result)
         {
-            __result = SpawnRegionManager_PointInsideNoSpawnRegion(pos);
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF IS GOING TO cut this method off, expect malfunction from calling mod SOON!");
-            return false;
+            NoSpawnRegion someResult = SpawnRegionManager_PointInsideNoSpawnRegion(pos);
+            if (someResult != null)
+            {
+                __result = someResult;
+                return false;
+            }
+            return true;
         }
     }
 
@@ -140,8 +161,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion sr)
         {
-            EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
-            return false;
+            return SpawnRegionManager_RemoveSpawnRegion(sr);
         }
     }
 
@@ -152,8 +172,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(ref string __result)
         {
-            // Serialization no longer happens on vanilla terms. EAF only!
-            //__result = SpawnRegionManager_Serialize();
+            // No log here, this is just to cut off vanilla serialization.
             return false;
         }
     }
@@ -164,8 +183,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix()
         {
-            SpawnRegionManager_Start();
-            return false;
+            return SpawnRegionManager_Start();
         }
     }
 
@@ -175,7 +193,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix()
         {
-            //EAFManager.LogWithStackTrace($"WARNING: External call detected! EAF has cut this method off, expect malfunction from calling mod!");
+            // No log here, this is just cut off vanilla update.
             return false;
         }
     }
