@@ -17,12 +17,12 @@ namespace ExpandedAiFramework
             RegisterDefaultPaintManagers();
         }
 
-        public override void Update()
+        public override void UpdateFromManager()
         {
-            base.Update();
+            base.UpdateFromManager();
             if (mActivePaintManager != null)
             {
-                mActivePaintManager.Update();
+                mActivePaintManager.UpdateFromManager();
             }
         }
 

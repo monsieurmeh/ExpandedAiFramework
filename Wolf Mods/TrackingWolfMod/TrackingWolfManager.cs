@@ -19,7 +19,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
         public void OnInitializedScene(string sceneName) { }
         public void OnSaveGame() { }
         public void OnQuitToMainMenu() { }
-        public void Update() { }
+        public void UpdateFromManager() { }
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
             if (TrackingWolf.TrackingWolfSettings.ForceSpawn)
