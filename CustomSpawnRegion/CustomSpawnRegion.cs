@@ -197,7 +197,7 @@ namespace ExpandedAiFramework
                 return;
             }
             mSpawnRegion.m_CurrentWaypointPathIndex = UnityEngine.Random.Range(0, mSpawnRegion.m_PathManagers.Count);
-            this.LogTraceInstanced($"mSpawnRegion.m_CurrentWaypointIndex set to {mSpawnRegion.m_CurrentWaypointPathIndex}");
+            this.LogTraceInstanced($"mSpawnRegion.m_CurrentWaypointIndex set to {mSpawnRegion.m_CurrentWaypointPathIndex}. Not, that this really matters... EAF uses its own wander system!");
         }
 
 
