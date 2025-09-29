@@ -337,9 +337,9 @@ namespace ExpandedAiFramework.DebugMenu
             InputBLocker.LockPosition(false);
         }
 
-        public void ProcessCommand(string[] args)
+        public void ProcessCommand(IList<string> args)
         {
-            if (args.Length == 0)
+            if (args.Count == 0)
             {
                 ToggleMenu();
                 return;

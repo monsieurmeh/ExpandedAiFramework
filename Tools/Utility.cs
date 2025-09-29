@@ -18,80 +18,6 @@ namespace ExpandedAiFramework
         public const float HoursToSeconds = 3600;
         public const string ModName = "Expanded Ai Framework";
         public const string DataFolderPath = "EAF";
-        public const string CommandString = "eaf";
-        public const string CommandString_Help = "help";
-        public const string CommandString_Create = "create";
-        public const string CommandString_Delete = "delete";
-        public const string CommandString_Save = "save";
-        public const string CommandString_Load = "load";
-        public const string CommandString_AddTo = "add";
-        public const string CommandString_GoTo = "goto";
-        public const string CommandString_Finish = "finish";
-        public const string CommandString_Show = "show";
-        public const string CommandString_Hide = "hide";
-        public const string CommandString_List = "list";
-        public const string CommandString_Spawn = "spawn";
-        public const string CommandString_Info = "info";
-        public const string CommandString_Paint = "paint";
-        public const string CommandString_Set = "set";
-        public const string CommandString_DebugMenu = "debugmenu";
-        public const string CommandString_Purge = "purge";
-
-        public const string CommandString_NavMesh = "navmesh";
-        public const string CommandString_WanderPath = "wanderpath";
-        public const string CommandString_HidingSpot = "hidingspot";
-        public const string CommandString_MapData = "mapdata";
-        public const string CommandString_SpawnRegion = "spawnregion";
-        public const string CommandString_DataPath = "datapath";
-        public const string CommandString_Ai = "ai";
-
-
-        public const string CommandString_OnCommandSupportedTypes =
-            $"{CommandString_Help}" +
-            $"{CommandString_Create} " +
-            $"{CommandString_Delete} " +
-            $"{CommandString_Save} " +
-            $"{CommandString_Load} " +
-            $"{CommandString_AddTo} " +
-            $"{CommandString_GoTo} " +
-            $"{CommandString_Finish} " +
-            $"{CommandString_Show} " +
-            $"{CommandString_Hide} " +
-            $"{CommandString_List} " +
-            $"{CommandString_Paint}" +
-            $"{CommandString_Set}" +
-            $"{CommandString_DebugMenu}" +
-            $"{CommandString_Purge}";
-
-        public const string CommandString_HelpSupportedCommands =
-            $"{CommandString_Create} " +
-            $"{CommandString_Delete} " +
-            $"{CommandString_Save} " +
-            $"{CommandString_Load} " +
-            $"{CommandString_AddTo} " +
-            $"{CommandString_GoTo} " +
-            $"{CommandString_Finish} " +
-            $"{CommandString_Show} " +
-            $"{CommandString_Hide} " +
-            $"{CommandString_List} " +
-            $"{CommandString_Paint}" +
-            $"{CommandString_Set}" +
-            $"{CommandString_DebugMenu}" +
-            $"{CommandString_Purge}";
-
-        public const string CommandString_CreateSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
-        public const string CommandString_DeleteSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
-        public const string CommandString_SaveSupportedTypes = $"{CommandString_MapData}";
-        public const string CommandString_AddToSupportedTypes = $"{CommandString_WanderPath}";
-        public const string CommandString_FinishSupportedTypes = $"{CommandString_WanderPath}";
-        public const string CommandString_GoToSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
-        public const string CommandString_ShowSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion} {CommandString_Ai}";
-        public const string CommandString_HideSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot} {CommandString_NavMesh} {CommandString_SpawnRegion} {CommandString_Ai}";
-        public const string CommandString_ListSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
-        public const string CommandString_LoadSupportedTypes = $"{CommandString_MapData}";
-        public const string CommandString_PaintSupportedTypes = $"{CommandString_HidingSpot} {CommandString_WanderPath}"; //{CommandString_NavMesh}
-        public const string CommandString_SetSupportedTypes = $"{CommandString_WanderPath}_{CommandString_DataPath} {CommandString_HidingSpot}_{CommandString_DataPath}";
-        public const string CommandString_PurgeSupportedTypes = $"{CommandString_SpawnRegion} {CommandString_Ai}";
 
         public static readonly string[] SceneNames = new string[]
         {
@@ -247,6 +173,52 @@ namespace ExpandedAiFramework
         };
 
         public static EAFManager Manager { get { return EAFManager.Instance; } }
+
+        public static List<string> ParseArgs() 
+        {
+            List<string> args = new List<string>();
+            for (int i = 0; i < 100; i++)
+            {
+                try 
+                {
+                    string arg = uConsole.GetString();
+                    if (string.IsNullOrEmpty(arg)) break;
+                    args.Add(arg);
+                }
+                catch
+                {
+                    break;
+                }
+            }
+            return args;
+        }
+
+        public static string GetNextArg(IList<string> args)
+        {
+            if (args.Count == 0)
+            {
+                LogError($"Not enough arguments provided!");
+                return null;
+            }
+            string arg = args[0];
+            args.RemoveAt(0);
+            return arg;
+        }
+
+        public static string ListAvailableTypes(string command)
+        {
+            if (!CommandDictionary_SupportedTypes.TryGetValue(command, out string[] types))
+            {
+                LogAlways($"Command {command} does not support any types");
+                return "";
+            }
+            string typeString = "";
+            foreach (string type in types)
+            {
+                typeString += $"{type} ";
+            }
+            return typeString;
+        }
 
         private static string GetLastCallerType(FlaggedLoggingLevel logLevel)
         {

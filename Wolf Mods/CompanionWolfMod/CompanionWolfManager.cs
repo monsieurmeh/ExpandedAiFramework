@@ -3,6 +3,7 @@ using Il2CppInterop.Runtime;
 using MelonLoader.TinyJSON;
 using Il2CppTLD.AddressableAssets;
 using static ExpandedAiFramework.Utility;
+using static ExpandedAiFramework.CommandStrings;
 using Il2Cpp;
 
 
@@ -311,7 +312,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             }
 
             string type = uConsole.GetString();
-            if (!IsTypeSupported(type, CommandString_CreateSupportedTypes)) return;
+            if (!IsTypeSupported(type, CWoldCommandString_CreateTypes)) return;
 
             switch (type)
             {

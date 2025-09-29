@@ -18,7 +18,7 @@ namespace ExpandedAiFramework
 
         public SpawnRegionPaintManager(EAFManager manager) : base(manager) { }
 
-        public override void StartPaint(string[] args)
+        public override void StartPaint(IList<string> args)
         {
             mCurrentPaintMode = PaintMode.Active;
             ShowAllSpawnRegions();
@@ -87,7 +87,7 @@ namespace ExpandedAiFramework
             }
         }
 
-        public override void ProcessCommand(string command, string[] args)
+        public override void ProcessCommand(string command, IList<string> args)
         {
             // SpawnRegionPaintManager doesn't need additional commands beyond the base paint functionality
             this.LogAlwaysInstanced($"SpawnRegionPaintManager doesn't support command: {command}");
