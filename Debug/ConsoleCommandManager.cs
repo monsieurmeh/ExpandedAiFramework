@@ -174,6 +174,12 @@ namespace ExpandedAiFramework
             string typeName = GetNextArg(args);
             switch (typeName)
             {
+                case null: 
+                    // purge it all
+                    PurgeAi(new List<string>{"normal"});
+                    PurgeAi(new List<string>{"aurora"});
+                    PurgeSpawnRegions(new List<string>{});
+                    break;
                 case CommandString_SpawnRegion: PurgeSpawnRegions(args); break;
                 case CommandString_Ai: PurgeAi(args); break;
                 default: ProcessRoutedCommand(CommandString_Purge, typeName, args); break;
