@@ -61,6 +61,11 @@ namespace ExpandedAiFramework
                 RerollChanceActive();
                 dataProxy.IsActive = mSpawnRegion.gameObject.activeSelf;
             }
+            else
+            {
+                this.LogDebugInstanced($"Not fresh proxy, deferring to IsActive state: {dataProxy.IsActive}");
+                mSpawnRegion.gameObject.SetActive(dataProxy.IsActive);
+            }
 
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
@@ -940,7 +945,8 @@ namespace ExpandedAiFramework
                             : GameManager.m_ExperienceModeManager.GetSpawnRegionChanceActiveScale();
             bool active = Utils.RollChance(chanceActive);
             this.LogDebugInstanced($"Rolled {active} with a success chance of {chanceActive}");
-            mSpawnRegion.gameObject.SetActive(active);
+            mSpawnRegion.gameObject.SetActive(active);  
+            mModDataProxy.IsActive = active;
         }
 
 
