@@ -247,11 +247,11 @@ namespace ExpandedAiFramework
 
         private void Save()
         {
-            this.LogVerboseInstanced($"Saving");
+            this.LogTraceInstanced($"Saving");
             Dictionary<string, List<T>> masterProxyDict = new Dictionary<string, List<T>>();
             foreach (T data in mDataContainer.EnumerateContents())
             {
-                this.LogVerboseInstanced($"Saving {data.DisplayName}");
+                this.LogTraceInstanced($"Saving {data.DisplayName}");
                 if (!masterProxyDict.TryGetValue(data.DataLocation, out List<T> dataList))
                 {
                     dataList = new List<T>();
@@ -267,22 +267,22 @@ namespace ExpandedAiFramework
                     continue;
                 }
                 SaveJsonToPath(json, dataLocation);
-                this.LogVerboseInstanced($"Saved to {dataLocation} with json length {json.Length}");
+                this.LogDebugInstanced($"Saved to {dataLocation} with json length {json.Length}");
             }
         }
 
 
         private void Load()
         {
-            this.LogVerboseInstanced($"Loading");
+            this.LogTraceInstanced($"Loading");
             if (mLoaded)
             {
-                this.LogVerboseInstanced($"Already loaded");
+                this.LogTraceInstanced($"Already loaded");
                 return;
             }
             Clear();
             mLoaded = LoadFromPath(GetDefaultDataPath());
-            this.LogVerboseInstanced($"Loaded: {mLoaded}");
+            this.LogDebugInstanced($"Loaded: {mLoaded}");
         }
 
 
@@ -290,11 +290,11 @@ namespace ExpandedAiFramework
         {
             try
             {
-                this.LogVerboseInstanced($"Loading from path: {dataPath}");
+                this.LogTraceInstanced($"Loading from path: {dataPath}");
                 string dataString = LoadJsonFromPath(dataPath);
                 if (dataString == null)
                 {
-                    this.LogTraceInstanced($"No data found at path: {dataPath}");
+                    this.LogDebugInstanced($"No data found at path: {dataPath}");
                     return false;
                 }
                 Variant dataVariant = JSON.Load(dataString);
@@ -305,16 +305,16 @@ namespace ExpandedAiFramework
                     newData.DataLocation = dataPath;
                     if (!PostProcessDataAfterLoad(newData))
                     {
-                        this.LogTraceInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
+                        this.LogErrorInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
                         continue;
                     }
                     if (!mDataContainer.TryAddData(newData))
                     {
-                        this.LogTraceInstanced($"Failed to add {newData.DisplayName}!");
+                        this.LogErrorInstanced($"Failed to add {newData.DisplayName}!");
                     }
-                    this.LogVerboseInstanced($"Loaded {newData.DisplayName} from {dataPath}");
+                    this.LogTraceInstanced($"Loaded {newData.DisplayName} from {dataPath}");
                 }
-                this.LogVerboseInstanced($"Loaded from path: {dataPath}");
+                this.LogDebugInstanced($"Loaded from path: {dataPath}");
                 return true;
             }
             catch (Exception e)
@@ -362,22 +362,22 @@ namespace ExpandedAiFramework
         {
             if (data == null)
             {
-                this.LogVerboseInstanced($"Null data");
+                this.LogTraceInstanced($"Null data");
                 return false;
             }
             if (data.Guid == Guid.Empty)
             {
-                this.LogVerboseInstanced($"Data with empty guid");
+                this.LogTraceInstanced($"Data with empty guid");
                 return false;
             }
             if (string.IsNullOrEmpty(data.Scene))
             {
-                this.LogVerboseInstanced($"Data with empty scene");
+                this.LogTraceInstanced($"Data with empty scene");
                 return false;
             }
             if (string.IsNullOrEmpty(data.DataLocation))
             {
-                this.LogVerboseInstanced($"Data with empty data location");
+                this.LogTraceInstanced($"Data with empty data location");
                 return false;
             }
             return true;
