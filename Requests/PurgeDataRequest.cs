@@ -18,12 +18,12 @@ namespace ExpandedAiFramework
         {
             if (mManager == null)
             {
-                this.LogTraceInstanced($"null manager, aborting");
+                this.LogErrorInstanced($"null manager, aborting");
                 return false;
             }
             if (mDataProvider == null)
             {
-                this.LogTraceInstanced($"Null data provider, aborting");
+                this.LogErrorInstanced($"Null data provider, aborting");
                 return false;
             }
             return true;
@@ -34,7 +34,7 @@ namespace ExpandedAiFramework
         {
             try
             {
-                mDataProvider.GetDataContainer().Clear();
+                mManager.ScheduleClear();
                 mManager.ScheduleSave();
                 return RequestResult.Succeeded;
             }

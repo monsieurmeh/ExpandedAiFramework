@@ -4,15 +4,6 @@ using MelonLoader.Utils;
 
 namespace ExpandedAiFramework
 {
-    //NOTE for future nick
-    // This class follows a very simple format to remain thread safe
-    // Public methods are allowed only to queue requests into the system
-    // ONLY protected and private methods are allowed to manipulate fields and perform logic
-    // Because no public fields call on the private/protected methods, we can assume that only the worker thread will access them, ensuring thread safety
-    // 
-    //
-
-
     public abstract class SubDataManager<T> : ISubDataManager,
                                               ISerializedDataProvider<T>,
                                               ISerializedDataValidatorProvider<T>
@@ -247,7 +238,7 @@ namespace ExpandedAiFramework
 
         private void Save()
         {
-            this.LogTraceInstanced($"Saving");
+            this.LogDebugInstanced($"Saving");
             Dictionary<string, List<T>> masterProxyDict = new Dictionary<string, List<T>>();
             foreach (T data in mDataContainer.EnumerateContents())
             {
@@ -350,7 +341,11 @@ namespace ExpandedAiFramework
         protected abstract string GetDefaultDataPath();
         protected abstract void SaveJsonToPath(string json, string dataLocation);
 
-        protected virtual void Clear() => mDataContainer.Clear();
+        protected virtual void Clear() 
+        {
+            mDataContainer.Clear();
+            this.LogTraceInstanced($"Data container cleared");
+        }
 
         protected virtual bool PostProcessDataAfterLoad(T data)
         {

@@ -961,7 +961,10 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"Ineligible for ReRoll");
                 return;
             }
-            mSpawnRegion.gameObject.SetActive(Utils.RollChance(GameManager.m_ExperienceModeManager.GetSpawnRegionChanceActiveScale()));
+            float chanceActive = GameManager.m_ExperienceModeManager.GetSpawnRegionChanceActiveScale();
+            bool active = Utils.RollChance(chanceActive);
+            this.LogDebugInstanced($"Rolled {active} with a success chance of {chanceActive}");
+            mSpawnRegion.gameObject.SetActive(active);
             mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = GetCurrentTimelinePoint();
         }
 

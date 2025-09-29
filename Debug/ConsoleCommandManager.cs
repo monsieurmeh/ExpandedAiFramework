@@ -357,9 +357,9 @@ namespace ExpandedAiFramework
                     LogError($"Invalid mode: {mode}");
                     return;
             }
-            mManager.DataManager.ScheduleSpawnModDataProxyRequest(new PurgeDataRequest<SpawnRegionModDataProxy>((spawnRegionModDataProxy, result) => 
+            mManager.DataManager.ScheduleSpawnModDataProxyRequest(new PurgeDataRequest<SpawnModDataProxy>((spawnModDataProxy, result) => 
             {
-                LogAlways("Spawn region mod data proxy purged");
+                LogAlways("Spawn mod data proxy purged");
             }, false), wildlifeMode);
         }
 
