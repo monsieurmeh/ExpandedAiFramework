@@ -5,6 +5,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using System.Diagnostics;
 using System.Reflection;
+using Il2CppRewired;
 
 
 namespace ExpandedAiFramework
@@ -34,6 +35,7 @@ namespace ExpandedAiFramework
         public const string CommandString_Paint = "paint";
         public const string CommandString_Set = "set";
         public const string CommandString_DebugMenu = "debugmenu";
+        public const string CommandString_Purge = "purge";
 
         public const string CommandString_NavMesh = "navmesh";
         public const string CommandString_WanderPath = "wanderpath";
@@ -58,7 +60,8 @@ namespace ExpandedAiFramework
             $"{CommandString_List} " +
             $"{CommandString_Paint}" +
             $"{CommandString_Set}" +
-            $"{CommandString_DebugMenu}";
+            $"{CommandString_DebugMenu}" +
+            $"{CommandString_Purge}";
 
         public const string CommandString_HelpSupportedCommands =
             $"{CommandString_Create} " +
@@ -70,10 +73,11 @@ namespace ExpandedAiFramework
             $"{CommandString_Finish} " +
             $"{CommandString_Show} " +
             $"{CommandString_Hide} " +
-            $"{CommandString_List} "+
+            $"{CommandString_List} " +
             $"{CommandString_Paint}" +
             $"{CommandString_Set}" +
-            $"{CommandString_DebugMenu}";
+            $"{CommandString_DebugMenu}" +
+            $"{CommandString_Purge}";
 
         public const string CommandString_CreateSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
         public const string CommandString_DeleteSupportedTypes = $"{CommandString_WanderPath} {CommandString_HidingSpot}";
@@ -87,6 +91,7 @@ namespace ExpandedAiFramework
         public const string CommandString_LoadSupportedTypes = $"{CommandString_MapData}";
         public const string CommandString_PaintSupportedTypes = $"{CommandString_HidingSpot} {CommandString_WanderPath}"; //{CommandString_NavMesh}
         public const string CommandString_SetSupportedTypes = $"{CommandString_WanderPath}_{CommandString_DataPath} {CommandString_HidingSpot}_{CommandString_DataPath}";
+        public const string CommandString_PurgeSupportedTypes = $"{CommandString_SpawnRegion} {CommandString_Ai}";
 
         public static readonly string[] SceneNames = new string[]
         {
