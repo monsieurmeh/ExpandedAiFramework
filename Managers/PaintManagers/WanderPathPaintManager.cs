@@ -15,7 +15,7 @@ namespace ExpandedAiFramework
 
         public WanderPathPaintManager(EAFManager manager) : base(manager) { }
 
-        public override void StartPaint(string[] args)
+        public override void StartPaint(IList<string> args)
         {
             if (mRecordingPath)
             {
@@ -23,14 +23,18 @@ namespace ExpandedAiFramework
                 return;
             }
 
-            string baseName = args.Length > 0 ? args[0] : "WanderPath";
-            mCurrentDataNameBase = baseName; // Store the base name for continuation
-            if (args.Length > 1 && !string.IsNullOrEmpty(args[1]))
+            string baseName = GetNextArg(args);
+            if (string.IsNullOrEmpty(baseName))
             {
-                mCurrentDataPath = args[1];
+                baseName = "WanderPath";
+            }
+            mCurrentDataNameBase = baseName; // Store the base name for continuation
+            string dataPath = GetNextArg(args);
+            if (!string.IsNullOrEmpty(dataPath))
+            {
+                mCurrentDataPath = dataPath;
                 this.LogAlwaysInstanced($"Using custom data path: {mCurrentDataPath}");
             }
-
             GetUniqueMapDataName(baseName, (uniqueName) =>
             {
                 if (InitializePaintWanderPath(uniqueName))
@@ -94,15 +98,9 @@ namespace ExpandedAiFramework
         }
 
 
-        protected override void ProcessDelete(string[] args)
+        protected override void ProcessDelete(IList<string> args)
         {
-            if (args.Length == 0)
-            {
-                this.LogWarningInstanced("Delete command requires a name");
-                return;
-            }
-
-            string name = args[0];
+            string name = GetNextArg(args);
             GetMapDataByName(name, (path, result) =>
             {
                 if (result != RequestResult.Succeeded)
@@ -113,22 +111,17 @@ namespace ExpandedAiFramework
                 DeleteMapData(path.Guid, (deletedPath, deleteResult) =>
                 {
                     this.LogAlwaysInstanced($"Deleted wander path {name} in scene {mManager.CurrentScene}.");
-                    ProcessSave(new string[0]);
+                    DataManager.SaveMapData();
                 });
             });
         }
 
 
-        protected override void ProcessGoTo(string[] args)
+        protected override void ProcessGoTo(IList<string> args)
         {
-            if (args.Length == 0)
-            {
-                this.LogWarningInstanced("GoTo command requires a name");
-                return;
-            }
-
-            string name = args[0];
-            int pathPointIndex = args.Length > 1 ? int.Parse(args[1]) : 0;
+            string name = GetNextArg(args);
+            string pathPointIndexStr = GetNextArg(args);
+            int pathPointIndex = string.IsNullOrEmpty(pathPointIndexStr) ? 0 : int.Parse(pathPointIndexStr);
 
             GetMapDataByName(name, (data, result) =>
             {
@@ -157,7 +150,7 @@ namespace ExpandedAiFramework
         }
 
 
-        protected override void ProcessPaint(string[] args)
+        protected override void ProcessPaint(IList<string> args)
         {
             StartPaint(args);
         }
@@ -333,8 +326,8 @@ namespace ExpandedAiFramework
                 mCurrentWanderPathPoints.Clear();
                 mCurrentWanderPathPointMarkers.Clear();
                 mRecordingPath = false;
-                ProcessSave(new string[0]);
-                
+                DataManager.SaveMapData();
+
                 GetUniqueMapDataName(mCurrentDataNameBase ?? "WanderPath", (uniqueName) =>
                 {
                     if (InitializePaintWanderPath(uniqueName))
@@ -345,7 +338,7 @@ namespace ExpandedAiFramework
             });
         }
 
-        protected override void ProcessSetCustom(string property, string value)
+        protected override void ProcessSetCustom(string property, string value, IList<string> args)
         {
             switch (property)
             {

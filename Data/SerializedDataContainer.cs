@@ -6,6 +6,8 @@ namespace ExpandedAiFramework
     {
         private readonly Dictionary<string, Dictionary<Guid, T>> mData = new Dictionary<string, Dictionary<Guid, T>>();
 
+        public int Count => mData.Keys.Count;
+
         public IEnumerable<T> EnumerateContents()
         {
             foreach (Dictionary<Guid, T> sceneData in mData.Values)

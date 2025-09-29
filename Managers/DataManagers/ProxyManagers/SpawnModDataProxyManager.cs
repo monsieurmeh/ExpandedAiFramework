@@ -116,7 +116,7 @@ namespace ExpandedAiFramework
             lock (mForceSpawnLock)
             {
                 bool canForceSpawn = mForceSpawnCount < mManager.Manager.Settings.MaxForceSpawns;
-                LogVerbose($"ForceSpawnCount: {mForceSpawnCount} | CanForceSpawn: {canForceSpawn}");
+                this.LogTraceInstanced($"ForceSpawnCount: {mForceSpawnCount} | CanForceSpawn: {canForceSpawn}");
                 return canForceSpawn;
             }
         }
@@ -128,7 +128,7 @@ namespace ExpandedAiFramework
             lock (mForceSpawnLock)
             {
                 mForceSpawnCount++;
-                LogTrace($"Incrementing force spawn count: {mForceSpawnCount - 1} -> {mForceSpawnCount}");
+                this.LogTraceInstanced($"Incrementing force spawn count: {mForceSpawnCount - 1} -> {mForceSpawnCount}");
             }
         }
 

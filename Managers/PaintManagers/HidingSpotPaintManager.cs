@@ -14,12 +14,18 @@ namespace ExpandedAiFramework
 
         public HidingSpotPaintManager(EAFManager manager) : base(manager) { }
 
-        public override void StartPaint(string[] args)
+        public override void StartPaint(IList<string> args)
         {
-            string baseName = args.Length > 0 ? args[0] : "HidingSpot";
-            if (args.Length > 1 && !string.IsNullOrEmpty(args[1]))
+            string baseName = GetNextArg(args);
+            if (string.IsNullOrEmpty(baseName))
             {
-                mCurrentDataPath = args[1];
+                baseName = "HidingSpot";
+            }
+            string dataPath = GetNextArg(args);
+            if (!string.IsNullOrEmpty(dataPath))
+            {
+                mCurrentDataPath = dataPath;
+                this.LogAlwaysInstanced($"Using custom data path: {mCurrentDataPath}");
             }
             mCurrentDataNameBase = baseName; // Store the base name for continuation
             GetUniqueMapDataName(baseName, (uniqueName) =>
@@ -123,15 +129,9 @@ namespace ExpandedAiFramework
         }
 
 
-        protected override void ProcessDelete(string[] args)
+        protected override void ProcessDelete(IList<string> args)
         {
-            if (args.Length == 0)
-            {
-                this.LogWarningInstanced("Delete command requires a name");
-                return;
-            }
-
-            string name = args[0];
+            string name = GetNextArg(args);
             GetMapDataByName(name, (spot, result) =>
             {
                 if (result != RequestResult.Succeeded)
@@ -142,21 +142,15 @@ namespace ExpandedAiFramework
                 DeleteMapData(spot.Guid, (deletedSpot, deleteResult) =>
                 {
                     this.LogAlwaysInstanced($"Deleted hiding spot {name} in scene {mManager.CurrentScene}.");
-                    ProcessSave(new string[0]);
+                    DataManager.SaveMapData();
                 });
             });
         }
 
 
-        protected override void ProcessGoTo(string[] args)
+        protected override void ProcessGoTo(IList<string> args)
         {
-            if (args.Length == 0)
-            {
-                this.LogWarningInstanced("GoTo command requires a name");
-                return;
-            }
-
-            string name = args[0];
+            string name = GetNextArg(args);
             GetMapDataByName(name, (data, result) =>
             {
                 if (result != RequestResult.Succeeded)
@@ -170,7 +164,7 @@ namespace ExpandedAiFramework
         }
 
 
-        protected override void ProcessPaint(string[] args)
+        protected override void ProcessPaint(IList<string> args)
         {
             StartPaint(args);
         }
@@ -336,7 +330,7 @@ namespace ExpandedAiFramework
                     
                     mSelectingRotation = false;
                     CleanupDirectionMarkers();
-                    ProcessSave(new string[0]);
+                    DataManager.SaveMapData();
                     
                     GetUniqueMapDataName(mCurrentDataNameBase ?? "HidingSpot", (uniqueName) =>
                     {

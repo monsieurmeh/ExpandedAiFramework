@@ -42,13 +42,11 @@ namespace ExpandedAiFramework
             }
         }
 
-        public override void ProcessCommand(string command, string[] args)
+        public override void ProcessCommand(string command, IList<string> args)
         {
             switch (command.ToLower())
             {
                 case CommandString_Delete: ProcessDelete(args); break;
-                case CommandString_Save: ProcessSave(args); break;
-                case CommandString_Load: ProcessLoad(args); break;
                 case CommandString_GoTo: ProcessGoTo(args); break;
                 case CommandString_Show: ProcessShow(args); break;
                 case CommandString_Hide: ProcessHide(args); break;
@@ -59,16 +57,10 @@ namespace ExpandedAiFramework
             }
         }
 
-        public virtual void ProcessSet(string[] args)
-        {
-            if (args.Length < 2)
-            {
-                this.LogWarningInstanced("Set command requires property and value");
-                return;
-            }
-            
-            string property = args[0].ToLower();
-            string value = args[1];
+        public virtual void ProcessSet(IList<string> args)
+        {           
+            string property = GetNextArg(args).ToLower();
+            string value = GetNextArg(args);
             
             switch (property)
             {
@@ -77,55 +69,45 @@ namespace ExpandedAiFramework
                     this.LogAlwaysInstanced($"Set data path to: {value}");
                     break;
                 default:
-                    ProcessSetCustom(property, value);
+                    ProcessSetCustom(property, value, args);
                     break;
             }
         }
 
-        protected virtual void ProcessSetCustom(string property, string value)
+        protected virtual void ProcessSetCustom(string property, string value, IList<string> args)
         {
             this.LogWarningInstanced($"Unknown property: {property}");
         }
 
-        protected abstract void ProcessDelete(string[] args);
-        protected abstract void ProcessGoTo(string[] args);
-        protected abstract void ProcessPaint(string[] args);
+        protected abstract void ProcessDelete(IList<string> args);
+        protected abstract void ProcessGoTo(IList<string> args);
+        protected abstract void ProcessPaint(IList<string> args);
 
-        protected virtual void ProcessSave(string[] args)
+        protected virtual void ProcessShow(IList<string> args)
         {
-            DataManager.SaveMapData();
-        }
-
-        protected virtual void ProcessLoad(string[] args)
-        {
-            DataManager.LoadMapData();
-        }
-
-        protected virtual void ProcessShow(string[] args)
-        {
-            if (args.Length == 0)
+            if (args.Count == 0)
             {
                 ShowAll();
             }
             else
             {
-                ShowByName(args[0]);
+                ShowByName(GetNextArg(args));
             }
         }
 
-        protected virtual void ProcessHide(string[] args)
+        protected virtual void ProcessHide(IList<string> args)
         {
-            if (args.Length == 0)
+            if (args.Count == 0)
             {
                 HideAll();
             }
             else
             {
-                HideByName(args[0]);
+                HideByName(GetNextArg(args));
             }
         }
 
-        protected virtual void ProcessList(string[] args)
+        protected virtual void ProcessList(IList<string> args)
         {
             DataManager.ScheduleMapDataRequest<T>(new ForEachMapDataRequest<T>(mManager.CurrentScene, (data) =>
             {

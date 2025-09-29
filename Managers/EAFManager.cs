@@ -4,6 +4,7 @@ using ComplexLogger;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using static Il2CppRewired.Demos.SimpleControlRemapping;
 
 
 namespace ExpandedAiFramework
@@ -405,8 +406,25 @@ namespace ExpandedAiFramework
             lock (mLoggerLock)
             {
                 DateTime now = DateTime.Now;
-                mLogDispatcher.Dispatch(() => mLogger.Log(message, logLevel, toUConsole ? LoggingSubType.uConsole : LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {now}"));
+                mLogDispatcher.Dispatch(() => LogInternal(message, logLevel, callerType, callerInstanceInfo, callerName, toUConsole, now));
             }
+        }
+
+        
+        private void LogInternal(
+            string message,
+            FlaggedLoggingLevel logLevel,
+            string callerType,
+            string callerInstanceInfo,
+            string callerName,
+            bool toUConsole,
+            DateTime now)
+        { 
+            if (toUConsole)
+            {
+                mLogger.Log(message, logLevel, LoggingSubType.uConsole, $"[{callerType}.{callerName}{callerInstanceInfo} at {now}]");
+            }
+            mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {now}]");
         }
 
 

@@ -31,9 +31,9 @@ namespace ExpandedAiFramework
         public virtual void Shutdown() { CleanupPaintMarker(); }
         public virtual void UpdateFromManager() { UpdatePaintMarker(); }
 
-        public abstract void StartPaint(string[] args);
+        public abstract void StartPaint(IList<string> args);
         public abstract void ExitPaint();
-        public abstract void ProcessCommand(string command, string[] args);
+        public abstract void ProcessCommand(string command, IList<string> args);
 
         public virtual void HandlePaintInput()
         {
