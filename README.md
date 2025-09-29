@@ -1,6 +1,6 @@
 ****CREDITS****
 
-Warm appreciation to Marcy for icons. They look awesome, and one day I'll have a complete set with moose and bear! :D
+Warm appreciation to Marcy for icons. They look awesome, and one day I'll have a complete set with moose! :D
 
 Big thanks to the TLD Modding community in general. This game has a lot of moving parts and it would take years longer than it has to make this without their input.
 
