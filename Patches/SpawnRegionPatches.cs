@@ -20,7 +20,6 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
-            EAFManager.LogWithStackTrace($"WARNING: This method is obsolete with EAF. Place any field adjustment patches on awake instead.");
             return false;
         }
     }
