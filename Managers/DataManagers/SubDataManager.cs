@@ -260,6 +260,7 @@ namespace ExpandedAiFramework
                 SaveJsonToPath(json, dataLocation);
                 this.LogDebugInstanced($"Saved to {dataLocation} with json length {json.Length}");
             }
+            this.LogDebugInstanced($"Saved total of {mDataContainer.Count} items across {masterProxyDict.Keys.Count} data locations");
         }
 
 
@@ -305,7 +306,7 @@ namespace ExpandedAiFramework
                     }
                     this.LogTraceInstanced($"Loaded {newData.DisplayName} from {dataPath}");
                 }
-                this.LogDebugInstanced($"Loaded from path: {dataPath}");
+                this.LogDebugInstanced($"Loaded {mDataContainer.Count} items from path: {dataPath}");
                 return true;
             }
             catch (Exception e)

@@ -800,7 +800,6 @@ namespace ExpandedAiFramework
                 {
                     mPendingWrapOperations.Remove(guid);
                 }
-                newSpawnRegionWrapper.Start();
             }, false));
         }
 

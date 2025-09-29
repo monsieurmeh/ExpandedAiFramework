@@ -55,6 +55,12 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_HasBeenDisabledByAurora = mModDataProxy?.HasBeenDisabledByAurora ?? false;
             mSpawnRegion.m_WasActiveBeforeAurora = mModDataProxy?.WasActiveBeforeAurora ?? true;
             mSpawnRegion.m_CooldownTimerHours = mModDataProxy?.CooldownTimerHours ?? 0f;
+            if (dataProxy.Fresh)
+            {
+                this.LogDebugInstanced($"Fresh proxy, rerolling active chance");
+                RerollChanceActive();
+                dataProxy.IsActive = mSpawnRegion.gameObject.activeSelf;
+            }
 
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
@@ -77,11 +83,6 @@ namespace ExpandedAiFramework
             {
                 mSpawnRegion.m_WolfTypeSpawned = baseAi.NormalWolf.IsNullOrDestroyed() ? WolfType.Timberwolf : WolfType.Normal;
             }
-            mSpawnRegion.m_ElapasedHoursNextRespawnAllowed = 0.0f;
-            mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = 0.0f;
-            mSpawnRegion.m_HoursNextTrapReset = 0.0f;
-            mSpawnRegion.m_NumRespawnsPending = 0;
-            mSpawnRegion.m_CooldownTimerHours = 0.0f;
             GameModeConfig gameModeConfig = ExperienceModeManager.s_CurrentGameMode;
             if (gameModeConfig.IsNullOrDestroyed())
             {
@@ -198,41 +199,6 @@ namespace ExpandedAiFramework
             }
             mSpawnRegion.m_CurrentWaypointPathIndex = UnityEngine.Random.Range(0, mSpawnRegion.m_PathManagers.Count);
             this.LogTraceInstanced($"mSpawnRegion.m_CurrentWaypointIndex set to {mSpawnRegion.m_CurrentWaypointPathIndex}. Not, that this really matters... EAF uses its own wander system!");
-        }
-
-
-        public void Start()
-        {
-            if (mSpawnRegion.m_StartHasBeenCalled)
-            {
-                return;
-            }
-            mSpawnRegion.m_StartHasBeenCalled = true;
-            ExperienceModeManager experienceModeManager = GameManager.m_ExperienceModeManager;
-            if (experienceModeManager.IsNullOrDestroyed())
-            {
-                this.LogErrorInstanced($"null ExperienceModeManager");
-                return;
-            }
-            float chanceActive = mSpawnRegion.m_ChanceActive;
-            chanceActive *= GameManager.InCustomMode()
-                            ? GetCustomSpawnRegionChanceActiveScale()
-                            : experienceModeManager.GetSpawnRegionChanceActiveScale();
-            if (!Utils.RollChance(chanceActive))
-            {
-                this.LogDebugInstanced($"Rolled 'false' with a success chance of {chanceActive}, setting inactive");
-                mSpawnRegion.gameObject.SetActive(false);
-                return;
-            }
-            if (Il2Cpp.SpawnRegion.m_SpawnDataProxyPool != null
-                && Il2Cpp.SpawnRegion.m_SpawnDataProxyPool.Length != 0
-                && Il2Cpp.SpawnRegion.m_SpawnDataProxyPool[0].IsNullOrDestroyed())
-            {
-                for (int i = 0, iMax = Il2Cpp.SpawnRegion.m_SpawnDataProxyPool.Length; i < iMax; i++)
-                {
-                    Il2Cpp.SpawnRegion.m_SpawnDataProxyPool[i] = new SpawnDataProxy();
-                }
-            }
         }
 
 
@@ -961,14 +927,24 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"Ineligible for ReRoll");
                 return;
             }
-            float chanceActive = GameManager.m_ExperienceModeManager.GetSpawnRegionChanceActiveScale();
-            bool active = Utils.RollChance(chanceActive);
-            this.LogDebugInstanced($"Rolled {active} with a success chance of {chanceActive}");
-            mSpawnRegion.gameObject.SetActive(active);
+            RerollChanceActive();
             mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll = GetCurrentTimelinePoint();
         }
 
 
+        private void RerollChanceActive()
+        {
+            float chanceActive = mSpawnRegion.m_ChanceActive;
+            chanceActive *= GameManager.InCustomMode()
+                            ? GetCustomSpawnRegionChanceActiveScale()
+                            : GameManager.m_ExperienceModeManager.GetSpawnRegionChanceActiveScale();
+            bool active = Utils.RollChance(chanceActive);
+            this.LogDebugInstanced($"Rolled {active} with a success chance of {chanceActive}");
+            mSpawnRegion.gameObject.SetActive(active);
+        }
+
+
+        // Very heavy vanilla element, mostly just handling from the patch... not using it myself. bleh
         public void SetActive(bool active)
         {
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Cougar)

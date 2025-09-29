@@ -8,6 +8,7 @@ namespace ExpandedAiFramework
     {
         [Include] protected string[] mCustomData;
         [Include] protected Vector3 mCurrentPosition;
+        [Exclude] public bool Fresh = false;
 
         public string[] CustomData { get { return mCustomData; } set { mCustomData = value; } }
         public Vector3 CurrentPosition { get { return mCurrentPosition; } set { mCurrentPosition = value; } }
@@ -21,6 +22,7 @@ namespace ExpandedAiFramework
         {
             mCurrentPosition = currentPosition;
             mCustomData = [];
+            Fresh = true;
         }
     }
 }
