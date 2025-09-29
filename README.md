@@ -1,3 +1,7 @@
+****CREDITS****
+Warm appreciation to Marcy for icons. They look awesome, and one day I'll have a complete set with moose and bear! :D
+Big thanks to the TLD Modding community in general. This game has a lot of moving parts and it would take years longer than it has to make this without their input.
+
 ****WARNING****
 Please back up your saves RIGHT NOW. Don't touch this mod until you have backed up your saves. It is in alpha and I cannot guarantee safety of any saves it is used on.
 
