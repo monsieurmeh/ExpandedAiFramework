@@ -98,7 +98,15 @@ namespace ExpandedAiFramework
 
         private void RegisterDefaultHotSwappableSubManagers()
         {
-            mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] = new CougarManager(this);
+            RegisterDefaultCougarManager();
+            // RegisterDefaultPackManager();
+        }
+
+        private void RegisterDefaultCougarManager()
+        {
+            CougarManager cougarManager = new CougarManager(this);
+            mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] = cougarManager;
+            mSubManagerDict.Add(typeof(BaseCougar), cougarManager);
         }
 
 
@@ -344,6 +352,7 @@ namespace ExpandedAiFramework
             switch (hotSwapType)
             {
                 case HotSwappableSubManagers.CougarManager:
+                    mSubManagerDict.Remove(typeof(BaseCougar));
                     mSubManagerDict.Add(subManager.SpawnType, subManager);
                     return;
             }
