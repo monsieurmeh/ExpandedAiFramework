@@ -342,6 +342,7 @@ namespace ExpandedAiFramework
             }
             mHotSwapLockMask |= 1U << (int)hotSwapType;
             mHotSwappableSubManagers[(int)hotSwapType] = subManager;
+            subManager.Initialize(this);
             PostProcessHotswappedSubmanager(hotSwapType, subManager);
             LogAlways($"{hotSwapType} locked!");
         }
@@ -364,7 +365,10 @@ namespace ExpandedAiFramework
             {
                 yield return mSubManagers[i];
             }
-            yield return mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ISubManager;
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                yield return mHotSwappableSubManagers[i];
+            }
         }
 
         
