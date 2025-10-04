@@ -359,35 +359,8 @@ namespace ExpandedAiFramework
         }
 
         
-        public bool TryGetSubManager(Type type, out ISubManager subManager)
-        {
-            if (mSubManagerDict.TryGetValue(type, out subManager)) 
-            {
-                return true;
-            }
-            if (type == mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager].SpawnType)
-            {
-                subManager = mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ISubManager;
-                return true;
-            }
-            return false;
-        }
-
-
-        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
-        {
-            if (mSubManagerDict.TryGetValue(proxy.GetType(), out ISubManager subManager))
-            {
-                subManager.PostProcessNewSpawnModDataProxy(proxy);
-                return;
-            }
-            if (proxy.VariantSpawnType == mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager].SpawnType)
-            {
-                mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager].PostProcessNewSpawnModDataProxy(proxy);
-                return;
-            }
-        }
-        
+        public bool TryGetSubManager(Type type, out ISubManager subManager) => mSubManagerDict.TryGetValue(type, out subManager);
+        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { if (mSubManagerDict.TryGetValue(proxy.VariantSpawnType, out ISubManager subManager)) subManager.PostProcessNewSpawnModDataProxy(proxy);}
         public void SaveData(string data, string suffix) => mDataManager.ModData.Save(data, suffix);
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
