@@ -72,12 +72,12 @@ namespace ExpandedAiFramework
             }
             if (!VanillaCougarManager.s_EnableInNewGame)
             {
-                LogDebug($"Cougar disabled");
+                LogTrace($"Cougar disabled");
                 return true;
             }
             if (mVanillaManager == null) 
             {
-                LogDebug("Null vanilla cougar manager");
+                LogTrace("Null vanilla cougar manager");
                 return true;
             }
             return false;
@@ -85,7 +85,7 @@ namespace ExpandedAiFramework
 
         public override void UpdateFromManager() 
         {
-            bool shouldReport = mDebugTicker + 10000000 <= DateTime.Now.Ticks ; // 10,000 ticks per ms, 1,000ms per second = 10,000,000
+            bool shouldReport = mDebugTicker + 10000000L <= DateTime.Now.Ticks ; // 10,000 ticks per ms, 1,000ms per second = 10,000,000
             if (shouldReport)
             {
                 mDebugTicker = DateTime.Now.Ticks;
@@ -117,31 +117,31 @@ namespace ExpandedAiFramework
             {
                 if (shouldReport)
                 {
-                    LogDebug($"No territory found");
+                    LogTrace($"No territory found");
                 }
                 return;
             }
             switch(territory.m_CougarState) 
             {
                 case VanillaCougarManager.CougarState.Start:
-                    LogDebug($"On Start");
+                    LogTrace($"On Start");
                     vanillaCougarManager.OnStart(territory);
                     return;
                 case VanillaCougarManager.CougarState.WaitingForArrival:
                     if (shouldReport)
                     {
-                        LogDebug($"Waiting for Arrival with DaysPlayedNotPaused: {vanillaCougarManager.GetDaysPlayedNotPaused()}");
+                        LogTrace($"Waiting for Arrival with DaysPlayedNotPaused: {vanillaCougarManager.GetDaysPlayedNotPaused()}");
                     }
                     vanillaCougarManager.UpdateWaitingForArrival(territory, vanillaCougarManager.GetDaysPlayedNotPaused());
                     return;
                 case VanillaCougarManager.CougarState.HasArrivedAfterTransition:
-                    LogDebug($"Setting Cougar Arrived");
+                    LogTrace($"Setting Cougar Arrived");
                     vanillaCougarManager.SetCougarArrived(territory);
                     return;
                 case VanillaCougarManager.CougarState.HasArrived:                    
                     if (shouldReport)
                     {
-                        LogDebug($"Has Arrived");
+                        LogTrace($"Has Arrived");
                     }
                     vanillaCougarManager.UpdateHasArrived(vanillaCougarManager.GetDaysPlayedNotPaused());
                     return;                    
@@ -172,7 +172,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogDebug($"Null VanillaCougarManager!"); 
+                    LogTrace($"Null VanillaCougarManager!"); 
                 }
                 return true;
             }
@@ -180,7 +180,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogDebug($"Vanilla Manager disabled!!"); 
+                    LogTrace($"Vanilla Manager disabled!!"); 
                 }
                 return true;
             }
@@ -188,7 +188,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogDebug($"Game paused!"); 
+                    LogTrace($"Game paused!"); 
                 }
                 return true;
             }
@@ -196,7 +196,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogDebug($"Gameplay suspended!"); 
+                    LogTrace($"Gameplay suspended!"); 
                 }
                 return true;
             }
@@ -204,7 +204,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogDebug($"Main menu active!"); 
+                    LogTrace($"Main menu active!"); 
                 }
                 return true;
             }
@@ -212,7 +212,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogDebug($"Restore in progress!"); 
+                    LogTrace($"Restore in progress!"); 
                 }
                 return true;
             }
@@ -221,7 +221,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogDebug($"Player struggle!"); 
+                    LogTrace($"Player struggle!"); 
                 }
                 return true;
             }
@@ -232,7 +232,7 @@ namespace ExpandedAiFramework
         {
             if (VanillaCougarManager.s_DebugWaitingForComponentRegistration)
             {
-                LogDebug($"Debug resetting cougar static counts");
+                LogTrace($"Debug resetting cougar static counts");
                 VanillaCougarManager.s_SceneTerritoryZonesCount = 0;
                 VanillaCougarManager.s_CougarIntroCinematicsCount = 0;
                 VanillaCougarManager.s_CougarIntroScenesCount = 0;
@@ -244,7 +244,7 @@ namespace ExpandedAiFramework
         {
             if (!AreStaticCountsCorrect())
             {
-                LogDebug($"Static counts incorrect, re-recording.");
+                LogTrace($"Static counts incorrect, re-recording.");
                 SetStaticCountsCorrect();
             }
         }
