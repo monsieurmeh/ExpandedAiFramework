@@ -8,6 +8,7 @@ namespace ExpandedAiFramework
 {
     public class CougarManager : BaseSubManager, ICougarManager
     {
+        protected bool mStartCalled = false;
         protected VanillaCougarManager mVanillaManager;
         public VanillaCougarManager VanillaCougarManager
         { 
@@ -27,6 +28,35 @@ namespace ExpandedAiFramework
 
         protected long mDebugTicker = 0;
 
+
+        public void OverrideStart()
+        {
+            if (mStartCalled) return;
+            mStartCalled = true;
+            if (ShouldAbortStart()) 
+            {
+                if (mVanillaManager != null)
+                {
+                    mVanillaManager.IsEnabled = false;
+                }
+            }       
+            VanillaCougarManager.s_CougarSettingsOverride = false;
+            mVanillaManager.m_CurrentThreatLevelByRegion.Clear();
+            mVanillaManager.m_CurrentThreatCooldownByRegion.Clear();
+            mVanillaManager.IsEnabled = true;
+            mVanillaManager.m_Cougar_TerritoryZone_EnterID = 0;
+            mVanillaManager.m_Cougar_TerritoryZone_ExitID = 0;
+            mVanillaManager.m_Cougar_NearbyOutsideID = 0;
+            VanillaCougarManager.SetAudioState(mVanillaManager.m_CougarTerritory_ZoneThreatLevel_ctztl_0);
+        }
+
+        private bool ShouldAbortStart()
+        {            
+            if (!VanillaCougarManager.GetCougarSettings(true)) return true;
+            if (!VanillaCougarManager.s_EnableInNewGame) return true;
+            if (mVanillaManager == null) return true;
+            return false;
+        }
 
         public override void UpdateFromManager() 
         {
