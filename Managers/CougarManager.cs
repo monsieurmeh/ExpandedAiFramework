@@ -28,13 +28,21 @@ namespace ExpandedAiFramework
 
         protected long mDebugTicker = 0;
 
+        public override void OnQuitToMainMenu()
+        {
+            base.OnQuitToMainMenu();
+            mStartCalled = false;
+        }
+
 
         public void OverrideStart()
         {
             if (mStartCalled) return;
+            LogDebug($"OverrideStart");
             mStartCalled = true;
             if (ShouldAbortStart()) 
             {
+                LogDebug($"Aborting...");
                 if (mVanillaManager != null)
                 {
                     mVanillaManager.IsEnabled = false;
@@ -48,13 +56,26 @@ namespace ExpandedAiFramework
             mVanillaManager.m_Cougar_TerritoryZone_ExitID = 0;
             mVanillaManager.m_Cougar_NearbyOutsideID = 0;
             VanillaCougarManager.SetAudioState(mVanillaManager.m_CougarTerritory_ZoneThreatLevel_ctztl_0);
+            LogDebug($"Started");
         }
 
         private bool ShouldAbortStart()
         {            
-            if (!VanillaCougarManager.GetCougarSettings(true)) return true;
-            if (!VanillaCougarManager.s_EnableInNewGame) return true;
-            if (mVanillaManager == null) return true;
+            if (!VanillaCougarManager.GetCougarSettings(true)) 
+            {
+                LogError($"Could not get cougar settings");
+                return true;
+            }
+            if (!VanillaCougarManager.s_EnableInNewGame)
+            {
+                LogDebug($"Cougar disabled");
+                return true;
+            }
+            if (mVanillaManager == null) 
+            {
+                LogError("Null vanilla cougar manager");
+                return true;
+            }
             return false;
         }
 
