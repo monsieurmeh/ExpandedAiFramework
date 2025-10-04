@@ -1352,12 +1352,12 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_SpawnLevel == 0)
             {
-                this.LogDebugInstanced($"Suppressed by zero sxpawn level");
+                this.LogTraceInstanced($"Suppressed by zero sxpawn level");
                 return true;
             }
             if (!ExperienceModeManager.s_CurrentGameMode.m_XPMode.m_NoPredatorsFirstDay)
             {
-                this.LogDebugInstanced($"No predator grace period, not suppressed");
+                this.LogTraceInstanced($"No predator grace period, not suppressed");
                 return false;
             }
             if (mSpawnRegion.m_AiTypeSpawned != AiType.Predator)
