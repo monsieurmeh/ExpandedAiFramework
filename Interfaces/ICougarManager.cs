@@ -12,7 +12,7 @@ namespace ExpandedAiFramework
             customSpawnRegion = new CustomSpawnRegion(spawnRegion, proxy, timeOfDay);
             return false;
         }
-        
-        void OverrideStart();
+
+        void OverrideStart() {}
     }
 }
