@@ -345,6 +345,21 @@ namespace ExpandedAiFramework
             yield return mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ISubManager;
         }
 
+        
+        public bool TryGetSubManager(Type type, out ISubManager subManager)
+        {
+            if (mSubManagerDict.TryGetValue(type, out subManager)) 
+            {
+                return true;
+            }
+            if (type == mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager].SpawnType)
+            {
+                subManager = mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ISubManager;
+                return true;
+            }
+            return false;
+        }
+
 
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
