@@ -39,6 +39,18 @@ namespace ExpandedAiFramework
             COUNT
         }
 
+        public enum HotSwappableSubManagers : int
+        {
+            CougarManager = 0,
+            // PackManager, SOON™
+            COUNT
+        }
+
+        private Dictionary<HotSwappableSubManagers, Type> mHotSwappableInterfaceMap = new Dictionary<HotSwappableSubManagers, Type>()
+        {
+            { HotSwappableSubManagers.CougarManager, typeof(ICougarManager) },
+            // { HotSwappableSubManagers.PackManager, typeof(PackManager) }, SOON™
+        };
 
         private ExpandedAiFrameworkSettings mSettings;
         private DataManager mDataManager;
@@ -48,6 +60,7 @@ namespace ExpandedAiFramework
         private DispatchManager mDispatchManager;
         private DispatchManager mLogDispatcher;
         private BaseSubManager[] mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
+        private ISubManager[] mHotSwappableSubManagers = new ISubManager[(int)HotSwappableSubManagers.COUNT];
         private Dictionary<Type, ISubManager> mSubManagerDict = new Dictionary<Type, ISubManager>();
         private ISubManager[] mSubManagers = new ISubManager[0];
         private Dictionary<string, BasePaintManager> mPaintManagerDict = new Dictionary<string, BasePaintManager>();
@@ -56,6 +69,7 @@ namespace ExpandedAiFramework
         private bool mGameLoaded = false;
         private bool mPendingSceneLoadRequest = false;
         private object mLoggerLock = new object();
+        private uint mHotSwapLockMask = 0U;
 
 
 
@@ -82,12 +96,18 @@ namespace ExpandedAiFramework
             mBaseSubManagers[(int)BaseSubManagers.ConsoleCommandManager] = mConsoleCommandManager;
         }
 
+        private void RegisterDefaultHotSwappableSubManagers()
+        {
+            mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] = new CougarManager(this);
+        }
+
 
         public void Initialize(ExpandedAiFrameworkSettings settings)
         {
             mSettings = settings;
             InitializeLogger();
             RegisterBaseSubManagers();
+            RegisterDefaultHotSwappableSubManagers();
             InitializeDebugMenu();
         }
 
@@ -110,7 +130,6 @@ namespace ExpandedAiFramework
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
         public Dictionary<string, BasePaintManager> PaintManagers => mPaintManagerDict;
 
-
         public void Shutdown()
         {
             foreach (var paintManager in mPaintManagerDict.Values)
@@ -120,6 +139,10 @@ namespace ExpandedAiFramework
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].Shutdown();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].Shutdown();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -134,6 +157,10 @@ namespace ExpandedAiFramework
             {
                 mBaseSubManagers[i].UpdateFromManager();
             }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].UpdateFromManager();
+            }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
                 mSubManagers[i].UpdateFromManager();
@@ -146,6 +173,10 @@ namespace ExpandedAiFramework
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnStartNewGame();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnStartNewGame();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -160,6 +191,10 @@ namespace ExpandedAiFramework
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnLoadGame();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnLoadGame();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -178,6 +213,10 @@ namespace ExpandedAiFramework
             for (int i = mBaseSubManagers.Length - 1, iMin = 0; i >= iMin; i--)
             {
                 mBaseSubManagers[i].OnSaveGame();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnSaveGame();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -212,6 +251,10 @@ namespace ExpandedAiFramework
             {
                 mBaseSubManagers[i].OnLoadScene(sceneName);
             }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnLoadScene(sceneName);
+            }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
                 mSubManagers[i].OnLoadScene(sceneName);
@@ -229,6 +272,10 @@ namespace ExpandedAiFramework
             {
                 mBaseSubManagers[i].OnInitializedScene(sceneName);
             }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnInitializedScene(sceneName);
+            }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
                 mSubManagers[i].OnInitializedScene(sceneName);
@@ -243,6 +290,10 @@ namespace ExpandedAiFramework
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnQuitToMainMenu();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnQuitToMainMenu();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -265,7 +316,27 @@ namespace ExpandedAiFramework
             mSubManagers[^1] = subManager;
         }
 
-
+        public void HotSwapSubManager(HotSwappableSubManagers hotSwapType, ISubManager subManager)
+        {
+            if (((1U << (int)hotSwapType) & mHotSwapLockMask) != 0U)
+            {
+                LogError($"{hotSwapType} already claimed!");
+                return;
+            }
+            if (!mHotSwappableInterfaceMap.TryGetValue(hotSwapType, out Type interfaceType))
+            {
+                LogError($"No interface type found for {hotSwapType}!");
+                return;
+            }
+            if (!interfaceType.IsAssignableFrom(subManager.GetType()))
+            {
+                LogError($"{subManager.GetType()} is not assignable from {interfaceType}!");
+                return;
+            }
+            mHotSwapLockMask |= 1U << (int)hotSwapType;
+            mHotSwappableSubManagers[(int)hotSwapType] = subManager;
+        }
+        
         public void SaveData(string data, string suffix) => mDataManager.ModData.Save(data, suffix);
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
