@@ -448,17 +448,13 @@ namespace ExpandedAiFramework
                 this.LogWarningInstanced($"Potential error: Could not get spawn position and rotation. Aborting");
                 return;
             }
-
-            // Need to delegate this upwards
             Type spawnType = typeof(void);
-            ISubManager[] subManagers = mManager.Manager.SubManagerArray;
-            for (int i = 0, iMax = subManagers.Length; i < iMax; i++)
+            foreach (ISubManager subManager in mManager.Manager.EnumerateSubManagers())
             {
-                this.LogTraceInstanced($"Allowing submanager {subManagers[i]} to intercept spawn...");
-                if (subManagers[i].ShouldInterceptSpawn(this))
+                if (subManager.ShouldInterceptSpawn(this))
                 {
-                    this.LogTraceInstanced($"Spawn intercept from submanager {subManagers[i]}! new type: {subManagers[i].SpawnType}");
-                    spawnType = subManagers[i].SpawnType;
+                    this.LogTraceInstanced($"Spawn intercept from submanager {subManager}! new type: {subManager.SpawnType}");
+                    spawnType = subManager.SpawnType;
                     break;
                 }
             }
@@ -505,10 +501,7 @@ namespace ExpandedAiFramework
             newProxy.ParentGuid = mModDataProxy.Guid;
             mDataManager.ScheduleRegisterSpawnModDataProxyRequest(newProxy, (proxy, result) =>
             {
-                if (mManager.Manager.SubManagers.TryGetValue(variantSpawnType, out ISubManager subManager))
-                {
-                    subManager.PostProcessNewSpawnModDataProxy(newProxy);
-                }
+                mManager.Manager.PostProcessNewSpawnModDataProxy(newProxy);
                 if (newProxy.ForceSpawn)
                 {
                     this.LogDebugInstanced($"FORCE spawning on creation!");

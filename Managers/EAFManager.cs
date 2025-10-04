@@ -115,8 +115,6 @@ namespace ExpandedAiFramework
         #region API
 
         public ExpandedAiFrameworkSettings Settings => mSettings;
-        public Dictionary<Type, ISubManager> SubManagers => mSubManagerDict;
-        public ISubManager[] SubManagerArray => mSubManagers;
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } } //should be encapsulated elsewhere, datamanager maybe? or maybe some sort of timeline manager.
         public string CurrentScene => mCurrentScene;
         public bool GameLoaded { get { return mGameLoaded; } set { mGameLoaded = value; } }
@@ -129,6 +127,7 @@ namespace ExpandedAiFramework
         public WeightedTypePicker<BaseAi> TypePicker => mAiManager.TypePicker;
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
         public Dictionary<string, BasePaintManager> PaintManagers => mPaintManagerDict;
+        public ICougarManager CougarManager => mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ICougarManager;
 
         public void Shutdown()
         {
@@ -336,6 +335,30 @@ namespace ExpandedAiFramework
             mHotSwapLockMask |= 1U << (int)hotSwapType;
             mHotSwappableSubManagers[(int)hotSwapType] = subManager;
         }
+
+        public IEnumerable<ISubManager> EnumerateSubManagers() 
+        {
+            for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
+            {
+                yield return mSubManagers[i];
+            }
+            yield return mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ISubManager;
+        }
+
+
+        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
+        {
+            if (mSubManagerDict.TryGetValue(proxy.GetType(), out ISubManager subManager))
+            {
+                subManager.PostProcessNewSpawnModDataProxy(proxy);
+                return;
+            }
+            if (proxy.VariantSpawnType == mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager].SpawnType)
+            {
+                mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager].PostProcessNewSpawnModDataProxy(proxy);
+                return;
+            }
+        }
         
         public void SaveData(string data, string suffix) => mDataManager.ModData.Save(data, suffix);
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
@@ -360,8 +383,7 @@ namespace ExpandedAiFramework
         {
             return mPaintManagerDict.TryGetValue(typeName.ToLower(), out paintManager);
         }
-       
-        
+
         /* This section needs a rework, possibly its own interop platform specifically for prefix bool patches
         #region Event Registers
 
