@@ -63,22 +63,22 @@ namespace ExpandedAiFramework
         {
             mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
 
-            mDispatchManager = new DispatchManager(this, mSubManagers);
+            mDispatchManager = new DispatchManager(this);
             mBaseSubManagers[(int)BaseSubManagers.DispatchManager] = mDispatchManager;
 
-            mLogDispatcher = new DispatchManager(this, mSubManagers);
+            mLogDispatcher = new DispatchManager(this);
             mBaseSubManagers[(int)BaseSubManagers.LogDispatcher] = mLogDispatcher;
 
-            mDataManager = new DataManager(this, mSubManagers);
+            mDataManager = new DataManager(this);
             mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
 
-            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers);
+            mSpawnRegionManager = new SpawnRegionManager(this);
             mBaseSubManagers[(int)BaseSubManagers.SpawnRegionManager] = mSpawnRegionManager;
 
-            mAiManager = new AiManager(this, mSubManagers);
+            mAiManager = new AiManager(this);
             mBaseSubManagers[(int)BaseSubManagers.AiManager] = mAiManager;
 
-            mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers);
+            mConsoleCommandManager = new ConsoleCommandManager(this);
             mBaseSubManagers[(int)BaseSubManagers.ConsoleCommandManager] = mConsoleCommandManager;
         }
 

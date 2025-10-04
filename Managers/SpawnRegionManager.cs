@@ -40,7 +40,7 @@ namespace ExpandedAiFramework
             }
         }
 
-        public SpawnRegionManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        public SpawnRegionManager(EAFManager manager) : base(manager) { }
         public Dictionary<int, CustomSpawnRegion> CustomSpawnRegions { get { return mCustomSpawnRegions; } }
         public Dictionary<Guid, CustomSpawnRegion> CustomSpawnRegionsByGuid { get { return mCustomSpawnRegionsByGuid; } }
         public bool ReadyToProcessSpawnRegions { get { return mReadyToProcessSpawnRegions; } }
@@ -52,9 +52,9 @@ namespace ExpandedAiFramework
 
         #region BaseSubManager
 
-        public override void Initialize(EAFManager manager, ISubManager[] subManagers)
+        public override void Initialize(EAFManager manager)
         {
-            base.Initialize(manager, subManagers);
+            base.Initialize(manager);
             mDataManager = mManager.DataManager;
         }
 

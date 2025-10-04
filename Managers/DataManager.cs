@@ -28,7 +28,7 @@ namespace ExpandedAiFramework
 
 
         public ModDataManager ModData { get { return mModData; } }
-        public DataManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        public DataManager(EAFManager manager) : base(manager) { }
         public SpawnRegionModDataProxyManager SpawnRegionModDataProxyManager { get { return mSpawnRegionModDataProxyManager; } }
         public SpawnModDataProxyManager[] SpawnModDataProxyManagers { get { return mSpawnModDataProxyManagers; } }
         public Dictionary<Type, IMapDataManager> MapDataManagers { get { return mMapDataManagers; } }
@@ -130,9 +130,9 @@ namespace ExpandedAiFramework
 
         #region Execution flow
 
-        public override void Initialize(EAFManager manager, ISubManager[] subManagers)
+        public override void Initialize(EAFManager manager)
         {
-            base.Initialize(manager, subManagers);
+            base.Initialize(manager);
             mWanderPathManager = new WanderPathManager(this, mManager.DispatchManager);
             mHidingSpotManager = new HidingSpotManager(this, mManager.DispatchManager);
             mMapDataManagers.Add(typeof(WanderPath), mWanderPathManager);
