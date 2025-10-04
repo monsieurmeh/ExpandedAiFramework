@@ -287,6 +287,11 @@ namespace ExpandedAiFramework
             {
                 mSubManagers[i].OnInitializedScene(sceneName);
             }
+            if (IsValidGameplayScene(sceneName, out _))
+            {
+                CougarManager.OverrideStart();
+                //PackManager.OverrideStart();
+            }
         }
 
 

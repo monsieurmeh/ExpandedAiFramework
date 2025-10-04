@@ -9,6 +9,7 @@ namespace ExpandedAiFramework
     public class CougarManager : BaseSubManager, ICougarManager
     {
         protected bool mStartCalled = false;
+        protected bool mIsMenuScene = true; //start out as true
         protected VanillaCougarManager mVanillaManager;
         public VanillaCougarManager VanillaCougarManager
         { 
@@ -33,13 +34,15 @@ namespace ExpandedAiFramework
             base.OnQuitToMainMenu();
             mStartCalled = false;
         }
-
-
+        
         public void OverrideStart()
         {
-            if (mStartCalled) return;
+            if (mStartCalled) 
+            {
+                LogDebug($"Start already called, aborting");
+                return;
+            }
             LogDebug($"OverrideStart");
-            mStartCalled = true;
             if (ShouldAbortStart()) 
             {
                 LogDebug($"Aborting...");
@@ -47,7 +50,8 @@ namespace ExpandedAiFramework
                 {
                     mVanillaManager.IsEnabled = false;
                 }
-            }       
+            }
+            mStartCalled = true;
             VanillaCougarManager.s_CougarSettingsOverride = false;
             mVanillaManager.m_CurrentThreatLevelByRegion.Clear();
             mVanillaManager.m_CurrentThreatCooldownByRegion.Clear();
@@ -73,7 +77,7 @@ namespace ExpandedAiFramework
             }
             if (mVanillaManager == null) 
             {
-                LogError("Null vanilla cougar manager");
+                LogDebug("Null vanilla cougar manager");
                 return true;
             }
             return false;

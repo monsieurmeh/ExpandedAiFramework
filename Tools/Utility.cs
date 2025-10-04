@@ -358,6 +358,11 @@ namespace ExpandedAiFramework
                     return true;
                 }
             }
+            if (SceneUtilities.IsScenePlayable(sceneName))
+            {
+                parsedSceneName = sceneName;
+                return true;
+            }
             return false;
         }
 

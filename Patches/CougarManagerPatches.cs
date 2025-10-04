@@ -13,7 +13,7 @@ namespace ExpandedAiFramework
     {
         private static bool Prefix()
         {
-            EAFManager.Instance.CougarManager.OverrideStart();
+            EAFManager.LogWithStackTrace($"CougarManager.Start Called by vanilla!");
             return false;
         }
     }
