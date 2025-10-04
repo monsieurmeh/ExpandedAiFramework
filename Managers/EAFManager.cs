@@ -301,16 +301,16 @@ namespace ExpandedAiFramework
         }
 
 
-        public void RegisterSubmanager(Type type, ISubManager subManager)
+        public void RegisterSubmanager(ISubManager subManager)
         { 
-            if (mSubManagerDict.TryGetValue(type, out ISubManager _))
+            if (mSubManagerDict.TryGetValue(subManager.SpawnType, out ISubManager _))
             {
-                LogError($"Type {type} already registered in submanager dictionary!");
+                LogError($"Type {subManager.SpawnType} already registered in submanager dictionary!");
                 return;
             }
-            LogTrace($"Registering SubManager for type {type}");
+            LogTrace($"Registering SubManager for type {subManager.SpawnType}");
             subManager.Initialize(this);
-            mSubManagerDict.Add(type, subManager);
+            mSubManagerDict.Add(subManager.SpawnType, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);
             mSubManagers[^1] = subManager;
         }
@@ -334,6 +334,19 @@ namespace ExpandedAiFramework
             }
             mHotSwapLockMask |= 1U << (int)hotSwapType;
             mHotSwappableSubManagers[(int)hotSwapType] = subManager;
+            PostProcessHotswappedSubmanager(hotSwapType, subManager);
+            LogAlways($"{hotSwapType} locked!");
+        }
+
+
+        private void PostProcessHotswappedSubmanager(HotSwappableSubManagers hotSwapType, ISubManager subManager)
+        {
+            switch (hotSwapType)
+            {
+                case HotSwappableSubManagers.CougarManager:
+                    mSubManagerDict.Add(subManager.SpawnType, subManager);
+                    return;
+            }
         }
 
         public IEnumerable<ISubManager> EnumerateSubManagers() 

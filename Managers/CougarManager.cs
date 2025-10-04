@@ -92,35 +92,15 @@ namespace ExpandedAiFramework
 
         protected bool EarlyExitUpdate(VanillaCougarManager vanillaManager)
         {
-            if (!VanillaCougarManager.IsEnabled)
-            {
-                return true;
-            }
-            if (GameManager.m_IsPaused)
-            {
-                return true;
-            }
-            if (GameManager.s_IsGameplaySuspended)
-            {
-                return true;
-            }
-            if (GameManager.s_ActiveIsMainMenu)
-            {
-                return true;
-            }
-            if (SaveGameSystem.IsRestoreInProgress())
-            {
-                return true;
-            }
-            if (GameManager.s_IsGameplaySuspended)
-            {
-                return true;
-            }
+            if (vanillaManager == null) return true;
+            if (!vanillaManager.IsEnabled) return true;
+            if (GameManager.m_IsPaused) return true;
+            if (GameManager.s_IsGameplaySuspended) return true;
+            if (GameManager.s_ActiveIsMainMenu) return true;
+            if (SaveGameSystem.IsRestoreInProgress()) return true;
+            if (GameManager.s_IsGameplaySuspended) return true;
             PlayerStruggle playerStruggle = GameManager.GetPlayerStruggleComponent();
-            if (playerStruggle == null || playerStruggle.InStruggle())
-            {
-                return true;
-            }
+            if (playerStruggle == null || playerStruggle.InStruggle()) return true;
             return false;
         }
 

@@ -6,7 +6,7 @@ using ExpandedAiFramework.WanderingWolfMod;
 using MelonLoader.Utils;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.AmbushWolfMod.Main), "ExpandedAiFramework.AmbushWolfMod", "0.11.10", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.AmbushWolfMod.Main), "ExpandedAiFramework.AmbushWolfMod", "0.11.11", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 
@@ -23,7 +23,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
         {
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             AmbushWolfManager manager = new AmbushWolfManager();
-            EAFManager.Instance.RegisterSubmanager(typeof(AmbushWolf), manager);
+            EAFManager.Instance.RegisterSubmanager(manager);
             AmbushWolf.AmbushWolfSettings = new AmbushWolfSettings(Path.Combine(DataFolderPath, $"{nameof(AmbushWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(AmbushWolf), AmbushWolf.AmbushWolfSettings))
             {
