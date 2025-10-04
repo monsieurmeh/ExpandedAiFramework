@@ -824,14 +824,15 @@ namespace ExpandedAiFramework
                 LogError($"Could not get base ai from spawn region!");
                 return null;
             }
-            if (baseAi.m_AiSubType == AiSubType.Wolf)
+            switch (baseAi.m_AiSubType)
             {
-                return new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay);
+                case AiSubType.Wolf: return new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay); //eventually may connect to a pool system; for now, I dont see anyone else using this soon
+                case AiSubType.Cougar: 
+                    if (mManager.CougarManager == null) break;
+                    if (!mManager.CougarManager.OverrideCustomSpawnRegionType(spawnRegion, proxy, mTimeOfDay, out CustomSpawnRegion customCougarSpawnRegion)) break;
+                    return customCougarSpawnRegion;
             }
-            else
-            {
-                return new CustomSpawnRegion(spawnRegion, proxy, mTimeOfDay);
-            }
+            return new CustomSpawnRegion(spawnRegion, proxy, mTimeOfDay);
         }
 
 
