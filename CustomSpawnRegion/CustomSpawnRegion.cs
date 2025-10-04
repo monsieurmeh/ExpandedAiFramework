@@ -448,16 +448,23 @@ namespace ExpandedAiFramework
                 this.LogWarningInstanced($"Potential error: Could not get spawn position and rotation. Aborting");
                 return;
             }
-            Type spawnType = typeof(void);
-            foreach (ISubManager subManager in mManager.Manager.EnumerateSubManagers())
+            // first priority: spawn region
+            Type spawnType = OverrideSpawnType();
+
+            // second priority: submanager array
+            if (spawnType == typeof(void))
             {
-                if (subManager.ShouldInterceptSpawn(this))
+                foreach (ISubManager subManager in mManager.Manager.EnumerateSubManagers())
                 {
-                    this.LogTraceInstanced($"Spawn intercept from submanager {subManager}! new type: {subManager.SpawnType}");
-                    spawnType = subManager.SpawnType;
-                    break;
+                    if (subManager.ShouldInterceptSpawn(this))
+                    {
+                        this.LogTraceInstanced($"Spawn intercept from submanager {subManager}! new type: {subManager.SpawnType}");
+                        spawnType = subManager.SpawnType;
+                        break;
+                    }
                 }
             }
+            // third priority: random spawn picker
             if (spawnType == typeof(void))
             {
                 BaseAi spawnableAi = mSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>();
@@ -489,6 +496,7 @@ namespace ExpandedAiFramework
             callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation));
         }
 
+        protected virtual Type OverrideSpawnType() => typeof(void);
 
         private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, WildlifeMode wildlifeMode, Vector3 position, Quaternion rotation)
         {
