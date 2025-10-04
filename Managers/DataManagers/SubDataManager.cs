@@ -238,7 +238,7 @@ namespace ExpandedAiFramework
 
         private void Save()
         {
-            this.LogDebugInstanced($"Saving");
+            this.LogDebugInstanced($"Saving");  
             Dictionary<string, List<T>> masterProxyDict = new Dictionary<string, List<T>>();
             foreach (T data in mDataContainer.EnumerateContents())
             {
@@ -252,7 +252,7 @@ namespace ExpandedAiFramework
             }
             if (masterProxyDict.Keys.Count == 0) // purge
             {
-                SaveJsonToPath(string.Empty, GetDefaultDataPath());
+                SaveJsonToPath("{}", GetDefaultDataPath());
                 this.LogDebugInstanced($"No data found, initiating PURGE at data path: {GetDefaultDataPath()}");
             }
             else 
