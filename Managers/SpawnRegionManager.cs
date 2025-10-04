@@ -654,6 +654,11 @@ namespace ExpandedAiFramework
 
         public bool TryAwake(SpawnRegion __instance)
         {
+            if (!__instance.m_RegisterOnAwake)
+            {
+                LogTrace($"SpawnRegion {__instance.GetHashCode()} of AiSubType {__instance.m_AiSubTypeSpawned} is set to not register on awake; it must be added manaully.");
+                return true;
+            }
             if (!mReadyToProcessSpawnRegions && !mSpawnRegionCatcher.Contains(__instance))
             {
                 mSpawnRegionCatcher.Add(__instance);
