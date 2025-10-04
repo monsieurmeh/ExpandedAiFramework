@@ -34,7 +34,7 @@ namespace ExpandedAiFramework
             base.OnQuitToMainMenu();
             mStartCalled = false;
         }
-        
+
         public void OverrideStart()
         {
             if (mStartCalled) 
@@ -85,18 +85,23 @@ namespace ExpandedAiFramework
 
         public override void UpdateFromManager() 
         {
+            bool shouldReport = mDebugTicker + 10000000 <= DateTime.Now.Ticks ; // 10,000 ticks per ms, 1,000ms per second = 10,000,000
+            if (shouldReport)
+            {
+                mDebugTicker = DateTime.Now.Ticks;
+            }
             if (!UpdateCustom())
             {
                 return;
             }
             VanillaCougarManager vanillaCougarManager = VanillaCougarManager;
-            if (EarlyExitUpdate(vanillaCougarManager))
+            if (EarlyExitUpdate(vanillaCougarManager, shouldReport))
             {
                 return;
             }
-            if (ValidUpdateCondition())
+            if (ValidUpdateCondition(shouldReport))
             {
-                UpdateInternal(vanillaCougarManager);
+                UpdateInternal(vanillaCougarManager, shouldReport);
             }
             else
             {
@@ -104,13 +109,8 @@ namespace ExpandedAiFramework
             }
         }
 
-        protected void UpdateInternal(VanillaCougarManager vanillaCougarManager)
+        protected void UpdateInternal(VanillaCougarManager vanillaCougarManager, bool shouldReport)
         {
-            bool shouldReport = mDebugTicker + 10000000 <= DateTime.Now.Ticks ; // 10,000 ticks per ms, 1,000ms per second = 10,000,000
-            if (shouldReport)
-            {
-                mDebugTicker = DateTime.Now.Ticks;
-            }
             MaybeDebugReset();
             var territory = vanillaCougarManager.MaybeGetCurrentTerritory();
             if (territory == null)
@@ -150,7 +150,7 @@ namespace ExpandedAiFramework
             }
         }        
 
-        protected bool ValidUpdateCondition()
+        protected bool ValidUpdateCondition(bool shouldReport)
         {
             return VanillaCougarManager.s_SceneTerritoryZones.Count != 0 
                 && VanillaCougarManager.s_CougarIntroCinematics.Count != 0 
@@ -166,17 +166,65 @@ namespace ExpandedAiFramework
             }
         }
 
-        protected bool EarlyExitUpdate(VanillaCougarManager vanillaManager)
+        protected bool EarlyExitUpdate(VanillaCougarManager vanillaManager, bool shouldReport)
         {
-            if (vanillaManager == null) return true;
-            if (!vanillaManager.IsEnabled) return true;
-            if (GameManager.m_IsPaused) return true;
-            if (GameManager.s_IsGameplaySuspended) return true;
-            if (GameManager.s_ActiveIsMainMenu) return true;
-            if (SaveGameSystem.IsRestoreInProgress()) return true;
-            if (GameManager.s_IsGameplaySuspended) return true;
+            if (vanillaManager == null) 
+            { 
+                if (shouldReport) 
+                {
+                    LogDebug($"Null VanillaCougarManager!"); 
+                }
+                return true;
+            }
+            if (!vanillaManager.IsEnabled)
+            { 
+                if (shouldReport) 
+                {
+                    LogDebug($"Vanilla Manager disabled!!"); 
+                }
+                return true;
+            }
+            if (GameManager.m_IsPaused) 
+            { 
+                if (shouldReport) 
+                {
+                    LogDebug($"Game paused!"); 
+                }
+                return true;
+            }
+            if (GameManager.s_IsGameplaySuspended)
+            { 
+                if (shouldReport) 
+                {
+                    LogDebug($"Gameplay suspended!"); 
+                }
+                return true;
+            }
+            if (GameManager.s_ActiveIsMainMenu) 
+            { 
+                if (shouldReport) 
+                {
+                    LogDebug($"Main menu active!"); 
+                }
+                return true;
+            }
+            if (SaveGameSystem.IsRestoreInProgress()) 
+            { 
+                if (shouldReport) 
+                {
+                    LogDebug($"Restore in progress!"); 
+                }
+                return true;
+            }
             PlayerStruggle playerStruggle = GameManager.GetPlayerStruggleComponent();
-            if (playerStruggle == null || playerStruggle.InStruggle()) return true;
+            if (playerStruggle == null || playerStruggle.InStruggle()) 
+            { 
+                if (shouldReport) 
+                {
+                    LogDebug($"Player struggle!"); 
+                }
+                return true;
+            }
             return false;
         }
 
