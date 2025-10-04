@@ -25,6 +25,8 @@ namespace ExpandedAiFramework
         public virtual bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
         public virtual void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { }
 
+        protected long mDebugTicker = 0;
+
 
         public override void UpdateFromManager() 
         {
@@ -49,30 +51,49 @@ namespace ExpandedAiFramework
 
         protected void UpdateInternal(VanillaCougarManager vanillaCougarManager)
         {
+            bool shouldReport = mDebugTicker + 10000000 <= DateTime.Now.Ticks ; // 10,000 ticks per ms, 1,000ms per second = 10,000,000
+            if (shouldReport)
+            {
+                mDebugTicker = DateTime.Now.Ticks;
+            }
             MaybeDebugReset();
             var territory = vanillaCougarManager.MaybeGetCurrentTerritory();
             if (territory == null)
             {
+                if (shouldReport)
+                {
+                    LogDebug($"No territory found");
+                }
                 return;
             }
             switch(territory.m_CougarState) 
             {
                 case VanillaCougarManager.CougarState.Start:
+                    LogDebug($"On Start");
                     vanillaCougarManager.OnStart(territory);
                     return;
                 case VanillaCougarManager.CougarState.WaitingForArrival:
+                    if (shouldReport)
+                    {
+                        LogDebug($"Waiting for Arrival with DaysPlayedNotPaused: {vanillaCougarManager.GetDaysPlayedNotPaused()}");
+                    }
                     vanillaCougarManager.UpdateWaitingForArrival(territory, vanillaCougarManager.GetDaysPlayedNotPaused());
                     return;
                 case VanillaCougarManager.CougarState.HasArrivedAfterTransition:
+                    LogDebug($"Setting Cougar Arrived");
                     vanillaCougarManager.SetCougarArrived(territory);
                     return;
-                case VanillaCougarManager.CougarState.HasArrived:
+                case VanillaCougarManager.CougarState.HasArrived:                    
+                    if (shouldReport)
+                    {
+                        LogDebug($"Has Arrived");
+                    }
                     vanillaCougarManager.UpdateHasArrived(vanillaCougarManager.GetDaysPlayedNotPaused());
                     return;                    
                 default:
                     return;
             }
-        }
+        }        
 
         protected bool ValidUpdateCondition()
         {
@@ -108,6 +129,7 @@ namespace ExpandedAiFramework
         {
             if (VanillaCougarManager.s_DebugWaitingForComponentRegistration)
             {
+                LogDebug($"Debug resetting cougar static counts");
                 VanillaCougarManager.s_SceneTerritoryZonesCount = 0;
                 VanillaCougarManager.s_CougarIntroCinematicsCount = 0;
                 VanillaCougarManager.s_CougarIntroScenesCount = 0;
@@ -119,6 +141,7 @@ namespace ExpandedAiFramework
         {
             if (!AreStaticCountsCorrect())
             {
+                LogDebug($"Static counts incorrect, re-recording.");
                 SetStaticCountsCorrect();
             }
         }
