@@ -50,6 +50,7 @@ namespace ExpandedAiFramework
                 {
                     mVanillaManager.IsEnabled = false;
                 }
+                return;
             }
             mStartCalled = true;
             VanillaCougarManager.s_CougarSettingsOverride = false;
