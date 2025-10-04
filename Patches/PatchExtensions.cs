@@ -29,60 +29,15 @@ namespace ExpandedAiFramework
 
         #region SpawnRegion
 
-
-        public static bool SpawnRegion_Awake(SpawnRegion __instance)
-        {
-            return !Manager.SpawnRegionManager.TryAwake(__instance);
-        }
-
-        public static bool SpawnRegion_GetClosestActiveSpawn(SpawnRegion __instance, Vector3 pos, ref GameObject __result)
-        {
-            return !Manager.SpawnRegionManager.TryGetClosestActiveSpawn(__instance, pos, ref __result);
-        }
-
-
-        public static bool SpawnRegion_GetNumActiveSpawns(SpawnRegion __instance, ref int __result)
-        {
-            return !Manager.SpawnRegionManager.TryGetNumActiveSpawns(__instance, ref __result);
-        }
-
-
-        public static bool SpawnRegion_GetWanderRegion(SpawnRegion __instance, Vector3 pos, ref WanderRegion __result)
-        {
-            return !Manager.SpawnRegionManager.TryGetWanderRegion(__instance, pos, ref __result);
-        }
-
-
-        public static bool SpawnRegion_GetWaypointCircuit(SpawnRegion __instance, ref Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3> __result)
-        {
-            return !Manager.SpawnRegionManager.TryGetWaypointCircuit(__instance, ref __result);
-        }
-
-
-        public static bool SpawnRegion_SetActive(SpawnRegion __instance, bool active)
-        {
-            return !Manager.SpawnRegionManager.TrySetActive(__instance, active);
-        }
-
-
-        public static bool SpawnRegion_RemoveFromSpawnRegion(SpawnRegion __instance, BaseAi baseAi)
-        {
-            return !Manager.SpawnRegionManager.TryRemoveFromSpawnRegion(__instance, baseAi);
-        }
-
-
-        public static bool SpawnRegion_OnAuroraEnabled(SpawnRegion __instance, bool enabled)
-        {
-            return !Manager.SpawnRegionManager.TryOnAuroraEnabled(__instance, enabled);
-        }
-
-
-        public static bool SpawnRegion_SetRandomWaypointCircuit(SpawnRegion __instance)
-        {
-            return !Manager.SpawnRegionManager.TrySetRandomWaypointCircuit(__instance);
-        }
-
-
+        public static bool SpawnRegion_Awake(SpawnRegion __instance) => !Manager.SpawnRegionManager.TryAwake(__instance);
+        public static bool SpawnRegion_GetClosestActiveSpawn(SpawnRegion __instance, Vector3 pos, ref GameObject __result) => !Manager.SpawnRegionManager.TryGetClosestActiveSpawn(__instance, pos, ref __result);
+        public static bool SpawnRegion_GetNumActiveSpawns(SpawnRegion __instance, ref int __result) => !Manager.SpawnRegionManager.TryGetNumActiveSpawns(__instance, ref __result);
+        public static bool SpawnRegion_GetWanderRegion(SpawnRegion __instance, Vector3 pos, ref WanderRegion __result) => !Manager.SpawnRegionManager.TryGetWanderRegion(__instance, pos, ref __result);
+        public static bool SpawnRegion_GetWaypointCircuit(SpawnRegion __instance, ref Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3> __result) => !Manager.SpawnRegionManager.TryGetWaypointCircuit(__instance, ref __result);
+        public static bool SpawnRegion_SetActive(SpawnRegion __instance, bool active) => !Manager.SpawnRegionManager.TrySetActive(__instance, active);
+        public static bool SpawnRegion_RemoveFromSpawnRegion(SpawnRegion __instance, BaseAi baseAi) => !Manager.SpawnRegionManager.TryRemoveFromSpawnRegion(__instance, baseAi);
+        public static bool SpawnRegion_OnAuroraEnabled(SpawnRegion __instance, bool enabled) => !Manager.SpawnRegionManager.TryOnAuroraEnabled(__instance, enabled);
+        public static bool SpawnRegion_SetRandomWaypointCircuit(SpawnRegion __instance) => !Manager.SpawnRegionManager.TrySetRandomWaypointCircuit(__instance);
         #endregion
     }
 }
