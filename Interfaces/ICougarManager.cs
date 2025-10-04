@@ -7,6 +7,5 @@ namespace ExpandedAiFramework
     public interface ICougarManager : ISubManager
     {
         VanillaCougarManager VanillaCougarManager { get; }
-        void Update() => VanillaCougarManager.Update();
     }
 }

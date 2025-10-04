@@ -26,7 +26,7 @@ namespace ExpandedAiFramework
         public virtual void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { }
 
 
-        public void Update() 
+        public override void UpdateFromManager() 
         {
             if (!UpdateCustom())
             {
