@@ -250,17 +250,25 @@ namespace ExpandedAiFramework
                 }
                 dataList.Add(data);
             }
-            foreach (string dataLocation in masterProxyDict.Keys)
+            if (masterProxyDict.Keys.Count == 0) // purge
             {
-                string json = JSON.Dump(masterProxyDict[dataLocation], EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
-                if (json == null || json == string.Empty)
-                {
-                    continue;
-                }
-                SaveJsonToPath(json, dataLocation);
-                this.LogDebugInstanced($"Saved to {dataLocation} with json length {json.Length}");
+                SaveJsonToPath(string.Empty, GetDefaultDataPath());
+                this.LogDebugInstanced($"No data found, initiating PURGE at data path: {GetDefaultDataPath()}");
             }
-            this.LogDebugInstanced($"Saved total of {mDataContainer.Count} items across {masterProxyDict.Keys.Count} data locations");
+            else 
+            {
+                foreach (string dataLocation in masterProxyDict.Keys)
+                {
+                    string json = JSON.Dump(masterProxyDict[dataLocation], EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
+                    if (json == null || json == string.Empty)
+                    {
+                        continue;
+                    }
+                    SaveJsonToPath(json, dataLocation);
+                    this.LogDebugInstanced($"Saved to {dataLocation} with json length {json.Length}");
+                }
+                this.LogDebugInstanced($"Saved total of {mDataContainer.Count} items across {masterProxyDict.Keys.Count} data locations");
+            }
         }
 
 
