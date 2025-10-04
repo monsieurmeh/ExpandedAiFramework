@@ -570,6 +570,11 @@ namespace ExpandedAiFramework
 
         public int CalculateTargetPopulation()
         {
+            if (!OverrideCalculateTargetPopulation(out int customTarget))
+            {
+                this.LogTraceInstanced($"Spawning target overridden to {customTarget}!");
+                return customTarget;
+            }
             if (SpawningSuppressedByExperienceMode())
             {
                 this.LogTraceInstanced($"Spawning suppressed by experience mode");
@@ -581,6 +586,13 @@ namespace ExpandedAiFramework
                 return 0;
             }
             return CalculateTargetPopulationInternal();
+        }
+
+        
+        protected virtual bool OverrideCalculateTargetPopulation(out int customTarget)
+        {
+            customTarget = 0;
+            return true;
         }
 
 
