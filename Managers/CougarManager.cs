@@ -2,12 +2,17 @@ global using VanillaCougarManager = Il2CppTLD.AI.CougarManager;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Il2CppAK.Wwise;
 using Il2CppTLD.AI;
+using UnityEngine;
 
 namespace ExpandedAiFramework
 {
     public class CougarManager : BaseSubManager, ICougarManager
     {
+        protected List<CougarIntroCinematic> mIntroCinematics = new List<CougarIntroCinematic>();
+        protected List<CougarTerritoryZoneTrigger> mTriggers = new List<CougarTerritoryZoneTrigger>();
+        protected List<CougarIntroScene> mIntroScenes = new List<CougarIntroScene>();
         protected bool mStartCalled = false;
         protected bool mIsMenuScene = true; //start out as true
         protected VanillaCougarManager mVanillaManager;
@@ -29,10 +34,53 @@ namespace ExpandedAiFramework
 
         protected long mDebugTicker = 0;
 
+        private void ClearLists()
+        {
+            mTriggers.Clear();
+            mIntroCinematics.Clear();
+            mIntroScenes.Clear();
+        }
+
         public override void OnQuitToMainMenu()
         {
             base.OnQuitToMainMenu();
+            ClearLists();
             mStartCalled = false;
+        }
+
+        public override void OnLoadScene(string sceneName)
+        {
+            base.OnLoadScene(sceneName);
+            ClearLists();
+        }
+
+        public override void OnInitializedScene(string sceneName)
+        {
+            base.OnInitializedScene(sceneName);
+            foreach (CougarTerritoryZoneTrigger trigger in GameObject.FindObjectsOfType<CougarTerritoryZoneTrigger>())
+            {
+                if (!mTriggers.Contains(trigger))
+                {
+                    LogDebug($"Found territory zone trigger: {trigger.name}");
+                    mTriggers.Add(trigger);
+                }
+            }
+            foreach (CougarIntroCinematic cinematic in GameObject.FindObjectsOfType<CougarIntroCinematic>())
+            {
+                if (!mIntroCinematics.Contains(cinematic))
+                {
+                    LogDebug($"Found intro cinematic: {cinematic.name}");
+                    mIntroCinematics.Add(cinematic);
+                }
+            }
+            foreach (CougarIntroScene scene in GameObject.FindObjectsOfType<CougarIntroScene>())
+            {
+                if (!mIntroScenes.Contains(scene))
+                {
+                    LogDebug($"Found intro scene: {scene.name}");
+                    mIntroScenes.Add(scene);
+                }
+            }
         }
 
         public void OverrideStart()
@@ -62,6 +110,7 @@ namespace ExpandedAiFramework
             mVanillaManager.m_Cougar_NearbyOutsideID = 0;
             VanillaCougarManager.SetAudioState(mVanillaManager.m_CougarTerritory_ZoneThreatLevel_ctztl_0);
             LogDebug($"Started");
+            
         }
 
         private bool ShouldAbortStart()
@@ -106,47 +155,52 @@ namespace ExpandedAiFramework
             }
             else
             {
-                CheckStaticCounts();
+                CheckStaticCounts(shouldReport);
             }
         }
 
         protected void UpdateInternal(VanillaCougarManager vanillaCougarManager, bool shouldReport)
         {
             MaybeDebugReset();
+            MaybePlayStalkingAudioInside(vanillaCougarManager);
             var territory = vanillaCougarManager.MaybeGetCurrentTerritory();
             if (territory == null)
             {
                 if (shouldReport)
                 {
-                    LogTrace($"No territory found");
+                    LogDebug($"No territory found");
                 }
                 return;
             }
             switch(territory.m_CougarState) 
             {
                 case VanillaCougarManager.CougarState.Start:
-                    LogTrace($"On Start");
+                    LogDebug($"On Start");
                     vanillaCougarManager.OnStart(territory);
                     return;
                 case VanillaCougarManager.CougarState.WaitingForArrival:
                     if (shouldReport)
                     {
-                        LogTrace($"Waiting for Arrival with DaysPlayedNotPaused: {vanillaCougarManager.GetDaysPlayedNotPaused()}");
+                        LogDebug($"Waiting for Arrival with DaysPlayedNotPaused: {vanillaCougarManager.GetDaysPlayedNotPaused()}");
                     }
                     vanillaCougarManager.UpdateWaitingForArrival(territory, vanillaCougarManager.GetDaysPlayedNotPaused());
                     return;
                 case VanillaCougarManager.CougarState.HasArrivedAfterTransition:
-                    LogTrace($"Setting Cougar Arrived");
+                    LogDebug($"Setting Cougar Arrived");
                     vanillaCougarManager.SetCougarArrived(territory);
                     return;
                 case VanillaCougarManager.CougarState.HasArrived:                    
                     if (shouldReport)
                     {
-                        LogTrace($"Has Arrived");
+                        LogDebug($"Has Arrived");
                     }
                     vanillaCougarManager.UpdateHasArrived(vanillaCougarManager.GetDaysPlayedNotPaused());
                     return;                    
                 default:
+                    if (shouldReport)
+                    {
+                        LogDebug($"No state to run");
+                    }
                     return;
             }
         }        
@@ -173,7 +227,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogTrace($"Null VanillaCougarManager!"); 
+                    LogDebug($"Null VanillaCougarManager!"); 
                 }
                 return true;
             }
@@ -181,7 +235,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogTrace($"Vanilla Manager disabled!!"); 
+                    LogDebug($"Vanilla Manager disabled!!"); 
                 }
                 return true;
             }
@@ -189,7 +243,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogTrace($"Game paused!"); 
+                    LogDebug($"Game paused!"); 
                 }
                 return true;
             }
@@ -197,7 +251,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogTrace($"Gameplay suspended!"); 
+                    LogDebug($"Gameplay suspended!"); 
                 }
                 return true;
             }
@@ -205,7 +259,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogTrace($"Main menu active!"); 
+                    LogDebug($"Main menu active!"); 
                 }
                 return true;
             }
@@ -213,7 +267,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogTrace($"Restore in progress!"); 
+                    LogDebug($"Restore in progress!"); 
                 }
                 return true;
             }
@@ -222,7 +276,7 @@ namespace ExpandedAiFramework
             { 
                 if (shouldReport) 
                 {
-                    LogTrace($"Player struggle!"); 
+                    LogDebug($"Player struggle!"); 
                 }
                 return true;
             }
@@ -233,7 +287,7 @@ namespace ExpandedAiFramework
         {
             if (VanillaCougarManager.s_DebugWaitingForComponentRegistration)
             {
-                LogTrace($"Debug resetting cougar static counts");
+                LogAlways($"Debug resetting cougar static counts");
                 VanillaCougarManager.s_SceneTerritoryZonesCount = 0;
                 VanillaCougarManager.s_CougarIntroCinematicsCount = 0;
                 VanillaCougarManager.s_CougarIntroScenesCount = 0;
@@ -241,27 +295,49 @@ namespace ExpandedAiFramework
             }
         }
 
-        protected void CheckStaticCounts() 
+        protected void CheckStaticCounts(bool shouldReport) 
         {
-            if (!AreStaticCountsCorrect())
+            if (!AreStaticCountsCorrect(shouldReport))
             {
-                LogTrace($"Static counts incorrect, re-recording.");
+                LogDebug($"Static counts incorrect, ensuring triggers/scenes/cinematics are contained in static lists then re-recording counts");
                 SetStaticCountsCorrect();
             }
         }
 
-        protected bool AreStaticCountsCorrect()
+        protected bool AreStaticCountsCorrect(bool shouldReport)
         {
-            return VanillaCougarManager.s_SceneTerritoryZones.Count == VanillaCougarManager.s_SceneTerritoryZonesCount 
-                && VanillaCougarManager.s_CougarIntroCinematics.Count == VanillaCougarManager.s_CougarIntroCinematicsCount 
-                && VanillaCougarManager.s_CougarIntroScenes.Count == VanillaCougarManager.s_CougarIntroScenesCount;
+            if (shouldReport)
+            {
+                LogAlways($"Checking static counts: \nTerritories: {mTriggers.Count} actual vs {VanillaCougarManager.s_SceneTerritoryZonesCount} expected\nCinematics: {mIntroCinematics.Count} actual vs {VanillaCougarManager.s_CougarIntroCinematicsCount} expected\nScenes: {mIntroScenes.Count} actual vs {VanillaCougarManager.s_CougarIntroScenesCount} expected");
+            }
+            return mTriggers.Count == VanillaCougarManager.s_SceneTerritoryZonesCount 
+                && mIntroCinematics.Count == VanillaCougarManager.s_CougarIntroCinematicsCount 
+                && mIntroScenes.Count == VanillaCougarManager.s_CougarIntroScenesCount;
         }
-
         protected void SetStaticCountsCorrect()
         {
-            VanillaCougarManager.s_SceneTerritoryZonesCount = VanillaCougarManager.s_SceneTerritoryZones.Count;
-            VanillaCougarManager.s_CougarIntroCinematicsCount = VanillaCougarManager.s_CougarIntroCinematics.Count;
-            VanillaCougarManager.s_CougarIntroScenesCount = VanillaCougarManager.s_CougarIntroScenes.Count;
+            LogAlways($"Seting static counts: \nTerritories: {mTriggers.Count}\nCinematics: {mIntroCinematics.Count}\nScenes: {mIntroScenes.Count}");
+
+            VanillaCougarManager.s_SceneTerritoryZones.Clear();
+            VanillaCougarManager.s_SceneTerritoryZonesCount = mTriggers.Count;
+            foreach (CougarTerritoryZoneTrigger trigger in mTriggers)
+            {
+                VanillaCougarManager.s_SceneTerritoryZones.Add(trigger);
+            }
+
+            VanillaCougarManager.s_CougarIntroCinematics.Clear();
+            VanillaCougarManager.s_CougarIntroCinematicsCount = mIntroCinematics.Count;
+            foreach (CougarIntroCinematic cinematic in mIntroCinematics)
+            {
+                VanillaCougarManager.s_CougarIntroCinematics.Add(cinematic);
+            }
+
+            VanillaCougarManager.s_CougarIntroScenes.Clear();
+            VanillaCougarManager.s_CougarIntroScenesCount = mIntroScenes.Count;
+            foreach (CougarIntroScene scene in mIntroScenes)
+            {
+                VanillaCougarManager.s_CougarIntroScenes.Add(scene);
+            }
         }
 
         protected virtual bool UpdateCustom() => true;
