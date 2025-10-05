@@ -448,20 +448,23 @@ namespace ExpandedAiFramework
                 this.LogWarningInstanced($"Potential error: Could not get spawn position and rotation. Aborting");
                 return;
             }
+            // first priority: spawn region
+            Type spawnType = OverrideSpawnType();
 
-            // Need to delegate this upwards
-            Type spawnType = typeof(void);
-            ISubManager[] subManagers = mManager.Manager.SubManagerArray;
-            for (int i = 0, iMax = subManagers.Length; i < iMax; i++)
+            // second priority: submanager array
+            if (spawnType == typeof(void))
             {
-                this.LogTraceInstanced($"Allowing submanager {subManagers[i]} to intercept spawn...");
-                if (subManagers[i].ShouldInterceptSpawn(this))
+                foreach (ISubManager subManager in mManager.Manager.EnumerateSubManagers())
                 {
-                    this.LogTraceInstanced($"Spawn intercept from submanager {subManagers[i]}! new type: {subManagers[i].SpawnType}");
-                    spawnType = subManagers[i].SpawnType;
-                    break;
+                    if (subManager.ShouldInterceptSpawn(this))
+                    {
+                        this.LogTraceInstanced($"Spawn intercept from submanager {subManager}! new type: {subManager.SpawnType}");
+                        spawnType = subManager.SpawnType;
+                        break;
+                    }
                 }
             }
+            // third priority: random spawn picker
             if (spawnType == typeof(void))
             {
                 BaseAi spawnableAi = mSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>();
@@ -493,6 +496,7 @@ namespace ExpandedAiFramework
             callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation));
         }
 
+        protected virtual Type OverrideSpawnType() => typeof(void);
 
         private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, WildlifeMode wildlifeMode, Vector3 position, Quaternion rotation)
         {
@@ -505,11 +509,8 @@ namespace ExpandedAiFramework
             newProxy.ParentGuid = mModDataProxy.Guid;
             mDataManager.ScheduleRegisterSpawnModDataProxyRequest(newProxy, (proxy, result) =>
             {
-                if (mManager.Manager.SubManagers.TryGetValue(variantSpawnType, out ISubManager subManager))
-                {
-                    subManager.PostProcessNewSpawnModDataProxy(newProxy);
-                }
-                if (newProxy.ForceSpawn)
+                mManager.Manager.PostProcessNewSpawnModDataProxy(newProxy);
+                if (newProxy.ForceSpawn && newProxy.WildlifeMode == VanillaSpawnRegion.m_WildlifeMode)
                 {
                     this.LogDebugInstanced($"FORCE spawning on creation!");
                     mManager.Manager.DataManager.IncrementForceSpawnCount(wildlifeMode);
@@ -569,6 +570,11 @@ namespace ExpandedAiFramework
 
         public int CalculateTargetPopulation()
         {
+            if (!OverrideCalculateTargetPopulation(out int customTarget))
+            {
+                this.LogTraceInstanced($"Spawning target overridden to {customTarget}!");
+                return customTarget;
+            }
             if (SpawningSuppressedByExperienceMode())
             {
                 this.LogTraceInstanced($"Spawning suppressed by experience mode");
@@ -580,6 +586,13 @@ namespace ExpandedAiFramework
                 return 0;
             }
             return CalculateTargetPopulationInternal();
+        }
+
+        
+        protected virtual bool OverrideCalculateTargetPopulation(out int customTarget)
+        {
+            customTarget = 0;
+            return true;
         }
 
 
@@ -1339,12 +1352,12 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_SpawnLevel == 0)
             {
-                this.LogDebugInstanced($"Suppressed by zero sxpawn level");
+                this.LogTraceInstanced($"Suppressed by zero sxpawn level");
                 return true;
             }
             if (!ExperienceModeManager.s_CurrentGameMode.m_XPMode.m_NoPredatorsFirstDay)
             {
-                this.LogDebugInstanced($"No predator grace period, not suppressed");
+                this.LogTraceInstanced($"No predator grace period, not suppressed");
                 return false;
             }
             if (mSpawnRegion.m_AiTypeSpawned != AiType.Predator)

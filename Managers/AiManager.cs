@@ -26,12 +26,12 @@ namespace ExpandedAiFramework
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict { get { return mSpawnSettingsDict; } }
 
 
-        public AiManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) { }
+        public AiManager(EAFManager manager) : base(manager) { }
 
 
-        public override void Initialize(EAFManager manager, ISubManager[] subManagers)
+        public override void Initialize(EAFManager manager)
         {
-            base.Initialize(manager, subManagers);
+            base.Initialize(manager);
             mDataManager = mManager.DataManager;
             mTypePicker = new WeightedTypePicker<BaseAi>(GetFallbackBaseSpawnableType, OnSpawnTypePicked);
             mTypePicker.StartWorker();

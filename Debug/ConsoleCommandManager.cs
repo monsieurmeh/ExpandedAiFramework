@@ -14,7 +14,7 @@ namespace ExpandedAiFramework
         private Dictionary<string, Action<IList<string>>> mCommandMap;    
         private Dictionary<string, Action<IList<string>>> mSetCommandMap;
         
-        public ConsoleCommandManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) 
+        public ConsoleCommandManager(EAFManager manager) : base(manager) 
         {
             RegisterDefaultPaintManagers();
             RegisterCommandMap();

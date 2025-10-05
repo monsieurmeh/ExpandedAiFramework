@@ -358,6 +358,13 @@ namespace ExpandedAiFramework
                     return true;
                 }
             }
+            /* This DOES NOT WORK AT MAIN MENU! What is up with that?
+            if (SceneUtilities.IsScenePlayable(sceneName) && !GameManager.s_ActiveIsMainMenu)
+            {
+                parsedSceneName = sceneName;
+                return true;
+            }
+            */
             return false;
         }
 

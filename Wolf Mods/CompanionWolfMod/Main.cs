@@ -5,7 +5,7 @@ global using static ExpandedAiFramework.Utility;
 using MelonLoader.Utils;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.CompanionWolfMod.Main), "ExpandedAiFramework.CompanionWolfMod", "0.11.10", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.CompanionWolfMod.Main), "ExpandedAiFramework.CompanionWolfMod", "0.11.11", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 
@@ -24,7 +24,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             EAFManager.Instance.LoadData("CompanionWolfMod");
             CompanionWolfManager manager = new CompanionWolfManager();
             CompanionWolf.CompanionWolfSettings = new CompanionWolfSettings(manager, Path.Combine(DataFolderPath, $"{nameof(CompanionWolf)}"));
-            EAFManager.Instance.RegisterSubmanager(typeof(CompanionWolf), manager);
+            EAFManager.Instance.RegisterSubmanager(manager);
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(CompanionWolf), CompanionWolf.CompanionWolfSettings))
             {
                 Utility.LogError("Could not register CompanionWolf spawning!");

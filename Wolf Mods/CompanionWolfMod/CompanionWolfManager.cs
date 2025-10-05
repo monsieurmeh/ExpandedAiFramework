@@ -235,7 +235,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         internal static void Console_OnCommand()
         {
-            if (!Manager.SubManagers.TryGetValue(typeof(CompanionWolf), out ISubManager subManager))
+            if (!Manager.TryGetSubManager(typeof(CompanionWolf), out ISubManager subManager))
             {
                 LogError("Could not fetch CompanionWolfManager instance!");
                 return;

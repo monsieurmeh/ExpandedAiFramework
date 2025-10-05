@@ -9,7 +9,7 @@ namespace ExpandedAiFramework
         private readonly Queue<Action> mActionQueue = new Queue<Action>();
         private readonly object mQueueLock = new object();
 
-        public DispatchManager(EAFManager manager, ISubManager[] subManagers) : base(manager, subManagers) 
+        public DispatchManager(EAFManager manager) : base(manager) 
         {
         }
 
