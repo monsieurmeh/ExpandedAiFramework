@@ -76,7 +76,7 @@ namespace ExpandedAiFramework
                 LogTrace($"Cougar disabled");
                 return true;
             }
-            if (mVanillaManager == null) 
+            if (VanillaCougarManager == null) 
             {
                 LogTrace("Null vanilla cougar manager");
                 return true;

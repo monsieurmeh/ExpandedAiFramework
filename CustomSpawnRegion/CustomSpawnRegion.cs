@@ -510,7 +510,7 @@ namespace ExpandedAiFramework
             mDataManager.ScheduleRegisterSpawnModDataProxyRequest(newProxy, (proxy, result) =>
             {
                 mManager.Manager.PostProcessNewSpawnModDataProxy(newProxy);
-                if (newProxy.ForceSpawn)
+                if (newProxy.ForceSpawn && newProxy.WildlifeMode == VanillaSpawnRegion.m_WildlifeMode)
                 {
                     this.LogDebugInstanced($"FORCE spawning on creation!");
                     mManager.Manager.DataManager.IncrementForceSpawnCount(wildlifeMode);
