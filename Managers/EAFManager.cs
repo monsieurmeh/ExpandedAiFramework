@@ -246,6 +246,11 @@ namespace ExpandedAiFramework
                 LogTrace($"{sceneName} invalid, ignoreing");
                 return;
             }
+            if (mCurrentScene == parsedSceneName)
+            {
+                LogDebug($"{mCurrentScene} already loaded, aborting!");
+                return;
+            }
             LogTrace($"OnLoadScene {parsedSceneName} valid!");
             mCurrentScene = parsedSceneName;
             if (!mGameLoaded)
@@ -273,6 +278,11 @@ namespace ExpandedAiFramework
         {
             if (sceneName == null)
             {
+                return;
+            }
+            if (!sceneName.Contains(mCurrentScene))
+            {
+                LogDebug($"{sceneName} is not {mCurrentScene}, aborting");
                 return;
             }
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
