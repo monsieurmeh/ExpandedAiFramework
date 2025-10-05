@@ -39,6 +39,18 @@ namespace ExpandedAiFramework
             COUNT
         }
 
+        public enum HotSwappableSubManagers : int
+        {
+            CougarManager = 0,
+            // PackManager, SOON™
+            COUNT
+        }
+
+        private Dictionary<HotSwappableSubManagers, Type> mHotSwappableInterfaceMap = new Dictionary<HotSwappableSubManagers, Type>()
+        {
+            { HotSwappableSubManagers.CougarManager, typeof(ICougarManager) },
+            // { HotSwappableSubManagers.PackManager, typeof(PackManager) }, SOON™
+        };
 
         private ExpandedAiFrameworkSettings mSettings;
         private DataManager mDataManager;
@@ -48,6 +60,7 @@ namespace ExpandedAiFramework
         private DispatchManager mDispatchManager;
         private DispatchManager mLogDispatcher;
         private BaseSubManager[] mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
+        private ISubManager[] mHotSwappableSubManagers = new ISubManager[(int)HotSwappableSubManagers.COUNT];
         private Dictionary<Type, ISubManager> mSubManagerDict = new Dictionary<Type, ISubManager>();
         private ISubManager[] mSubManagers = new ISubManager[0];
         private Dictionary<string, BasePaintManager> mPaintManagerDict = new Dictionary<string, BasePaintManager>();
@@ -56,6 +69,7 @@ namespace ExpandedAiFramework
         private bool mGameLoaded = false;
         private bool mPendingSceneLoadRequest = false;
         private object mLoggerLock = new object();
+        private uint mHotSwapLockMask = 0U;
 
 
 
@@ -63,23 +77,36 @@ namespace ExpandedAiFramework
         {
             mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
 
-            mDispatchManager = new DispatchManager(this, mSubManagers);
+            mDispatchManager = new DispatchManager(this);
             mBaseSubManagers[(int)BaseSubManagers.DispatchManager] = mDispatchManager;
 
-            mLogDispatcher = new DispatchManager(this, mSubManagers);
+            mLogDispatcher = new DispatchManager(this);
             mBaseSubManagers[(int)BaseSubManagers.LogDispatcher] = mLogDispatcher;
 
-            mDataManager = new DataManager(this, mSubManagers);
+            mDataManager = new DataManager(this);
             mBaseSubManagers[(int)BaseSubManagers.DataManager] = mDataManager;
 
-            mSpawnRegionManager = new SpawnRegionManager(this, mSubManagers);
+            mSpawnRegionManager = new SpawnRegionManager(this);
             mBaseSubManagers[(int)BaseSubManagers.SpawnRegionManager] = mSpawnRegionManager;
 
-            mAiManager = new AiManager(this, mSubManagers);
+            mAiManager = new AiManager(this);
             mBaseSubManagers[(int)BaseSubManagers.AiManager] = mAiManager;
 
-            mConsoleCommandManager = new ConsoleCommandManager(this, mSubManagers);
+            mConsoleCommandManager = new ConsoleCommandManager(this);
             mBaseSubManagers[(int)BaseSubManagers.ConsoleCommandManager] = mConsoleCommandManager;
+        }
+
+        private void RegisterDefaultHotSwappableSubManagers()
+        {
+            RegisterDefaultCougarManager();
+            // RegisterDefaultPackManager();
+        }
+
+        private void RegisterDefaultCougarManager()
+        {
+            CougarManager cougarManager = new CougarManager(this);
+            mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] = cougarManager;
+            mSubManagerDict.Add(typeof(BaseCougar), cougarManager);
         }
 
 
@@ -88,6 +115,7 @@ namespace ExpandedAiFramework
             mSettings = settings;
             InitializeLogger();
             RegisterBaseSubManagers();
+            RegisterDefaultHotSwappableSubManagers();
             InitializeDebugMenu();
         }
 
@@ -95,8 +123,6 @@ namespace ExpandedAiFramework
         #region API
 
         public ExpandedAiFrameworkSettings Settings => mSettings;
-        public Dictionary<Type, ISubManager> SubManagers => mSubManagerDict;
-        public ISubManager[] SubManagerArray => mSubManagers;
         public float LastPlayerStruggleTime { get { return mLastPlayerStruggleTime; } set { mLastPlayerStruggleTime = value; } } //should be encapsulated elsewhere, datamanager maybe? or maybe some sort of timeline manager.
         public string CurrentScene => mCurrentScene;
         public bool GameLoaded { get { return mGameLoaded; } set { mGameLoaded = value; } }
@@ -109,7 +135,7 @@ namespace ExpandedAiFramework
         public WeightedTypePicker<BaseAi> TypePicker => mAiManager.TypePicker;
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
         public Dictionary<string, BasePaintManager> PaintManagers => mPaintManagerDict;
-
+        public ICougarManager CougarManager => mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ICougarManager;
 
         public void Shutdown()
         {
@@ -120,6 +146,10 @@ namespace ExpandedAiFramework
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].Shutdown();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].Shutdown();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -134,6 +164,10 @@ namespace ExpandedAiFramework
             {
                 mBaseSubManagers[i].UpdateFromManager();
             }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].UpdateFromManager();
+            }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
                 mSubManagers[i].UpdateFromManager();
@@ -146,6 +180,10 @@ namespace ExpandedAiFramework
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnStartNewGame();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnStartNewGame();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -160,6 +198,10 @@ namespace ExpandedAiFramework
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnLoadGame();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnLoadGame();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -178,6 +220,10 @@ namespace ExpandedAiFramework
             for (int i = mBaseSubManagers.Length - 1, iMin = 0; i >= iMin; i--)
             {
                 mBaseSubManagers[i].OnSaveGame();
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnSaveGame();
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -200,6 +246,11 @@ namespace ExpandedAiFramework
                 LogTrace($"{sceneName} invalid, ignoreing");
                 return;
             }
+            if (mCurrentScene == parsedSceneName)
+            {
+                LogDebug($"{mCurrentScene} already loaded, aborting!");
+                return;
+            }
             LogTrace($"OnLoadScene {parsedSceneName} valid!");
             mCurrentScene = parsedSceneName;
             if (!mGameLoaded)
@@ -211,6 +262,10 @@ namespace ExpandedAiFramework
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnLoadScene(sceneName);
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnLoadScene(sceneName);
             }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
@@ -225,13 +280,27 @@ namespace ExpandedAiFramework
             {
                 return;
             }
+            if (!sceneName.Contains(mCurrentScene))
+            {
+                LogDebug($"{sceneName} is not {mCurrentScene}, aborting");
+                return;
+            }
             for (int i = 0, iMax = mBaseSubManagers.Length; i < iMax; i++)
             {
                 mBaseSubManagers[i].OnInitializedScene(sceneName);
             }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnInitializedScene(sceneName);
+            }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
                 mSubManagers[i].OnInitializedScene(sceneName);
+            }
+            if (IsValidGameplayScene(sceneName, out _))
+            {
+                CougarManager.OverrideStart();
+                //PackManager.OverrideStart();
             }
         }
 
@@ -244,6 +313,10 @@ namespace ExpandedAiFramework
             {
                 mBaseSubManagers[i].OnQuitToMainMenu();
             }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                mHotSwappableSubManagers[i].OnQuitToMainMenu();
+            }
             for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
             {
                 mSubManagers[i].OnQuitToMainMenu();
@@ -251,21 +324,71 @@ namespace ExpandedAiFramework
         }
 
 
-        public void RegisterSubmanager(Type type, ISubManager subManager)
+        public void RegisterSubmanager(ISubManager subManager)
         { 
-            if (mSubManagerDict.TryGetValue(type, out ISubManager _))
+            if (mSubManagerDict.TryGetValue(subManager.SpawnType, out ISubManager _))
             {
-                LogError($"Type {type} already registered in submanager dictionary!");
+                LogError($"Type {subManager.SpawnType} already registered in submanager dictionary!");
                 return;
             }
-            LogTrace($"Registering SubManager for type {type}");
+            LogTrace($"Registering SubManager for type {subManager.SpawnType}");
             subManager.Initialize(this);
-            mSubManagerDict.Add(type, subManager);
+            mSubManagerDict.Add(subManager.SpawnType, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);
             mSubManagers[^1] = subManager;
         }
 
+        public void HotSwapSubManager(HotSwappableSubManagers hotSwapType, ISubManager subManager)
+        {
+            if (((1U << (int)hotSwapType) & mHotSwapLockMask) != 0U)
+            {
+                LogError($"{hotSwapType} already claimed!");
+                return;
+            }
+            if (!mHotSwappableInterfaceMap.TryGetValue(hotSwapType, out Type interfaceType))
+            {
+                LogError($"No interface type found for {hotSwapType}!");
+                return;
+            }
+            if (!interfaceType.IsAssignableFrom(subManager.GetType()))
+            {
+                LogError($"{subManager.GetType()} is not assignable from {interfaceType}!");
+                return;
+            }
+            mHotSwapLockMask |= 1U << (int)hotSwapType;
+            mHotSwappableSubManagers[(int)hotSwapType] = subManager;
+            subManager.Initialize(this);
+            PostProcessHotswappedSubmanager(hotSwapType, subManager);
+            LogAlways($"{hotSwapType} locked!");
+        }
 
+
+        private void PostProcessHotswappedSubmanager(HotSwappableSubManagers hotSwapType, ISubManager subManager)
+        {
+            switch (hotSwapType)
+            {
+                case HotSwappableSubManagers.CougarManager:
+                    mSubManagerDict.Remove(typeof(BaseCougar));
+                    mSubManagerDict.Add(subManager.SpawnType, subManager);
+                    return;
+            }
+        }
+
+        public IEnumerable<ISubManager> EnumerateSubManagers() 
+        {
+            for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
+            {
+                yield return mSubManagers[i];
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                yield return mHotSwappableSubManagers[i];
+            }
+        }
+
+        
+        public bool TryGetSubManager(Type type, out ISubManager subManager) => mSubManagerDict.TryGetValue(type, out subManager);
+        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { if (mSubManagerDict.TryGetValue(proxy.VariantSpawnType, out ISubManager subManager)) subManager.PostProcessNewSpawnModDataProxy(proxy);}
         public void SaveData(string data, string suffix) => mDataManager.ModData.Save(data, suffix);
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
@@ -289,8 +412,7 @@ namespace ExpandedAiFramework
         {
             return mPaintManagerDict.TryGetValue(typeName.ToLower(), out paintManager);
         }
-       
-        
+
         /* This section needs a rework, possibly its own interop platform specifically for prefix bool patches
         #region Event Registers
 
