@@ -1,4 +1,5 @@
 global using VanillaPackManager = Il2Cpp.PackManager;
+using Il2Cpp;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace ExpandedAiFramework
     public class PackManager : BaseSubManager, IPackManager
     {
         protected bool mStartCalled = false;
-        protected bool mIsMenuScene = true; //start out as true
+        protected bool mIsMenuScene = true; 
         protected VanillaPackManager mVanillaManager;
         public VanillaPackManager VanillaPackManager
         { 
@@ -27,6 +28,7 @@ namespace ExpandedAiFramework
         public PackManager(EAFManager manager) : base(manager) { }
         
         protected long mDebugTicker = 0;
+        protected PackSettings mPackSettings;
 
         public override void OnQuitToMainMenu()
         {
@@ -52,6 +54,14 @@ namespace ExpandedAiFramework
                 return;
             }
             LogDebug($"OverrideStart", LogCategoryFlags.PackManager);
+            Il2CppTLD.UI.PanelReference panelReference = Il2CppTLD.UI.PanelReference.Get<Panel_HUD>();
+            if (panelReference.TryGetPanel<Panel_HUD>(out Panel_HUD panel))
+            {
+                panel.QuietlyResetTimberWolfCombatMusic();
+            }
+            VanillaPackManager.m_HoursPlayedAtStart = GameManager.GetTimeOfDayComponent().GetHoursPlayedNotPaused();
+            VanillaPackManager.m_SystemEnabled = VanillaPackManager.ArePacksAllowed();
+            mPackSettings = VanillaPackManager.GetPackSettings();
         }
 
 
@@ -62,10 +72,30 @@ namespace ExpandedAiFramework
             {
                 mDebugTicker = DateTime.Now.Ticks;
             }
-            if (!UpdateCustom())
-            {
-                return;
-            }
+            if (!ShouldUpdate()) return;
+            VanillaPackManager.MaybeEnableAnimalsOnLoad();
+			VanillaPackManager.ResetGroupEventFlags();
+			VanillaPackManager.MaybeCleanupDeadPackAnimals(mPackSettings);
+			VanillaPackManager.MaybeDisbandGroupOnTargetLost(mPackSettings);
+			VanillaPackManager.MaybeFleeAndDisbandOnMoraleCheck();
+			VanillaPackManager.MaybeFleeAndDisbandOnBearOrMooseCheck(mPackSettings);
+			VanillaPackManager.MaybeForceMoveMembers(mPackSettings);
+			VanillaPackManager.MaybeMoveToNewHoldGroundPosition(mPackSettings);
+			VanillaPackManager.MaybeForceAttackInCombatRestrictedArea(mPackSettings);
+			VanillaPackManager.MaybeKeepLonersWithinRadius();
+			VanillaPackManager.MaybeFormGroupOnPlayerDetectionRange(mPackSettings);
+			VanillaPackManager.MaybeUpdateInteriorAudio(mPackSettings);
+        }
+
+
+        private bool ShouldUpdate()
+        {
+            if (!UpdateCustom()) return false;
+            if (!VanillaPackManager.m_SystemEnabled) return false;
+            if (GameManager.m_IsPaused) return false;
+            if (GameManager.s_IsGameplaySuspended) return false;
+            if (GameManager.ControlsLocked()) return false;
+            return true;
         }
 
         protected virtual bool UpdateCustom() => true;
