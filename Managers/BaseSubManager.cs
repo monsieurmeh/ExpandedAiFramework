@@ -5,7 +5,7 @@ using Il2CppRewired;
 namespace ExpandedAiFramework
 {
     //I am going to create a lot of these to keep things cleaner, better to have a central place to do dependency injection for common stuff
-    public abstract class BaseSubManager
+    public abstract class BaseSubManager : ISubManager
     {
         protected EAFManager mManager;
         protected TimeOfDay mTimeOfDay;
