@@ -17,6 +17,7 @@ namespace ExpandedAiFramework
         CougarManager,
         PackManager,
         Request,
+        System,
         COUNT
 
     }
@@ -36,5 +37,6 @@ namespace ExpandedAiFramework
         CougarManager = 1 << (int)LogCategory.CougarManager,
         PackManager = 1 << (int)LogCategory.PackManager,
         Request = 1 << (int)LogCategory.Request,
+        System = 1 << (int)LogCategory.System,
     }
 }

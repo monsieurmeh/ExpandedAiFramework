@@ -22,7 +22,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
         {
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
             TrackingWolfManager manager = new TrackingWolfManager();
-            EAFManager.Instance.RegisterSubmanager(manager);
+            EAFManager.Instance.RegisterSpawnManager(manager);
             TrackingWolf.TrackingWolfSettings = new TrackingWolfSettings(Path.Combine(DataFolderPath, $"{nameof(TrackingWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(TrackingWolf), TrackingWolf.TrackingWolfSettings))
             {

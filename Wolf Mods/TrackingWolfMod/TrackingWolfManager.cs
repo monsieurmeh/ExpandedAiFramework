@@ -3,13 +3,13 @@
 
 namespace ExpandedAiFramework.TrackingWolfMod
 {
-    public class TrackingWolfManager : ISubManager
+    public class TrackingWolfManager : ISpawnManager
     {
         protected EAFManager mManager;
         public void Initialize(EAFManager manager)
         {
             mManager = manager;
-            LogTrace("TrackingWolfManager initialized!");
+            LogTrace("TrackingWolfManager initialized!", LogCategoryFlags.System);
         }
         public bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
         public void Shutdown() { }

@@ -4,14 +4,14 @@ using static ExpandedAiFramework.Utility;
 
 namespace ExpandedAiFramework.WanderingWolfMod
 {
-    public class AmbushWolfManager : ISubManager
+    public class AmbushWolfManager : ISpawnManager
     {
         protected EAFManager mManager;
 
         public void Initialize(EAFManager manager) 
         { 
             mManager = manager;  
-            LogTrace("AmbushWolfManager initialized!"); 
+            LogTrace("AmbushWolfManager initialized!", LogCategoryFlags.System); 
         }
         public bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
         public void Shutdown() { }

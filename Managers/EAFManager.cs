@@ -41,14 +41,14 @@ namespace ExpandedAiFramework
         public enum HotSwappableSubManagers : int
         {
             CougarManager = 0,
-            // PackManager, SOON™
+            PackManager,
             COUNT
         }
 
         private Dictionary<HotSwappableSubManagers, Type> mHotSwappableInterfaceMap = new Dictionary<HotSwappableSubManagers, Type>()
         {
             { HotSwappableSubManagers.CougarManager, typeof(ICougarManager) },
-            // { HotSwappableSubManagers.PackManager, typeof(PackManager) }, SOON™
+             { HotSwappableSubManagers.PackManager, typeof(IPackManager) },
         };
 
         private ExpandedAiFrameworkSettings mSettings;
@@ -60,7 +60,7 @@ namespace ExpandedAiFramework
         private DispatchManager mLogDispatcher;
         private BaseSubManager[] mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
         private ISubManager[] mHotSwappableSubManagers = new ISubManager[(int)HotSwappableSubManagers.COUNT];
-        private Dictionary<Type, ISubManager> mSubManagerDict = new Dictionary<Type, ISubManager>();
+        private Dictionary<Type, ISpawnManager> mSubManagerDict = new Dictionary<Type, ISpawnManager>();
         private ISubManager[] mSubManagers = new ISubManager[0];
         private Dictionary<string, BasePaintManager> mPaintManagerDict = new Dictionary<string, BasePaintManager>();
         private float mLastPlayerStruggleTime = 0.0f;
@@ -99,7 +99,7 @@ namespace ExpandedAiFramework
         private void RegisterDefaultHotSwappableSubManagers()
         {
             RegisterDefaultCougarManager();
-            // RegisterDefaultPackManager();
+            RegisterDefaultPackManager();
         }
 
         private void RegisterDefaultCougarManager()
@@ -107,6 +107,14 @@ namespace ExpandedAiFramework
             CougarManager cougarManager = new CougarManager(this);
             mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] = cougarManager;
             mSubManagerDict.Add(typeof(BaseCougar), cougarManager);
+        }
+
+
+        private void RegisterDefaultPackManager()
+        {
+            PackManager packManager = new PackManager(this);
+            mHotSwappableSubManagers[(int)HotSwappableSubManagers.PackManager] = packManager;
+            // PackManager is NOT an ISpawnManager - don't try to add it to the spawnmanager dict
         }
 
 
@@ -136,6 +144,7 @@ namespace ExpandedAiFramework
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
         public Dictionary<string, BasePaintManager> PaintManagers => mPaintManagerDict;
         public ICougarManager CougarManager => mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ICougarManager;
+        public IPackManager PackManager => mHotSwappableSubManagers[(int)HotSwappableSubManagers.PackManager] as IPackManager;
         public LogCategoryFlags LogCategoryFlags { get { return mLogCategoryFlags; } set { mLogCategoryFlags = value; } }
 
         public void Shutdown()
@@ -301,7 +310,7 @@ namespace ExpandedAiFramework
             if (IsValidGameplayScene(sceneName, out _))
             {
                 CougarManager.OverrideStart();
-                //PackManager.OverrideStart();
+                PackManager.OverrideStart();
             }
         }
 
@@ -325,14 +334,14 @@ namespace ExpandedAiFramework
         }
 
 
-        public void RegisterSubmanager(ISubManager subManager)
+        public void RegisterSpawnManager(ISpawnManager subManager)
         { 
-            if (mSubManagerDict.TryGetValue(subManager.SpawnType, out ISubManager _))
+            if (mSubManagerDict.TryGetValue(subManager.SpawnType, out ISpawnManager _))
             {
                 LogError($"Type {subManager.SpawnType} already registered in submanager dictionary!");
                 return;
             }
-            LogTrace($"Registering SubManager for type {subManager.SpawnType}");
+            LogTrace($"Registering SubManager for type {subManager.SpawnType}", LogCategoryFlags.System);
             subManager.Initialize(this);
             mSubManagerDict.Add(subManager.SpawnType, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);
@@ -369,8 +378,14 @@ namespace ExpandedAiFramework
             switch (hotSwapType)
             {
                 case HotSwappableSubManagers.CougarManager:
+                    ICougarManager cougarManager = subManager as ICougarManager;
+                    if (cougarManager == null)
+                    {
+                        LogError($"{subManager.GetType()} is not a ICougarManager!");
+                        return;
+                    }
                     mSubManagerDict.Remove(typeof(BaseCougar));
-                    mSubManagerDict.Add(subManager.SpawnType, subManager);
+                    mSubManagerDict.Add(cougarManager.SpawnType, cougarManager);
                     return;
             }
         }
@@ -387,9 +402,27 @@ namespace ExpandedAiFramework
             }
         }
 
+        public IEnumerable<ISpawnManager> EnumerateSpawnManagers()
+        {
+            for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
+            {
+                if (mSubManagers[i] is ISpawnManager spawnManager)
+                {
+                    yield return spawnManager;
+                }
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                if (mHotSwappableSubManagers[i] is ISpawnManager spawnManager)
+                {
+                    yield return spawnManager;
+                }
+            }
+        }
+
         
-        public bool TryGetSubManager(Type type, out ISubManager subManager) => mSubManagerDict.TryGetValue(type, out subManager);
-        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { if (mSubManagerDict.TryGetValue(proxy.VariantSpawnType, out ISubManager subManager)) subManager.PostProcessNewSpawnModDataProxy(proxy);}
+        public bool TryGetSpawnManager(Type type, out ISpawnManager subManager) => mSubManagerDict.TryGetValue(type, out subManager);
+        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { if (mSubManagerDict.TryGetValue(proxy.VariantSpawnType, out ISpawnManager subManager)) subManager.PostProcessNewSpawnModDataProxy(proxy);}
         public void SaveData(string data, string suffix) => mDataManager.ModData.Save(data, suffix);
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);
@@ -404,7 +437,7 @@ namespace ExpandedAiFramework
                 LogError($"Paint manager for type {paintManager.TypeName} already registered!");
                 return;
             }
-            LogTrace($"Registering paint manager for type {paintManager.TypeName}");
+            LogDebug($"Registering paint manager for type {paintManager.TypeName}", LogCategoryFlags.PaintManager);
             paintManager.Initialize();
             mPaintManagerDict.Add(paintManager.TypeName.ToLower(), paintManager);
         }
@@ -489,6 +522,7 @@ namespace ExpandedAiFramework
         {
             LogSettings logSettings = LogSettings.CreateDynamic(Path.Combine(DataFolderPath, "LogSettings"));
             logSettings.AddToModSettings(ModName);
+            logSettings.Reload();
             mLogCategoryFlags = logSettings.GetFlags();
             mLogger = new ComplexLogger<Main>();
         }
@@ -533,7 +567,7 @@ namespace ExpandedAiFramework
             [CallerMemberName] string callerName = "",
             bool toUConsole = false)
         {
-            if (!logCategoryFlags.AnyOf(mLogCategoryFlags))
+            if (!mLogCategoryFlags.AnyOf(logCategoryFlags))
             {
                 return;
             }

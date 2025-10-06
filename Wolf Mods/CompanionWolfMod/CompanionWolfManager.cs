@@ -10,7 +10,7 @@ using Il2Cpp;
 
 namespace ExpandedAiFramework.CompanionWolfMod
 {
-    public class CompanionWolfManager : ISubManager
+    public class CompanionWolfManager : ISpawnManager
     {
         public const string WolfPrefabString = "WILDLIFE_Wolf";
 
@@ -37,7 +37,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             mManager = manager;
             mInitialized = true;
-            LogTrace("CompanionWolfManager initialized!");
+            LogTrace("CompanionWolfManager initialized!", LogCategoryFlags.System);
         }
 
 
@@ -235,7 +235,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         internal static void Console_OnCommand()
         {
-            if (!Manager.TryGetSubManager(typeof(CompanionWolf), out ISubManager subManager))
+            if (!Manager.TryGetSpawnManager(typeof(CompanionWolf), out ISpawnManager subManager))
             {
                 LogError("Could not fetch CompanionWolfManager instance!");
                 return;

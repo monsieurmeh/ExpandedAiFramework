@@ -9,7 +9,7 @@ using UnityEngine;
 namespace ExpandedAiFramework
 {
     public class CougarManager : BaseSubManager, ICougarManager
-    {
+    {   
         protected List<CougarIntroCinematic> mIntroCinematics = new List<CougarIntroCinematic>();
         protected List<CougarTerritoryZoneTrigger> mTriggers = new List<CougarTerritoryZoneTrigger>();
         protected List<CougarIntroScene> mIntroScenes = new List<CougarIntroScene>();

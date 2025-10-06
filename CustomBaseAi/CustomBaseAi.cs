@@ -336,7 +336,7 @@ namespace ExpandedAiFramework
                             this.LogTraceInstanced($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}", LogCategoryFlags.Ai);
                             return AiMode.None;
                         }
-                        if (PackManager.InPack(mBaseAi.m_PackAnimal))
+                        if (VanillaPackManager.InPack(mBaseAi.m_PackAnimal))
                         {
                             if (!GameManager.m_PackManager.CanAttack(mBaseAi.m_PackAnimal, false))
                             {
@@ -367,7 +367,7 @@ namespace ExpandedAiFramework
                     }
                 }
             }
-            else if (mode == AiMode.Wander && mBaseAi.Timberwolf != null && PackManager.InPack(mBaseAi.m_PackAnimal) && GameManager.m_PackManager.IsPackCombatRestricted(mBaseAi.m_PackAnimal))
+            else if (mode == AiMode.Wander && mBaseAi.Timberwolf != null && VanillaPackManager.InPack(mBaseAi.m_PackAnimal) && GameManager.m_PackManager.IsPackCombatRestricted(mBaseAi.m_PackAnimal))
             {
                 this.LogTraceInstanced($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}", LogCategoryFlags.Ai);
                 mode = AiMode.HoldGround;
@@ -739,7 +739,7 @@ namespace ExpandedAiFramework
                 }
                 GameManager.m_AchievementManager.m_HasKilledSomething = true;
             }
-            if (PackManager.InPack(mBaseAi.m_PackAnimal) && CurrentMode != AiMode.Struggle)
+            if (VanillaPackManager.InPack(mBaseAi.m_PackAnimal) && CurrentMode != AiMode.Struggle)
             {
                 GameManager.m_PackManager.ModifyGroupMoraleOnDamage(mBaseAi.m_PackAnimal);
             }
@@ -1012,7 +1012,7 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"Target is moosing, returning ignore value of {MooseCanBeIgnored()}", LogCategoryFlags.Ai);
                 return MooseCanBeIgnored();
             }
-            if (PackManager.InPack(mBaseAi.m_PackAnimal) && !PackManager.IsValidPackTarget(target))
+            if (VanillaPackManager.InPack(mBaseAi.m_PackAnimal) && !VanillaPackManager.IsValidPackTarget(target))
             {
                 this.LogTraceInstanced($"In pack and target is not valid pack target, ignoring", LogCategoryFlags.Ai);
                 return true;
@@ -1171,7 +1171,7 @@ namespace ExpandedAiFramework
                 fleeChance = 0.0f;
             }
 
-            if (PackManager.InPack(mBaseAi.m_PackAnimal) && !GameManager.m_PackManager.ShouldAnimalFlee(mBaseAi.m_PackAnimal))
+            if (VanillaPackManager.InPack(mBaseAi.m_PackAnimal) && !GameManager.m_PackManager.ShouldAnimalFlee(mBaseAi.m_PackAnimal))
             {
                 this.LogTraceInstanced($"In pack and packmanager says no flee, flee chance is zero", LogCategoryFlags.Ai);
                 fleeChance = 0.0f;
