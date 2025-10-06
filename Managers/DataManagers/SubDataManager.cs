@@ -44,7 +44,7 @@ namespace ExpandedAiFramework
                 return;
             }
             mKeepTaskRunning = true;
-            this.LogTraceInstanced($"Starting worker thread");
+            this.LogTraceInstanced($"Starting worker thread", LogCategoryFlags.SerializedData);
             mTask = Task.Run(Worker);
         }
         public virtual void StopWorker()
@@ -238,11 +238,11 @@ namespace ExpandedAiFramework
 
         private void Save()
         {
-            this.LogDebugInstanced($"Saving");  
+            this.LogDebugInstanced($"Saving", LogCategoryFlags.SerializedData);  
             Dictionary<string, List<T>> masterProxyDict = new Dictionary<string, List<T>>();
             foreach (T data in mDataContainer.EnumerateContents())
             {
-                this.LogTraceInstanced($"Saving {data.DisplayName}");
+                this.LogTraceInstanced($"Saving {data.DisplayName}", LogCategoryFlags.SerializedData);
                 if (!masterProxyDict.TryGetValue(data.DataLocation, out List<T> dataList))
                 {
                     dataList = new List<T>();
@@ -253,7 +253,7 @@ namespace ExpandedAiFramework
             if (masterProxyDict.Keys.Count == 0) // purge
             {
                 SaveJsonToPath("{}", GetDefaultDataPath());
-                this.LogDebugInstanced($"No data found, initiating PURGE at data path: {GetDefaultDataPath()}");
+                this.LogDebugInstanced($"No data found, initiating PURGE at data path: {GetDefaultDataPath()}", LogCategoryFlags.SerializedData);
             }
             else 
             {
@@ -265,24 +265,24 @@ namespace ExpandedAiFramework
                         continue;
                     }
                     SaveJsonToPath(json, dataLocation);
-                    this.LogDebugInstanced($"Saved to {dataLocation} with json length {json.Length}");
+                    this.LogDebugInstanced($"Saved to {dataLocation} with json length {json.Length}", LogCategoryFlags.SerializedData);
                 }
-                this.LogDebugInstanced($"Saved total of {mDataContainer.Count} items across {masterProxyDict.Keys.Count} data locations");
+                this.LogDebugInstanced($"Saved total of {mDataContainer.Count} items across {masterProxyDict.Keys.Count} data locations", LogCategoryFlags.SerializedData);
             }
         }
 
 
         private void Load()
         {
-            this.LogTraceInstanced($"Loading");
+            this.LogTraceInstanced($"Loading", LogCategoryFlags.SerializedData);
             if (mLoaded)
             {
-                this.LogTraceInstanced($"Already loaded");
+                this.LogTraceInstanced($"Already loaded", LogCategoryFlags.SerializedData);
                 return;
             }
             Clear();
             mLoaded = LoadFromPath(GetDefaultDataPath());
-            this.LogDebugInstanced($"Loaded: {mLoaded}");
+            this.LogDebugInstanced($"Loaded: {mLoaded}", LogCategoryFlags.SerializedData);
         }
 
 
@@ -290,11 +290,11 @@ namespace ExpandedAiFramework
         {
             try
             {
-                this.LogTraceInstanced($"Loading from path: {dataPath}");
+                this.LogTraceInstanced($"Loading from path: {dataPath}", LogCategoryFlags.SerializedData);
                 string dataString = LoadJsonFromPath(dataPath);
                 if (dataString == null)
                 {
-                    this.LogDebugInstanced($"No data found at path: {dataPath}");
+                    this.LogDebugInstanced($"No data found at path: {dataPath}", LogCategoryFlags.SerializedData);
                     return false;
                 }
                 Variant dataVariant = JSON.Load(dataString);
@@ -312,9 +312,9 @@ namespace ExpandedAiFramework
                     {
                         this.LogErrorInstanced($"Failed to add {newData.DisplayName}!");
                     }
-                    this.LogTraceInstanced($"Loaded {newData.DisplayName} from {dataPath}");
+                    this.LogTraceInstanced($"Loaded {newData.DisplayName} from {dataPath}", LogCategoryFlags.SerializedData);
                 }
-                this.LogDebugInstanced($"Loaded {mDataContainer.Count} items from path: {dataPath}");
+                this.LogDebugInstanced($"Loaded {mDataContainer.Count} items from path: {dataPath}", LogCategoryFlags.SerializedData);
                 return true;
             }
             catch (Exception e)
@@ -353,7 +353,7 @@ namespace ExpandedAiFramework
         protected virtual void Clear() 
         {
             mDataContainer.Clear();
-            this.LogTraceInstanced($"Data container cleared");
+            this.LogTraceInstanced($"Data container cleared", LogCategoryFlags.SerializedData);
         }
 
         protected virtual bool PostProcessDataAfterLoad(T data)
@@ -366,22 +366,22 @@ namespace ExpandedAiFramework
         {
             if (data == null)
             {
-                this.LogTraceInstanced($"Null data");
+                this.LogTraceInstanced($"Null data", LogCategoryFlags.SerializedData);
                 return false;
             }
             if (data.Guid == Guid.Empty)
             {
-                this.LogTraceInstanced($"Data with empty guid");
+                this.LogTraceInstanced($"Data with empty guid", LogCategoryFlags.SerializedData);
                 return false;
             }
             if (string.IsNullOrEmpty(data.Scene))
             {
-                this.LogTraceInstanced($"Data with empty scene");
+                this.LogTraceInstanced($"Data with empty scene", LogCategoryFlags.SerializedData);
                 return false;
             }
             if (string.IsNullOrEmpty(data.DataLocation))
             {
-                this.LogTraceInstanced($"Data with empty data location");
+                this.LogTraceInstanced($"Data with empty data location", LogCategoryFlags.SerializedData);
                 return false;
             }
             return true;

@@ -77,7 +77,7 @@ namespace ExpandedAiFramework
             List<Guid> queuedGuids = GetQueuedSpawnModDataProxiesByParentGuid(proxy.ParentGuid);
             if (!queuedGuids.Contains(proxy.Guid))
             {
-                this.LogTraceInstanced($"Queueing SpawnModDataProxy {proxy.Guid} against parent guid {proxy.ParentGuid}");
+                this.LogTraceInstanced($"Queueing SpawnModDataProxy {proxy.Guid} against parent guid {proxy.ParentGuid}", LogCategoryFlags.SerializedData);
                 queuedGuids.Add(proxy.Guid);
             }
         }
@@ -87,12 +87,12 @@ namespace ExpandedAiFramework
         {
             if (proxy.ParentGuid == Guid.Empty)
             {
-                this.LogTraceInstanced($"Empty parent guid: {proxy}");
+                this.LogTraceInstanced($"Empty parent guid: {proxy}", LogCategoryFlags.SerializedData);
                 return false;
             }
             if (proxy.Disconnected)
             {
-                this.LogTraceInstanced($"Disconnected: {proxy}");
+                this.LogTraceInstanced($"Disconnected: {proxy}", LogCategoryFlags.SerializedData);
                 return false;
             }
             return base.IsDataValid(proxy);
@@ -116,7 +116,7 @@ namespace ExpandedAiFramework
             lock (mForceSpawnLock)
             {
                 bool canForceSpawn = mForceSpawnCount < mManager.Manager.Settings.MaxForceSpawns;
-                this.LogTraceInstanced($"ForceSpawnCount: {mForceSpawnCount} | CanForceSpawn: {canForceSpawn}");
+                this.LogTraceInstanced($"ForceSpawnCount: {mForceSpawnCount} | CanForceSpawn: {canForceSpawn}", LogCategoryFlags.SerializedData);
                 return canForceSpawn;
             }
         }
@@ -128,7 +128,7 @@ namespace ExpandedAiFramework
             lock (mForceSpawnLock)
             {
                 mForceSpawnCount++;
-                this.LogTraceInstanced($"Incrementing force spawn count: {mForceSpawnCount - 1} -> {mForceSpawnCount}");
+                this.LogTraceInstanced($"Incrementing force spawn count: {mForceSpawnCount - 1} -> {mForceSpawnCount}", LogCategoryFlags.SerializedData);
             }
         }
 

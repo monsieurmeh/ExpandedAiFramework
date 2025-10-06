@@ -200,7 +200,7 @@ namespace ExpandedAiFramework
         
         private void ClearWorkers()
         {
-            LogTrace($"Clearing Workers");
+            LogTrace($"Clearing Workers", LogCategoryFlags.SerializedData);
             foreach (IMapDataManager mapDataManager in mMapDataManagers.Values)
             {
                 if (mapDataManager == null)
@@ -223,7 +223,7 @@ namespace ExpandedAiFramework
 
         private void ClearDataCache()
         {
-            LogTrace($"Clearing DataCache");
+            LogTrace($"Clearing DataCache", LogCategoryFlags.SerializedData);
             mLastScene = string.Empty;
             for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
             {
@@ -318,7 +318,7 @@ namespace ExpandedAiFramework
 
         private void RefreshAvailableMapData()
         {
-            LogVerbose($"Loading EAF map data for scene {mLastScene}");
+            LogTrace($"Loading EAF map data for scene {mLastScene}", LogCategoryFlags.SerializedData);
             foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.ScheduleRefresh(mLastScene);
@@ -328,7 +328,7 @@ namespace ExpandedAiFramework
 
         public void SaveMapData()
         {
-            LogVerbose($"Saving MapData");
+            LogTrace($"Saving MapData", LogCategoryFlags.SerializedData);
             foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.ScheduleSave();
@@ -338,7 +338,7 @@ namespace ExpandedAiFramework
 
         public void LoadMapData()
         {
-            LogVerbose($"Loading MapData");
+            LogTrace($"Loading MapData", LogCategoryFlags.SerializedData);
             foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.ScheduleLoad();
@@ -348,7 +348,7 @@ namespace ExpandedAiFramework
 
         public void ClearMapData()
         {
-            LogVerbose($"Clearing MapData");
+            LogTrace($"Clearing MapData", LogCategoryFlags.SerializedData);
             foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.ScheduleClear();
