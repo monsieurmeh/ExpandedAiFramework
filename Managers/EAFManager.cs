@@ -3,9 +3,8 @@
 using ComplexLogger;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using ExpandedAiFramework.Enums;
 using UnityEngine;
-using static Il2CppRewired.Demos.SimpleControlRemapping;
-
 
 namespace ExpandedAiFramework
 {
@@ -70,6 +69,7 @@ namespace ExpandedAiFramework
         private bool mPendingSceneLoadRequest = false;
         private object mLoggerLock = new object();
         private uint mHotSwapLockMask = 0U;
+        private LogCategoryFlags mLogCategoryFlags = LogCategoryFlags.General;
 
 
 
@@ -136,6 +136,7 @@ namespace ExpandedAiFramework
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
         public Dictionary<string, BasePaintManager> PaintManagers => mPaintManagerDict;
         public ICougarManager CougarManager => mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ICougarManager;
+        public LogCategoryFlags LogCategoryFlags { get { return mLogCategoryFlags; } set { mLogCategoryFlags = value; } }
 
         public void Shutdown()
         {
@@ -483,7 +484,14 @@ namespace ExpandedAiFramework
 
         private ComplexLogger<Main> mLogger;
         public ComplexLogger<Main> Logger => mLogger;
-        private void InitializeLogger() => mLogger = new ComplexLogger<Main>();
+        
+        private void InitializeLogger()
+        {
+            LogSettings logSettings = new LogSettings(Path.Combine(DataFolderPath, "LogSettings"));
+            logSettings.AddToModSettings(ModName);
+            mLogCategoryFlags = logSettings.GetFlags();
+            mLogger = new ComplexLogger<Main>();
+        }
 
         private void InitializeDebugMenu()
         {
@@ -520,10 +528,15 @@ namespace ExpandedAiFramework
             string message, 
             FlaggedLoggingLevel logLevel,
             string callerType,
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
             string callerInstanceInfo = "",
             [CallerMemberName] string callerName = "",
             bool toUConsole = false)
         {
+            if (!logCategoryFlags.AnyOf(mLogCategoryFlags))
+            {
+                return;
+            }
             callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
             lock (mLoggerLock)
             {
@@ -554,11 +567,12 @@ namespace ExpandedAiFramework
             string message, 
             FlaggedLoggingLevel logLevel,
             string callerType,
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
             string callerInstanceInfo = "",
             [CallerMemberName] string callerName = "",
             bool toUConsole = false)
         {
-            Manager.Log(message, logLevel, callerType, callerInstanceInfo, callerName, toUConsole);
+            Manager.Log(message, logLevel, callerType, logCategoryFlags, callerInstanceInfo, callerName, toUConsole);
         }
 #endregion
 
