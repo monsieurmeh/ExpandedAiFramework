@@ -27,12 +27,12 @@ namespace ExpandedAiFramework
         {
             if (mCustomSpawnRegion == null)
             {
-                this.LogTraceInstanced($"null custom spawn region");
+                this.LogTraceInstanced($"null custom spawn region", LogCategoryFlags.Request);
                 return false;
             }
             if (mSpawnModDataProxyProvider == null)
             {
-                this.LogTraceInstanced($"null spawn mod data proxy provider");
+                this.LogTraceInstanced($"null spawn mod data proxy provider", LogCategoryFlags.Request);
                 return false;
             }
             return base.Validate();
@@ -57,7 +57,7 @@ namespace ExpandedAiFramework
                 List<Guid> normalSpawns = mSpawnModDataProxyProvider.GetCrossReferencedList<SpawnRegionModDataProxy, SpawnModDataProxy>(mCustomSpawnRegion.ModDataProxy.Guid);
                 for (int i = normalSpawns.Count; i < preQueueCount; i++)
                 {
-                    this.LogTraceInstanced($"Pre-queueing normal spawn #{i}");
+                    this.LogTraceInstanced($"Pre-queueing normal spawn #{i}", LogCategoryFlags.Request);
                     mCustomSpawnRegion.GenerateNewRandomSpawnModDataProxy((s) =>
                     {
                         mDataProvider.TryRegister(s);

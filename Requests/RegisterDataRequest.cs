@@ -23,12 +23,12 @@ namespace ExpandedAiFramework
         {
             if (mPayload == null)
             {
-                this.LogTraceInstanced($"null data, aborting");
+                this.LogTraceInstanced($"null data, aborting", LogCategoryFlags.Request);
                 return false;
             }
             if (!mDataValidator?.Invoke(mPayload) ?? false)
             {
-                this.LogTraceInstanced($"Invalid data, aborting");
+                this.LogTraceInstanced($"Invalid data, aborting", LogCategoryFlags.Request);
                 return false;
             }
             return true;

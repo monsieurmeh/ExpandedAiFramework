@@ -500,7 +500,7 @@ namespace ExpandedAiFramework
             var debugMenuObj = new GameObject("EAFDebugMenu");
             UnityEngine.Object.DontDestroyOnLoad(debugMenuObj);
             debugMenuObj.AddComponent<DebugMenu.DebugMenuManager>();
-            LogStatic("Debug menu initialized (hidden)", FlaggedLoggingLevel.Debug, nameof(EAFManager));
+            LogStatic("Debug menu initialized (hidden)", FlaggedLoggingLevel.Debug, nameof(EAFManager), LogCategoryFlags.DebugMenu);
         }
 
         public FlaggedLoggingLevel CurrentLogLevel => ComplexLogger.Main.CurrentLevel;

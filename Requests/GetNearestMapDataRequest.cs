@@ -38,17 +38,17 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer");
+                this.LogTraceInstanced($"null mDataContainer", LogCategoryFlags.Request);
                 return false;
             }
             if (mPosition.Equals(Vector3.zero))
             {
-                this.LogTraceInstanced($"zero position");
+                this.LogTraceInstanced($"zero position", LogCategoryFlags.Request);
                 return false;
             }
             if (string.IsNullOrEmpty(mScene))
             {
-                this.LogTraceInstanced($"Null or empty scene");
+                this.LogTraceInstanced($"Null or empty scene", LogCategoryFlags.Request);
                 return false;
             }
             return true;

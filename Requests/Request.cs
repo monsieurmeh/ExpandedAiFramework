@@ -40,7 +40,7 @@ namespace ExpandedAiFramework
 
         public void LogExecutionInfo(string extraInfo)
         {
-            this.LogDebugInstanced($"\nExecutionInformation\nWait Time: {(mRequestStartTime - mQueueTime) * 0.00001}ms\nRequest execution time: {(mRequestCompleteTime - mRequestStartTime) * 0.0001}ms\nCallback Wait Time: {(mCallbackStartTime - mRequestCompleteTime) * 0.0001}ms\nCallback Execution Time: {(mCallbackCompleteTime - mCallbackStartTime) * 0.0001}ms\n{extraInfo}");
+            this.LogDebugInstanced($"\nExecutionInformation\nWait Time: {(mRequestStartTime - mQueueTime) * 0.00001}ms\nRequest execution time: {(mRequestCompleteTime - mRequestStartTime) * 0.0001}ms\nCallback Wait Time: {(mCallbackStartTime - mRequestCompleteTime) * 0.0001}ms\nCallback Execution Time: {(mCallbackCompleteTime - mCallbackStartTime) * 0.0001}ms\n{extraInfo}", LogCategoryFlags.Request);
         }
 
     }

@@ -32,17 +32,17 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer");
+                this.LogTraceInstanced($"null mDataContainer", LogCategoryFlags.Request);
                 return false;
             }
             if (string.IsNullOrEmpty(mScene))
             {
-                this.LogTraceInstanced($"empty or null scene");
+                this.LogTraceInstanced($"empty or null scene", LogCategoryFlags.Request);
                 return false;
             }
             if (mGuid == Guid.Empty)
             {
-                this.LogTraceInstanced($"Empty guid");
+                this.LogTraceInstanced($"Empty guid", LogCategoryFlags.Request);
                 return false;
             }
             if (mSpawnModDataProxyProvider == null)
