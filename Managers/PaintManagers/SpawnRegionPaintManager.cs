@@ -30,7 +30,7 @@ namespace ExpandedAiFramework
             mPaintMarker.GetComponent<Renderer>().material.color = Color.red;
             UnityEngine.Object.Destroy(mPaintMarker.GetComponent<Collider>()); // Remove collider so it doesn't interfere
             
-            this.LogAlwaysInstanced("Spawn Region Paint Mode activated. Left-click to move spawn regions, right-click for info, right-click empty space to exit.");
+            this.LogAlwaysInstanced("Spawn Region Paint Mode activated. Left-click to move spawn regions, right-click for info, right-click empty space to exit.", LogCategoryFlags.PaintManager);
         }
 
         public override void ExitPaint()
@@ -90,7 +90,7 @@ namespace ExpandedAiFramework
         public override void ProcessCommand(string command, IList<string> args)
         {
             // SpawnRegionPaintManager doesn't need additional commands beyond the base paint functionality
-            this.LogAlwaysInstanced($"SpawnRegionPaintManager doesn't support command: {command}");
+            this.LogAlwaysInstanced($"SpawnRegionPaintManager doesn't support command: {command}", LogCategoryFlags.PaintManager);
         }
 
         protected override void UpdatePaintMarkerInternal()
@@ -200,7 +200,7 @@ namespace ExpandedAiFramework
                 }
             }
             
-            this.LogAlwaysInstanced($"Started moving spawn region {spawnRegion.VanillaSpawnRegion.GetHashCode()} from position {mOriginalPosition}");
+            this.LogAlwaysInstanced($"Started moving spawn region {spawnRegion.VanillaSpawnRegion.GetHashCode()} from position {mOriginalPosition}", LogCategoryFlags.PaintManager);
         }
 
         private void PlaceSpawnRegion()
@@ -222,7 +222,7 @@ namespace ExpandedAiFramework
                 }
             }
             
-            this.LogAlwaysInstanced($"Moved spawn region {mSelectedSpawnRegion.VanillaSpawnRegion.GetHashCode()} to position {newPosition}");
+            this.LogAlwaysInstanced($"Moved spawn region {mSelectedSpawnRegion.VanillaSpawnRegion.GetHashCode()} to position {newPosition}", LogCategoryFlags.PaintManager);
             
             mMovingSpawnRegion = false;
             mSelectedSpawnRegion = null;
@@ -237,7 +237,7 @@ namespace ExpandedAiFramework
                 mSelectedSpawnRegion.VanillaSpawnRegion.transform.position = mOriginalPosition;
                 mSelectedSpawnRegion.VanillaSpawnRegion.m_Center = mOriginalPosition;
                 mSelectedSpawnRegion.ModDataProxy.CurrentPosition = mOriginalPosition;
-                this.LogAlwaysInstanced($"Dropped spawn region {mSelectedSpawnRegion.VanillaSpawnRegion.GetHashCode()} back to original position {mOriginalPosition}");
+                this.LogAlwaysInstanced($"Dropped spawn region {mSelectedSpawnRegion.VanillaSpawnRegion.GetHashCode()} back to original position {mOriginalPosition}", LogCategoryFlags.PaintManager);
             }
             
             // Re-enable the collider now that we're done moving
@@ -257,16 +257,16 @@ namespace ExpandedAiFramework
         private void LogSpawnRegionInfo(CustomSpawnRegion spawnRegion)
         {
             SpawnRegion vanilla = spawnRegion.VanillaSpawnRegion;
-            this.LogAlwaysInstanced($"=== Spawn Region Info ===");
-            this.LogAlwaysInstanced($"Hash Code: {vanilla.GetHashCode()}");
-            this.LogAlwaysInstanced($"GUID: {spawnRegion.ModDataProxy.Guid}");
-            this.LogAlwaysInstanced($"Position: {vanilla.transform.position}");
-            this.LogAlwaysInstanced($"AI Sub Type: {vanilla.m_AiSubTypeSpawned}");
-            this.LogAlwaysInstanced($"AI Type: {vanilla.m_AiTypeSpawned}");
-            this.LogAlwaysInstanced($"Radius: {vanilla.m_Radius}");
-            this.LogAlwaysInstanced($"Active Spawns: {spawnRegion.ActiveSpawns.Count}");
-            this.LogAlwaysInstanced($"Is Active: {vanilla.gameObject.activeInHierarchy}");
-            this.LogAlwaysInstanced($"========================");
+            this.LogAlwaysInstanced($"=== Spawn Region Info ===", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"Hash Code: {vanilla.GetHashCode()}", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"GUID: {spawnRegion.ModDataProxy.Guid}", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"Position: {vanilla.transform.position}", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"AI Sub Type: {vanilla.m_AiSubTypeSpawned}", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"AI Type: {vanilla.m_AiTypeSpawned}", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"Radius: {vanilla.m_Radius}", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"Active Spawns: {spawnRegion.ActiveSpawns.Count}", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"Is Active: {vanilla.gameObject.activeInHierarchy}", LogCategoryFlags.PaintManager);
+            this.LogAlwaysInstanced($"========================", LogCategoryFlags.PaintManager);
         }
 
         private void SetSpawnRegionMarkerColor(CustomSpawnRegion spawnRegion, Color color)
