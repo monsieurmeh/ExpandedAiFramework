@@ -209,7 +209,7 @@ namespace ExpandedAiFramework
         {
             if (!CommandDictionary_SupportedTypes.TryGetValue(command, out string[] types))
             {
-                LogAlways($"Command {command} does not support any types");
+                LogAlways($"Command {command} does not support any types", LogCategoryFlags.ConsoleCommand);
                 return "";
             }
             string typeString = "";
@@ -458,7 +458,7 @@ namespace ExpandedAiFramework
             }
             if (shouldWarn)
             {
-                LogWarning($"{type} is not supported by this command! Supported types: {supportedTypeString}");
+                LogWarning($"{type} is not supported by this command! Supported types: {supportedTypeString}", LogCategoryFlags.ConsoleCommand);
             }
             return false;
         }
@@ -470,7 +470,7 @@ namespace ExpandedAiFramework
             {
                 if (shouldWarn)
                 {
-                    LogWarning($"Provide a type to use this command! Supported types: {supportedTypeString}");
+                    LogWarning($"Provide a type to use this command! Supported types: {supportedTypeString}", LogCategoryFlags.ConsoleCommand);
                 }
                 return false;
             }
@@ -484,7 +484,7 @@ namespace ExpandedAiFramework
             {
                 if (shouldWarn)
                 {
-                    LogWarning($"Provide a name!");
+                    LogWarning($"Provide a name!", LogCategoryFlags.ConsoleCommand);
                 }
                 return false;
             }

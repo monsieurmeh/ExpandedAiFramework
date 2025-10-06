@@ -67,8 +67,6 @@ namespace ExpandedAiFramework
         }
 
 
-
-
         public void Console_OnCommand()
         {
             string command = uConsole.GetString();
@@ -84,6 +82,7 @@ namespace ExpandedAiFramework
             }
             commandAction(ParseArgs());
         }
+
 
         private void ProcessHelp(IList<string> args)
         {

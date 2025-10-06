@@ -26,7 +26,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
-            LogVerbose($"proxy with guid <<<{proxy.Guid}>>> has custom data: {proxy.CustomData != null} with length: {proxy.CustomData?.Length ?? 0}");
+            LogTrace($"proxy with guid <<<{proxy.Guid}>>> has custom data: {proxy.CustomData != null} with length: {proxy.CustomData?.Length ?? 0}", LogCategoryFlags.AiManager);
 
             if (proxy.CustomData == null || proxy.CustomData.Length == 0)
             {
@@ -60,7 +60,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             proxy.AsyncProcessing = false;
             if (spot != null)
             {
-                LogVerbose($"Attaching wanderpath with guid <<<{spot.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>");
+                LogTrace($"Attaching wanderpath with guid <<<{spot.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>", LogCategoryFlags.AiManager);
                 proxy.CustomData = [spot.Guid.ToString()];
                 spot.Claim();
             }

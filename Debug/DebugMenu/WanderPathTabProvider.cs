@@ -96,7 +96,7 @@ namespace ExpandedAiFramework.DebugMenu
                 string[] args = { "NewWanderPath" };
                 Manager.ConsoleCommandManager.SetActivePaintManager(paintManager);
                 paintManager.StartPaint(args);
-                LogDebug($"Started paint mode for {GetTabDisplayName()}");
+                LogDebug($"Started paint mode for {GetTabDisplayName()}", LogCategoryFlags.DebugMenu);
                 
                 // Hide the debug menu
                 DebugMenu.DebugMenuManager.Instance?.HideMenu();
@@ -187,7 +187,7 @@ namespace ExpandedAiFramework.DebugMenu
                 // Log requested changes for debugging
                 foreach (var field in fieldValues)
                 {
-                    LogDebug($"  {field.Key}: {field.Value} ({field.Value?.GetType().Name})");
+                    LogDebug($"  {field.Key}: {field.Value} ({field.Value?.GetType().Name})", LogCategoryFlags.DebugMenu);
                 }
                 
                 // Use the thread-safe request system for CRUD operations
@@ -195,7 +195,7 @@ namespace ExpandedAiFramework.DebugMenu
                 {
                     if (result == RequestResult.Succeeded)
                     {
-                        LogDebug($"Successfully updated WanderPath: {updatedEntity.Name}");
+                        LogDebug($"Successfully updated WanderPath: {updatedEntity.Name}", LogCategoryFlags.DebugMenu);
                         // Refresh the tab to show updated data
                         Refresh();
                     }

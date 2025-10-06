@@ -21,7 +21,7 @@ namespace ExpandedAiFramework
 
         public override bool CanSpawn(BaseAi ai)
         {
-            //LogDebug($"[BaseMooseSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | Moose is null: {ai.Moose == null}");
+            LogDebug($"[BaseMooseSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | Moose is null: {ai.Moose == null}", LogCategoryFlags.Ai);
             return Enable && ai.m_AiSubType == AiSubType.Moose && ai.Moose != null;
         }
 

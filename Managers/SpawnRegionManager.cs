@@ -126,7 +126,7 @@ namespace ExpandedAiFramework
             newCustomBaseAi = null;
             if (spawnRegion == null)
             {
-                LogVerbose($"Null spawn region, can't intercept.", LogCategoryFlags.SpawnRegionManager);
+                LogTrace($"Null spawn region, can't intercept.", LogCategoryFlags.SpawnRegionManager);
                 return false;
             }
             if (!mManager.AiManager.TryInjectCustomAi(baseAi, proxy.VariantSpawnType, spawnRegion, out newCustomBaseAi, proxy))
@@ -134,7 +134,7 @@ namespace ExpandedAiFramework
                 LogError($"Error in AiManager ai injection process while trying to respawn previously found ai variant in region with hash code {spawnRegion.GetHashCode()}!");
                 return false;
             }
-            LogVerbose($"Successfully wrapped a {proxy.VariantSpawnType.Name} with hash code {baseAi.GetHashCode()} with pre-queued proxy!", LogCategoryFlags.SpawnRegionManager);
+            LogTrace($"Successfully wrapped a {proxy.VariantSpawnType.Name} with hash code {baseAi.GetHashCode()} with pre-queued proxy!", LogCategoryFlags.SpawnRegionManager);
             return true;
         }
 
@@ -287,13 +287,13 @@ namespace ExpandedAiFramework
             }
             if (mCustomSpawnRegionsByGuid.TryGetValue(new Guid(guid), out CustomSpawnRegion value) && !value.VanillaSpawnRegion.IsNullOrDestroyed())
             {
-                LogVerbose($"Found EAF custom region", LogCategoryFlags.SpawnRegionManager);
+                LogTrace($"Found EAF custom region", LogCategoryFlags.SpawnRegionManager);
                 return value.VanillaSpawnRegion;
             }
             GameObject go = PdidTable.GetGameObject(guid);
             if (go.IsNullOrDestroyed())
             {
-                LogVerbose($"Could not fetch object by guid", LogCategoryFlags.SpawnRegionManager);
+                LogTrace($"Could not fetch object by guid", LogCategoryFlags.SpawnRegionManager);
                 return null;
             }
             if (!go.TryGetComponent<SpawnRegion>(out SpawnRegion existingSpawnRegion))
@@ -301,7 +301,7 @@ namespace ExpandedAiFramework
                 LogError($"Could not fetch SpawnRegion from GUID-fetched object");
                 return null;
             }
-            LogVerbose($"Found spawn region by GUID", LogCategoryFlags.SpawnRegionManager);
+            LogTrace($"Found spawn region by GUID", LogCategoryFlags.SpawnRegionManager);
             return existingSpawnRegion;
         }
 
@@ -317,11 +317,11 @@ namespace ExpandedAiFramework
                 SpawnRegion spawnRegion = mCustomSpawnRegionsByIndex[i].VanillaSpawnRegion;
                 if (Vector3.Distance(spawnRegion.transform.position, saveData.m_Position) < 0.01f)
                 {
-                    LogVerbose($"Found spawn region by position", LogCategoryFlags.SpawnRegionManager);
+                    LogTrace($"Found spawn region by position", LogCategoryFlags.SpawnRegionManager);
                     return spawnRegion;
                 }
             }
-            LogVerbose($"Could not fetch spawn region by position", LogCategoryFlags.SpawnRegionManager);
+            LogTrace($"Could not fetch spawn region by position", LogCategoryFlags.SpawnRegionManager);
             return null;
         }
 
@@ -369,18 +369,18 @@ namespace ExpandedAiFramework
                 }
                 if (otherSpawnRegion.m_AiSubTypeSpawned != customBaseSpawnRegion.VanillaSpawnRegion.m_AiSubTypeSpawned)
                 {
-                    LogVerbose($"Spawn region subtype mismatch", LogCategoryFlags.SpawnRegionManager);
+                    LogTrace($"Spawn region subtype mismatch", LogCategoryFlags.SpawnRegionManager);
                     continue;
                 }
                 customBaseSpawnRegion.VanillaSpawnRegion.m_WasForceDisabled = !enable;
                 if (!customBaseSpawnRegion.VanillaSpawnRegion.m_WasEnabled && enable)
                 {
-                    LogVerbose($"spawnRegion was not enabled and enable is set, continuing", LogCategoryFlags.SpawnRegionManager);
+                    LogTrace($"spawnRegion was not enabled and enable is set, continuing", LogCategoryFlags.SpawnRegionManager);
                     continue;
                 }
                 if (SquaredDistance(otherSpawnRegion.transform.position, customBaseSpawnRegion.VanillaSpawnRegion.transform.position) > range)
                 {
-                    LogVerbose($"spawnRegion out of range, continuing", LogCategoryFlags.SpawnRegionManager);
+                    LogTrace($"spawnRegion out of range, continuing", LogCategoryFlags.SpawnRegionManager);
                     continue;
                 }
                 customBaseSpawnRegion.VanillaSpawnRegion.m_WasEnabled = customBaseSpawnRegion.VanillaSpawnRegion.isActiveAndEnabled;
@@ -483,18 +483,18 @@ namespace ExpandedAiFramework
                 }
                 if (SquaredDistance(pos, noSpawnRegion.transform.position) > noSpawnRegion.m_Radius * noSpawnRegion.m_Radius)
                 {
-                    LogVerbose($"NoSpawnRegion too far, continuing", LogCategoryFlags.SpawnRegionManager);
+                    LogTrace($"NoSpawnRegion too far, continuing", LogCategoryFlags.SpawnRegionManager);
                     continue;
                 }
                 if (!noSpawnRegion.gameObject.activeSelf)
                 {
-                    LogVerbose($"inactive spawnregion, continuing", LogCategoryFlags.SpawnRegionManager);
+                    LogTrace($"inactive spawnregion, continuing", LogCategoryFlags.SpawnRegionManager);
                     continue;
                 }
-                LogVerbose($"found containing NoSpawnRegion", LogCategoryFlags.SpawnRegionManager);
+                LogTrace($"found containing NoSpawnRegion", LogCategoryFlags.SpawnRegionManager);
                 return noSpawnRegion;
             }
-            LogVerbose($"Failed to find any containing NoSpawnRegion", LogCategoryFlags.SpawnRegionManager);
+            LogTrace($"Failed to find any containing NoSpawnRegion", LogCategoryFlags.SpawnRegionManager);
             return null;
         }
 
@@ -814,7 +814,7 @@ namespace ExpandedAiFramework
             //A lot of this was in / is repeated still in CustomBaseSpawnRegion.Initialize(); may be wiser to use an actual parent top object and delegate some logic to smaller serviec objects.
             if (spawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
-                LogVerbose($"null spawnable prefab on spawn region, fetching...", LogCategoryFlags.SpawnRegionManager);
+                LogTrace($"null spawnable prefab on spawn region, fetching...", LogCategoryFlags.SpawnRegionManager);
                 AssetReferenceAnimalPrefab animalReferencePrefab = spawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(WildlifeMode.Normal);
                 spawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
                 animalReferencePrefab.ReleaseAsset();
@@ -845,7 +845,7 @@ namespace ExpandedAiFramework
             }
             if (mCustomSpawnRegions.ContainsKey(spawnRegion.GetHashCode()))
             {
-                LogVerbose($"Spawn region with hash code {spawnRegion.GetHashCode()} already wrapped, cannot re-wrap", LogCategoryFlags.SpawnRegionManager);
+                LogTrace($"Spawn region with hash code {spawnRegion.GetHashCode()} already wrapped, cannot re-wrap", LogCategoryFlags.SpawnRegionManager);
                 return null;
             }
             SpawnRegionModDataProxy newProxy = new SpawnRegionModDataProxy(guid, scene, spawnRegion);

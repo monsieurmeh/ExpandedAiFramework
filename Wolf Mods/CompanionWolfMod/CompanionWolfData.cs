@@ -37,7 +37,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void Connect()
         {
-            Utility.LogVerbose($"Connecting!");
+            Utility.LogTrace($"Connecting!", LogCategoryFlags.Ai);
             Connected = true;
             SpawnDate = Utility.GetCurrentTimelinePoint();
             UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.LingerDurationHours;
@@ -49,7 +49,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void Disconnect()
         {
-            Utility.LogVerbose($"Disconnecting!!");
+            Utility.LogTrace($"Disconnecting!!", LogCategoryFlags.Ai);
             Connected = false;
         }
     }

@@ -105,7 +105,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 return;
             }
             mSubManager = companionWolfManager;
-            this.LogVerboseInstanced($"Initializing companion! Data: Connected = {mSubManager.Data.Connected}");
+            this.LogTraceInstanced($"Initializing companion! Data: Connected = {mSubManager.Data.Connected}", LogCategoryFlags.Ai);
             mSubManager.Data.TryConnect();
             mBaseAi.m_MaxHP = mSubManager.Data.MaxCondition;
             mBaseAi.m_CurrentHP = mSubManager.Data.CurrentCondition;
@@ -126,7 +126,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 mBaseAi.m_CurrentMode = AiMode.Wander;
             }
             UpdateStats(timePassed);
-            this.LogVerboseInstanced($"Initialized CompanionWolf with {mBaseAi.m_MaxHP}/{mBaseAi.m_MaxHP} condition and scale {mBaseAi.transform.localScale}; Tamed: {mSubManager.Data.Tamed}; Time passed since last load: {timePassed} seconds or {timePassed * Utility.SecondsToHours} hrs; CurrentTime: {currentTime} hrs; Listed timeout time: {mSubManager.Data.UntamedTimeoutTime} which is {mSubManager.Data.UntamedTimeoutTime - currentTime} hrs away");
+            this.LogTraceInstanced($"Initialized CompanionWolf with {mBaseAi.m_MaxHP}/{mBaseAi.m_MaxHP} condition and scale {mBaseAi.transform.localScale}; Tamed: {mSubManager.Data.Tamed}; Time passed since last load: {timePassed} seconds or {timePassed * Utility.SecondsToHours} hrs; CurrentTime: {currentTime} hrs; Listed timeout time: {mSubManager.Data.UntamedTimeoutTime} which is {mSubManager.Data.UntamedTimeoutTime - currentTime} hrs away", LogCategoryFlags.Ai);
         }
 
         protected override bool ShouldAddToBaseAiManager() => false;
@@ -232,13 +232,13 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (!mSubManager.Data.Tamed && mode.ToFlag().AnyOf(UntamedCompanionWolfRouteToHoldGroundModes))
             {
-                this.LogVerboseInstanced($"Untamed companions dont like to {mode}, routing to HoldGround!");
+                this.LogTraceInstanced($"Untamed companions dont like to {mode}, routing to HoldGround!", LogCategoryFlags.Ai);
                 newMode = AiMode.HoldGround;
                 return false;
             }
             if (!mSubManager.Data.Tamed && mode.ToFlag().AnyOf(UntamedCompanionWolfOverrideModes))
             {
-                this.LogVerboseInstanced($"Untamed companion with mode {mode}, ignoring typical pre-processing in favor of CompanionWolf.");
+                this.LogTraceInstanced($"Untamed companion with mode {mode}, ignoring typical pre-processing in favor of CompanionWolf.", LogCategoryFlags.Ai);
                 newMode = mode;
                 return false;
             }
@@ -246,43 +246,43 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 if (mode == AiMode.Attack || mode == AiMode.Stalking)
                 {
-                    this.LogVerboseInstanced($"Temporary catch to prevent tamed wolf from attacking *anything* right now. Floofs is just not ready for combat yet. Soon, I promise!");
+                    this.LogTraceInstanced($"Temporary catch to prevent tamed wolf from attacking *anything* right now. Floofs is just not ready for combat yet. Soon, I promise!", LogCategoryFlags.Ai);
                     newMode = AiMode.None;
                     return false;
                 }
                 if (mode == AiMode.HoldGround)
                 {
-                    this.LogVerboseInstanced($"Temporary catch to prevent tamed wolf from holding ground against friendly things like fire. Eventually we'll program in proper behavior. For right now i just want him to sit with me by the fire <3");
+                    this.LogTraceInstanced($"Temporary catch to prevent tamed wolf from holding ground against friendly things like fire. Eventually we'll program in proper behavior. For right now i just want him to sit with me by the fire <3", LogCategoryFlags.Ai);
                     newMode = AiMode.None;
                     return false;
                 }
                 if (CurrentMode == AiMode.Wander)
                 {
-                    this.LogVerboseInstanced($"Temporary catch to route tamed wander to follow. good boy!");
+                    this.LogTraceInstanced($"Temporary catch to route tamed wander to follow. good boy!", LogCategoryFlags.Ai);
                     newMode = (AiMode)CompanionWolfAiMode.Follow;
                     return false;
                 }
                 if ((mode == AiMode.InvestigateFood || mode == AiMode.Feeding) && (mCurrentFoodTargetGearItem == null || mCurrentFoodTargetGearItem.m_FoodItem == null))
                 {
-                    this.LogVerboseInstanced($"Temporary catch to prevent tamed wolf trying to eat something that doesn't exist. This keeps happening when prey dies and I think something vanilla is triggering wolf to approach and eat, which wont work with tamed behavior.");
+                    this.LogTraceInstanced($"Temporary catch to prevent tamed wolf trying to eat something that doesn't exist. This keeps happening when prey dies and I think something vanilla is triggering wolf to approach and eat, which wont work with tamed behavior.", LogCategoryFlags.Ai);
                     newMode = AiMode.None;
                     return false;
                 }
                 if (CurrentTarget != null && CurrentTarget.IsPlayer() && mode.ToFlag().AnyOf(AiModeFlags.Stalking | AiModeFlags.Attack | AiModeFlags.Struggle))
                 {
                     //Recipe #19 for "Friendly Floofy"
-                    this.LogVerboseInstanced($"Preventing attempted savaging and devouring of mackenzie/astrid by floofy. good boy!");
+                    this.LogTraceInstanced($"Preventing attempted savaging and devouring of mackenzie/astrid by floofy. good boy!", LogCategoryFlags.Ai);
                     newMode = AiMode.None;
                     return false;
                 }
                 // If feeding or investigating food and the request is not one of those two and we still have a food target, ignore request
                 if (CurrentMode.ToFlag().AnyOf(TamedCompanionFeedingStateLockModes) && TamedCompanionFeedingStateLockModes.NoneOf(mode.ToFlag()) && mCurrentFoodTargetGearItem != null)
                 {
-                    this.LogVerboseInstanced($"Preventing attempt to interrupt hungry floofy. Bad developers!");
+                    this.LogTraceInstanced($"Preventing attempt to interrupt hungry floofy. Bad developers!", LogCategoryFlags.Ai);
                     newMode = AiMode.None;
                     return false;
                 }
-                this.LogVerboseInstanced($"Tamed companion with mode {mode}, ignoring typical pre-processing in favor of CompanionWolf.");
+                this.LogTraceInstanced($"Tamed companion with mode {mode}, ignoring typical pre-processing in favor of CompanionWolf.", LogCategoryFlags.Ai);
                 newMode = mode;
                 return false;
             }
@@ -294,7 +294,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         //run using INGAME TIME in SECONDS!
         protected void UpdateStats(float deltaTime)
         {
-            //this.LogVerboseInstanced($"Calories: {mSubManager.Data.CurrentCalories} will be reduced by {deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays} to {mSubManager.Data.CurrentCalories - deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays}\nAffection: {mSubManager.Data.CurrentAffection} will be reduced by {deltaTime * Settings.AffectionDecayDelayHours * Utility.SecondsToHours} to {mSubManager.Data.CurrentAffection - deltaTime * Settings.AffectionDecayDelayHours * Utility.SecondsToHours}");
+            //this.LogTraceInstanced($"Calories: {mSubManager.Data.CurrentCalories} will be reduced by {deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays} to {mSubManager.Data.CurrentCalories - deltaTime * Settings.CaloriesBurnedPerDay * Utility.SecondsToDays}\nAffection: {mSubManager.Data.CurrentAffection} will be reduced by {deltaTime * Settings.AffectionDecayDelayHours * Utility.SecondsToHours} to {mSubManager.Data.CurrentAffection - deltaTime * Settings.AffectionDecayDelayHours * Utility.SecondsToHours}", LogCategoryFlags.Ai);
             mSubManager.Data.CurrentCalories -= deltaTime * CompanionWolfSettings.CaloriesBurnedPerDay * Utility.SecondsToDays;
             mSubManager.Data.CurrentAffection -= deltaTime * (mSubManager.Data.Tamed ? CompanionWolfSettings.TamedAffectionDecayRate : CompanionWolfSettings.UntamedAffectionDecayRate) * Utility.SecondsToHours;
 
@@ -314,7 +314,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 mSubManager.Data.CurrentAffection = 0.0f;
                 if (mSubManager.Data.Tamed) //Tamed wolves will run away at this point :(
                 {
-                    this.LogVerboseInstanced("Tamd wolf affection reached zero and it ran away! How could you let this happen... :( :( :(");
+                    this.LogTraceInstanced("Tamd wolf affection reached zero and it ran away! How could you let this happen... :( :( :(");
                     mSubManager.Data.Disconnect();
                     mManager.AiManager.TryRemoveCustomAi(mBaseAi);
                     GameObject.Destroy(mBaseAi.transform.parent.gameObject);
@@ -336,7 +336,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             if (!mSubManager.Data.Tamed && mSubManager.Data.UntamedTimeoutTime <= Utility.GetCurrentTimelinePoint())
             {
                 //turn into "disconnect" method
-                this.LogVerboseInstanced("Disappear! go away! until next time :-(");
+                this.LogTraceInstanced("Disappear! go away! until next time :-(");
                 mSubManager.Data.Disconnect();
                 mManager.AiManager.TryRemoveCustomAi(mBaseAi);
                 return false;
@@ -344,7 +344,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             if (mSubManager.Data.Tamed && Time.time - mCheckTamedStateDebugResetTime < CheckTamedStateDebugFrequency)
             {
                 mCheckTamedStateDebugResetTime = Time.time;
-                this.LogVerboseInstanced("Debug tame state reset check");
+                this.LogTraceInstanced("Debug tame state reset check");
                 if (CurrentMode.ToFlag().AnyOf(UntamedCompanionWolfRouteToHoldGroundModes) && CurrentTarget.IsPlayer())
                 {
                     SetAiMode((AiMode)CompanionWolfAiMode.Follow);
@@ -359,7 +359,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             mCheckForDecoyMeatTime = Time.time;
             if (mode == AiMode.Dead)
             {
-                this.LogVerboseInstanced("Entered AiMode.Dead and DIED! How could you let this happen... :( :( :(");
+                this.LogTraceInstanced("Entered AiMode.Dead and DIED! How could you let this happen... :( :( :(");
                 mSubManager.Data.Disconnect();
                 mManager.AiManager.TryRemoveCustomAi(mBaseAi);
                 return false;
@@ -449,27 +449,27 @@ namespace ExpandedAiFramework.CompanionWolfMod
             ScanForNewTarget();
             if (CheckForDecoyMeat())
             {
-                //this.LogVerboseInstanced($"Valid decoy found, aborting hold ground!");
+                //this.LogTraceInstanced($"Valid decoy found, aborting hold ground!", LogCategoryFlags.Ai);
                 return false;
             }
             if (!mBaseAi.m_CurrentTarget.IsPlayer())
             {
-                //this.LogVerboseInstanced($"Target not player, deferring...");
+                //this.LogTraceInstanced($"Target not player, deferring...", LogCategoryFlags.Ai);
                 return true;
             }
             if (mBaseAi.m_TimeInModeSeconds >= 10.0f)
             {
-                this.LogTraceInstanced($"Player took too long to drop food clos to an untamed companion wolf, running away!");
+                this.LogTraceInstanced($"Player took too long to drop food clos to an untamed companion wolf, running away!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.Flee);
                 return false;
             }
             if (Vector3.Distance(mBaseAi.transform.position, mBaseAi.m_CurrentTarget.transform.position) <= MinPlayerDistanceFromWolf)
             {
-                this.LogTraceInstanced($"Player got too close to an untamed companion wolf, running away!"); 
+                this.LogTraceInstanced($"Player got too close to an untamed companion wolf, running away!", LogCategoryFlags.Ai); 
                 SetAiMode(AiMode.Flee);
                 return false;
             }
-            //this.LogVerboseInstanced($"Player target causing hold ground state!");
+            //this.LogTraceInstanced($"Player target causing hold ground state!", LogCategoryFlags.Ai);
             return false;
         }
 
@@ -606,41 +606,41 @@ namespace ExpandedAiFramework.CompanionWolfMod
             {
                 return false;
             }
-            //this.LogVerboseInstanced("Decoy meat check");
+            //this.LogTraceInstanced("Decoy meat check");
             mCheckForDecoyMeatTime = Time.time;
             Il2CppSystem.Collections.Generic.List<GearItem> droppedDecoys = GearManager.m_DroppedDecoys;
             for (int i = 0, iMax = droppedDecoys.Count; i < iMax; i++)
             { 
                 if (!mSubManager.Data.Tamed && Vector3.Distance(CurrentTarget.transform.position, droppedDecoys[i].transform.position) <= MinPlayerDistanceFromDecoy)
                 {
-                    this.LogVerboseInstanced($"Player is too close to decoy!");
+                    this.LogTraceInstanced($"Player is too close to decoy!", LogCategoryFlags.Ai);
                     continue;
                 }
                 /* They can smell this shit, if its close enough its close enough...
                 if (Vector3.Angle(mBaseAi.transform.forward, CurrentTarget.transform.position - mBaseAi.transform.position) >= mBaseAi.m_DetectionFOV / 2f)
                 {
-                    this.LogVerboseInstanced($"Decoy out of field of view, cannot see");
+                    this.LogTraceInstanced($"Decoy out of field of view, cannot see", LogCategoryFlags.Ai);
                     return false;
                 }
                 */
                 if (Vector3.Distance(mBaseAi.transform.position, droppedDecoys[i].transform.position) >= MaxWolfDistanceFromDecoy)
                 {
-                    this.LogVerboseInstanced($"Decoy is too far away!");
+                    this.LogTraceInstanced($"Decoy is too far away!", LogCategoryFlags.Ai);
                     continue;
                 }
                 mBaseAi.m_InvestigateFoodObject = droppedDecoys[i].gameObject;
                 mCurrentFoodTargetGearItem = droppedDecoys[i].GetComponent<GearItem>();
                 if (mCurrentFoodTargetGearItem == null)
                 {
-                    this.LogVerboseInstanced($"No gear item on target!");
+                    this.LogTraceInstanced($"No gear item on target!", LogCategoryFlags.Ai);
                     continue;
                 }
                 if (mCurrentFoodTargetGearItem.m_FoodItem == null)
                 {
-                    this.LogVerboseInstanced($"Gear item is not food, ignoring!");
+                    this.LogTraceInstanced($"Gear item is not food, ignoring!", LogCategoryFlags.Ai);
                     continue;
                 }
-                this.LogVerboseInstanced($"Food found, investigating!");
+                this.LogTraceInstanced($"Food found, investigating!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.InvestigateFood);
                 return true;
             }
@@ -652,16 +652,16 @@ namespace ExpandedAiFramework.CompanionWolfMod
         
         private bool ProcessInvestigateFoodCustom()
         {
-            //this.LogVerboseInstanced($"Investigating Food like a GOOD BOY");
+            //this.LogTraceInstanced($"Investigating Food like a GOOD BOY", LogCategoryFlags.Ai);
             if (!mSubManager.Data.Tamed && Vector3.Distance(mBaseAi.transform.position, GameManager.GetPlayerObject().transform.position) <= MinPlayerDistanceFromDecoy)
             {
-                this.LogVerboseInstanced($"Player too close to food, swapping to hold ground!");
+                this.LogTraceInstanced($"Player too close to food, swapping to hold ground!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.HoldGround);
                 return false;
             }
             if (mBaseAi.CloseEnoughToEatObject(mBaseAi.m_InvestigateFoodObject))// || Vector3.Distance(mBaseAi.m_InvestigateFoodObject.transform.position, mBaseAi.transform.position) <= 2.0f)
             {
-                this.LogVerboseInstanced($"Close enough to each, transitioning to eating!");
+                this.LogTraceInstanced($"Close enough to each, transitioning to eating!", LogCategoryFlags.Ai);
                 mBaseAi.MoveAgentStop();
                 SetAiMode(AiMode.Feeding);
             }
@@ -671,7 +671,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 {
                     if (!mBaseAi.m_MoveAgent.HasPath())
                     {
-                        this.LogVerboseInstanced($"Hasn't reached dest and no path, this could be a bug. Resetting to default mode");
+                        this.LogTraceInstanced($"Hasn't reached dest and no path, this could be a bug. Resetting to default mode", LogCategoryFlags.Ai);
                         SetDefaultAiMode();
                         return false;
                     }
@@ -681,7 +681,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                     }
                     if (!mSubManager.Data.Tamed && mBaseAi.m_CurrentTarget.Distance(mBaseAi.transform.position) <= mBaseAi.m_InvestigateFoodAvoidTargetDistance)
                     {
-                        this.LogVerboseInstanced($"Target got too close, fleeing!");
+                        this.LogTraceInstanced($"Target got too close, fleeing!", LogCategoryFlags.Ai);
                         mBaseAi.ClearTarget();
                         SetAiMode(AiMode.Flee);
                     }
@@ -697,19 +697,19 @@ namespace ExpandedAiFramework.CompanionWolfMod
             /*
             if (mBaseAi.MaybeWaitForStopAgent() || mBaseAi.MaybeSyncToFeeding())
             {
-                this.LogVerboseInstanced($"Waiting for animation sync");
+                this.LogTraceInstanced($"Waiting for animation sync", LogCategoryFlags.Ai);
                 return false;
             }
             */
             if (!mBaseAi.m_DidStopAudio)
             {
-                this.LogVerboseInstanced($"Audio queue");
+                this.LogTraceInstanced($"Audio queue", LogCategoryFlags.Ai);
                 mBaseAi.m_FeedingAudioID = GameAudioManager.Play3DSound(mBaseAi.m_FeedingAudio, mBaseAi.gameObject);
                 mBaseAi.m_DidStopAudio = true;
             }
             if (!mSubManager.Data.Tamed && CurrentTarget != null && CurrentTarget.IsPlayer() && CurrentTarget.Distance(mBaseAi.transform.position) <= MinPlayerDistanceFromWolf)
             {
-                this.LogVerboseInstanced($"Too close to untamed feeding wolf, running away!");
+                this.LogTraceInstanced($"Too close to untamed feeding wolf, running away!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.Flee);
                 return false;
             }
@@ -724,7 +724,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 }
                 if (!mSubManager.Data.Tamed && mSubManager.Data.CurrentAffection >= CompanionWolfSettings.AffectionRequirement && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= CompanionWolfSettings.AffectionDaysRequirement)
                 {
-                    this.LogVerboseInstanced($"You tamed it! YOU DID IT! WOO!!");
+                    this.LogTraceInstanced($"You tamed it! YOU DID IT! WOO!!", LogCategoryFlags.Ai);
                     mSubManager.Data.Tamed = true;
                     mBaseAi.m_DefaultMode = (AiMode)CompanionWolfAiMode.Follow;
                     SetAiMode((AiMode)CompanionWolfAiMode.Follow);
@@ -733,19 +733,19 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 bool finishedEating = false;
                 if (mSubManager.Data.CurrentCalories >= CompanionWolfSettings.MaximumCalorieIntake)
                 {
-                    this.LogVerboseInstanced($"Full!");
+                    this.LogTraceInstanced($"Full!", LogCategoryFlags.Ai);
                     mSubManager.Data.CurrentCalories = CompanionWolfSettings.MaximumCalorieIntake;
                     finishedEating = true;
                 }
                 if (mCurrentFoodTargetGearItem.m_FoodItem.m_CaloriesRemaining <= 0)
                 {
-                    this.LogVerboseInstanced($"Done!");
+                    this.LogTraceInstanced($"Done!", LogCategoryFlags.Ai);
                     GearManager.DestroyGearObject(mCurrentFoodTargetGearItem);
                     finishedEating = true;
                 }
                 if (finishedEating && !CheckForDecoyMeat())
                 {
-                    this.LogVerboseInstanced($"Done eating and no food found, wandering away");
+                    this.LogTraceInstanced($"Done eating and no food found, wandering away", LogCategoryFlags.Ai);
                     SetDefaultAiMode();
                 }
             }
@@ -758,7 +758,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (CheckForDecoyMeat())
             {
-                //this.LogVerboseInstanced($"Valid decoy found, aborting hold ground!");
+                //this.LogTraceInstanced($"Valid decoy found, aborting hold ground!", LogCategoryFlags.Ai);
                 return false;
             }
             if (Time.time - mCheckForFollowTime < FollowCheckInterval)
@@ -782,7 +782,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 AiUtils.GetClosestNavmeshPos(out Vector3 followPosition, rawFollowPosition, rawFollowPosition); // Agent needs to get a LITTLE closer otherwise it moves a bunch while mackenzie shifts around
                 if (!mBaseAi.CanPlayerBeReached(followPosition))
                 {
-                    this.LogVerboseInstanced("Can't reach player, warping...");
+                    this.LogTraceInstanced("Can't reach player, warping...");
                     mBaseAi.m_MoveAgent.transform.position = followPosition;
                     mBaseAi.m_MoveAgent.Warp(followPosition, 1.0f, true, -1);
                 }
@@ -859,12 +859,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         protected override bool ChangeModeWhenTargetDetectedCustom()
         {
-            this.LogVerboseInstanced($"ChangeModeWhenTargetDetectedCustom");
+            this.LogTraceInstanced($"ChangeModeWhenTargetDetectedCustom", LogCategoryFlags.Ai);
             if (mSubManager.Data.Tamed)
             {
                 if (CurrentTarget.IsPlayer())
                 {
-                    this.LogVerboseInstanced($"Tamed wolf sees player");
+                    this.LogTraceInstanced($"Tamed wolf sees player", LogCategoryFlags.Ai);
                     //right now we dont care
                     return false;
                 }
@@ -874,7 +874,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 //use some flags here for clarity, other modes might pop up too like eating, etc
                 if (CurrentTarget.IsPlayer() && CurrentMode == AiMode.Wander)
                 {
-                    this.LogVerboseInstanced($"Untamed wolf sees player in wander mode, hold ground!");
+                    this.LogTraceInstanced($"Untamed wolf sees player in wander mode, hold ground!", LogCategoryFlags.Ai);
                     mSubManager.Data.UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolfSettings.LingerDurationHours;
                     SetAiMode(AiMode.HoldGround);
                     return false;
@@ -885,7 +885,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 SetAiMode(AiMode.Flee);
                 return false;
             }
-            this.LogVerboseInstanced($"no catch, defer...");
+            this.LogTraceInstanced($"no catch, defer...", LogCategoryFlags.Ai);
             return true;
         }
     }

@@ -369,7 +369,7 @@ namespace ExpandedAiFramework.DebugMenu
             if (mSubDataManager != null)
             {
                 mSubDataManager.ScheduleSave();
-                LogDebug($"Saved data for {GetTabDisplayName()}");
+                LogDebug($"Saved data for {GetTabDisplayName()}", LogCategoryFlags.DebugMenu);
             }
             else
             {
@@ -382,7 +382,7 @@ namespace ExpandedAiFramework.DebugMenu
             if (mSubDataManager != null)
             {
                 mSubDataManager.ScheduleLoad();
-                LogDebug($"Loaded data for {GetTabDisplayName()}");
+                LogDebug($"Loaded data for {GetTabDisplayName()}", LogCategoryFlags.DebugMenu);
                 Refresh(); // Refresh the list after loading
             }
             else
@@ -517,7 +517,7 @@ namespace ExpandedAiFramework.DebugMenu
                 mData = data ?? new List<T>();
                 ApplyFilters();
                 UpdateDisplay();
-                LogDebug($"Loaded {mData.Count} items for {GetTabDisplayName()}");
+                LogDebug($"Loaded {mData.Count} items for {GetTabDisplayName()}", LogCategoryFlags.DebugMenu);
             }
             else
             {
@@ -612,7 +612,7 @@ namespace ExpandedAiFramework.DebugMenu
                     entity.DataLocation = dataLocationString;
                 }
 
-                LogDebug($"Applied basic entity changes to {entity.DisplayName}");
+                LogDebug($"Applied basic entity changes to {entity.DisplayName}", LogCategoryFlags.DebugMenu);
                 return true;
             }
             catch (Exception e)

@@ -331,7 +331,7 @@ namespace ExpandedAiFramework.DebugMenu
                 mHasChanges = false;
                 UpdateButtonStates();
                 StoreOriginalValues(); // Update original values after successful apply
-                LogDebug($"Successfully applied changes to {mCurrentEntity.DisplayName}");
+                LogDebug($"Successfully applied changes to {mCurrentEntity.DisplayName}", LogCategoryFlags.DebugMenu);
             }
             else
             {
