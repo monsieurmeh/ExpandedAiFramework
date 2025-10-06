@@ -60,7 +60,7 @@ namespace ExpandedAiFramework
         private DispatchManager mLogDispatcher;
         private BaseSubManager[] mBaseSubManagers = new BaseSubManager[(int)BaseSubManagers.COUNT];
         private ISubManager[] mHotSwappableSubManagers = new ISubManager[(int)HotSwappableSubManagers.COUNT];
-        private Dictionary<Type, ISubManager> mSubManagerDict = new Dictionary<Type, ISubManager>();
+        private Dictionary<Type, ISpawnManager> mSubManagerDict = new Dictionary<Type, ISpawnManager>();
         private ISubManager[] mSubManagers = new ISubManager[0];
         private Dictionary<string, BasePaintManager> mPaintManagerDict = new Dictionary<string, BasePaintManager>();
         private float mLastPlayerStruggleTime = 0.0f;
@@ -325,9 +325,9 @@ namespace ExpandedAiFramework
         }
 
 
-        public void RegisterSubmanager(ISubManager subManager)
+        public void RegisterSpawnManager(ISpawnManager subManager)
         { 
-            if (mSubManagerDict.TryGetValue(subManager.SpawnType, out ISubManager _))
+            if (mSubManagerDict.TryGetValue(subManager.SpawnType, out ISpawnManager _))
             {
                 LogError($"Type {subManager.SpawnType} already registered in submanager dictionary!");
                 return;
@@ -369,8 +369,14 @@ namespace ExpandedAiFramework
             switch (hotSwapType)
             {
                 case HotSwappableSubManagers.CougarManager:
+                    ICougarManager cougarManager = subManager as ICougarManager;
+                    if (cougarManager == null)
+                    {
+                        LogError($"{subManager.GetType()} is not a ICougarManager!");
+                        return;
+                    }
                     mSubManagerDict.Remove(typeof(BaseCougar));
-                    mSubManagerDict.Add(subManager.SpawnType, subManager);
+                    mSubManagerDict.Add(cougarManager.SpawnType, cougarManager);
                     return;
             }
         }
@@ -387,9 +393,27 @@ namespace ExpandedAiFramework
             }
         }
 
+        public IEnumerable<ISpawnManager> EnumerateSpawnManagers()
+        {
+            for (int i = 0, iMax = mSubManagers.Length; i < iMax; i++)
+            {
+                if (mSubManagers[i] is ISpawnManager spawnManager)
+                {
+                    yield return spawnManager;
+                }
+            }
+            for (int i = 0, iMax = mHotSwappableSubManagers.Length; i < iMax; i++)
+            {
+                if (mHotSwappableSubManagers[i] is ISpawnManager spawnManager)
+                {
+                    yield return spawnManager;
+                }
+            }
+        }
+
         
-        public bool TryGetSubManager(Type type, out ISubManager subManager) => mSubManagerDict.TryGetValue(type, out subManager);
-        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { if (mSubManagerDict.TryGetValue(proxy.VariantSpawnType, out ISubManager subManager)) subManager.PostProcessNewSpawnModDataProxy(proxy);}
+        public bool TryGetSpawnManager(Type type, out ISpawnManager subManager) => mSubManagerDict.TryGetValue(type, out subManager);
+        public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy) { if (mSubManagerDict.TryGetValue(proxy.VariantSpawnType, out ISpawnManager subManager)) subManager.PostProcessNewSpawnModDataProxy(proxy);}
         public void SaveData(string data, string suffix) => mDataManager.ModData.Save(data, suffix);
         public string LoadData(string suffix) => mDataManager.ModData.Load(suffix);
         public bool RegisterSpawnableAi(Type type, ISpawnTypePickerCandidate spawnSettings) => mAiManager.RegisterSpawnableAi(type, spawnSettings);

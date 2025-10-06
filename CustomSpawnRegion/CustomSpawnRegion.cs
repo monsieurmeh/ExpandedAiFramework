@@ -454,7 +454,7 @@ namespace ExpandedAiFramework
             // second priority: submanager array
             if (spawnType == typeof(void))
             {
-                foreach (ISubManager subManager in mManager.Manager.EnumerateSubManagers())
+                foreach (ISpawnManager subManager in mManager.Manager.EnumerateSpawnManagers())
                 {
                     if (subManager.ShouldInterceptSpawn(this))
                     {

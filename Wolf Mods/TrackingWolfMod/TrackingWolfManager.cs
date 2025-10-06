@@ -3,7 +3,7 @@
 
 namespace ExpandedAiFramework.TrackingWolfMod
 {
-    public class TrackingWolfManager : ISubManager
+    public class TrackingWolfManager : ISpawnManager
     {
         protected EAFManager mManager;
         public void Initialize(EAFManager manager)

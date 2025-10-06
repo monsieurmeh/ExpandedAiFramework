@@ -4,7 +4,7 @@ using Il2CppAK;
 
 namespace ExpandedAiFramework
 {
-    public interface ICougarManager : ISubManager
+    public interface ICougarManager : ISpawnManager
     {
         VanillaCougarManager VanillaCougarManager { get; }
         bool OverrideCustomSpawnRegionType(SpawnRegion spawnRegion, SpawnRegionModDataProxy proxy, TimeOfDay timeOfDay, out CustomSpawnRegion customSpawnRegion)

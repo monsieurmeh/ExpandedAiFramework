@@ -4,7 +4,7 @@ using static ExpandedAiFramework.Utility;
 
 namespace ExpandedAiFramework.WanderingWolfMod
 {
-    public class AmbushWolfManager : ISubManager
+    public class AmbushWolfManager : ISpawnManager
     {
         protected EAFManager mManager;
 

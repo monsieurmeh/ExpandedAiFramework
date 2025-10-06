@@ -3,7 +3,7 @@
 
 namespace ExpandedAiFramework.WanderingWolfMod
 {
-    public class WanderingWolfManager : ISubManager
+    public class WanderingWolfManager : ISpawnManager
     {
         protected EAFManager mManager;
         public void Initialize(EAFManager manager)
