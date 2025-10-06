@@ -123,7 +123,7 @@ namespace ExpandedAiFramework
                 LogError($"Can't register {type} as it is already registered!", FlaggedLoggingLevel.Critical);
                 return false;
             }
-            LogTrace($"Registering type {type}");
+            LogTrace($"Registering type {type}", LogCategoryFlags.AiManager);
 
             mSpawnSettingsDict.Add(type, spawnSettings);
             mTypePicker.AddWeight(type, spawnSettings.SpawnWeight, (ai) => spawnSettings.CanSpawn(ai) && mManager.DataManager.CanForceSpawn(ai.m_WildlifeMode));
