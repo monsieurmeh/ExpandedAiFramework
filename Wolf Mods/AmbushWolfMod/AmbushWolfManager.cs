@@ -11,7 +11,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public void Initialize(EAFManager manager) 
         { 
             mManager = manager;  
-            LogTrace("AmbushWolfManager initialized!"); 
+            LogTrace("AmbushWolfManager initialized!", LogCategoryFlags.System); 
         }
         public bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
         public void Shutdown() { }

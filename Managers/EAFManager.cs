@@ -341,7 +341,7 @@ namespace ExpandedAiFramework
                 LogError($"Type {subManager.SpawnType} already registered in submanager dictionary!");
                 return;
             }
-            LogTrace($"Registering SubManager for type {subManager.SpawnType}");
+            LogTrace($"Registering SubManager for type {subManager.SpawnType}", LogCategoryFlags.System);
             subManager.Initialize(this);
             mSubManagerDict.Add(subManager.SpawnType, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);

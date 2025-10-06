@@ -9,7 +9,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public void Initialize(EAFManager manager)
         {
             mManager = manager;
-            LogTrace("WanderingWolfManager initialized!");
+            LogTrace("WanderingWolfManager initialized!", LogCategoryFlags.System);
         }
         public bool ShouldInterceptSpawn(CustomSpawnRegion region) => false;
         public void Shutdown() { }

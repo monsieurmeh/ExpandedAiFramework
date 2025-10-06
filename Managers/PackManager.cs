@@ -91,6 +91,7 @@ namespace ExpandedAiFramework
         private bool ShouldUpdate()
         {
             if (!UpdateCustom()) return false;
+            if (VanillaPackManager == null) return false;
             if (!VanillaPackManager.m_SystemEnabled) return false;
             if (GameManager.m_IsPaused) return false;
             if (GameManager.s_IsGameplaySuspended) return false;

@@ -37,7 +37,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             mManager = manager;
             mInitialized = true;
-            LogTrace("CompanionWolfManager initialized!");
+            LogTrace("CompanionWolfManager initialized!", LogCategoryFlags.System);
         }
 
 
