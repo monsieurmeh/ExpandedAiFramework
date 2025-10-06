@@ -34,6 +34,5 @@ namespace ExpandedAiFramework
         DebugMenu = 1 << (int)LogCategory.DebugMenu,
         CougarManager = 1 << (int)LogCategory.CougarManager,
         PackManager = 1 << (int)LogCategory.PackManager,
-        COUNT = 1 << (int)LogCategory.COUNT
     }
 }

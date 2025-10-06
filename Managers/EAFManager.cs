@@ -487,7 +487,7 @@ namespace ExpandedAiFramework
         
         private void InitializeLogger()
         {
-            LogSettings logSettings = new LogSettings(Path.Combine(DataFolderPath, "LogSettings"));
+            LogSettings logSettings = LogSettings.CreateDynamic(Path.Combine(DataFolderPath, "LogSettings"));
             logSettings.AddToModSettings(ModName);
             mLogCategoryFlags = logSettings.GetFlags();
             mLogger = new ComplexLogger<Main>();
