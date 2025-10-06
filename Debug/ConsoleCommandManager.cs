@@ -74,12 +74,12 @@ namespace ExpandedAiFramework
             string command = uConsole.GetString();
             if (command == null || command.Length == 0)
             {
-                LogAlways($"Command cannot be empty. Use '{CommandString} {CommandString_Help}' for supported commands.");
+                LogAlways($"Command cannot be empty. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
                 return;
             }
             if (!mCommandMap.TryGetValue(command, out Action<IList<string>> commandAction))
             {
-                LogAlways($"Unknown command: {command}. Use '{CommandString} {CommandString_Help}' for supported commands.");
+                LogAlways($"Unknown command: {command}. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
                 return;
             }
             commandAction(ParseArgs());
@@ -95,7 +95,7 @@ namespace ExpandedAiFramework
             string command = GetNextArg(args);
             if (command == null ||!mCommandMap.TryGetValue(command, out Action<IList<string>> commandAction))
             {
-                LogAlways($"Unknown command: {command}. Use '{CommandString} {CommandString_Help}' for supported commands.");
+                LogAlways($"Unknown command: {command}. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
                 return;
             }
         }
@@ -104,7 +104,7 @@ namespace ExpandedAiFramework
         {
             foreach (var command in mCommandMap)
             {
-                LogAlways($"{command.Key.PadRight(16)} | {command.Value}");
+                LogAlways($"{command.Key.PadRight(16)} | {command.Value}", LogCategoryFlags.ConsoleCommand);
             }
         }
 
@@ -196,7 +196,7 @@ namespace ExpandedAiFramework
             }
             else
             {
-                LogAlways($"Unknown {CommandString_Paint} type: {typeName}. Supported types: {string.Join(", ", mManager.PaintManagers.Keys)}");
+                LogAlways($"Unknown {CommandString_Paint} type: {typeName}. Supported types: {string.Join(", ", mManager.PaintManagers.Keys)}", LogCategoryFlags.ConsoleCommand);
             }
         }
 
@@ -343,7 +343,7 @@ namespace ExpandedAiFramework
         {
             mManager.DataManager.ScheduleSpawnRegionModDataProxyRequest(new PurgeDataRequest<SpawnRegionModDataProxy>((spawnRegionModDataProxy, result) => 
             {
-                LogAlways("Spawn region mod data proxy purged");
+                LogAlways("Spawn region mod data proxy purged", LogCategoryFlags.ConsoleCommand);
             }, false));
         }
 
