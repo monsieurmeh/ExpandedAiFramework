@@ -9,44 +9,34 @@ namespace ExpandedAiFramework
         [Description("Enable advenced logging features. This should only be used for troubleshooting and debugging.")]
         public bool Enable = false;
 
-        [Name("AiManager Logging")]
-        [Description("Enable AiManager logging.")]
+        [Name("AiManager")]
         public bool EnableAiManagerLogging = false;
 
-        [Name("Ai Logging")]
-        [Description("Enable Ai logging.")]
+        [Name("Ai")]
         public bool EnableAiLogging = false;
 
-        [Name("SpawnRegionManager Logging")]
-        [Description("Enable SpawnRegionManager logging.")]
+        [Name("SpawnRegionManager")]
         public bool EnableSpawnRegionManagerLogging = false;
 
-        [Name("SpawnRegion Logging")]
-        [Description("Enable SpawnRegion logging.")]
+        [Name("SpawnRegion")]
         public bool EnableSpawnRegionLogging = false;
 
-        [Name("SerializedData Logging")]
-        [Description("Enable SerializedData logging.")]
+        [Name("SerializedData")]
         public bool EnableSerializedDataLogging = false;
 
-        [Name("PaintManager Logging")]
-        [Description("Enable PaintManager logging.")]
+        [Name("PaintManager")]
         public bool EnablePaintManagerLogging = false;
 
-        [Name("ConsoleCommand Logging")]
-        [Description("Enable ConsoleCommand logging.")]
+        [Name("ConsoleCommand")]
         public bool EnableConsoleCommandLogging = false;
 
-        [Name("DebugMenu Logging")]
-        [Description("Enable DebugMenu logging.")]
+        [Name("DebugMenu")]
         public bool EnableDebugMenuLogging = false;
 
-        [Name("CougarManager Logging")]
-        [Description("Enable CougarManager logging.")]
+        [Name("CougarManager")]
         public bool EnableCougarManagerLogging = false;
 
-        [Name("PackManager Logging")]
-        [Description("Enable PackManager logging.")]
+        [Name("PackManager")]
         public bool EnablePackManagerLogging = false;
 
 
