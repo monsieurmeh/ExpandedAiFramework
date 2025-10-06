@@ -7,5 +7,6 @@ namespace ExpandedAiFramework
     public interface IPackManager : ISubManager
     {
         VanillaPackManager VanillaPackManager { get; }
+        void OverrideStart() {}
     }
 }

@@ -41,14 +41,14 @@ namespace ExpandedAiFramework
         public enum HotSwappableSubManagers : int
         {
             CougarManager = 0,
-            // PackManager, SOON™
+            PackManager,
             COUNT
         }
 
         private Dictionary<HotSwappableSubManagers, Type> mHotSwappableInterfaceMap = new Dictionary<HotSwappableSubManagers, Type>()
         {
             { HotSwappableSubManagers.CougarManager, typeof(ICougarManager) },
-            // { HotSwappableSubManagers.PackManager, typeof(PackManager) }, SOON™
+             { HotSwappableSubManagers.PackManager, typeof(IPackManager) },
         };
 
         private ExpandedAiFrameworkSettings mSettings;
@@ -99,7 +99,7 @@ namespace ExpandedAiFramework
         private void RegisterDefaultHotSwappableSubManagers()
         {
             RegisterDefaultCougarManager();
-            // RegisterDefaultPackManager();
+            RegisterDefaultPackManager();
         }
 
         private void RegisterDefaultCougarManager()
@@ -107,6 +107,14 @@ namespace ExpandedAiFramework
             CougarManager cougarManager = new CougarManager(this);
             mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] = cougarManager;
             mSubManagerDict.Add(typeof(BaseCougar), cougarManager);
+        }
+
+
+        private void RegisterDefaultPackManager()
+        {
+            PackManager packManager = new PackManager(this);
+            mHotSwappableSubManagers[(int)HotSwappableSubManagers.PackManager] = packManager;
+            // PackManager is NOT an ISpawnManager - don't try to add it to the spawnmanager dict
         }
 
 
@@ -136,6 +144,7 @@ namespace ExpandedAiFramework
         public Dictionary<Type, ISpawnTypePickerCandidate> SpawnSettingsDict => mAiManager.SpawnSettingsDict;
         public Dictionary<string, BasePaintManager> PaintManagers => mPaintManagerDict;
         public ICougarManager CougarManager => mHotSwappableSubManagers[(int)HotSwappableSubManagers.CougarManager] as ICougarManager;
+        public IPackManager PackManager => mHotSwappableSubManagers[(int)HotSwappableSubManagers.PackManager] as IPackManager;
         public LogCategoryFlags LogCategoryFlags { get { return mLogCategoryFlags; } set { mLogCategoryFlags = value; } }
 
         public void Shutdown()
@@ -301,7 +310,7 @@ namespace ExpandedAiFramework
             if (IsValidGameplayScene(sceneName, out _))
             {
                 CougarManager.OverrideStart();
-                //PackManager.OverrideStart();
+                PackManager.OverrideStart();
             }
         }
 
