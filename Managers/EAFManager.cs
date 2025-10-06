@@ -437,7 +437,7 @@ namespace ExpandedAiFramework
                 LogError($"Paint manager for type {paintManager.TypeName} already registered!");
                 return;
             }
-            LogTrace($"Registering paint manager for type {paintManager.TypeName}");
+            LogDebug($"Registering paint manager for type {paintManager.TypeName}", LogCategoryFlags.PaintManager);
             paintManager.Initialize();
             mPaintManagerDict.Add(paintManager.TypeName.ToLower(), paintManager);
         }
@@ -522,6 +522,7 @@ namespace ExpandedAiFramework
         {
             LogSettings logSettings = LogSettings.CreateDynamic(Path.Combine(DataFolderPath, "LogSettings"));
             logSettings.AddToModSettings(ModName);
+            logSettings.Reload();
             mLogCategoryFlags = logSettings.GetFlags();
             mLogger = new ComplexLogger<Main>();
         }
@@ -566,7 +567,7 @@ namespace ExpandedAiFramework
             [CallerMemberName] string callerName = "",
             bool toUConsole = false)
         {
-            if (!logCategoryFlags.AnyOf(mLogCategoryFlags))
+            if (!mLogCategoryFlags.AnyOf(logCategoryFlags))
             {
                 return;
             }

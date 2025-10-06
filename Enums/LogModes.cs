@@ -36,7 +36,7 @@ namespace ExpandedAiFramework
         DebugMenu = 1 << (int)LogCategory.DebugMenu,
         CougarManager = 1 << (int)LogCategory.CougarManager,
         PackManager = 1 << (int)LogCategory.PackManager,
-        System = 1 << (int)LogCategory.System,
         Request = 1 << (int)LogCategory.Request,
+        System = 1 << (int)LogCategory.System,
     }
 }

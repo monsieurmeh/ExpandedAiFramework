@@ -290,7 +290,7 @@ namespace ExpandedAiFramework
         {
             try
             {
-                this.LogTraceInstanced($"Loading from path: {dataPath}", LogCategoryFlags.SerializedData);
+                LogTrace($"Loading from path: {dataPath}");
                 string dataString = LoadJsonFromPath(dataPath);
                 if (dataString == null)
                 {
