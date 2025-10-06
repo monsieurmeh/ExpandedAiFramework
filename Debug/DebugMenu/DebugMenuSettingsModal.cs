@@ -421,7 +421,7 @@ namespace ExpandedAiFramework.DebugMenu
                 }
             }
             
-            LogDebug($"Applied settings for {mCurrentTabName}");
+            LogDebug($"Applied settings for {mCurrentTabName}", LogCategoryFlags.DebugMenu);
             Hide();
         }
 

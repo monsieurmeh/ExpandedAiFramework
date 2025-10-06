@@ -26,7 +26,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
 proxy)
         {
             base.Initialize(ai, timeOfDay, spawnRegion, proxy);
-            this.LogTraceInstanced($"Initializing AmbushWolf at {spawnRegion.transform.position}");
+            this.LogTraceInstanced($"Initializing AmbushWolf at {spawnRegion.transform.position}", LogCategoryFlags.Ai);
             mBaseAi.m_DefaultMode = (AiMode)AmbushWolfAiMode.Hide;
             mBaseAi.m_StartMode = (AiMode)AmbushWolfAiMode.Hide;
         }
@@ -47,7 +47,7 @@ proxy)
                 }
                 return false;
             }
-            this.LogTraceInstanced($"FirstFrameCustom: Warping to hiding spot at {mHidingSpot.Position} and setting hide mode");
+            this.LogTraceInstanced($"FirstFrameCustom: Warping to hiding spot at {mHidingSpot.Position} and setting hide mode", LogCategoryFlags.Ai);
 
             mBaseAi.m_MoveAgent.transform.position = mHidingSpot.Position;
             mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 2.0f, true, -1);
@@ -65,7 +65,7 @@ proxy)
             }
             mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetNearestMapDataRequest<HidingSpot>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
             {
-                this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
+                this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
                 AttachHidingSpot(nearestSpot);
             }, false, null, 3));
             
@@ -79,29 +79,29 @@ proxy)
                 || proxy.CustomData == null
                 || proxy.CustomData.Length == 0)
             {
-                this.LogTraceInstanced($"Null proxy, null proxy custom data or no length to proxy custom data");
+                this.LogTraceInstanced($"Null proxy, null proxy custom data or no length to proxy custom data", LogCategoryFlags.Ai);
                 return false;
             }
             Guid spotGuid = new Guid((string)proxy.CustomData[0]);
             if (spotGuid == Guid.Empty)
             {
-                this.LogTraceInstanced($"Proxy spot guid is empty");
+                this.LogTraceInstanced($"Proxy spot guid is empty", LogCategoryFlags.Ai);
                 return false;
             }
             mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetDataByGuidRequest<HidingSpot>(spotGuid, proxy.Scene, (spot, result) =>
             {
                 if (result != RequestResult.Succeeded)
                 {
-                    this.LogTraceInstanced($"Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...");
+                    this.LogTraceInstanced($"Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...", LogCategoryFlags.Ai);
                     mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetNearestMapDataRequest<HidingSpot>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
                     {
-                        this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
+                        this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
                         AttachHidingSpot(nearestSpot);
                     }, false, null, 3));
                 }
                 else
                 {
-                    this.LogTraceInstanced($"Found saved hiding spot with guid <<<{spotGuid}>>>");
+                    this.LogTraceInstanced($"Found saved hiding spot with guid <<<{spotGuid}>>>", LogCategoryFlags.Ai);
                     AttachHidingSpot(spot);
                 }
             }, false));
@@ -118,13 +118,13 @@ proxy)
                 this.LogWarningInstanced("Received NULL hiding spot, aborting!");
                 return;
             }
-            this.LogTraceInstanced($"Attached hiding spot: {hidingSpot}");
+            this.LogTraceInstanced($"Attached hiding spot: {hidingSpot}", LogCategoryFlags.Ai);
             mHidingSpot = hidingSpot;
 
             if (mModDataProxy != null)
             {
                 mModDataProxy.CustomData = [mHidingSpot.Guid.ToString()];
-                this.LogTraceInstanced($"Saved spot {mHidingSpot} to proxy data");
+                this.LogTraceInstanced($"Saved spot {mHidingSpot} to proxy data", LogCategoryFlags.Ai);
             }
             hidingSpot.Claim();
         }
@@ -142,15 +142,15 @@ proxy)
             switch (CurrentMode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessHiding.");
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessHiding.", LogCategoryFlags.Ai);
                     ProcessHiding();
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessReturning.");
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessReturning.", LogCategoryFlags.Ai);
                     ProcessReturning();
                     return false;
                 default:
-                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.", LogCategoryFlags.Ai);
                     return base.ProcessCustom();
             }
         }
@@ -161,15 +161,15 @@ proxy)
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    this.LogVerboseInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Paused.");
+                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Paused.", LogCategoryFlags.Ai);
                     overrideState = AiAnimationState.Paused;
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    this.LogVerboseInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Wander.");
+                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Wander.", LogCategoryFlags.Ai);
                     overrideState = AiAnimationState.Wander;
                     return false;
                 default:
-                    this.LogVerboseInstanced($"GetAiAnimationStateCustom: mode is {mode}, deffering");
+                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, deffering", LogCategoryFlags.Ai);
                     overrideState = AiAnimationState.Invalid;
                     return true;
             }
@@ -181,15 +181,15 @@ proxy)
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    this.LogVerboseInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState false.");
+                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState false.", LogCategoryFlags.Ai);
                     isMoveState = false;
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    this.LogVerboseInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState true.");
+                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState true.", LogCategoryFlags.Ai);
                     isMoveState = true;
                     return false;
                 default:
-                    this.LogVerboseInstanced($"IsMoveStateCustom: mode is {mode}, deferring.");
+                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, deferring.", LogCategoryFlags.Ai);
                     isMoveState = false;
                     return true;
             }
@@ -201,15 +201,15 @@ proxy)
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    this.LogVerboseInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterHiding");
+                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterHiding", LogCategoryFlags.Ai);
                     EnterHiding();
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    this.LogVerboseInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterReturning.");
+                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterReturning.", LogCategoryFlags.Ai);
                     EnterReturning();
                     return false;
                 default:
-                    this.LogVerboseInstanced($"EnterAiModeCustom: mode is {mode}, deferring.");
+                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, deferring.", LogCategoryFlags.Ai);
                     return true;
             }
         }
@@ -255,10 +255,10 @@ proxy)
             float hidingSpotDistance = Vector3.Distance(mBaseAi.transform.position, mHidingSpot.Position);
             if (hidingSpotDistance >= 2.0f) //todo: eliminate sqrt check, move to simple squared distance as a cached value from a "hiding spot distance" setting
             {
-                this.LogVerboseInstanced($"ProcessReturning: To far from hiding spot ({hidingSpotDistance}, continuing.");
+                this.LogTraceInstanced($"ProcessReturning: To far from hiding spot ({hidingSpotDistance}, continuing.", LogCategoryFlags.Ai);
                 return;
             }
-            this.LogVerboseInstanced($"ProcessReturning: Close enough to hiding spot, hiding.");
+            this.LogTraceInstanced($"ProcessReturning: Close enough to hiding spot, hiding.", LogCategoryFlags.Ai);
             SetAiMode((AiMode)AmbushWolfAiMode.Hide);
         }
 
@@ -277,16 +277,16 @@ proxy)
         {
             if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsMoose())
             {
-                this.LogVerboseInstanced($"Ambush wolves run from larger threats!");
+                this.LogTraceInstanced($"Ambush wolves run from larger threats!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.Flee);
                 return false;
             }
             if (!CurrentTarget.IsPlayer())
             {
-                this.LogVerboseInstanced($"ChangeModeWhenTargetDetectedCustom: target is not player, IGNORING. Ambush wolves want YOU!");
+                this.LogTraceInstanced($"ChangeModeWhenTargetDetectedCustom: target is not player, IGNORING. Ambush wolves want YOU!", LogCategoryFlags.Ai);
                 return false;
             }
-            this.LogVerboseInstanced($"ChangeModeWhenTargetDetectedCustom: Attacking player target!");
+            this.LogTraceInstanced($"ChangeModeWhenTargetDetectedCustom: Attacking player target!", LogCategoryFlags.Ai);
             SetAiMode(AiMode.Attack);
             return false;
         }

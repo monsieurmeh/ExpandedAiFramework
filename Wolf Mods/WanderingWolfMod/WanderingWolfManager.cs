@@ -23,7 +23,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public Type SpawnType { get { return typeof(WanderingWolf); } }
         public void PostProcessNewSpawnModDataProxy(SpawnModDataProxy proxy)
         {
-            LogVerbose($"proxy with guid <<<{proxy.Guid}>>> has custom data: {proxy.CustomData != null} with length: {proxy.CustomData?.Length ?? 0}");
+            LogTrace($"proxy with guid <<<{proxy.Guid}>>> has custom data: {proxy.CustomData != null} with length: {proxy.CustomData?.Length ?? 0}", LogCategoryFlags.AiManager);
             proxy.AsyncProcessing = true;
             if (proxy.CustomData == null || proxy.CustomData.Length == 0)
             {
@@ -57,7 +57,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             proxy.AsyncProcessing = false;
             if (path != null)
             {
-                LogVerbose($"Attaching wanderpath with guid <<<{path.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>");
+                LogTrace($"Attaching wanderpath with guid <<<{path.Guid}>>> to proxy with guid <<<{proxy.Guid}>>>", LogCategoryFlags.AiManager);
                 proxy.CustomData = [path.Guid.ToString()];
                 path.Claim();
             }

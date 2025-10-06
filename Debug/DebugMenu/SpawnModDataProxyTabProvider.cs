@@ -239,7 +239,7 @@ namespace ExpandedAiFramework.DebugMenu
                 // Log requested changes for debugging
                 foreach (var field in fieldValues)
                 {
-                    LogDebug($"  {field.Key}: {field.Value} ({field.Value?.GetType().Name})");
+                    LogDebug($"  {field.Key}: {field.Value} ({field.Value?.GetType().Name})", LogCategoryFlags.DebugMenu);
                 }
                 
                 // Use the thread-safe request system for CRUD operations
@@ -247,7 +247,7 @@ namespace ExpandedAiFramework.DebugMenu
                 {
                     if (result == RequestResult.Succeeded)
                     {
-                        LogDebug($"Successfully updated SpawnModDataProxy: {updatedEntity.DisplayName}");
+                        LogDebug($"Successfully updated SpawnModDataProxy: {updatedEntity.DisplayName}", LogCategoryFlags.DebugMenu);
                         // Refresh the tab to show updated data
                         Refresh();
                     }

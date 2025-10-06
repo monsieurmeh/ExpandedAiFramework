@@ -73,7 +73,7 @@ namespace ExpandedAiFramework
         {
             private static bool Prefix(BaseAi __instance)
             {
-                LogVerbose($"Start on {__instance.gameObject.name} with ai subtype {__instance.m_AiSubType} at {__instance.transform.position}!");
+                LogTrace($"Start on {__instance.gameObject.name} with ai subtype {__instance.m_AiSubType} at {__instance.transform.position}!");
                 return !Manager.AiManager.TryStart(__instance);
                 //return __instance.m_AiSubType != AiSubType.Wolf || __instance.Timberwolf;
             }
@@ -157,13 +157,13 @@ namespace ExpandedAiFramework
         {
             private static void Postfix(GameObject carcassSitePrefab, Vector3 position, GameObject originCorpse)
             {
-                LogVerbose($"[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: CarcassSite.Manager.TryInstanciateCarcassSite on {carcassSitePrefab.name} at {position}");
+                LogTrace($"[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: CarcassSite.Manager.TryInstanciateCarcassSite on {carcassSitePrefab.name} at {position}", LogCategoryFlags.AiManager);
                 BaseAi baseAi = null;
                 bool carcassAiFound = carcassSitePrefab != null && carcassSitePrefab.TryGetComponent(out baseAi);
                 carcassAiFound = carcassAiFound || (originCorpse != null && originCorpse.TryGetComponent(out baseAi));
                 if (!carcassAiFound)
                 {
-                    LogVerbose($"[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: No base ai script found on carcass prefab or origin corpse, aborting...");
+                    LogTrace($"[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: No base ai script found on carcass prefab or origin corpse, aborting...", LogCategoryFlags.AiManager);
                     return;
                 }
                 if (baseAi == null)

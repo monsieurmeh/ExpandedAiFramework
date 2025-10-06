@@ -25,18 +25,18 @@ namespace ExpandedAiFramework
             if (!string.IsNullOrEmpty(dataPath))
             {
                 mCurrentDataPath = dataPath;
-                this.LogAlwaysInstanced($"Using custom data path: {mCurrentDataPath}");
+                this.LogAlwaysInstanced($"Using custom data path: {mCurrentDataPath}", LogCategoryFlags.PaintManager);
             }
             mCurrentDataNameBase = baseName; // Store the base name for continuation
             GetUniqueMapDataName(baseName, (uniqueName) =>
             {
                 if (InitializePaintHidingSpot(uniqueName))
                 {
-                    this.LogAlwaysInstanced("Entered hiding spot paint mode. Left click to select position, then left click again to set rotation. Right click to exit mode.");
+                    this.LogAlwaysInstanced("Entered hiding spot paint mode. Left click to select position, then left click again to set rotation. Right click to exit mode.", LogCategoryFlags.PaintManager);
                 }
                 else
                 {
-                    this.LogWarningInstanced("Failed to initialize paint mode");
+                    this.LogWarningInstanced("Failed to initialize paint mode", LogCategoryFlags.PaintManager);
                 }
             });
         }
@@ -136,12 +136,12 @@ namespace ExpandedAiFramework
             {
                 if (result != RequestResult.Succeeded)
                 {
-                    this.LogWarningInstanced($"No such hiding spot {name} in scene {mManager.CurrentScene}!");
+                    this.LogWarningInstanced($"No such hiding spot {name} in scene {mManager.CurrentScene}!", LogCategoryFlags.PaintManager);
                     return;
                 }
                 DeleteMapData(spot.Guid, (deletedSpot, deleteResult) =>
                 {
-                    this.LogAlwaysInstanced($"Deleted hiding spot {name} in scene {mManager.CurrentScene}.");
+                    this.LogAlwaysInstanced($"Deleted hiding spot {name} in scene {mManager.CurrentScene}.", LogCategoryFlags.PaintManager);
                     DataManager.SaveMapData();
                 });
             });
@@ -159,7 +159,7 @@ namespace ExpandedAiFramework
                     return;
                 }
                 Teleport(data.Position, data.Rotation);
-                this.LogAlwaysInstanced($"Teleported to {data}! Watch out for ambush wolves...");
+                this.LogAlwaysInstanced($"Teleported to {data}! Watch out for ambush wolves...", LogCategoryFlags.PaintManager);
             });
         }
 
@@ -234,7 +234,7 @@ namespace ExpandedAiFramework
                 mPaintMarker = CreateMarker(Vector3.zero, Color.green, "PaintMarker", 50f, 2f);
                 if (mPaintMarker == null)
                 {
-                    this.LogWarningInstanced("Failed to create paint marker");
+                    this.LogWarningInstanced("Failed to create paint marker", LogCategoryFlags.PaintManager);
                     return false;
                 }
 
@@ -244,7 +244,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced($"Paint mode initialization failed: {e}");
+                this.LogErrorInstanced($"Paint mode initialization failed: {e}", LogCategoryFlags.PaintManager);
                 ExitPaint();
                 return false;
             }
@@ -326,7 +326,7 @@ namespace ExpandedAiFramework
                 RegisterMapData(newSpot, (spot, result) =>
                 {
                     mDebugShownObjects.Add(CreateMarker(newSpot.Position, Color.yellow, $"Hiding spot: {mCurrentDataName}", 100.0f));
-                    this.LogAlwaysInstanced($"Created hiding spot {mCurrentDataName} at {newSpot.Position} with rotation {newSpot.Rotation}");
+                    this.LogAlwaysInstanced($"Created hiding spot {mCurrentDataName} at {newSpot.Position} with rotation {newSpot.Rotation}", LogCategoryFlags.PaintManager);
                     
                     mSelectingRotation = false;
                     CleanupDirectionMarkers();
@@ -336,7 +336,7 @@ namespace ExpandedAiFramework
                     {
                         if (InitializePaintHidingSpot(uniqueName))
                         {
-                            this.LogAlwaysInstanced("Ready for next hiding spot. Left click to place.");
+                            this.LogAlwaysInstanced("Ready for next hiding spot. Left click to place.", LogCategoryFlags.PaintManager);
                         }
                     });
                 });
@@ -354,14 +354,14 @@ namespace ExpandedAiFramework
                 mDirectionArrow.transform.SetParent(mPaintMarker.transform);
             }
             
-            this.LogAlwaysInstanced($"Selected hiding spot position at {mPendingPosition}. Left click to set rotation, or Shift+Left click to reselect position.");
+            this.LogAlwaysInstanced($"Selected hiding spot position at {mPendingPosition}. Left click to set rotation, or Shift+Left click to reselect position.", LogCategoryFlags.PaintManager);
         }
 
         private void RevertToPositionSelection()
         {
             mSelectingRotation = false;
             CleanupDirectionMarkers();
-            this.LogAlwaysInstanced("Reverted to position selection. Left click to select new position.");
+            this.LogAlwaysInstanced("Reverted to position selection. Left click to select new position.", LogCategoryFlags.PaintManager);
         }
     }
 }

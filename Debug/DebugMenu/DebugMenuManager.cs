@@ -211,7 +211,7 @@ namespace ExpandedAiFramework.DebugMenu
         {
             if (mTabProviders.ContainsKey(tabName))
             {
-                LogWarning($"Tab provider for '{tabName}' already registered, replacing...");
+                LogWarning($"Tab provider for '{tabName}' already registered, replacing...", LogCategoryFlags.DebugMenu);
                 mTabProviders[tabName].Cleanup();
             }
 
@@ -287,7 +287,7 @@ namespace ExpandedAiFramework.DebugMenu
 
         public void ShowTabSettings(string tabName, Dictionary<string, string> settings, Dictionary<string, System.Action<string>> callbacks)
         {
-            LogDebug($"ShowTabSettings called for tab: {tabName}");
+            LogDebug($"ShowTabSettings called for tab: {tabName}", LogCategoryFlags.DebugMenu);
             
             if (mSettingsModal == null)
             {

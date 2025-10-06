@@ -137,7 +137,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         protected override void OnPick()
         {
-            LogTrace($"Picked!");
+            LogTrace($"Picked!", LogCategoryFlags.Ai);
             mManager.SpawnOneFlag = true;
         }
 

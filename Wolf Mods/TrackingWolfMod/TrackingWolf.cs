@@ -19,11 +19,11 @@ namespace ExpandedAiFramework.TrackingWolfMod
             switch (CurrentMode)
             {
                 case AiMode.InvestigateSmell:
-                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessInvestigateSmellCustom.");
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessInvestigateSmellCustom.", LogCategoryFlags.Ai);
                     ProcessInvestigateSmellCustom();
                     return false;
                 default:
-                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.", LogCategoryFlags.Ai);
                     return base.ProcessCustom();
             }
         }
@@ -50,7 +50,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
         {
             if (!mBaseAi.CanPlayerBeReached(GameManager.m_PlayerManager.m_LastPlayerPosition))
             {
-                this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: Cant reach player, swapping back to default mode...");
+                this.LogTraceInstanced($"ProcessInvestigateSmellCustom: Cant reach player, swapping back to default mode...", LogCategoryFlags.Ai);
                 SetDefaultAiMode();
                 return;
             }
@@ -60,7 +60,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
             }
             if (mBaseAi.m_SmellTarget == null)
             {
-                this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: smell target is null, setting default ai mode.");
+                this.LogTraceInstanced($"ProcessInvestigateSmellCustom: smell target is null, setting default ai mode.", LogCategoryFlags.Ai);
                 return;
             }
             float dist;
@@ -68,7 +68,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
             {
                 if (!AiUtils.GetClosestNavmeshPos(out Vector3 navMeshPos, mBaseAi.m_SmellTarget.transform.position, mBaseAi.m_SmellTarget.transform.position))
                 {
-                    this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: Unable to get closest navmesh point, setting default ai mode.");
+                    this.LogTraceInstanced($"ProcessInvestigateSmellCustom: Unable to get closest navmesh point, setting default ai mode.", LogCategoryFlags.Ai);
                     SetDefaultAiMode();
                     return;
                 }
@@ -76,10 +76,10 @@ namespace ExpandedAiFramework.TrackingWolfMod
                 dist = Vector3.Distance(mBaseAi.m_CachedTransform.position, mBaseAi.m_PathingToSmellTargetPos);
                 if (dist < mBaseAi.m_MinSmellDistance) //todo: cache squared minSmellDist and eliminate sqrt check
                 {
-                    this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: Distance from pos ({mBaseAi.m_CachedTransform.position}) to target ({mBaseAi.m_CachedTransform.position}) [{dist}] is less than minSmellDistance ({mBaseAi.m_MinSmellDistance}), trying attack or returning");
+                    this.LogTraceInstanced($"ProcessInvestigateSmellCustom: Distance from pos ({mBaseAi.m_CachedTransform.position}) to target ({mBaseAi.m_CachedTransform.position}) [{dist}] is less than minSmellDistance ({mBaseAi.m_MinSmellDistance}), trying attack or returning", LogCategoryFlags.Ai);
                     if (mBaseAi.CanSeeTarget())
                     {
-                        this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: Can see target, attacking!");
+                        this.LogTraceInstanced($"ProcessInvestigateSmellCustom: Can see target, attacking!", LogCategoryFlags.Ai);
                         SetAiMode(AiMode.Attack);
                     }
                     return;
@@ -90,14 +90,14 @@ namespace ExpandedAiFramework.TrackingWolfMod
             dist = Vector3.Distance(mBaseAi.m_CachedTransform.position, mBaseAi.m_PathingToSmellTargetPos);
             if (dist < mBaseAi.m_MinSmellDistance)
             {
-                this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: Distance from pos ({mBaseAi.m_CachedTransform.position}) to target ({mBaseAi.m_CachedTransform.position}) [{dist}] is less than minSmellDistance ({mBaseAi.m_MinSmellDistance}), stopping move agent and resetting calcs");
+                this.LogTraceInstanced($"ProcessInvestigateSmellCustom: Distance from pos ({mBaseAi.m_CachedTransform.position}) to target ({mBaseAi.m_CachedTransform.position}) [{dist}] is less than minSmellDistance ({mBaseAi.m_MinSmellDistance}), stopping move agent and resetting calcs", LogCategoryFlags.Ai);
                 mBaseAi.m_HasInvestigateSmellPath = false;
                 mBaseAi.MoveAgentStop();
             }
             ScanForNewTarget();
             if (mBaseAi.CanSeeTarget() && mBaseAi.m_CurrentTarget.IsPlayer())
             {
-                this.LogVerboseInstanced($"ProcessInvestigateSmellCustom: Can see PLAYER target, attacking!");
+                this.LogTraceInstanced($"ProcessInvestigateSmellCustom: Can see PLAYER target, attacking!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.Attack);
             }
         }
@@ -123,20 +123,20 @@ namespace ExpandedAiFramework.TrackingWolfMod
             {
                 if (mBaseAi.CanSeeTarget() && mBaseAi.m_CurrentTarget.IsPlayer())
                 {
-                    this.LogVerboseInstanced("PostProcessCustom: Player spotted, entering stalking state!");
+                    this.LogTraceInstanced("PostProcessCustom: Player spotted, entering stalking state!");
                     SetAiMode(AiMode.Stalking);
                     return true;
                 }
                 if (mBaseAi.CanPathfindToPosition(GameManager.m_PlayerManager.m_LastPlayerPosition))
                 {
-                    this.LogVerboseInstanced($"PostProcessCustom: Smell target reachable, moving to investigate.");
+                    this.LogTraceInstanced($"PostProcessCustom: Smell target reachable, moving to investigate.", LogCategoryFlags.Ai);
                     mBaseAi.m_SmellTarget = GameManager.m_PlayerManager.m_AiTarget;
                     mBaseAi.m_AiTarget = mBaseAi.m_SmellTarget;
                     SetAiMode(AiMode.InvestigateSmell);
                 }
                 else if (CurrentMode != AiMode.InvestigateSmell)
                 {
-                    this.LogVerboseInstanced($"PostProcessCustom: Cant reach smell target, moving to wander.");
+                    this.LogTraceInstanced($"PostProcessCustom: Cant reach smell target, moving to wander.", LogCategoryFlags.Ai);
                     SetAiMode(AiMode.Wander);
                 }
             }
@@ -149,7 +149,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
         {
             if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsMoose())
             {
-                this.LogVerboseInstanced($"Tracking wolves run from larger threats!");
+                this.LogTraceInstanced($"Tracking wolves run from larger threats!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.Flee);
                 return false;
             }

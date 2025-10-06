@@ -22,7 +22,7 @@ namespace ExpandedAiFramework
         {
             if (mCustomSpawnRegion == null)
             {
-                this.LogTraceInstanced($"null custom spawn region");
+                this.LogTraceInstanced($"null custom spawn region", LogCategoryFlags.Request);
                 return false;
             }
             if (mCustomSpawnRegion.VanillaSpawnRegion == null)
@@ -53,25 +53,25 @@ namespace ExpandedAiFramework
                 {
                     if (!mDataContainer.TryGetData(mCustomSpawnRegion.ModDataProxy.Scene, guid, out SpawnModDataProxy proxy))
                     {
-                        this.LogTraceInstanced($"Cannot get data: {guid}");
+                        this.LogTraceInstanced($"Cannot get data: {guid}", LogCategoryFlags.Request);
                         continue;
                     }
                     if (proxy.ForceSpawn)
                     {
-                        this.LogTraceInstanced($"Queueing force spawn");
+                        this.LogTraceInstanced($"Queueing force spawn", LogCategoryFlags.Request);
                         spawnableProxies.Insert(0, proxy); 
                         continue;
                     }
                     if (mCustomSpawnRegion.VanillaSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance >= Vector3.Distance(mCustomSpawnRegion.Manager.PlayerStartPos, proxy.CurrentPosition))
                     {
-                        this.LogTraceInstanced($"Queueing pre spawn");
+                        this.LogTraceInstanced($"Queueing pre spawn", LogCategoryFlags.Request);
                         spawnableProxies.Add(proxy);
                         continue;
                     }
                 }
                 foreach (SpawnModDataProxy proxy in spawnableProxies)
                 {
-                    this.LogTraceInstanced($"Queueing for immediate spawn: {proxy.Guid}");
+                    this.LogTraceInstanced($"Queueing for immediate spawn: {proxy.Guid}", LogCategoryFlags.Request);
                     mCustomSpawnRegion.QueueSpawn(proxy);
                 }
                 spawnableProxies.Clear();

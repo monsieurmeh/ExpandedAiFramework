@@ -23,7 +23,7 @@ namespace ExpandedAiFramework
 
         public override bool CanSpawn(BaseAi ai)
         {
-            //LogDebug($"[BaseRabbitSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | Rabbit is null: {ai.Rabbit == null} | Ptarmigan is null: {ai.Ptarmigan == null}");
+            LogDebug($"[BaseRabbitSettings] Enabled: {Enable} | AiSubtype: {ai.m_AiSubType} | Rabbit is null: {ai.Rabbit == null} | Ptarmigan is null: {ai.Ptarmigan == null}", LogCategoryFlags.Ai);
             return Enable && ai.m_AiSubType == AiSubType.Rabbit && ai.Rabbit != null && ai.Ptarmigan == null;
         }
 

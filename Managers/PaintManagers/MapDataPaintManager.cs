@@ -20,7 +20,7 @@ namespace ExpandedAiFramework
         public void SetDataPath(string path)
         {
             mCurrentDataPath = path;
-            this.LogAlwaysInstanced($"Data path set to: {path}");
+            this.LogAlwaysInstanced($"Data path set to: {path}", LogCategoryFlags.PaintManager);
         }
         protected List<GameObject> mDebugShownObjects = new List<GameObject>();
         protected DataManager DataManager => mManager.DataManager;
@@ -53,7 +53,7 @@ namespace ExpandedAiFramework
                 case CommandString_List: ProcessList(args); break;
                 case CommandString_Paint: ProcessPaint(args); break;
                 case CommandString_Set: ProcessSet(args); break;
-                default: this.LogWarningInstanced($"Unknown command: {command}"); break;
+                default: this.LogWarningInstanced($"Unknown command: {command}", LogCategoryFlags.PaintManager); break;
             }
         }
 
@@ -66,7 +66,7 @@ namespace ExpandedAiFramework
             {
                 case "datapath": 
                     mCurrentDataPath = value;
-                    this.LogAlwaysInstanced($"Set data path to: {value}");
+                    this.LogAlwaysInstanced($"Set data path to: {value}", LogCategoryFlags.PaintManager);
                     break;
                 default:
                     ProcessSetCustom(property, value, args);
@@ -76,7 +76,7 @@ namespace ExpandedAiFramework
 
         protected virtual void ProcessSetCustom(string property, string value, IList<string> args)
         {
-            this.LogWarningInstanced($"Unknown property: {property}");
+            this.LogWarningInstanced($"Unknown property: {property}", LogCategoryFlags.PaintManager);
         }
 
         protected abstract void ProcessDelete(IList<string> args);
@@ -111,7 +111,7 @@ namespace ExpandedAiFramework
         {
             DataManager.ScheduleMapDataRequest<T>(new ForEachMapDataRequest<T>(mManager.CurrentScene, (data) =>
             {
-                this.LogAlwaysInstanced($"Found {data}. Occupied: {data.Claimed}");
+                this.LogAlwaysInstanced($"Found {data}. Occupied: {data.Claimed}", LogCategoryFlags.PaintManager);
             }, false));
         }
 

@@ -18,39 +18,101 @@ namespace ExpandedAiFramework
 
     public static class ILogInfoProviderExtensions
     {
-        public static void LogTraceInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
+        public static void LogTraceInstanced(
+            this ILogInfoProvider provider, 
+            string message, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Trace, provider.TypeInfo, provider.InstanceInfo, memberName);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Trace, 
+                provider.TypeInfo, 
+                logCategoryFlags, 
+                provider.InstanceInfo, 
+                memberName);
         }
 
 
-        public static void LogDebugInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
+        public static void LogDebugInstanced(
+            this ILogInfoProvider provider, 
+            string message, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Debug, provider.TypeInfo, provider.InstanceInfo, memberName);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Debug, 
+                provider.TypeInfo, 
+                logCategoryFlags, 
+                provider.InstanceInfo, 
+                memberName);
         }
 
 
-        public static void LogVerboseInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
+        public static void LogVerboseInstanced(
+            this ILogInfoProvider provider, 
+            string message, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Verbose, provider.TypeInfo, provider.InstanceInfo, memberName);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Verbose, 
+                provider.TypeInfo, 
+                logCategoryFlags, 
+                provider.InstanceInfo,
+                memberName);
         }
 
 
-        public static void LogWarningInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
+        public static void LogWarningInstanced(
+            this ILogInfoProvider provider, 
+            string message,
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Warning, provider.TypeInfo, provider.InstanceInfo, memberName);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Warning, 
+                provider.TypeInfo, 
+                logCategoryFlags,
+                provider.InstanceInfo,
+                memberName);
         }
 
 
-        public static void LogErrorInstanced(this ILogInfoProvider provider, string message, FlaggedLoggingLevel additionalFlags = 0U, [CallerMemberName] string memberName = "")
+        public static void LogErrorInstanced(
+            this ILogInfoProvider provider,
+            string message,
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Error | additionalFlags, provider.TypeInfo, provider.InstanceInfo, memberName, false);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Error, 
+                provider.TypeInfo, 
+                logCategoryFlags,
+                provider.InstanceInfo, 
+                memberName, 
+                false);
         }
 
 
-        public static void LogAlwaysInstanced(this ILogInfoProvider provider, string message, [CallerMemberName] string memberName = "")
+        public static void LogAlwaysInstanced(
+            this ILogInfoProvider provider, 
+            string message, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Always, provider.TypeInfo, provider.InstanceInfo, memberName, true);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Always, 
+                provider.TypeInfo, 
+                logCategoryFlags,
+                provider.InstanceInfo, 
+                memberName, 
+                true);
         }
     }
 }

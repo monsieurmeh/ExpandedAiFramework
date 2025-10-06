@@ -47,7 +47,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
                 return false;
             }
 
-            this.LogTraceInstanced($"FirstFrameCustom: Warping to wanderpath start at {mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex]} and setting wander mode");
+            this.LogTraceInstanced($"FirstFrameCustom: Warping to wanderpath start at {mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex]} and setting wander mode", LogCategoryFlags.Ai);
             mBaseAi.m_MoveAgent.transform.position = mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex];
             mBaseAi.m_MoveAgent.Warp(mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex], 2.0f, true, -1);
             SetDefaultAiMode();
@@ -63,7 +63,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             }
             mManager.DataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
             {
-                this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>");
+                this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
                 AttachWanderPath(nearestSpot);
             }, false, null, 3));
 
@@ -77,29 +77,29 @@ namespace ExpandedAiFramework.WanderingWolfMod
                 || proxy.CustomData == null
                 || proxy.CustomData.Length == 0)
             {
-                this.LogTraceInstanced($"Null proxy, null proxy custom data or no length to proxy custom data");
+                this.LogTraceInstanced($"Null proxy, null proxy custom data or no length to proxy custom data", LogCategoryFlags.Ai);
                 return false;
             }
             Guid spotGuid = new Guid((string)proxy.CustomData[0]);
             if (spotGuid == Guid.Empty)
             {
-                this.LogTraceInstanced($"Proxy spot guid is empty");
+                this.LogTraceInstanced($"Proxy spot guid is empty", LogCategoryFlags.Ai);
                 return false;
             }
             mManager.DataManager.ScheduleMapDataRequest<WanderPath>(new GetDataByGuidRequest<WanderPath>(spotGuid, proxy.Scene, (spot, result) =>
             {
                 if (result != RequestResult.Succeeded)
                 {
-                    this.LogTraceInstanced($"Can't get WanderPath with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...");
+                    this.LogTraceInstanced($"Can't get WanderPath with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...", LogCategoryFlags.Ai);
                     mManager.DataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
                     {
-                        this.LogTraceInstanced($"Found NEW nearest WanderPath with guid <<<{nearestSpot}>>>");
+                        this.LogTraceInstanced($"Found NEW nearest WanderPath with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
                         AttachWanderPath(nearestSpot);
                     }, false, (wp => wp.WanderPathType == WanderPathTypes.IndividualPath), 3));
                 }
                 else
                 {
-                    this.LogTraceInstanced($"Found saved WanderPath with guid <<<{spotGuid}>>>");
+                    this.LogTraceInstanced($"Found saved WanderPath with guid <<<{spotGuid}>>>", LogCategoryFlags.Ai);
                     AttachWanderPath(spot);
                 }
             }, false));
@@ -131,10 +131,10 @@ namespace ExpandedAiFramework.WanderingWolfMod
             switch (CurrentMode)
             {
                 case AiMode.FollowWaypoints:
-                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessFollowWaypointsCustom.");
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessFollowWaypointsCustom.", LogCategoryFlags.Ai);
                     return ProcessFollowWaypointsCustom();
                 default:
-                    this.LogVerboseInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.");
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.", LogCategoryFlags.Ai);
                     return base.ProcessCustom();
             }
         }

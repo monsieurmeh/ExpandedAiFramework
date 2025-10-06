@@ -111,25 +111,25 @@ namespace ExpandedAiFramework
             }
             if (playerManager.m_ItemInHandsInternal.IsNullOrDestroyed())
             {
-                this.LogTraceInstanced($"Item in hands null or destroyed, not dropping...");
+                this.LogTraceInstanced($"Item in hands null or destroyed, not dropping...", LogCategoryFlags.Ai);
                 return;
             }
             GearItem itemInHands = playerManager.m_ItemInHandsInternal;
             if (!itemInHands.IsWeapon())
             {
-                this.LogTraceInstanced($"Item in hands is not weapon, not dropping...");
+                this.LogTraceInstanced($"Item in hands is not weapon, not dropping...", LogCategoryFlags.Ai);
                 return;
             }
             if (!itemInHands.m_GunItem.IsNullOrDestroyed() && itemInHands.m_GunItem.m_GunType == GunType.Camera)
             {
-                this.LogTraceInstanced($"doing some weird force immediate drop for cameras");
+                this.LogTraceInstanced($"doing some weird force immediate drop for cameras", LogCategoryFlags.Ai);
                 playerManager.UnequipImmediate(false);
                 return;
             }
             GameManager.m_vpFPSCamera.MaybeResetCurrentWeapon();
             if (!itemInHands.m_BowItem.IsNullOrDestroyed())
             {
-                this.LogTraceInstanced($"Force unequiping bow item");
+                this.LogTraceInstanced($"Force unequiping bow item", LogCategoryFlags.Ai);
                 itemInHands.m_BowItem.OnDequip();
             }
             itemInHands.Drop(1, true, true, true);

@@ -209,7 +209,7 @@ namespace ExpandedAiFramework
         {
             if (!CommandDictionary_SupportedTypes.TryGetValue(command, out string[] types))
             {
-                LogAlways($"Command {command} does not support any types");
+                LogAlways($"Command {command} does not support any types", LogCategoryFlags.ConsoleCommand);
                 return "";
             }
             string typeString = "";
@@ -268,39 +268,101 @@ namespace ExpandedAiFramework
         }
 
 
-        public static void LogTrace(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        public static void LogTrace(
+            string message,
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            string callerInstanceInfo = "",
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Trace, GetLastCallerType(FlaggedLoggingLevel.Trace), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Trace, 
+                GetLastCallerType(FlaggedLoggingLevel.Trace), 
+                logCategoryFlags, 
+                callerInstanceInfo, 
+                memberName);
         }
 
 
-        public static void LogDebug(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        public static void LogDebug(
+            string message, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
+            string callerInstanceInfo = "", 
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Debug, GetLastCallerType(FlaggedLoggingLevel.Debug), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(
+                message, FlaggedLoggingLevel.Debug, 
+                GetLastCallerType(FlaggedLoggingLevel.Debug), 
+                logCategoryFlags, 
+                callerInstanceInfo, 
+                memberName);
         }
 
 
-        public static void LogVerbose(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        public static void LogVerbose(
+            string message, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
+            string callerInstanceInfo = "", 
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Verbose, GetLastCallerType(FlaggedLoggingLevel.Verbose), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Verbose, 
+                GetLastCallerType(FlaggedLoggingLevel.Verbose), 
+                logCategoryFlags, 
+                callerInstanceInfo, 
+                memberName);
         }
 
 
-        public static void LogWarning(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        public static void LogWarning(
+            string message, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
+            string callerInstanceInfo = "", 
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Warning, GetLastCallerType(FlaggedLoggingLevel.Warning), callerInstanceInfo, memberName);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Warning, 
+                GetLastCallerType(FlaggedLoggingLevel.Warning), 
+                logCategoryFlags, 
+                callerInstanceInfo, 
+                memberName);
         }
 
 
-        public static void LogError(string message, FlaggedLoggingLevel additionalFlags = 0U, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        public static void LogError(
+            string message, 
+            FlaggedLoggingLevel additionalFlags = 0U, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
+            string callerInstanceInfo = "", 
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Error | additionalFlags, GetLastCallerType(FlaggedLoggingLevel.Error), callerInstanceInfo, memberName, true);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Error | additionalFlags, 
+                GetLastCallerType(FlaggedLoggingLevel.Error), 
+                logCategoryFlags,
+                callerInstanceInfo, 
+                memberName, 
+                true);
         }
 
 
-        public static void LogAlways(string message, string callerInstanceInfo = "", [CallerMemberName] string memberName = "")
+        public static void LogAlways(
+            string message, 
+            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
+            string callerInstanceInfo = "", 
+            [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(message, FlaggedLoggingLevel.Always, GetLastCallerType(FlaggedLoggingLevel.Always), callerInstanceInfo, memberName, true);
+            EAFManager.LogStatic(
+                message, 
+                FlaggedLoggingLevel.Always, 
+                GetLastCallerType(FlaggedLoggingLevel.Always), 
+                logCategoryFlags, 
+                callerInstanceInfo, 
+                memberName, 
+                true);
         }
 
 
@@ -396,7 +458,7 @@ namespace ExpandedAiFramework
             }
             if (shouldWarn)
             {
-                LogWarning($"{type} is not supported by this command! Supported types: {supportedTypeString}");
+                LogWarning($"{type} is not supported by this command! Supported types: {supportedTypeString}", LogCategoryFlags.ConsoleCommand);
             }
             return false;
         }
@@ -408,7 +470,7 @@ namespace ExpandedAiFramework
             {
                 if (shouldWarn)
                 {
-                    LogWarning($"Provide a type to use this command! Supported types: {supportedTypeString}");
+                    LogWarning($"Provide a type to use this command! Supported types: {supportedTypeString}", LogCategoryFlags.ConsoleCommand);
                 }
                 return false;
             }
@@ -422,7 +484,7 @@ namespace ExpandedAiFramework
             {
                 if (shouldWarn)
                 {
-                    LogWarning($"Provide a name!");
+                    LogWarning($"Provide a name!", LogCategoryFlags.ConsoleCommand);
                 }
                 return false;
             }

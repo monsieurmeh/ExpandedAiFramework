@@ -19,7 +19,7 @@ namespace ExpandedAiFramework
         {
             if (mRecordingPath)
             {
-                this.LogWarningInstanced($"Already recording path {mCurrentDataName}! Use finish command first.");
+                this.LogWarningInstanced($"Already recording path {mCurrentDataName}! Use finish command first.", LogCategoryFlags.PaintManager);
                 return;
             }
 
@@ -33,17 +33,17 @@ namespace ExpandedAiFramework
             if (!string.IsNullOrEmpty(dataPath))
             {
                 mCurrentDataPath = dataPath;
-                this.LogAlwaysInstanced($"Using custom data path: {mCurrentDataPath}");
+                this.LogAlwaysInstanced($"Using custom data path: {mCurrentDataPath}", LogCategoryFlags.PaintManager);
             }
             GetUniqueMapDataName(baseName, (uniqueName) =>
             {
                 if (InitializePaintWanderPath(uniqueName))
                 {
-                    this.LogAlwaysInstanced($"Entered wander path paint mode. Left click to place points, right click to finish a path, right click twice to exit mode.");
+                    this.LogAlwaysInstanced($"Entered wander path paint mode. Left click to place points, right click to finish a path, right click twice to exit mode.", LogCategoryFlags.PaintManager);
                 }
                 else
                 {
-                    this.LogWarningInstanced("Failed to initialize paint mode");
+                    this.LogWarningInstanced("Failed to initialize paint mode", LogCategoryFlags.PaintManager);
                 }
             });
         }
@@ -105,12 +105,12 @@ namespace ExpandedAiFramework
             {
                 if (result != RequestResult.Succeeded)
                 {
-                    this.LogWarningInstanced($"No such path {name} in scene {mManager.CurrentScene}!");
+                    this.LogWarningInstanced($"No such path {name} in scene {mManager.CurrentScene}!", LogCategoryFlags.PaintManager);
                     return;
                 }
                 DeleteMapData(path.Guid, (deletedPath, deleteResult) =>
                 {
-                    this.LogAlwaysInstanced($"Deleted wander path {name} in scene {mManager.CurrentScene}.");
+                    this.LogAlwaysInstanced($"Deleted wander path {name} in scene {mManager.CurrentScene}.", LogCategoryFlags.PaintManager);
                     DataManager.SaveMapData();
                 });
             });
@@ -132,7 +132,7 @@ namespace ExpandedAiFramework
                 }
                 if (pathPointIndex >= data.PathPoints.Length)
                 {
-                    this.LogWarningInstanced($"{data} has {data.PathPoints.Length} path points, please select one in that range!");
+                    this.LogWarningInstanced($"{data} has {data.PathPoints.Length} path points, please select one in that range!", LogCategoryFlags.PaintManager);
                     return;
                 }
                 Quaternion lookDir = Quaternion.identity;
@@ -145,7 +145,7 @@ namespace ExpandedAiFramework
                     lookDir = Quaternion.LookRotation(data.PathPoints[pathPointIndex + 1] - data.PathPoints[pathPointIndex]);
                 }
                 Teleport(data.PathPoints[pathPointIndex], lookDir);
-                this.LogAlwaysInstanced($"Teleported to WanderPath {data.Name} point #{pathPointIndex} at {data.PathPoints[pathPointIndex]}! Watch out for wandering wolves...");
+                this.LogAlwaysInstanced($"Teleported to WanderPath {data.Name} point #{pathPointIndex} at {data.PathPoints[pathPointIndex]}! Watch out for wandering wolves...", LogCategoryFlags.PaintManager);
             });
         }
 
@@ -279,7 +279,7 @@ namespace ExpandedAiFramework
                 mCurrentWanderPathPointMarkers.Add(ConnectMarkers(actualPos, mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], Color.blue, $"{mCurrentDataName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 100));
             }
             
-            this.LogAlwaysInstanced($"Added wanderpath point at {actualPos} to wanderpath {mCurrentDataName}");
+            this.LogAlwaysInstanced($"Added wanderpath point at {actualPos} to wanderpath {mCurrentDataName}", LogCategoryFlags.PaintManager);
         }
 
         private void RemoveLastWanderPathPoint()
@@ -299,7 +299,7 @@ namespace ExpandedAiFramework
             
             Vector3 removedPoint = mCurrentWanderPathPoints[^1];
             mCurrentWanderPathPoints.RemoveAt(mCurrentWanderPathPoints.Count - 1);
-            this.LogAlwaysInstanced($"Removed last wanderpath point at {removedPoint} from wanderpath {mCurrentDataName}");
+            this.LogAlwaysInstanced($"Removed last wanderpath point at {removedPoint} from wanderpath {mCurrentDataName}", LogCategoryFlags.PaintManager);
         }
 
 
@@ -321,7 +321,7 @@ namespace ExpandedAiFramework
                     this.LogErrorInstanced("Couldn't register new wander path!");
                     return;
                 }
-                this.LogAlwaysInstanced($"Generated wander path {mCurrentDataName} starting at {mCurrentWanderPathPoints[0]}.");
+                this.LogAlwaysInstanced($"Generated wander path {mCurrentDataName} starting at {mCurrentWanderPathPoints[0]}.", LogCategoryFlags.PaintManager);
                 mDebugShownObjects.AddRange(mCurrentWanderPathPointMarkers);
                 mCurrentWanderPathPoints.Clear();
                 mCurrentWanderPathPointMarkers.Clear();
@@ -356,10 +356,10 @@ namespace ExpandedAiFramework
                     {
                         mWanderPathType = (WanderPathTypes)Enum.Parse(typeof(WanderPathTypes), value);
                     }
-                    this.LogAlwaysInstanced($"Set wander path type to {mWanderPathType}");
+                    this.LogAlwaysInstanced($"Set wander path type to {mWanderPathType}", LogCategoryFlags.PaintManager);
                     break;
                 default:
-                    this.LogWarningInstanced($"Unknown property: {property}");
+                    this.LogWarningInstanced($"Unknown property: {property}", LogCategoryFlags.PaintManager);
                     break;
             }
         }

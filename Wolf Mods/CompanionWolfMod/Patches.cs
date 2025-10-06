@@ -10,7 +10,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (EAFManager.Instance.CustomAis.TryGetValue(__instance.GetHashCode(), out CustomBaseAi customAi) && customAi is CompanionWolf companionWolf && companionWolf.PersistentData.Tamed)
             {
-                Utility.LogVerbose($"Intercepting attempt to serialize custom-spawned companion wolf!");
+                Utility.LogTrace($"Intercepting attempt to serialize custom-spawned companion wolf!", LogCategoryFlags.Ai);
                 return false;
             }
             return true;

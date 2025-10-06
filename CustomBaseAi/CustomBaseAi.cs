@@ -302,20 +302,20 @@ namespace ExpandedAiFramework
         {
             if (!PreprocesSetAiModeCustom(mode, out mode))
             {
-                this.LogVerboseInstanced($"ProcessSetAiModeCustom injection, routing mode to {mode}");
+                this.LogTraceInstanced($"ProcessSetAiModeCustom injection, routing mode to {mode}", LogCategoryFlags.Ai);
                 return mode;
             }
             if (mode > AiMode.Disabled)
             {
                 //Vanilla logic does not know how to pre-process new ai modes, return early here with current mode
-                this.LogVerboseInstanced($"Custom AI mode {mode} not handled by custom implementation, deferring to current mode as a fallback");
+                this.LogTraceInstanced($"Custom AI mode {mode} not handled by custom implementation, deferring to current mode as a fallback", LogCategoryFlags.Ai);
                 return mode;
             }
             if (mode == AiMode.Flee)
             {
                 if (CurrentMode == AiMode.Flee && mBaseAi.m_FleeReason == AiFleeReason.AfterPassingAttack)
                 {
-                    this.LogVerboseInstanced($"Ai is fleeign after passing attack, preventing change mode to {mode}");
+                    this.LogTraceInstanced($"Ai is fleeign after passing attack, preventing change mode to {mode}", LogCategoryFlags.Ai);
                     return AiMode.None;
                 }
             }
@@ -323,7 +323,7 @@ namespace ExpandedAiFramework
             {
                 if (mBaseAi.IsTooScaredToAttack())
                 {
-                    this.LogVerboseInstanced($"Ai is too scared to attack, preventing change mode to {mode}");
+                    this.LogTraceInstanced($"Ai is too scared to attack, preventing change mode to {mode}", LogCategoryFlags.Ai);
                     return AiMode.None;
                 }
                 bool skip = false;
@@ -333,20 +333,20 @@ namespace ExpandedAiFramework
                     {
                         if (CurrentMode == AiMode.Attack)
                         {
-                            this.LogVerboseInstanced($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}");
+                            this.LogTraceInstanced($"Ai is timberwolf that is already attacking, preventing re-entry to mode {mode}", LogCategoryFlags.Ai);
                             return AiMode.None;
                         }
                         if (PackManager.InPack(mBaseAi.m_PackAnimal))
                         {
                             if (!GameManager.m_PackManager.CanAttack(mBaseAi.m_PackAnimal, false))
                             {
-                                this.LogVerboseInstanced($"Ai is timberwolf that can't attack due to pack mechanics, changing {mode} to HoldGround");
+                                this.LogTraceInstanced($"Ai is timberwolf that can't attack due to pack mechanics, changing {mode} to HoldGround", LogCategoryFlags.Ai);
                                 mode = AiMode.HoldGround;
                             }
                         }
                         else
                         {
-                            this.LogVerboseInstanced($"AI is timberwolf without a pack, routing {mode} to Flee");
+                            this.LogTraceInstanced($"AI is timberwolf without a pack, routing {mode} to Flee", LogCategoryFlags.Ai);
                             mode = AiMode.Flee;
                         }
                         skip = true;
@@ -356,12 +356,12 @@ namespace ExpandedAiFramework
                 {
                     if (MaybeHoldGround())
                     {
-                        this.LogVerboseInstanced($"MaybeHoldGround returned true and set aimode itself, preventing mode change to {mode}");
+                        this.LogTraceInstanced($"MaybeHoldGround returned true and set aimode itself, preventing mode change to {mode}", LogCategoryFlags.Ai);
                         return AiMode.None;
                     }
                     if (!mBaseAi.CanPathfindToPosition(mBaseAi.m_CurrentTarget?.transform?.position ?? Vector3.positiveInfinity, MoveAgent.PathRequirement.FullPath))
                     {
-                        this.LogVerboseInstanced($"Can't reach target, changing {mode} to {mBaseAi.m_DefaultMode}");
+                        this.LogTraceInstanced($"Can't reach target, changing {mode} to {mBaseAi.m_DefaultMode}", LogCategoryFlags.Ai);
                         mBaseAi.CantReachTarget();
                         return mBaseAi.m_DefaultMode;
                     }
@@ -369,7 +369,7 @@ namespace ExpandedAiFramework
             }
             else if (mode == AiMode.Wander && mBaseAi.Timberwolf != null && PackManager.InPack(mBaseAi.m_PackAnimal) && GameManager.m_PackManager.IsPackCombatRestricted(mBaseAi.m_PackAnimal))
             {
-                this.LogVerboseInstanced($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}");
+                this.LogTraceInstanced($"Special AI timberwolf hold ground trigger, routing mode change from {mode} to {AiMode.HoldGround}", LogCategoryFlags.Ai);
                 mode = AiMode.HoldGround;
             }
             if (mode == AiMode.Wander || mode == AiMode.Flee)
@@ -381,7 +381,7 @@ namespace ExpandedAiFramework
             }
             else if (mode == AiMode.None)
             {
-                this.LogVerboseInstanced($"Mode change of AiMode.None not caught during preprocessing, changing to idle");
+                this.LogTraceInstanced($"Mode change of AiMode.None not caught during preprocessing, changing to idle", LogCategoryFlags.Ai);
                 mode = AiMode.Idle;
             }
             /* weird HL bug catch?
@@ -398,22 +398,22 @@ namespace ExpandedAiFramework
             {
                 if (CurrentMode != AiMode.Flee)
                 {
-                    this.LogVerboseInstanced($"Trying to set AiMode to current mode {mode} which is not AiMode.Flee, triggering early out");
+                    this.LogTraceInstanced($"Trying to set AiMode to current mode {mode} which is not AiMode.Flee, triggering early out", LogCategoryFlags.Ai);
                     return AiMode.None;
                 }
                 if (mBaseAi.m_UseRetreatSpeedInFlee == false)
                 {
-                    this.LogVerboseInstanced($"Trying to set AiMode to current mode {mode} and m_UseRetreatSpeedInFlee is false, triggering early out");
+                    this.LogTraceInstanced($"Trying to set AiMode to current mode {mode} and m_UseRetreatSpeedInFlee is false, triggering early out", LogCategoryFlags.Ai);
                     return AiMode.None;
                 }
                 mBaseAi.m_UseRetreatSpeedInFlee = false;
                 mBaseAi.m_AiGoalSpeed = mBaseAi.GetFleeSpeed();
-                this.LogVerboseInstanced($"Trying to set AiMode to current mode {mode}, triggering early out after ajusting flee speed");
+                this.LogTraceInstanced($"Trying to set AiMode to current mode {mode}, triggering early out after ajusting flee speed", LogCategoryFlags.Ai);
                 return AiMode.None;
             }
             if (CurrentMode == AiMode.Stunned && mBaseAi.IsStunTimerActive() && mode != AiMode.Dead && mode != AiMode.ScriptedSequence)
             {
-                this.LogVerboseInstanced($"Trying to set AiMode to mode {mode} while stunned and stun timer is active, triggering early out");
+                this.LogTraceInstanced($"Trying to set AiMode to mode {mode} while stunned and stun timer is active, triggering early out", LogCategoryFlags.Ai);
                 return AiMode.None;
             }
             return mode;
@@ -425,7 +425,7 @@ namespace ExpandedAiFramework
             mode = PreprocessNewAiMode(mode);
             if (mode == AiMode.None)
             {
-                this.LogVerboseInstanced($"ProcessNewAiMode returned AiMode.None, early-outting setAiMode");
+                this.LogTraceInstanced($"ProcessNewAiMode returned AiMode.None, early-outting setAiMode", LogCategoryFlags.Ai);
                 return;
             }
             ExitAiMode(CurrentMode);
@@ -526,22 +526,22 @@ namespace ExpandedAiFramework
             }
             if (mBaseAi.m_AiType != AiType.Predator)
             {
-                this.LogVerboseInstanced($"Not predator, cannot hold ground");
+                this.LogTraceInstanced($"Not predator, cannot hold ground", LogCategoryFlags.Ai);
                 return false;
             }
             if (!mBaseAi.CanHoldGround())
             {
-                this.LogVerboseInstanced($"BaseAi.CanHoldGround false, cannot hold ground");
+                this.LogTraceInstanced($"BaseAi.CanHoldGround false, cannot hold ground", LogCategoryFlags.Ai);
                 return false;
             }
             if (((1U << (int)CurrentMode) & (uint)AiModeFlags.EarlyOutMaybeHoldGround) != 0U)
             {
-                this.LogVerboseInstanced($"Current mode is {CurrentMode} which precludes holding ground, cannot hold ground");
+                this.LogTraceInstanced($"Current mode is {CurrentMode} which precludes holding ground, cannot hold ground", LogCategoryFlags.Ai);
                 return false;
             }
             else if (CurrentMode == AiMode.Attack && mBaseAi.m_IgnoreFlaresAndFireWhenAttacking)
             {
-                this.LogVerboseInstanced($"Attacking and ignoring stimulus, cannot hold ground");
+                this.LogTraceInstanced($"Attacking and ignoring stimulus, cannot hold ground", LogCategoryFlags.Ai);
                 return false;
             }
 
@@ -596,7 +596,7 @@ namespace ExpandedAiFramework
 
             if (holdingGround)
             {
-                this.LogVerboseInstanced($"Holding ground!");
+                this.LogTraceInstanced($"Holding ground!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.HoldGround);
             }
             return holdingGround;
@@ -783,7 +783,7 @@ namespace ExpandedAiFramework
             {
                 return;
             }
-            this.LogVerboseInstanced($"Scanning for new target...");
+            this.LogTraceInstanced($"Scanning for new target...", LogCategoryFlags.Ai);
             mBaseAi.m_TimeForNextTargetScan = Time.time + UnityEngine.Random.Range(0.1f, 0.5f); //todo: yoink out the hard coded values
             Vector3 eyePosition = mBaseAi.GetEyePos();
             float distanceToNearestTarget = float.MaxValue;
@@ -822,11 +822,11 @@ namespace ExpandedAiFramework
 
             if (nearestTarget == null)
             {
-                this.LogVerboseInstanced($"No possible additional candidates during scan for new targets");
+                this.LogTraceInstanced($"No possible additional candidates during scan for new targets", LogCategoryFlags.Ai);
                 return;
             }
 
-            this.LogVerboseInstanced($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away");
+            this.LogTraceInstanced($"Closest target is {nearestTarget} at {nearestTarget.transform.position} which is {distanceToNearestTarget} away", LogCategoryFlags.Ai);
             AiTarget previousTarget = mBaseAi.m_CurrentTarget;
             mBaseAi.m_CurrentTarget = nearestTarget;
 
@@ -841,7 +841,7 @@ namespace ExpandedAiFramework
                 {
                     if (!mBaseAi.CanPlayerBeReached(mBaseAi.m_CurrentTarget.transform.position, MoveAgent.PathRequirement.FullPath) || !CanSeeTarget(false))
                     {
-                        this.LogVerboseInstanced($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...");
+                        this.LogTraceInstanced($"Nearest target is player in AiMode.patrolpointsofinterest and PLayer can't be reached, aborting...", LogCategoryFlags.Ai);
                         mBaseAi.m_CurrentTarget = null;
                         return;
                     }
@@ -859,7 +859,7 @@ namespace ExpandedAiFramework
             GameManager.m_PackManager.MaybeAlertMembers(mBaseAi.m_PackAnimal);
             if (!packForming)
             {
-                this.LogVerboseInstanced($"Target detected, running ChangeModeWhenTargetDetected");
+                this.LogTraceInstanced($"Target detected, running ChangeModeWhenTargetDetected", LogCategoryFlags.Ai);
                 ChangeModeWhenTargetDetected(); 
             }
 
@@ -874,17 +874,17 @@ namespace ExpandedAiFramework
         {
             if (!CanSeeTargetCustom(out bool canSeeTarget))
             {
-                this.LogVerboseInstanced($"Custom override, cannot see");
+                this.LogTraceInstanced($"Custom override, cannot see", LogCategoryFlags.Ai);
                 return canSeeTarget;
             }
             if (Vector3.Angle(mBaseAi.transform.forward, CurrentTarget.transform.position - mBaseAi.transform.position) >= mBaseAi.m_DetectionFOV / 2f)
             {
-                this.LogVerboseInstanced($"CurrentTarget is out of field of view, cannot see");
+                this.LogTraceInstanced($"CurrentTarget is out of field of view, cannot see", LogCategoryFlags.Ai);
                 return false;
             }
             if (!skipDistCheck && ComputeDistanceForTarget(mBaseAi.GetEyePos(), CurrentTarget) == float.PositiveInfinity)
             {
-                this.LogVerboseInstanced($"{mBaseAi.gameObject.name}'s CurrentTarget {CurrentTarget} distance too great, cannot see");
+                this.LogTraceInstanced($"{mBaseAi.gameObject.name}'s CurrentTarget {CurrentTarget} distance too great, cannot see", LogCategoryFlags.Ai);
                 return false;
             }
             return true;
@@ -895,7 +895,7 @@ namespace ExpandedAiFramework
         {
             if (TargetCanBeIgnored(potentialTarget))
             {
-                this.LogVerboseInstanced($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} can be ignored, infinite distance");
+                this.LogTraceInstanced($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} can be ignored, infinite distance", LogCategoryFlags.Ai);
                 return float.PositiveInfinity;
             }
             Vector3 targetEyePos = potentialTarget.GetEyePos();
@@ -929,7 +929,7 @@ namespace ExpandedAiFramework
                 Feat_MasterHunter bigCatKillerFeat = FeatsManager.m_Feat_MasterHunter;
                 if (bigCatKillerFeat.IsUnlockedAndEnabled())
                 {
-                    this.LogVerboseInstanced($"Master hunter feat enabled! AiSightRangeScale is {bigCatKillerFeat.m_AiSightRangeScale} and SightScale is {bigCatKillerFeat.m_SightScale}");
+                    this.LogTraceInstanced($"Master hunter feat enabled! AiSightRangeScale is {bigCatKillerFeat.m_AiSightRangeScale} and SightScale is {bigCatKillerFeat.m_SightScale}", LogCategoryFlags.Ai);
                     bigCatKillerScalar = bigCatKillerFeat.m_AiSightRangeScale;
                 }
                 else
@@ -943,7 +943,7 @@ namespace ExpandedAiFramework
                 {
                     if (CurrentTarget != potentialTarget)
                     {
-                        this.LogVerboseInstanced($"{mBaseAi.gameObject.name}'s Current Target {CurrentTarget} != potential target {potentialTarget.gameObject.name}, infinite distance");
+                        this.LogTraceInstanced($"{mBaseAi.gameObject.name}'s Current Target {CurrentTarget} != potential target {potentialTarget.gameObject.name}, infinite distance", LogCategoryFlags.Ai);
                         return float.PositiveInfinity;
                     }
                 }
@@ -951,11 +951,11 @@ namespace ExpandedAiFramework
             
             if (!AiUtils.PositionVisible(eyePos, mBaseAi.transform.forward, targetEyePos, detectionRange, mBaseAi.m_DetectionFOV, 0.0f, Utils.m_PhysicalCollisionLayerMask)) 
             {
-                this.LogVerboseInstanced($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} position not visible using eyePos {eyePos}, forward {mBaseAi.transform.forward}, targetEyePos {targetEyePos}, detectionRange {mBaseAi.m_DetectionFOV}, detectionFOV {crouchDetectionRangeScalar}, infinite distance");
+                this.LogTraceInstanced($"{mBaseAi.gameObject.name}'s potential target {potentialTarget.gameObject.name} position not visible using eyePos {eyePos}, forward {mBaseAi.transform.forward}, targetEyePos {targetEyePos}, detectionRange {mBaseAi.m_DetectionFOV}, detectionFOV {crouchDetectionRangeScalar}, infinite distance", LogCategoryFlags.Ai);
                 return float.PositiveInfinity;
             }
             float dist = Vector3.Distance(BaseAi.transform.position, potentialTarget.transform.position);
-            this.LogVerboseInstanced($"Distance from ai {mBaseAi.gameObject.name} to target {potentialTarget.gameObject.name}: {dist}");
+            this.LogTraceInstanced($"Distance from ai {mBaseAi.gameObject.name} to target {potentialTarget.gameObject.name}: {dist}", LogCategoryFlags.Ai);
             return dist;
         }
 
@@ -964,24 +964,24 @@ namespace ExpandedAiFramework
         {
             if (!TargetCanBeIgnoredCustom(target, out bool canBeIgnored))
             {
-                this.LogVerboseInstanced("TargetCanBeIgnoredCustom");
+                this.LogTraceInstanced("TargetCanBeIgnoredCustom");
                 return canBeIgnored;
             }
             if (target == null)
             {
-                this.LogVerboseInstanced("Null Target, ignoring");
+                this.LogTraceInstanced("Null Target, ignoring");
                 return true;
             }
             /* pretty sure this one precludes the player? Might have interpreted it wrong.
             if (target.m_BaseAi == null)
             {
-                this.LogVerboseInstanced("Target is not baseAi, ignoring");
+                this.LogTraceInstanced("Target is not baseAi, ignoring");
                 return true;
             }
             */
             if (target.m_BaseAi == this)
             {
-                this.LogVerboseInstanced("Target is self, ignoring");
+                this.LogTraceInstanced("Target is self, ignoring");
                 return true;
             }
             /* Not sure we need this, i dont really care if BaseAI is active or not.
@@ -993,70 +993,70 @@ namespace ExpandedAiFramework
             bool isPlayer = target.IsPlayer();
             if (isPlayer && GameManager.m_PlayerManager.PlayerIsInvisibleToAi())
             {
-                this.LogVerboseInstanced("Target is invisible player, ignoring");
+                this.LogTraceInstanced("Target is invisible player, ignoring");
                 return true;
             }
             if (isPlayer && CurrentMode == AiMode.Feeding)
             {
-                this.LogVerboseInstanced("Target is player and am feeding, ignoring");
+                this.LogTraceInstanced("Target is player and am feeding, ignoring");
                 return true;
             }
             if (target.IsDead())
             {
-                this.LogVerboseInstanced("Target is dead, ignoring (should we make this overridable for zombie wolves...?)");
+                this.LogTraceInstanced("Target is dead, ignoring (should we make this overridable for zombie wolves...?)");
                 return true;
             }
             // NPC survivor code that I'm not going to bother adding
             if (target.IsMoose())
             {
-                this.LogVerboseInstanced($"Target is moosing, returning ignore value of {MooseCanBeIgnored()}");
+                this.LogTraceInstanced($"Target is moosing, returning ignore value of {MooseCanBeIgnored()}", LogCategoryFlags.Ai);
                 return MooseCanBeIgnored();
             }
             if (PackManager.InPack(mBaseAi.m_PackAnimal) && !PackManager.IsValidPackTarget(target))
             {
-                this.LogVerboseInstanced($"In pack and target is not valid pack target, ignoring");
+                this.LogTraceInstanced($"In pack and target is not valid pack target, ignoring", LogCategoryFlags.Ai);
                 return true;
             }
             if (!target.IsHostileTowards(mBaseAi))
             {
-                this.LogVerboseInstanced($"Target is not hostile toward me, ignoring");
+                this.LogTraceInstanced($"Target is not hostile toward me, ignoring", LogCategoryFlags.Ai);
                 return true;
             }
             if (isPlayer)
             {
                 if (InterfaceManager.IsMainMenuEnabled())
                 {
-                    this.LogVerboseInstanced($"Target is player while in main menu, ignoring");
+                    this.LogTraceInstanced($"Target is player while in main menu, ignoring", LogCategoryFlags.Ai);
                     return true;
                 }
                 if (GameManager.m_PlayerStruggle.m_Active)
                 {
-                    this.LogVerboseInstanced($"Target is player in active struggle, ignoring");
+                    this.LogTraceInstanced($"Target is player in active struggle, ignoring", LogCategoryFlags.Ai);
                     return true;
                 }
-                this.LogVerboseInstanced($"Target is player, NOT ignoring");
+                this.LogTraceInstanced($"Target is player, NOT ignoring", LogCategoryFlags.Ai);
                 return false;
             }
 
             if (mBaseAi.WillOnlyTargetPlayer())
             {
-                this.LogVerboseInstanced($"Target is not player and will target player, ignoring");
+                this.LogTraceInstanced($"Target is not player and will target player, ignoring", LogCategoryFlags.Ai);
                 return true;
             }
 
             if (mBaseAi.m_WildlifeMode != WildlifeMode.Aurora)
             {
-                this.LogVerboseInstanced($"Target is not player and non-aurora wildlife, NOT ignoring");
+                this.LogTraceInstanced($"Target is not player and non-aurora wildlife, NOT ignoring", LogCategoryFlags.Ai);
                 return false;
             }
 
             if (AuroraManager.m_AuroraFieldsSceneManager.GetFieldContaining(target.transform.position) != null)
             {
-                this.LogVerboseInstanced($"Target is not player and aurora wildlife and target is not in aurora field, NOT ignoring");
+                this.LogTraceInstanced($"Target is not player and aurora wildlife and target is not in aurora field, NOT ignoring", LogCategoryFlags.Ai);
                 return false;
             }
 
-            this.LogWarningInstanced($"CustomBaseAi.TargetCanBeIgnored reached end of method with no cases returning a valid condition. Falling through to 'can ignore target' condition");
+            this.LogWarningInstanced($"CustomBaseAi.TargetCanBeIgnored reached end of method with no cases returning a valid condition. Falling through to 'can ignore target' condition", LogCategoryFlags.Ai);
             return true;
         }
 
@@ -1065,13 +1065,13 @@ namespace ExpandedAiFramework
         {
             if (!ChangeModeWhenTargetDetectedCustom())
             {
-                this.LogVerboseInstanced($"ChangeModeWhenTargetDetectedCustom");
+                this.LogTraceInstanced($"ChangeModeWhenTargetDetectedCustom", LogCategoryFlags.Ai);
                 return;
             }
 
             if (mBaseAi.m_AiType == AiType.Human)
             {
-                this.LogVerboseInstanced($"Astrid and mackenzie aren't ai... yet...");
+                this.LogTraceInstanced($"Astrid and mackenzie aren't ai... yet...", LogCategoryFlags.Ai);
                 return;
             }
 
@@ -1081,7 +1081,7 @@ namespace ExpandedAiFramework
             //todo: move to moose-specific ai script
             if (mBaseAi.Moose != null && mBaseAi.m_CurrentTarget.IsPlayer())
             {
-                this.LogVerboseInstanced($"Moose specific hold ground catch");
+                this.LogTraceInstanced($"Moose specific hold ground catch", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.HoldGround);
                 return;
             }
@@ -1092,7 +1092,7 @@ namespace ExpandedAiFramework
             {
                 if (!BaseAi.ShouldAlwaysFleeFromCurrentTarget())
                 {
-                    this.LogTraceInstanced($"Feeding and should always flee from current target, fleeing");
+                    this.LogTraceInstanced($"Feeding and should always flee from current target, fleeing", LogCategoryFlags.Ai);
                     SetAiMode(AiMode.Flee);
                 }
                 return;
@@ -1100,14 +1100,14 @@ namespace ExpandedAiFramework
 
             if (mBaseAi.Timberwolf?.CanEnterHideAndSeek() ?? false)
             {
-                this.LogVerboseInstanced($"Target found, timberwolf entering hide and seek");
+                this.LogTraceInstanced($"Target found, timberwolf entering hide and seek", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.HideAndSeek);
             }
 
             float fleeChance = mBaseAi.m_FleeChanceWhenTargetDetected;
             if (!mBaseAi.m_CurrentTarget.IsHostileTowards(mBaseAi) || mBaseAi.m_CurrentTarget.IsAmbient())
             {
-                this.LogVerboseInstanced($"Target found, target is not hostile or ai is ambient, no flee chance");
+                this.LogTraceInstanced($"Target found, target is not hostile or ai is ambient, no flee chance", LogCategoryFlags.Ai);
                 fleeChance = 0.0f;
             }
 
@@ -1139,7 +1139,7 @@ namespace ExpandedAiFramework
             {
                 if (mBaseAi.m_CurrentTarget.IsVulnerable() || (CurrentMode != AiMode.Wander))
                 {
-                    this.LogVerboseInstanced($"Target found, am predator and target is vulnerable OR currentmode {CurrentMode} is not wander, zero flee chance");
+                    this.LogTraceInstanced($"Target found, am predator and target is vulnerable OR currentmode {CurrentMode} is not wander, zero flee chance", LogCategoryFlags.Ai);
                     fleeChance = 0.0f;
                 }
             }
@@ -1155,44 +1155,44 @@ namespace ExpandedAiFramework
             if (mBaseAi.m_CurrentTarget.IsPlayer() && mBaseAi.BaseWolf != null)
             {
                 fleeChance += GameManager.m_PlayerManager.m_IncreaseWolfFleePercentagePoints; 
-                this.LogVerboseInstanced($"Playertarget found, am wolf, flee chance increased to {fleeChance}");
+                this.LogTraceInstanced($"Playertarget found, am wolf, flee chance increased to {fleeChance}", LogCategoryFlags.Ai);
             }
 
             if (mBaseAi.m_AiType == AiType.Predator)
             {
                 AuroraManager auroraManager = GameManager.m_AuroraManager;
                 fleeChance *= auroraManager.AuroraIsActive() ? auroraManager.m_PredatorFleeChanceScale : 1.0f;
-                this.LogVerboseInstanced($"Playertarget found, am aurora wolf: {auroraManager.AuroraIsActive()}, flee chance multiplied to {fleeChance}");
+                this.LogTraceInstanced($"Playertarget found, am aurora wolf: {auroraManager.AuroraIsActive()}, flee chance multiplied to {fleeChance}", LogCategoryFlags.Ai);
             }
 
             if (CurrentMode == AiMode.Wander && mBaseAi.m_WanderingAroundPos)
             {
-                this.LogVerboseInstanced($"CurrentMode is wander and wandering around pos, flee chance is zero");
+                this.LogTraceInstanced($"CurrentMode is wander and wandering around pos, flee chance is zero", LogCategoryFlags.Ai);
                 fleeChance = 0.0f;
             }
 
             if (PackManager.InPack(mBaseAi.m_PackAnimal) && !GameManager.m_PackManager.ShouldAnimalFlee(mBaseAi.m_PackAnimal))
             {
-                this.LogVerboseInstanced($"In pack and packmanager says no flee, flee chance is zero");
+                this.LogTraceInstanced($"In pack and packmanager says no flee, flee chance is zero", LogCategoryFlags.Ai);
                 fleeChance = 0.0f;
             }
 
             //move to cougar AI
             if (mBaseAi.m_CurrentTarget.IsPlayer() && mBaseAi.Cougar != null)
             {
-                this.LogVerboseInstanced($"Cougar is not scared of you, flee chance is zero");
+                this.LogTraceInstanced($"Cougar is not scared of you, flee chance is zero", LogCategoryFlags.Ai);
                 fleeChance = 0.0f;
             }
 
             if (mBaseAi.ShouldAlwaysFleeFromCurrentTarget())
             {
-                this.LogVerboseInstanced($"Should always flee from current target, flee chance is 100%");
+                this.LogTraceInstanced($"Should always flee from current target, flee chance is 100%", LogCategoryFlags.Ai);
                 fleeChance = 100.0f;
             }
 
             if (Utils.RollChance(fleeChance))
             {
-                this.LogTraceInstanced($"Random roll with fleeChance {fleeChance} triggered fleeing");
+                this.LogTraceInstanced($"Random roll with fleeChance {fleeChance} triggered fleeing", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.Flee);
                 return;
             }
@@ -1361,7 +1361,7 @@ namespace ExpandedAiFramework
 
         protected void SetDefaultAiMode()
         {
-            this.LogVerboseInstanced($"For whatever reason, ai mode is being set to default by the mod!");
+            this.LogTraceInstanced($"For whatever reason, ai mode is being set to default by the mod!", LogCategoryFlags.Ai);
             SetAiMode(mBaseAi.m_DefaultMode);
         }
 

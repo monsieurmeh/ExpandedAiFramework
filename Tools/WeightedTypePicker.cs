@@ -49,14 +49,14 @@ namespace ExpandedAiFramework
 
         public void StartWorker()
         {
-            LogTrace($"Starting TypePicker worker thread");
+            LogTrace($"Starting TypePicker worker thread", LogCategoryFlags.AiManager);
             mTask = Task.Run(Worker);
         }
 
 
         public void StopWorker()
         {
-            LogTrace($"Stopping TypePicker worker thread");
+            LogTrace($"Stopping TypePicker worker thread", LogCategoryFlags.AiManager);
             mRunWorker = false;
             try
             {
@@ -112,7 +112,7 @@ namespace ExpandedAiFramework
 
                 foreach (var entry in allEntries)
                 {
-                    //LogDebug($"Checking {entry.Type} in WeightedTypePicker. Condition is {entry.Condition(t)}, weight is {entry.WeightProvider()}");
+                    LogDebug($"Checking {entry.Type} in WeightedTypePicker. Condition is {entry.Condition(t)}, weight is {entry.WeightProvider()}", LogCategoryFlags.AiManager);
                     if (entry.Condition(t))
                     {
                         int weight = entry.WeightProvider();
@@ -120,28 +120,28 @@ namespace ExpandedAiFramework
                         {
                             validEntries.Add((entry.Type, weight));
                             totalValidWeight += weight;
-                            //LogDebug($"Add {entry.Type} to WeightedTypePicker valid pool. Compiled pool weight is now {totalValidWeight} with {validEntries.Count} entries.");
+                            LogDebug($"Add {entry.Type} to WeightedTypePicker valid pool. Compiled pool weight is now {totalValidWeight} with {validEntries.Count} entries.", LogCategoryFlags.AiManager);
                         }
                     }
                 }
 
                 if (validEntries.Count == 0 || totalValidWeight <= 0)
                 {
-                    //LogError("WeightedTypePicker could not pick a valid spawn type!", ComplexLogger.FlaggedLoggingLevel.Critical);
+                    LogError("WeightedTypePicker could not pick a valid spawn type!", ComplexLogger.FlaggedLoggingLevel.Critical);
                     return mGetFallbackTypeFunction.Invoke(t);
                 }
 
                 int roll = (int)(random.NextDouble() * totalValidWeight);
                 float cumulative = 0;
 
-                //LogDebug($"Rolled {roll}, checking against pool.");
+                LogDebug($"Rolled {roll}, checking against pool.", LogCategoryFlags.AiManager);
                 foreach (var (type, weight) in validEntries)
                 {
                     cumulative += weight;
-                    //LogDebug($"Added {type}, cumulative weight is {cumulative}");
+                    LogDebug($"Added {type}, cumulative weight is {cumulative}", LogCategoryFlags.AiManager);
                     if (roll <= cumulative)
                     {
-                        //LogDebug($"Cumulative weight {cumulative} >=roll {roll}, picking type {type}!");
+                        LogDebug($"Cumulative weight {cumulative} >=roll {roll}, picking type {type}!", LogCategoryFlags.AiManager);
                         returnType = type;
                         break;
                     }

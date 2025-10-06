@@ -28,7 +28,7 @@ namespace ExpandedAiFramework
         {
             if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsBear())
             {
-                this.LogTraceInstanced($"Wolves run from larger threats!");
+                this.LogTraceInstanced($"Wolves run from larger threats!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.Flee);
                 return false;
             }
