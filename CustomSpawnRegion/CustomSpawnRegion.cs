@@ -336,7 +336,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private void SpawnInternal(SpawnModDataProxy queuedProxy)
+        protected void SpawnInternal(SpawnModDataProxy queuedProxy)
         {
             if (InstantiateSpawn(queuedProxy) != null)
             {
@@ -350,7 +350,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private CustomBaseAi InstantiateSpawn(SpawnModDataProxy modDataProxy)
+        protected CustomBaseAi InstantiateSpawn(SpawnModDataProxy modDataProxy)
         {
             if (!modDataProxy.ForceSpawn && !ValidSpawn(modDataProxy))
             {
@@ -366,7 +366,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private CustomBaseAi InstantiateSpawnInternal(SpawnModDataProxy modDataProxy)
+        protected CustomBaseAi InstantiateSpawnInternal(SpawnModDataProxy modDataProxy)
         {
             GameObject spawnablePrefab = mSpawnRegion.m_SpawnablePrefab;
             if (mSpawnRegion.m_AuroraSpawnablePrefab != null && modDataProxy.WildlifeMode == WildlifeMode.Aurora)
