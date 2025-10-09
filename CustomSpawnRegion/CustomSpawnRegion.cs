@@ -338,11 +338,7 @@ namespace ExpandedAiFramework
 
         protected void SpawnInternal(SpawnModDataProxy queuedProxy)
         {
-            if (InstantiateSpawn(queuedProxy) != null)
-            {
-                mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(queuedProxy.Guid, queuedProxy.Scene, null, false), queuedProxy.WildlifeMode);
-            }
-            else
+            if (InstantiateSpawn(queuedProxy) == null)
             {
                 this.LogTraceInstanced($"Proxy with guid {queuedProxy.Guid} set to AVAILABLE.", LogCategoryFlags.SpawnRegion);
                 queuedProxy.Available = true;
@@ -362,6 +358,7 @@ namespace ExpandedAiFramework
                 return null;
             }
             modDataProxy.Spawned = true; //Ensure that it sticks around until the AI perishes
+            mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(modDataProxy.Guid, modDataProxy.Scene, null, false), modDataProxy.WildlifeMode);
             return customBaseAi;
         }
 
