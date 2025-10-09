@@ -141,7 +141,7 @@ namespace ExpandedAiFramework
 
         #region SpawnRegionManager Vanilla Rerouting
        
-        public bool Add(SpawnRegion spawnRegion)
+        public bool Add(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback = null)
         {
             if (!CheckVanillaManager())
             {
@@ -162,7 +162,7 @@ namespace ExpandedAiFramework
                 LogError($"Custom spawn region already generated for this vanilla region; use EAF's API to fetch by hashcode instead!");
                 return false;
             }
-            if (!ProcessCaughtSpawnRegion(spawnRegion))
+            if (!ProcessCaughtSpawnRegion(spawnRegion, callback))
             {
                 LogError($"Failed to process caught spawn region. This is a DEEP bug, please report it!");
                 return false;
@@ -704,7 +704,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private bool TryInjectCustomSpawnRegion(SpawnRegion spawnRegion)
+        private bool TryInjectCustomSpawnRegion(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback)
         {
             if (spawnRegion == null)
             {
@@ -722,14 +722,14 @@ namespace ExpandedAiFramework
                 return false;
             }
             Guid wrapperGuid = new Guid(guid.PDID);
-            WrapSpawnRegion(spawnRegion, wrapperGuid);
+            WrapSpawnRegion(spawnRegion, wrapperGuid, callback);
             return true;
         }
 
 
-        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion)
+        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback = null)
         {
-            if (!TryInjectCustomSpawnRegion(spawnRegion))
+            if (!TryInjectCustomSpawnRegion(spawnRegion, callback))
             {
                 return false;
             }
@@ -750,7 +750,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public void WrapSpawnRegion(SpawnRegion spawnRegion, Guid guid, Action<CustomSpawnRegion> callback = null)
+        private void WrapSpawnRegion(SpawnRegion spawnRegion, Guid guid, Action<CustomSpawnRegion> callback)
         {
             lock (mPendingWrapOperations)
             {
