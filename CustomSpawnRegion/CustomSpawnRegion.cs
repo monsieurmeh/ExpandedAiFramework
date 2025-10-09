@@ -207,7 +207,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public void UpdateFromManager()
+        public virtual void UpdateFromManager()
         {
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
@@ -330,27 +330,13 @@ namespace ExpandedAiFramework
             {
                 while (mPendingSpawns.Count > 0)
                 {
-                    SpawnInternal(mPendingSpawns.Dequeue());
+                    InstantiateSpawn(mPendingSpawns.Dequeue());
                 }
             }
         }
 
 
-        private void SpawnInternal(SpawnModDataProxy queuedProxy)
-        {
-            if (InstantiateSpawn(queuedProxy) != null)
-            {
-                mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(queuedProxy.Guid, queuedProxy.Scene, null, false), queuedProxy.WildlifeMode);
-            }
-            else
-            {
-                this.LogTraceInstanced($"Proxy with guid {queuedProxy.Guid} set to AVAILABLE.", LogCategoryFlags.SpawnRegion);
-                queuedProxy.Available = true;
-            }
-        }
-
-
-        private CustomBaseAi InstantiateSpawn(SpawnModDataProxy modDataProxy)
+        protected CustomBaseAi InstantiateSpawn(SpawnModDataProxy modDataProxy)
         {
             if (!modDataProxy.ForceSpawn && !ValidSpawn(modDataProxy))
             {
@@ -361,7 +347,17 @@ namespace ExpandedAiFramework
             {
                 return null;
             }
-            modDataProxy.Spawned = true; //Ensure that it sticks around until the AI perishes
+            if (customBaseAi != null)
+            {
+                this.LogTraceInstanced($"Spawned new Ai. Proxy with guid {modDataProxy.Guid} set to CLAIMED.", LogCategoryFlags.SpawnRegion);
+                modDataProxy.Spawned = true; //Ensure that it sticks around until the AI perishes
+                mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(modDataProxy.Guid, modDataProxy.Scene, null, false), modDataProxy.WildlifeMode);
+            } 
+            else
+            {
+                this.LogTraceInstanced($"Could not spawn new Ai. Proxy with guid {modDataProxy.Guid} set to AVAILABLE.", LogCategoryFlags.SpawnRegion);
+                modDataProxy.Available = true;
+            }
             return customBaseAi;
         }
 
@@ -396,7 +392,7 @@ namespace ExpandedAiFramework
         }
 
 
-        protected bool PostProcessInstantiatedSpawn(CustomBaseAi customBaseAi)
+        private bool PostProcessInstantiatedSpawn(CustomBaseAi customBaseAi)
         {
             BaseAi baseAi = customBaseAi.BaseAi;
             if (customBaseAi.IsNullOrDestroyed())
