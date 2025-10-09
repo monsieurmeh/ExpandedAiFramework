@@ -750,7 +750,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private void WrapSpawnRegion(SpawnRegion spawnRegion, Guid guid)
+        public void WrapSpawnRegion(SpawnRegion spawnRegion, Guid guid, Action<CustomSpawnRegion> callback = null)
         {
             lock (mPendingWrapOperations)
             {
@@ -778,6 +778,10 @@ namespace ExpandedAiFramework
                 }
                 if (proxy == null)
                 {
+                    if (callback != null)
+                    {
+                        callback(null);
+                    }
                     // A null proxy by now has definitely generated warnings; abort!
                     return;
                 }
@@ -788,7 +792,6 @@ namespace ExpandedAiFramework
                     mCustomSpawnRegions.Remove(spawnRegion.GetHashCode());
                 }
                 mCustomSpawnRegions.Add(spawnRegion.GetHashCode(), newSpawnRegionWrapper);
-
                 if (mCustomSpawnRegionsByGuid.ContainsKey(proxy.Guid))
                 {
                     LogWarning($"Alpha -> Beta Transition Warning - ID conflict on mCustomSpawnRegionsByGuid: {proxy.Guid}", LogCategoryFlags.SpawnRegionManager);
@@ -804,6 +807,10 @@ namespace ExpandedAiFramework
                 lock (mPendingWrapOperations)
                 {
                     mPendingWrapOperations.Remove(guid);
+                }
+                if (callback != null)
+                {
+                    callback(newSpawnRegionWrapper);
                 }
             }, false));
         }
