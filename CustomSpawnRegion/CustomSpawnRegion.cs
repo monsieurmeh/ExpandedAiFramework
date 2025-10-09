@@ -207,7 +207,7 @@ namespace ExpandedAiFramework
         }
 
 
-        public void UpdateFromManager()
+        public virtual void UpdateFromManager()
         {
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
