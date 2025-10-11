@@ -13,7 +13,17 @@ namespace ExpandedAiFramework
     {
         private const long TickRate = 500000L; // 10,000 ticks per ms, 1,000ms per second = 10,000,000 factor
         private bool mStartCalled = false;
+        private long mNextTick = 0;
+        private PackSettings mPackSettings;
         private VanillaPackManager mVanillaManager;
+
+        public PackManager(EAFManager manager) : base(manager) 
+        { 
+            PackManagerSettings settings = new PackManagerSettings(Path.Combine(DataFolderPath, $"{nameof(PackManager)}"));
+            settings.AddToModSettings(ModName);
+            settings.Reload();
+        }
+
         public VanillaPackManager VanillaPackManager
         { 
             get 
@@ -25,11 +35,7 @@ namespace ExpandedAiFramework
                 return mVanillaManager;
             }
         }
-        public PackManager(EAFManager manager) : base(manager) { }
         
-        private long mNextTick = 0;
-        private PackSettings mPackSettings;
-
         public override void OnQuitToMainMenu()
         {
             base.OnQuitToMainMenu();
