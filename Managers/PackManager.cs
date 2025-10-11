@@ -11,9 +11,9 @@ namespace ExpandedAiFramework
 {
     public class PackManager : BaseSubManager, IPackManager
     {
-        protected bool mStartCalled = false;
-        protected bool mIsMenuScene = true; 
-        protected VanillaPackManager mVanillaManager;
+        private const long TickRate = 500000L; // 10,000 ticks per ms, 1,000ms per second = 10,000,000 factor
+        private bool mStartCalled = false;
+        private VanillaPackManager mVanillaManager;
         public VanillaPackManager VanillaPackManager
         { 
             get 
@@ -27,8 +27,8 @@ namespace ExpandedAiFramework
         }
         public PackManager(EAFManager manager) : base(manager) { }
         
-        protected long mDebugTicker = 0;
-        protected PackSettings mPackSettings;
+        private long mNextTick = 0;
+        private PackSettings mPackSettings;
 
         public override void OnQuitToMainMenu()
         {
@@ -67,11 +67,9 @@ namespace ExpandedAiFramework
 
         public override void UpdateFromManager() 
         {
-            bool shouldReport = mDebugTicker + 10000000L <= DateTime.Now.Ticks ; // 10,000 ticks per ms, 1,000ms per second = 10,000,000
-            if (shouldReport)
-            {
-                mDebugTicker = DateTime.Now.Ticks;
-            }
+            if (!UpdateCustom()) return; // give priority to a custom implementation if ever exists
+            if (mNextTick > DateTime.Now.Ticks) return;
+            mNextTick = DateTime.Now.Ticks + TickRate;
             if (!ShouldUpdate()) return;
             MaybeEnableAnimalsOnLoad();
 			ResetGroupEventFlags();
@@ -90,7 +88,6 @@ namespace ExpandedAiFramework
 
         private bool ShouldUpdate()
         {
-            if (!UpdateCustom()) return false;
             if (VanillaPackManager == null) return false;
             if (!VanillaPackManager.m_SystemEnabled) return false;
             if (GameManager.m_IsPaused) return false;
