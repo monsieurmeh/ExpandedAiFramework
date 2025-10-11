@@ -73,9 +73,9 @@ namespace ExpandedAiFramework
                 mDebugTicker = DateTime.Now.Ticks;
             }
             if (!ShouldUpdate()) return;
-            MaybeEnableAnimalsOnLoad(shouldReport);
-			ResetGroupEventFlags(shouldReport);
-			VanillaPackManager.MaybeCleanupDeadPackAnimals(mPackSettings);
+            MaybeEnableAnimalsOnLoad();
+			ResetGroupEventFlags();
+			MaybeCleanupDeadPackAnimals(mPackSettings);
 			VanillaPackManager.MaybeDisbandGroupOnTargetLost(mPackSettings);
 			VanillaPackManager.MaybeFleeAndDisbandOnMoraleCheck();
 			VanillaPackManager.MaybeFleeAndDisbandOnBearOrMooseCheck(mPackSettings);
@@ -99,47 +99,69 @@ namespace ExpandedAiFramework
             return true;
         }
 
-        private void MaybeEnableAnimalsOnLoad(bool shouldReport) 
+        private void MaybeEnableAnimalsOnLoad() 
         {
-            if (!MaybeEnableAnimalsOnLoadCustom()) return;
             if (!VanillaPackManager.m_EnablePacksOnLoad) return;
-            if (shouldReport) LogTrace("MaybeEnableAnimalsOnLoad (EAF Native)", LogCategoryFlags.PackManager);
             foreach (PackGroup pack in VanillaPackManager.m_PackAnimalGroupByLeader.Values)
             {
-                foreach (PackAnimal member in pack.m_Members)
+                foreach (PackAnimal animal in pack.m_Members)
                 {
-                    EnablePackMember(member);
+                    EnablePackAnimal(animal);
                 }
             }
             VanillaPackManager.m_EnablePacksOnLoad = false;
         }
 
-        private void EnablePackMember(PackAnimal member)
+        private void EnablePackAnimal(PackAnimal animal)
         {
-            if (member.isActiveAndEnabled) return;
-            if (member.transform.parent == null) return; 
-            member.gameObject.SetActive(value: true);
-            if (member.transform.parent.gameObject.activeSelf) return; 
-            member.transform.parent.gameObject.SetActive(value: true);
+            if (animal.isActiveAndEnabled) return;
+            if (animal.transform.parent == null) return; 
+            animal.gameObject.SetActive(value: true);
+            if (animal.transform.parent.gameObject.activeSelf) return; 
+            animal.transform.parent.gameObject.SetActive(value: true);
         }
 
-        private void ResetGroupEventFlags(bool shouldReport)
+        private void ResetGroupEventFlags()
         {
-            if (!ResetGroupEventFlagsCustom()) return;
-            if (shouldReport) LogTrace("ResetGroupEventFlags (EAF Native)", LogCategoryFlags.PackManager);
             foreach (PackGroup pack in VanillaPackManager.m_PackAnimalGroupByLeader.Values)
             {
                 pack.m_GroupEventProcessed = false;
             }
         }
 
-        
+        private void MaybeCleanupDeadPackAnimals(PackSettings settings)
+        {
+            foreach (PackAnimal animal in GetPossiblyDeadPackAnimals(settings))
+            {
+                if (IsPackAnimalDead(animal, settings)) continue;
+                VanillaPackManager.UnregisterPackAnimal(animal, true);
+            }
+        }
+
+
+        private IEnumerable<PackAnimal> GetPossiblyDeadPackAnimals(PackSettings settings)
+        {
+            foreach (PackGroup packGroup in VanillaPackManager.m_PackAnimalGroupByLeader.Values)
+            {
+                foreach (PackAnimal animal in packGroup.m_Members)
+                {
+                    yield return animal;
+                }
+            }
+        }
+
+
+        private bool IsPackAnimalDead(PackAnimal animal, PackSettings settings) 
+        {
+            if (animal.m_BaseAi.GetAiMode() == AiMode.Dead) return true;
+            if (animal.m_BaseAi.IsBleedingOut() && animal.m_BaseAi.GetBleedingOutMinutesRemaining() < settings.m_MinBleedOutTimeMinutes) return true;
+            if (!animal.isActiveAndEnabled && animal.m_BaseAi.HasUpdated()) return true; // This one may need special EAF attention, m_BaseAi.HasUpdated() is unlikely to work properly...
+            return false;
+        }
+
 
         #region overrides
-
         protected virtual bool UpdateCustom() => true;
-        protected virtual bool MaybeEnableAnimalsOnLoadCustom() => true;
-        protected virtual bool ResetGroupEventFlagsCustom() => true;
 
         #endregion
     }
