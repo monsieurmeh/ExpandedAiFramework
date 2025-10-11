@@ -73,7 +73,7 @@ namespace ExpandedAiFramework
                 mDebugTicker = DateTime.Now.Ticks;
             }
             if (!ShouldUpdate()) return;
-            VanillaPackManager.MaybeEnableAnimalsOnLoad();
+            MaybeEnableAnimalsOnLoad(shouldReport);
 			VanillaPackManager.ResetGroupEventFlags();
 			VanillaPackManager.MaybeCleanupDeadPackAnimals(mPackSettings);
 			VanillaPackManager.MaybeDisbandGroupOnTargetLost(mPackSettings);
@@ -100,5 +100,31 @@ namespace ExpandedAiFramework
         }
 
         protected virtual bool UpdateCustom() => true;
+
+        private void MaybeEnableAnimalsOnLoad(bool shouldReport) 
+        {
+            if (!MaybeEnableAnimalsOnLoadCustom()) return;
+            if (!VanillaPackManager.m_EnablePacksOnLoad) return;
+            if (shouldReport) LogTrace("MaybeEnableAnimalsOnLoad (EAF Native)", LogCategoryFlags.PackManager);
+            foreach (PackGroup pack in VanillaPackManager.m_PackAnimalGroupByLeader.Values)
+            {
+                foreach (PackAnimal member in pack.m_Members)
+                {
+                    EnablePackMember(member);
+                }
+            }
+            VanillaPackManager.m_EnablePacksOnLoad = false;
+        }
+
+        private void EnablePackMember(PackAnimal member)
+        {
+            if (member.isActiveAndEnabled) return;
+            if (member.transform.parent == null) return; 
+            member.gameObject.SetActive(value: true);
+            if (member.transform.parent.gameObject.activeSelf) return; 
+            member.transform.parent.gameObject.SetActive(value: true);
+        }
+
+        protected virtual bool MaybeEnableAnimalsOnLoadCustom() => true;
     }
 }
