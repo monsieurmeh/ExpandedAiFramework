@@ -703,8 +703,7 @@ namespace ExpandedAiFramework
             return mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out customSpawnRegion);
         }
 
-
-        private bool TryInjectCustomSpawnRegion(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback)
+        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback = null)
         {
             if (spawnRegion == null)
             {
@@ -723,16 +722,6 @@ namespace ExpandedAiFramework
             }
             Guid wrapperGuid = new Guid(guid.PDID);
             WrapSpawnRegion(spawnRegion, wrapperGuid, callback);
-            return true;
-        }
-
-
-        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback = null)
-        {
-            if (!TryInjectCustomSpawnRegion(spawnRegion, callback))
-            {
-                return false;
-            }
             LogTrace($"Successfully wrapped custom spawn region with hash code {spawnRegion.GetHashCode()}!", LogCategoryFlags.SpawnRegionManager);
             return true;
         }
