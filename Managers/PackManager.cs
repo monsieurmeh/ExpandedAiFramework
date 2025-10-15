@@ -311,6 +311,7 @@ namespace ExpandedAiFramework
                 LogTrace($"Group morale heuristic less than flee morale threshold", UpdateFlags);
                 return true;
             }
+            /* "???bruh???" is right... this part makes zero sense in context. I've never seen a pack of wolves disband for any reason other than "too few members", so this feels... weird...
             if (!IsTaggedGroupAnimal(animal)) 
             {
                 LogTrace($"Not tagged group animal", UpdateFlags);
@@ -354,6 +355,7 @@ namespace ExpandedAiFramework
                 }
             }
             LogTrace($"???bruh???", UpdateFlags);
+            */
             return false;
         }
 
