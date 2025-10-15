@@ -18,6 +18,12 @@ namespace ExpandedAiFramework
         public int SpawnWeight = 100;
 
 
+        [Name("DANGER: Increase Max Spawn Count")]
+        [Slider(0, 25)]
+        [Description("Spawns more timberwolves... What else do you want?")]
+        public int MaxTimberwolfSpawnCountIncrease = 0;
+
+
         public BaseTimberwolfSettings(string path) : base(path) { }
 
 

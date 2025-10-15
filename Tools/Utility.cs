@@ -12,6 +12,16 @@ namespace ExpandedAiFramework
 {
     public static class Utility
     {
+        public const long MillisecondsToTicks = 10000L;
+        public const long SecondsToTicks = MillisecondsToTicks * 1000L;
+        public const long MinutesToTicks = SecondsToTicks * 60L;
+        public const long HoursToTicks = MinutesToTicks * 60L;
+        public const long DaysToTicks = HoursToTicks * 24L;
+        public const float TicksToMilliseconds = 0.0001f;
+        public const float TicksToSeconds = TicksToMilliseconds * 0.001f;
+        public const float TicksToMinutes = TicksToSeconds / 60f;
+        public const float TicksToHours = TicksToMinutes / 60f;
+        public const float TicksToDays = TicksToHours / 24f;
         public const float SecondsToDays = 1f / 86400f;
         public const float DaysToSeconds = 86400f;
         public const float SecondsToHours = 1f / 3600f;
