@@ -822,7 +822,10 @@ namespace ExpandedAiFramework
             }
             switch (baseAi.m_AiSubType)
             {
-                case AiSubType.Wolf: return new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay); //eventually may connect to a pool system; for now, I dont see anyone else using this soon
+                case AiSubType.Wolf: 
+                    return baseAi.Timberwolf == null 
+                        ? new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay) //eventually may connect to a pool system; for now, I dont see anyone else using this soon
+                        : new BaseTimberwolfSpawnRegion(spawnRegion, proxy, mTimeOfDay);
                 case AiSubType.Cougar: 
                     if (mManager.CougarManager == null) break;
                     if (mManager.CougarManager.OverrideCustomSpawnRegionType(spawnRegion, proxy, mTimeOfDay, out CustomSpawnRegion customCougarSpawnRegion)) break;
