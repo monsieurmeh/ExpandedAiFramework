@@ -375,12 +375,11 @@ namespace ExpandedAiFramework
                 LogTrace($"Pack group members count is 0", UpdateFlags);
                 return 1f;
             }
-            return Mathf.Clamp01(group.m_Members.Count - 1) / (group.m_FormationCount - 1);            
+            return Mathf.Clamp01((group.m_Members.Count - 1) / (group.m_FormationCount - 1));            
         }
 
         #region eventual uproots
         
-        private float GroupMoraleHeuristic(PackAnimal animal) => VanillaPackManager.GroupMoraleHeuristic(animal);
         private bool IsMismatchWildlifeMode(PackAnimal animal) => VanillaPackManager.IsMismatchWildlifeMode(animal);
         private bool IsTaggedGroupAnimal(PackAnimal animal) => VanillaPackManager.IsTaggedGroupAnimal(animal);
         private void MaybeSetAuroraMaterialsOnFlee(BaseAi baseAi) => VanillaPackManager.MaybeSetAuroraMaterialsOnFlee(baseAi);
