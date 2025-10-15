@@ -202,6 +202,11 @@ namespace ExpandedAiFramework
             }
         }
 
+        private bool TryGetPackGroupByLeader(PackAnimal leader, out PackGroup group) 
+        {
+            return VanillaPackManager.m_PackAnimalGroupByLeader.TryGetValue(leader, out group);
+        }
+
 
         private bool IsPackAnimalDead(PackAnimal animal) 
         {
@@ -352,6 +357,26 @@ namespace ExpandedAiFramework
             return false;
         }
 
+
+        private float GroupMoraleHeuristic(PackAnimal animal)
+        {
+            if (animal == null)
+            {
+                LogTrace($"Null PackAnimal", UpdateFlags);
+                return 1f;
+            }
+            if (!TryGetPackGroupByLeader(animal.m_GroupLeader, out PackGroup group))
+            {
+                LogTrace($"Failed to get pack group by leader", UpdateFlags);
+                return 1f;
+            }
+            if (group.m_Members.Count == 0)
+            {
+                LogTrace($"Pack group members count is 0", UpdateFlags);
+                return 1f;
+            }
+            return Mathf.Clamp01(group.m_Members.Count - 1) / (group.m_FormationCount - 1);            
+        }
 
         #region eventual uproots
         
