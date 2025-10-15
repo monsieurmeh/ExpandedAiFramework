@@ -304,7 +304,7 @@ namespace ExpandedAiFramework
                 LogTrace($"Force AIFlee", UpdateFlags);
                 return true;
             }
-            float fleeMoraleThreshold = settings.m_FleeMoraleThreshold / 100f;
+            float fleeMoraleThreshold = settings.m_FleeMoraleThreshold / 100f; // Great place to adjust flee threshold for combat!
             float groupMoraleHeuristic = GroupMoraleHeuristic(animal);
             if (groupMoraleHeuristic < fleeMoraleThreshold) 
             {
