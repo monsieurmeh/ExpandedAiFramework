@@ -33,7 +33,8 @@ namespace ExpandedAiFramework
     {
         public const WanderPathFlags DefaultFlags = WanderPathFlags.Wolf | WanderPathFlags.Individual | WanderPathFlags.Modded;
         [Include] private Vector3[] mPathPoints;
-        [Include] private WanderPathFlags mWanderPathFlags = DefaultFlags;
+        [Exclude] private WanderPathFlags mWanderPathFlags = DefaultFlags;
+        [Include] private uint mWanderPathFlagsSerialized = (uint)DefaultFlags;
 
         public Vector3[] PathPoints { get { return mPathPoints; } }
         public WanderPathFlags WanderPathFlags { get { return mWanderPathFlags; } }
@@ -51,6 +52,20 @@ namespace ExpandedAiFramework
         {
             mPathPoints = pathPoints;
             mWanderPathFlags = wanderPathFlags;
+            mWanderPathFlagsSerialized = (uint)mWanderPathFlags;
+        }
+
+        public override bool PostProcess()
+        {
+            try
+            {
+                mWanderPathFlags = (WanderPathFlags)mWanderPathFlagsSerialized;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
