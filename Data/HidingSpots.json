@@ -6101,5 +6101,396 @@
 		"mClaimed": false,
 		"mGuid": "5416cbfd-0290-45a1-909a-1d596eec84cf",
 		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.2615571,
+			"z": -0,
+			"w": 0.965188
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 300.13602,
+			"y": 225.84581,
+			"z": 340.612
+		},
+		"mClaimed": false,
+		"mGuid": "a04edd76-cbe4-43dd-be79-a9ee90886348",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.39264506,
+			"z": -0,
+			"w": 0.9196901
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": -59.17926,
+			"y": 139.43018,
+			"z": 20.115112
+		},
+		"mClaimed": false,
+		"mGuid": "7f7c3437-bfe4-48bd-bafe-c8a3b29779ef",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.93749285,
+			"z": 0,
+			"w": 0.3480046
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 62.816467,
+			"y": 193.99075,
+			"z": 428.03253
+		},
+		"mClaimed": false,
+		"mGuid": "cdbc50a0-6e76-4a9e-b1b1-2ce86c8a39f1",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99948823,
+			"z": 0,
+			"w": 0.03198913
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 156.04974,
+			"y": 306.17264,
+			"z": 873.746
+		},
+		"mClaimed": false,
+		"mGuid": "f7bf4cb5-a8b9-4849-8c56-355552a0e2d2",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.16364086,
+			"z": 0,
+			"w": 0.98652
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 319.98004,
+			"y": 340.52905,
+			"z": 814.19226
+		},
+		"mClaimed": false,
+		"mGuid": "c7b8837a-52fc-4c7b-9a1b-3df9473f129d",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8265577,
+			"z": 0,
+			"w": 0.562852
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 837.23193,
+			"y": 92.02702,
+			"z": 507.27148
+		},
+		"mClaimed": false,
+		"mGuid": "52280959-53d1-456f-8399-0e6b7fe7dad4",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.774051,
+			"z": 0,
+			"w": 0.6331232
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 686.42944,
+			"y": 92.027016,
+			"z": 346.66162
+		},
+		"mClaimed": false,
+		"mGuid": "517a09db-4a43-43ad-9b7a-c87a158108c1",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.87109005,
+			"z": 0,
+			"w": 0.4911233
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 582.5922,
+			"y": 105.20792,
+			"z": 292.7975
+		},
+		"mClaimed": false,
+		"mGuid": "43354f7d-a892-49f6-a9ad-d1386433fd44",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.17533062,
+			"z": -0,
+			"w": 0.9845096
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 500.45517,
+			"y": 48.009518,
+			"z": -132.73476
+		},
+		"mClaimed": false,
+		"mGuid": "8f808174-d2d3-4df4-8b92-a68d4984b70a",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5702562,
+			"z": 0,
+			"w": 0.8214669
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 571.6294,
+			"y": 64.83079,
+			"z": 97.43442
+		},
+		"mClaimed": false,
+		"mGuid": "2ec3dde0-790a-4f48-b2a2-5a1a2ab85190",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7436388,
+			"z": 0,
+			"w": 0.6685816
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 172.81554,
+			"y": 29.944708,
+			"z": -436.18976
+		},
+		"mClaimed": false,
+		"mGuid": "d97d08c2-a729-4ee1-9bf1-48acc27c5898",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.57608646,
+			"z": 0,
+			"w": 0.8173888
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 57.488106,
+			"y": 81.52015,
+			"z": -916.66266
+		},
+		"mClaimed": false,
+		"mGuid": "ec65847c-de21-46c2-ab82-919cf17aa02c",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.398852,
+			"z": 0,
+			"w": 0.9170153
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": -365.66577,
+			"y": 31.897644,
+			"z": -616.2058
+		},
+		"mClaimed": false,
+		"mGuid": "ded3c92f-406f-4128-9e3f-39908f84b531",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6893906,
+			"z": 0,
+			"w": 0.72438985
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": -499.215,
+			"y": 39.867092,
+			"z": -444.59814
+		},
+		"mClaimed": false,
+		"mGuid": "567d5cdb-3312-4420-a0e9-15601690dbce",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7230821,
+			"z": 0,
+			"w": 0.6907621
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": -469.78238,
+			"y": 32.05002,
+			"z": -446.49933
+		},
+		"mClaimed": false,
+		"mGuid": "c669dadc-979d-43ab-9068-9e6bfd355a13",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7938785,
+			"z": 0,
+			"w": 0.60807645
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": -760.6726,
+			"y": 36.066345,
+			"z": -391.99268
+		},
+		"mClaimed": false,
+		"mGuid": "9cdafbbc-dcbc-46ee-a3e8-79d97943e181",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9111745,
+			"z": 0,
+			"w": -0.41202086
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": -960.32184,
+			"y": 56.08463,
+			"z": -210.59407
+		},
+		"mClaimed": false,
+		"mGuid": "a3a92dcc-ecae-4066-887f-6727994a5805",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.74631166,
+			"z": 0,
+			"w": 0.66559666
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": -641.05597,
+			"y": 35.79109,
+			"z": -71.11595
+		},
+		"mClaimed": false,
+		"mGuid": "2d8ec3c3-c6ee-4ebe-8501-df22a447dbdc",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6241526,
+			"z": 0,
+			"w": 0.78130245
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": -938.6801,
+			"y": 77.651024,
+			"z": 370.75793
+		},
+		"mClaimed": false,
+		"mGuid": "a761b09a-beea-49b1-bd0a-c2ce6c6f28c3",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99788874,
+			"z": 0,
+			"w": -0.064947516
+		},
+		"mName": "HidingSpot_20",
+		"mAnchorPosition": {
+			"x": -197.216,
+			"y": 25.867798,
+			"z": 239.61462
+		},
+		"mClaimed": false,
+		"mGuid": "88b44846-c8b2-40a6-a919-188b8ec6a514",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9107941,
+			"z": 0,
+			"w": 0.41286096
+		},
+		"mName": "HidingSpot_21",
+		"mAnchorPosition": {
+			"x": -259.79584,
+			"y": 123.09024,
+			"z": 879.6536
+		},
+		"mClaimed": false,
+		"mGuid": "595ea061-3829-4d7b-ada1-0eb6ffbef5e5",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.79760873,
+			"z": 0,
+			"w": 0.6031752
+		},
+		"mName": "HidingSpot_22",
+		"mAnchorPosition": {
+			"x": -6.893921,
+			"y": 93.667984,
+			"z": 574.09985
+		},
+		"mClaimed": false,
+		"mGuid": "3f67a20d-4565-4b03-83ea-3cef5203dd29",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6055887,
+			"z": -0,
+			"w": 0.79577786
+		},
+		"mName": "HidingSpot_23",
+		"mAnchorPosition": {
+			"x": -544.50037,
+			"y": 110.338684,
+			"z": 847.1426
+		},
+		"mClaimed": false,
+		"mGuid": "9adedb7f-9273-475c-8e63-50b027598283",
+		"mScene": "CanneryRegion"
 	}
 ]
