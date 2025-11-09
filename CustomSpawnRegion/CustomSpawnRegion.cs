@@ -331,9 +331,15 @@ namespace ExpandedAiFramework
             {
                 while (mPendingSpawns.Count > 0)
                 {
-                    InstantiateSpawn(mPendingSpawns.Dequeue());
+                    InstantiateSpawnAndSetUnavailable(mPendingSpawns.Dequeue());
                 }
             }
+        }
+
+        protected void InstantiateSpawnAndSetUnavailable(SpawnModDataProxy modDataProxy)
+        {
+            CustomBaseAi customBaseAi = InstantiateSpawn(modDataProxy);
+            modDataProxy.Available = customBaseAi == null;
         }
 
 
@@ -350,15 +356,9 @@ namespace ExpandedAiFramework
             }
             if (customBaseAi != null)
             {
-                this.LogTraceInstanced($"Spawned new Ai. Proxy with guid {modDataProxy.Guid} set to CLAIMED.", LogCategoryFlags.SpawnRegion);
                 modDataProxy.Spawned = true; //Ensure that it sticks around until the AI perishes
                 mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(modDataProxy.Guid, modDataProxy.Scene, null, false), modDataProxy.WildlifeMode);
             } 
-            else
-            {
-                this.LogTraceInstanced($"Could not spawn new Ai. Proxy with guid {modDataProxy.Guid} set to AVAILABLE.", LogCategoryFlags.SpawnRegion);
-                modDataProxy.Available = true;
-            }
             return customBaseAi;
         }
 
