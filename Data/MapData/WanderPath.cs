@@ -8,7 +8,7 @@ namespace ExpandedAiFramework
     {
         IndividualPath = 0,
         SpawnRegionMigrationPath,
-        PackPack,
+        PackPath,
         COUNT
     }
 
