@@ -7,12 +7,13 @@ namespace ExpandedAiFramework
     {
         protected string mScene;
         protected Vector3 mPosition;
+        protected string mInstanceInfo;
         protected int mExtraNearestCandidatesToMaybePickFrom;
         protected bool mHasAdditionalFilters = false;
         protected Func<T, bool> mManagerScopeFilter = null;
         protected Func<T, bool> mRequestScopeFilter = null;
 
-        public override string InstanceInfo { get { return $"{mPosition} in {mScene}"; } }
+        public override string InstanceInfo { get { return mInstanceInfo; } }
         public override string TypeInfo { get { return $"GetNearestMapData<{typeof(T)}>"; } }
 
         public GetNearestMapDataRequest(Vector3 position, string scene, Action<T, RequestResult> callback, bool callbackIsThreadSafe, Func<T, bool> additionalFilter = null, int extraNearestCandidatesToMaybePickFrom = 0) : base(callback, true, callbackIsThreadSafe)
@@ -21,6 +22,7 @@ namespace ExpandedAiFramework
             mPosition = position;
             mExtraNearestCandidatesToMaybePickFrom = extraNearestCandidatesToMaybePickFrom;
             mRequestScopeFilter = additionalFilter;
+            mInstanceInfo = $"{mPosition} in {mScene} with {extraNearestCandidatesToMaybePickFrom} extra picks";
         }
 
         public override void Preprocess(ISubDataManager manager)
