@@ -124,7 +124,7 @@ namespace ExpandedAiFramework.DebugMenu
             // Wander Path Type - standard dropdown
             var wanderPathTypeOptions = DropdownFormFieldOptions.Default("Wander Path Type");
             wanderPathTypeOptions.LabelOptions.textOptions.fontSize = 12;
-            var wanderPathTypeField = FormFieldFactory.CreateDropdownField("Wander Path Type", entity.WanderPathType, modalContent.transform, onValueChanged, wanderPathTypeOptions);
+            var wanderPathTypeField = FormFieldFactory.CreateDropdownField("Wander Path Type", entity.WanderPathFlags, modalContent.transform, onValueChanged, wanderPathTypeOptions);
             
             // Path points count (read-only) - compact since it's just info
             var countOptions = TextFormFieldOptions.Compact("Path Points Count", 45f);

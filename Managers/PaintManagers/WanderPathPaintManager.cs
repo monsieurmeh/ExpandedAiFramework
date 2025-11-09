@@ -1,3 +1,4 @@
+using Il2CppSystem.IO;
 using UnityEngine;
 
 
@@ -9,7 +10,7 @@ namespace ExpandedAiFramework
         private List<GameObject> mCurrentWanderPathPointMarkers = new List<GameObject>();
         private bool mRecordingPath = false;
         private bool mJustFinishedPath = false;
-        private WanderPathTypes mWanderPathType = WanderPathTypes.IndividualPath;
+        private WanderPathFlags mWanderPathType = WanderPath.DefaultFlags;
 
         public override string TypeName => CommandString_WanderPath;
 
@@ -343,18 +344,15 @@ namespace ExpandedAiFramework
             switch (property)
             {
                 case "wanderpathtype":
-                    if (!Enum.TryParse(value, out mWanderPathType))
+                    try
                     {
-                        if (!int.TryParse(value, out int intValue))
-                        {
-                            this.LogErrorInstanced($"Invalid wander path type: {value} AND cannot parse as int");
-                            return;
-                        }
-                        mWanderPathType = (WanderPathTypes)intValue;
+                        uint tryParseFromString = uint.Parse(value);
+                        mWanderPathType = (WanderPathFlags)tryParseFromString;
                     }
-                    else
+                    catch (Exception e)
                     {
-                        mWanderPathType = (WanderPathTypes)Enum.Parse(typeof(WanderPathTypes), value);
+                        this.LogErrorInstanced($"Could not parse uint from wanderpathtype input ({e})");
+                        return;
                     }
                     this.LogAlwaysInstanced($"Set wander path type to {mWanderPathType}", LogCategoryFlags.PaintManager);
                     break;
