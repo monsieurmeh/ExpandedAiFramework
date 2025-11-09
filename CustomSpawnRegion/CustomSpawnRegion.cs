@@ -25,7 +25,7 @@ namespace ExpandedAiFramework
         public DataManager DataManager { get { return mDataManager; } }
         public SpawnRegion VanillaSpawnRegion { get { return mSpawnRegion; } }
         public SpawnRegionModDataProxy ModDataProxy { get { return mModDataProxy; } }
-        public virtual string InstanceInfo { get { return !VanillaSpawnRegion.IsNullOrDestroyed() ? VanillaSpawnRegion.GetHashCode().ToString() : "NULL"; } }
+        public virtual string InstanceInfo { get { return mModDataProxy != null ? $"{mModDataProxy.Guid}": !VanillaSpawnRegion.IsNullOrDestroyed() ? VanillaSpawnRegion.GetHashCode().ToString() : "NULL"; } }
         public virtual string TypeInfo { get { return GetType().Name; } }
         public List<CustomBaseAi> ActiveSpawns { get { return mActiveSpawns; } }
 
