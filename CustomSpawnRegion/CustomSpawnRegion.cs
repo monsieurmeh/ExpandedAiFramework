@@ -743,6 +743,11 @@ namespace ExpandedAiFramework
                             this.LogTraceInstanced($"Failed to match wildlifeMode for forced removal and spawn is normal wolf in AiMode.WanderPaused, cannot despawn", LogCategoryFlags.SpawnRegion);
                             continue;
                         }
+                        if (mActiveSpawns[i].ModDataProxy != null)
+                        {
+                            // ensure despawned entities get saved to moddata on despawn, otherwise we will lose out on position data later on
+                            mActiveSpawns[i].ModDataProxy.Save(mActiveSpawns[i]);
+                        }
                         spawn.Despawn();
                         numToDeactivate--;
                     }
