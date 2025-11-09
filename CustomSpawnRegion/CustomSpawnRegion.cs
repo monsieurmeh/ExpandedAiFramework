@@ -319,6 +319,7 @@ namespace ExpandedAiFramework
                     }
                 }
                 proxy.Available = false;
+                this.LogTraceInstanced($"Setting proxy with guid {proxy.Guid} to UNAVAILABLE", LogCategoryFlags.SpawnRegion);
                 mPendingSpawns.Enqueue(proxy);
             }
         }
