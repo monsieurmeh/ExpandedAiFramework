@@ -110,6 +110,10 @@ namespace ExpandedAiFramework
             {
                 WolfType = WolfType.Normal;
             }
+            if (baseAi.transform == null)
+            {
+                return;
+            }
             AiUtils.GetClosestNavmeshPos(out mCurrentPosition, baseAi.transform.position, baseAi.transform.position, 5, 5);
             CurrentRotation = baseAi.transform.rotation;
         }
