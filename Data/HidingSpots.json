@@ -7529,5 +7529,362 @@
 		"mClaimed": false,
 		"mGuid": "a9c1efbf-7b8c-47e3-b9ed-1dde88407a49",
 		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.62259775,
+			"z": 0,
+			"w": 0.78254205
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 649.19714,
+			"y": 239.02388,
+			"z": 1514.3333
+		},
+		"mClaimed": false,
+		"mGuid": "657aacde-1c93-4cc8-8a5f-321ea568f447",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.78948826,
+			"z": 0,
+			"w": 0.6137657
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 757.0001,
+			"y": 245.67513,
+			"z": 1358.3296
+		},
+		"mClaimed": false,
+		"mGuid": "fb89bad4-a766-4a63-85e8-1faf4268a72c",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8802239,
+			"z": 0,
+			"w": 0.47455877
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 366.05704,
+			"y": 184.8492,
+			"z": 1306.6997
+		},
+		"mClaimed": false,
+		"mGuid": "db2cd77c-a14d-424a-9435-a17cd97fa5ed",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7904834,
+			"z": 0,
+			"w": 0.61248344
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 564.10474,
+			"y": 187.3,
+			"z": 1364.7422
+		},
+		"mClaimed": false,
+		"mGuid": "34c22822-df0f-40e4-87c1-caa4af86f21c",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.042028066,
+			"z": -0,
+			"w": 0.9991164
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 843.7822,
+			"y": 238.15425,
+			"z": 1036.8386
+		},
+		"mClaimed": false,
+		"mGuid": "33cabe20-9d89-4f5a-8266-f71f6960cac1",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.10919744,
+			"z": 0,
+			"w": 0.9940201
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 662.3458,
+			"y": 233.43858,
+			"z": 939.15607
+		},
+		"mClaimed": false,
+		"mGuid": "4a7e8226-72eb-4ffd-80e8-02255030a110",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.10176237,
+			"z": 0,
+			"w": 0.99480873
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 828.3135,
+			"y": 237.5144,
+			"z": 802.3934
+		},
+		"mClaimed": false,
+		"mGuid": "68c838f5-629f-47f9-80d1-09442a76122d",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6330438,
+			"z": -0,
+			"w": 0.774116
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 604.8218,
+			"y": 230.68408,
+			"z": 851.83105
+		},
+		"mClaimed": false,
+		"mGuid": "3f41589e-6607-4261-808b-29710e51bed3",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9197068,
+			"z": 0,
+			"w": 0.3926059
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 536.61426,
+			"y": 231.69067,
+			"z": 770.82495
+		},
+		"mClaimed": false,
+		"mGuid": "0e001f30-bc2f-48a3-aea8-6ef601595f15",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.25983137,
+			"z": 0,
+			"w": 0.965654
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 434.09866,
+			"y": 234.17372,
+			"z": 820.32513
+		},
+		"mClaimed": false,
+		"mGuid": "db1020bc-230e-4b59-881f-71c718290352",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.26890635,
+			"z": 0,
+			"w": 0.96316636
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 244.26172,
+			"y": 250.88873,
+			"z": 944.6318
+		},
+		"mClaimed": false,
+		"mGuid": "d63efcba-84d1-4d69-9c87-ed434f971c0c",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.95152175,
+			"z": 0,
+			"w": 0.30758148
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": -73.40652,
+			"y": 261.32632,
+			"z": 919.2548
+		},
+		"mClaimed": false,
+		"mGuid": "50ae310d-6460-4d63-a161-f1dbc62f0f11",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.94460034,
+			"z": 0,
+			"w": 0.3282228
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": -128.65483,
+			"y": 230.78514,
+			"z": 790.5028
+		},
+		"mClaimed": false,
+		"mGuid": "d9312314-58a5-43bd-a219-58cd28dbc17d",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.120984994,
+			"z": 0,
+			"w": 0.9926544
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": 68.98154,
+			"y": 243.61908,
+			"z": 441.08887
+		},
+		"mClaimed": false,
+		"mGuid": "c1b5f7e2-8317-45b6-b5c9-9db8839b5e0e",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.21275936,
+			"z": -0,
+			"w": 0.97710466
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": 524.37036,
+			"y": 172.1,
+			"z": 306.32474
+		},
+		"mClaimed": false,
+		"mGuid": "f0771e07-ea3a-4ff5-a763-ef67cafbeaca",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.299851,
+			"z": 0,
+			"w": 0.95398605
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": 808.6106,
+			"y": 236.16264,
+			"z": 401.92993
+		},
+		"mClaimed": false,
+		"mGuid": "f7904a6e-5b3a-4ee0-90d0-7c65490efd22",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99100673,
+			"z": 0,
+			"w": 0.13381201
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": 772.3187,
+			"y": 227.59088,
+			"z": 652.523
+		},
+		"mClaimed": false,
+		"mGuid": "d6b58158-2918-4c00-8ad7-f846fb53f8d0",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97288334,
+			"z": 0,
+			"w": -0.23129636
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": 577.28394,
+			"y": 199.79747,
+			"z": 576.2124
+		},
+		"mClaimed": false,
+		"mGuid": "6a3f23e5-ea4e-440c-a48c-fa9e7ede4e7c",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.012359805,
+			"z": -0,
+			"w": 0.99992365
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": 642.3638,
+			"y": 200.68884,
+			"z": 529.86523
+		},
+		"mClaimed": false,
+		"mGuid": "2aeba78d-36bd-4cd4-bb3c-485f494dd01b",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7362272,
+			"z": 0,
+			"w": 0.6767345
+		},
+		"mName": "HidingSpot_20",
+		"mAnchorPosition": {
+			"x": 254.22244,
+			"y": 190.30873,
+			"z": 576.5489
+		},
+		"mClaimed": false,
+		"mGuid": "8bf72108-3de9-43b4-b71b-6c0b073112e4",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5162807,
+			"z": 0,
+			"w": 0.85641944
+		},
+		"mName": "HidingSpot_21",
+		"mAnchorPosition": {
+			"x": 321.5976,
+			"y": 189.32349,
+			"z": 430.0276
+		},
+		"mClaimed": false,
+		"mGuid": "228a5c41-d24e-4168-92c6-56d029175bad",
+		"mScene": "TracksRegion"
 	}
 ]
