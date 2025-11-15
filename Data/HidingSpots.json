@@ -6616,7 +6616,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.6228016,
-			"z": -0,
+			"z": 0,
 			"w": 0.7823798
 		},
 		"mName": "HidingSpot_8",
@@ -6650,7 +6650,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.030362613,
-			"z": -0,
+			"z": 0,
 			"w": 0.99953896
 		},
 		"mName": "HidingSpot_10",
@@ -6667,7 +6667,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.44876915,
-			"z": -0,
+			"z": 0,
 			"w": 0.89364773
 		},
 		"mName": "HidingSpot_11",
@@ -6684,7 +6684,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.6423873,
-			"z": -0,
+			"z": 0,
 			"w": 0.7663802
 		},
 		"mName": "HidingSpot_12",
@@ -6752,7 +6752,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.40828106,
-			"z": -0,
+			"z": 0,
 			"w": 0.9128563
 		},
 		"mName": "HidingSpot_16",
@@ -6769,7 +6769,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.5440238,
-			"z": -0,
+			"z": 0,
 			"w": 0.8390698
 		},
 		"mName": "HidingSpot_1",
@@ -6854,7 +6854,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.3211117,
-			"z": -0,
+			"z": 0,
 			"w": 0.94704133
 		},
 		"mName": "HidingSpot_6",
@@ -6905,7 +6905,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.22324367,
-			"z": -0,
+			"z": 0,
 			"w": 0.9747627
 		},
 		"mName": "HidingSpot_9",
@@ -6990,7 +6990,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.671225,
-			"z": -0,
+			"z": 0,
 			"w": 0.7412537
 		},
 		"mName": "HidingSpot_1",
@@ -7041,7 +7041,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.59339607,
-			"z": -0,
+			"z": 0,
 			"w": 0.80491066
 		},
 		"mName": "HidingSpot_4",
@@ -7058,7 +7058,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.21064204,
-			"z": -0,
+			"z": 0,
 			"w": 0.97756326
 		},
 		"mName": "HidingSpot_5",
@@ -7211,7 +7211,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.09960658,
-			"z": -0,
+			"z": 0,
 			"w": 0.99502695
 		},
 		"mName": "HidingSpot_1",
@@ -7228,7 +7228,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.5411594,
-			"z": -0,
+			"z": 0,
 			"w": 0.84092003
 		},
 		"mName": "HidingSpot_2",
@@ -7313,7 +7313,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.6532376,
-			"z": -0,
+			"z": 0,
 			"w": 0.75715303
 		},
 		"mName": "HidingSpot_7",
@@ -7449,7 +7449,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.12534186,
-			"z": -0,
+			"z": 0,
 			"w": 0.99211365
 		},
 		"mName": "HidingSpot_15",
@@ -7466,7 +7466,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.4465877,
-			"z": -0,
+			"z": 0,
 			"w": 0.89473987
 		},
 		"mName": "HidingSpot_16",
@@ -7517,7 +7517,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.021507505,
-			"z": -0,
+			"z": 0,
 			"w": 0.99976873
 		},
 		"mName": "HidingSpot_19",
@@ -7602,7 +7602,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.042028066,
-			"z": -0,
+			"z": 0,
 			"w": 0.9991164
 		},
 		"mName": "HidingSpot_5",
@@ -7653,7 +7653,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.6330438,
-			"z": -0,
+			"z": 0,
 			"w": 0.774116
 		},
 		"mName": "HidingSpot_8",
@@ -7772,7 +7772,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.21275936,
-			"z": -0,
+			"z": 0,
 			"w": 0.97710466
 		},
 		"mName": "HidingSpot_15",
@@ -7840,7 +7840,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.012359805,
-			"z": -0,
+			"z": 0,
 			"w": 0.99992365
 		},
 		"mName": "HidingSpot_19",
@@ -7886,5 +7886,396 @@
 		"mClaimed": false,
 		"mGuid": "228a5c41-d24e-4168-92c6-56d029175bad",
 		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8635153,
+			"z": 0,
+			"w": 0.50432265
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": -345.4275,
+			"y": 134.5292,
+			"z": -901.8974
+		},
+		"mClaimed": false,
+		"mGuid": "5a1417fb-25e6-4b2a-918d-8493119f49ad",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9994976,
+			"z": 0,
+			"w": 0.031694956
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": -352.2492,
+			"y": 130.61015,
+			"z": -862.0909
+		},
+		"mClaimed": false,
+		"mGuid": "2999f74b-b01c-4f02-8b12-d3442fa7d3a5",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99992424,
+			"z": 0,
+			"w": 0.012312623
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": -715.1904,
+			"y": 77.373856,
+			"z": -708.1759
+		},
+		"mClaimed": false,
+		"mGuid": "60044bc4-1f6c-4d48-87c8-54d10e7ac0e7",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.96698225,
+			"z": 0,
+			"w": -0.25484377
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": -588.21124,
+			"y": 106.45548,
+			"z": -470.9829
+		},
+		"mClaimed": false,
+		"mGuid": "304b4cef-162c-4f6a-9e68-a22be273d9f5",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99682534,
+			"z": 0,
+			"w": -0.07961989
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": -362.56055,
+			"y": 142.6056,
+			"z": -519.6233
+		},
+		"mClaimed": false,
+		"mGuid": "9d0665f3-ac82-4cbc-98aa-0e421a4d6a6a",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7216941,
+			"z": 0,
+			"w": 0.6922121
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": -111.78162,
+			"y": 221.46788,
+			"z": -11.589722
+		},
+		"mClaimed": false,
+		"mGuid": "fe8b00c5-b733-4c49-a114-36cb62100413",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8750022,
+			"z": 0,
+			"w": -0.484119
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": -255.06293,
+			"y": 209.6389,
+			"z": 11.800995
+		},
+		"mClaimed": false,
+		"mGuid": "1c3f8677-ef47-4dcd-b362-94610ec80814",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.016909197,
+			"z": 0,
+			"w": 0.99985707
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": -151.67471,
+			"y": 172.21434,
+			"z": -505.96475
+		},
+		"mClaimed": false,
+		"mGuid": "55ef5550-5992-4695-a6e2-782bdf81087e",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.0075857933,
+			"z": 0,
+			"w": 0.9999713
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": -713.05646,
+			"y": 115.20763,
+			"z": -149.99524
+		},
+		"mClaimed": false,
+		"mGuid": "0044e619-f0aa-4dd1-a081-7175d419d7cf",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5046332,
+			"z": -0,
+			"w": 0.8633339
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": -666.4584,
+			"y": 105.92286,
+			"z": 1.166116
+		},
+		"mClaimed": false,
+		"mGuid": "a8578f35-b7ef-4d1f-96ea-60c8f4a5e89a",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.44945166,
+			"z": 0,
+			"w": 0.8933047
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": -919.44336,
+			"y": 120.87857,
+			"z": 186.43677
+		},
+		"mClaimed": false,
+		"mGuid": "93b4dc9c-8cf6-4945-b466-558bcf839466",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.07904044,
+			"z": 0,
+			"w": 0.9968714
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": -822.4993,
+			"y": 100.683365,
+			"z": 429.00024
+		},
+		"mClaimed": false,
+		"mGuid": "c3598536-b176-47db-9d42-2f95275044a0",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8188189,
+			"z": 0,
+			"w": 0.574052
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 27.686401,
+			"y": 228.28441,
+			"z": 81.22839
+		},
+		"mClaimed": false,
+		"mGuid": "a94b3bbc-4a90-4ec6-a711-3a8c68f400d6",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8528513,
+			"z": 0,
+			"w": 0.52215403
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": 678.7749,
+			"y": 322.9612,
+			"z": 649.6101
+		},
+		"mClaimed": false,
+		"mGuid": "003fdf52-51ff-4c6c-81f8-7889b3c5d188",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.2024298,
+			"z": -0,
+			"w": 0.9792968
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": 1080.411,
+			"y": 301.5024,
+			"z": 533.3393
+		},
+		"mClaimed": false,
+		"mGuid": "51330827-89dd-4d19-82b7-9cc727deaa3d",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.3897574,
+			"z": -0,
+			"w": 0.9209176
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": 714.213,
+			"y": 380.5893,
+			"z": 805.4016
+		},
+		"mClaimed": false,
+		"mGuid": "177e32a9-7ba9-4237-bb11-352952d94518",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.2530575,
+			"z": -0,
+			"w": 0.9674513
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": 489.59198,
+			"y": 362.4184,
+			"z": 905.7225
+		},
+		"mClaimed": false,
+		"mGuid": "9c0de2f7-4ec4-4122-af7e-e7d3348634bd",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99712116,
+			"z": 0,
+			"w": 0.07582518
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": 409.34827,
+			"y": 381.2756,
+			"z": 1008.9888
+		},
+		"mClaimed": false,
+		"mGuid": "8882832e-3fd5-49d7-bd8e-f4e0794ff6c6",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.73841894,
+			"z": 0,
+			"w": 0.67434233
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": 893.7529,
+			"y": 228.9127,
+			"z": -93.09595
+		},
+		"mClaimed": false,
+		"mGuid": "9f03d568-96ec-401e-ac0b-4b65993f62a4",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.2229082,
+			"z": 0,
+			"w": 0.9748395
+		},
+		"mName": "HidingSpot_20",
+		"mAnchorPosition": {
+			"x": 861.24945,
+			"y": 246.23404,
+			"z": -200.89667
+		},
+		"mClaimed": false,
+		"mGuid": "88d1941d-ad00-4f25-be2b-c910601df32f",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.37326658,
+			"z": -0,
+			"w": 0.9277241
+		},
+		"mName": "HidingSpot_21",
+		"mAnchorPosition": {
+			"x": 618.8257,
+			"y": 225.25505,
+			"z": -327.8448
+		},
+		"mClaimed": false,
+		"mGuid": "8c13aef8-fb26-4422-abdb-25dc7183dea5",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9766597,
+			"z": 0,
+			"w": -0.21479237
+		},
+		"mName": "HidingSpot_22",
+		"mAnchorPosition": {
+			"x": 191.45862,
+			"y": 179.62305,
+			"z": -242.9845
+		},
+		"mClaimed": false,
+		"mGuid": "745296ed-d486-4685-8df2-9bd6921fdfde",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.48156983,
+			"z": 0,
+			"w": 0.87640774
+		},
+		"mName": "HidingSpot_23",
+		"mAnchorPosition": {
+			"x": 247.90674,
+			"y": 189.1351,
+			"z": -629.97656
+		},
+		"mClaimed": false,
+		"mGuid": "dc6eeb91-100d-4ec6-8deb-f08b3fe5436f",
+		"mScene": "BlackrockRegion"
 	}
 ]
