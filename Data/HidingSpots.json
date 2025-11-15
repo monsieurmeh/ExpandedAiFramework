@@ -6764,5 +6764,226 @@
 		"mClaimed": false,
 		"mGuid": "652f31aa-23d3-4108-baf9-7b10d40c1802",
 		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5440238,
+			"z": -0,
+			"w": 0.8390698
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 1719.9312,
+			"y": 16.645628,
+			"z": 1093.2262
+		},
+		"mClaimed": false,
+		"mGuid": "3d4a10d7-40e9-41a2-b7f3-ac3ff67c4539",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.19447897,
+			"z": 0,
+			"w": 0.9809067
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 1348.3237,
+			"y": 28.158043,
+			"z": 1068.191
+		},
+		"mClaimed": false,
+		"mGuid": "df5949d6-8a5d-4a6d-b734-cdbc903d3c0f",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7534278,
+			"z": 0,
+			"w": 0.6575307
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 977.124,
+			"y": 30.92492,
+			"z": 897.8204
+		},
+		"mClaimed": false,
+		"mGuid": "4dd15647-87c7-47ee-b318-84e15b2cbb58",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.62189806,
+			"z": 0,
+			"w": 0.7830983
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 933.6457,
+			"y": 45.783863,
+			"z": 1065.2477
+		},
+		"mClaimed": false,
+		"mGuid": "0882920d-45db-4441-9b62-7342c75a327c",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.33944312,
+			"z": 0,
+			"w": 0.9406266
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 202.56337,
+			"y": 101.53265,
+			"z": 1069.1587
+		},
+		"mClaimed": false,
+		"mGuid": "bd6a0b27-d94b-4a1c-a001-6cb4b966c32c",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.3211117,
+			"z": -0,
+			"w": 0.94704133
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 488.25592,
+			"y": 78.25491,
+			"z": 1033.7772
+		},
+		"mClaimed": false,
+		"mGuid": "b5e221f2-5b38-411e-9fd3-130a7403520a",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.16102473,
+			"z": 0,
+			"w": 0.9869504
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 626.68207,
+			"y": 106.9803,
+			"z": 625.50006
+		},
+		"mClaimed": false,
+		"mGuid": "add18b89-972f-4ed7-8a08-c3c3117d3d0a",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97899526,
+			"z": 0,
+			"w": -0.20388322
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 961.2981,
+			"y": 197.18909,
+			"z": 1294.6547
+		},
+		"mClaimed": false,
+		"mGuid": "b0a0755c-9818-4a86-8c27-e430b71cdf86",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.22324367,
+			"z": -0,
+			"w": 0.9747627
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 1184.9778,
+			"y": 208.31989,
+			"z": 1606.5577
+		},
+		"mClaimed": false,
+		"mGuid": "ca536661-f334-49da-87db-7da9d61581dd",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6024915,
+			"z": 0,
+			"w": 0.7981253
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 1038.0527,
+			"y": 198.33937,
+			"z": 1734.9155
+		},
+		"mClaimed": false,
+		"mGuid": "ad9f131c-3330-42fa-9325-f00c3b97f925",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8980805,
+			"z": 0,
+			"w": 0.43983114
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 494.43988,
+			"y": 115.18944,
+			"z": 1417.7738
+		},
+		"mClaimed": false,
+		"mGuid": "ee7e5467-4b97-45e6-9968-8823d5bf7d74",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.98489773,
+			"z": 0,
+			"w": -0.17313722
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 1209.2013,
+			"y": 202.51848,
+			"z": 833.92334
+		},
+		"mClaimed": false,
+		"mGuid": "c8fd11da-7167-423c-88cb-228e1e1b3790",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6944454,
+			"z": 0,
+			"w": 0.7195455
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 440.33392,
+			"y": 230.7568,
+			"z": 263.499
+		},
+		"mClaimed": false,
+		"mGuid": "146ca6d7-eaf5-4443-9772-a348078b58fd",
+		"mScene": "RiverValleyRegion"
 	}
 ]
