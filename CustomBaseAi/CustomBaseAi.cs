@@ -20,7 +20,7 @@ namespace ExpandedAiFramework
         public BaseAi BaseAi { get { return mBaseAi; } }
         public Component Self { get { return this; } }
         public SpawnModDataProxy ModDataProxy { get { return mModDataProxy; } }
-        public virtual string InstanceInfo { get { return mBaseAi.GetHashCode().ToString(); } }
+        public virtual string InstanceInfo { get { return mModDataProxy != null ? $"{mModDataProxy.Guid}" : mBaseAi.GetHashCode().ToString(); } }
         public virtual string TypeInfo { get { return GetType().Name; } }
         public virtual Color DebugHighlightColor { get { return Color.white; } }
 

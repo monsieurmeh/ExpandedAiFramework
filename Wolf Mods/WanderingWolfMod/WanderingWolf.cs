@@ -95,7 +95,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
                     {
                         this.LogTraceInstanced($"Found NEW nearest WanderPath with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
                         AttachWanderPath(nearestSpot);
-                    }, false, (wp => wp.WanderPathType == WanderPathTypes.IndividualPath), 3));
+                    }, false, (wp => wp.WanderPathFlags == WanderPath.DefaultFlags), 3));
                 }
                 else
                 {

@@ -25,7 +25,7 @@ namespace ExpandedAiFramework
         public DataManager DataManager { get { return mDataManager; } }
         public SpawnRegion VanillaSpawnRegion { get { return mSpawnRegion; } }
         public SpawnRegionModDataProxy ModDataProxy { get { return mModDataProxy; } }
-        public virtual string InstanceInfo { get { return !VanillaSpawnRegion.IsNullOrDestroyed() ? VanillaSpawnRegion.GetHashCode().ToString() : "NULL"; } }
+        public virtual string InstanceInfo { get { return mModDataProxy != null ? $"{mModDataProxy.Guid}": !VanillaSpawnRegion.IsNullOrDestroyed() ? VanillaSpawnRegion.GetHashCode().ToString() : "NULL"; } }
         public virtual string TypeInfo { get { return GetType().Name; } }
         public List<CustomBaseAi> ActiveSpawns { get { return mActiveSpawns; } }
 
@@ -319,6 +319,7 @@ namespace ExpandedAiFramework
                     }
                 }
                 proxy.Available = false;
+                this.LogTraceInstanced($"Setting proxy with guid {proxy.Guid} to UNAVAILABLE", LogCategoryFlags.SpawnRegion);
                 mPendingSpawns.Enqueue(proxy);
             }
         }
@@ -330,9 +331,15 @@ namespace ExpandedAiFramework
             {
                 while (mPendingSpawns.Count > 0)
                 {
-                    InstantiateSpawn(mPendingSpawns.Dequeue());
+                    InstantiateSpawnAndSetUnavailable(mPendingSpawns.Dequeue());
                 }
             }
+        }
+
+        protected void InstantiateSpawnAndSetUnavailable(SpawnModDataProxy modDataProxy)
+        {
+            CustomBaseAi customBaseAi = InstantiateSpawn(modDataProxy);
+            modDataProxy.Available = customBaseAi == null;
         }
 
 
@@ -349,15 +356,9 @@ namespace ExpandedAiFramework
             }
             if (customBaseAi != null)
             {
-                this.LogTraceInstanced($"Spawned new Ai. Proxy with guid {modDataProxy.Guid} set to CLAIMED.", LogCategoryFlags.SpawnRegion);
                 modDataProxy.Spawned = true; //Ensure that it sticks around until the AI perishes
                 mDataManager.ScheduleSpawnModDataProxyRequest(new ClaimAvailableSpawnRequest(modDataProxy.Guid, modDataProxy.Scene, null, false), modDataProxy.WildlifeMode);
             } 
-            else
-            {
-                this.LogTraceInstanced($"Could not spawn new Ai. Proxy with guid {modDataProxy.Guid} set to AVAILABLE.", LogCategoryFlags.SpawnRegion);
-                modDataProxy.Available = true;
-            }
             return customBaseAi;
         }
 
@@ -741,6 +742,11 @@ namespace ExpandedAiFramework
                         {
                             this.LogTraceInstanced($"Failed to match wildlifeMode for forced removal and spawn is normal wolf in AiMode.WanderPaused, cannot despawn", LogCategoryFlags.SpawnRegion);
                             continue;
+                        }
+                        if (mActiveSpawns[i].ModDataProxy != null)
+                        {
+                            // ensure despawned entities get saved to moddata on despawn, otherwise we will lose out on position data later on
+                            mActiveSpawns[i].ModDataProxy.Save(mActiveSpawns[i]);
                         }
                         spawn.Despawn();
                         numToDeactivate--;

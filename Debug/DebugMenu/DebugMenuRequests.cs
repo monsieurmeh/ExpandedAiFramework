@@ -184,7 +184,7 @@ namespace ExpandedAiFramework
     {
         private string mSceneFilter;
         private string mNameFilter;
-        private WanderPathTypes? mTypeFilter;
+        private WanderPathFlags? mTypeFilter;
 
         public override string InstanceInfo { get { return $"Scene:{mSceneFilter ?? "All"} Name:{mNameFilter ?? "All"} Type:{mTypeFilter?.ToString() ?? "All"}"; } }
 
@@ -192,7 +192,7 @@ namespace ExpandedAiFramework
             Action<List<WanderPath>, RequestResult> callback,
             string sceneFilter = null,
             string nameFilter = null,
-            WanderPathTypes? typeFilter = null,
+            WanderPathFlags? typeFilter = null,
             bool callbackIsThreadSafe = false) : base(callback, true, callbackIsThreadSafe)
         {
             mSceneFilter = sceneFilter;
@@ -213,7 +213,7 @@ namespace ExpandedAiFramework
                 if (!string.IsNullOrEmpty(mNameFilter) && !path.Name.Contains(mNameFilter))
                     continue;
 
-                if (mTypeFilter.HasValue && path.WanderPathType != mTypeFilter.Value)
+                if (mTypeFilter.HasValue && path.WanderPathFlags.AllOf(mTypeFilter.Value))
                     continue;
 
                 mResults.Add(path);
@@ -681,7 +681,7 @@ namespace ExpandedAiFramework
                     // Name property is read-only
                 }
 
-                if (mFieldValues.TryGetValue("Wander Path Type", out var typeValue) && typeValue is WanderPathTypes pathType)
+                if (mFieldValues.TryGetValue("Wander Path Type", out var typeValue) && typeValue is WanderPathFlags pathType)
                 {
                     // wanderPath.WanderPathType = pathType; // Read-only property
                     // WanderPathType property is read-only

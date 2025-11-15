@@ -8,5 +8,6 @@ namespace ExpandedAiFramework
         string Scene { get; }
         string DataLocation { get; set; }
         string DisplayName { get; }
+        bool PostProcess();
     }
 }

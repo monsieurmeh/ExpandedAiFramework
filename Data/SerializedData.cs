@@ -24,6 +24,9 @@ namespace ExpandedAiFramework
         }
 
 
+        public virtual bool PostProcess() => true;
+
+
         public override int GetHashCode() => mGuid.GetHashCode();
 
 

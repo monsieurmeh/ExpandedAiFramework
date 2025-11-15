@@ -110,8 +110,18 @@ namespace ExpandedAiFramework
             {
                 WolfType = WolfType.Normal;
             }
-            AiUtils.GetClosestNavmeshPos(out mCurrentPosition, baseAi.transform.position, baseAi.transform.position, 5, 5);
-            CurrentRotation = baseAi.transform.rotation;
+            try
+            {
+                if (baseAi.transform == null)
+                {
+                    return;
+                }
+                AiUtils.GetClosestNavmeshPos(out mCurrentPosition, baseAi.transform.position, baseAi.transform.position, 5, 5);
+                CurrentRotation = baseAi.transform.rotation;
+            } catch (Exception e)
+            {
+                LogWarning($"Failed to save position and rotation during SpawnModDataProxy serialization; possibly this creature is despawned currently? ({e})");
+            }
         }
     }
 }

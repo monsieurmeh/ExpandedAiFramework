@@ -100,7 +100,7 @@ namespace ExpandedAiFramework
             {
                 if (!mRequireForceSpawn)
                 {
-                    this.LogErrorInstanced($"Could not get proxy!");
+                    this.LogWarningInstanced($"Could not get proxy!");
                 }
                 return false;
             }

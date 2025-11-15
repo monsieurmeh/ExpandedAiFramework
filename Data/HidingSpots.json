@@ -2808,7 +2808,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.3671983,
-			"z": -0,
+			"z": 0,
 			"w": 0.9301427
 		},
 		"mName": "fa_3",
@@ -2825,7 +2825,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.15938231,
-			"z": -0,
+			"z": 0,
 			"w": 0.98721695
 		},
 		"mName": "fa_4",
@@ -2876,7 +2876,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.626232,
-			"z": -0,
+			"z": 0,
 			"w": 0.7796368
 		},
 		"mName": "fa_7",
@@ -2927,7 +2927,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.7035907,
-			"z": -0,
+			"z": 0,
 			"w": 0.7106055
 		},
 		"mName": "fa_10",
@@ -2944,7 +2944,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.1641784,
-			"z": -0,
+			"z": 0,
 			"w": 0.9864307
 		},
 		"mName": "fa_11",
@@ -2961,7 +2961,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.28623652,
-			"z": -0,
+			"z": 0,
 			"w": 0.958159
 		},
 		"mName": "fa_12",
@@ -3165,7 +3165,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.5031394,
-			"z": -0,
+			"z": 0,
 			"w": 0.8642053
 		},
 		"mName": "fa_24",
@@ -3233,7 +3233,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.4260633,
-			"z": -0,
+			"z": 0,
 			"w": 0.90469337
 		},
 		"mName": "fa_28",
@@ -3267,7 +3267,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.67476076,
-			"z": -0,
+			"z": 0,
 			"w": 0.7380365
 		},
 		"mName": "fa_30",
@@ -3284,7 +3284,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.4764155,
-			"z": -0,
+			"z": 0,
 			"w": 0.8792203
 		},
 		"mName": "fa_31",
@@ -3301,7 +3301,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.34608856,
-			"z": -0,
+			"z": 0,
 			"w": 0.9382019
 		},
 		"mName": "fa_32",
@@ -3403,7 +3403,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.19381407,
-			"z": -0,
+			"z": 0,
 			"w": 0.9810383
 		},
 		"mName": "fa_38",
@@ -3539,7 +3539,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.1639497,
-			"z": -0,
+			"z": 0,
 			"w": 0.98646873
 		},
 		"mName": "fa_46",
@@ -3556,7 +3556,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.54673165,
-			"z": -0,
+			"z": 0,
 			"w": 0.8373079
 		},
 		"mName": "fa_47",
@@ -3573,7 +3573,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.5134757,
-			"z": -0,
+			"z": 0,
 			"w": 0.85810417
 		},
 		"mName": "fa_48",
@@ -3641,7 +3641,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.5911582,
-			"z": -0,
+			"z": 0,
 			"w": 0.8065556
 		},
 		"mName": "fa_52",
@@ -3675,7 +3675,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.07518021,
-			"z": -0,
+			"z": 0,
 			"w": 0.99717
 		},
 		"mName": "fa_54",
@@ -3709,7 +3709,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.16816615,
-			"z": -0,
+			"z": 0,
 			"w": 0.98575866
 		},
 		"mName": "fa_56",
@@ -3760,7 +3760,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.080818206,
-			"z": -0,
+			"z": 0,
 			"w": 0.99672884
 		},
 		"mName": "fa_59",
@@ -3811,7 +3811,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.03245287,
-			"z": -0,
+			"z": 0,
 			"w": 0.9994733
 		},
 		"mName": "fa_62",
@@ -3828,7 +3828,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.39571562,
-			"z": -0,
+			"z": 0,
 			"w": 0.9183731
 		},
 		"mName": "fa_63",
@@ -3879,7 +3879,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.0015566156,
-			"z": -0,
+			"z": 0,
 			"w": 0.9999988
 		},
 		"mName": "fa_66",
@@ -3913,7 +3913,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.14825733,
-			"z": -0,
+			"z": 0,
 			"w": 0.9889488
 		},
 		"mName": "fa_68",
@@ -3947,7 +3947,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.18324703,
-			"z": -0,
+			"z": 0,
 			"w": 0.9830669
 		},
 		"mName": "fa_70",
@@ -3964,7 +3964,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.47802338,
-			"z": -0,
+			"z": 0,
 			"w": 0.8783471
 		},
 		"mName": "fa_71",
@@ -3998,7 +3998,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.57393557,
-			"z": -0,
+			"z": 0,
 			"w": 0.81890047
 		},
 		"mName": "fa_73",
@@ -4117,7 +4117,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.4631791,
-			"z": -0,
+			"z": 0,
 			"w": 0.88626474
 		},
 		"mName": "fa_80",
@@ -4134,7 +4134,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.29082644,
-			"z": -0,
+			"z": 0,
 			"w": 0.95677584
 		},
 		"mName": "fa_81",
@@ -4151,7 +4151,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.11222877,
-			"z": -0,
+			"z": 0,
 			"w": 0.9936824
 		},
 		"mName": "fa_82",
@@ -4287,7 +4287,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.27862927,
-			"z": -0,
+			"z": 0,
 			"w": 0.96039873
 		},
 		"mName": "fa_90",
@@ -4423,7 +4423,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.34014294,
-			"z": -0,
+			"z": 0,
 			"w": 0.9403738
 		},
 		"mName": "fa_98",
@@ -4525,7 +4525,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.5803568,
-			"z": -0,
+			"z": 0,
 			"w": 0.8143624
 		},
 		"mName": "fa_104",
@@ -4542,7 +4542,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.527679,
-			"z": -0,
+			"z": 0,
 			"w": 0.84944385
 		},
 		"mName": "fa_105",
@@ -4576,7 +4576,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.6507262,
-			"z": -0,
+			"z": 0,
 			"w": 0.7593125
 		},
 		"mName": "fa_107",
@@ -4627,7 +4627,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.4257576,
-			"z": -0,
+			"z": 0,
 			"w": 0.90483725
 		},
 		"mName": "fa_110",
@@ -4661,7 +4661,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.46981335,
-			"z": -0,
+			"z": 0,
 			"w": 0.88276577
 		},
 		"mName": "fa_112",
@@ -4763,7 +4763,7 @@
 		"mRotation": {
 			"x": 0,
 			"y": -0.69670457,
-			"z": -0,
+			"z": 0,
 			"w": 0.7173582
 		},
 		"mName": "fa_118",
@@ -4877,5 +4877,3456 @@
 		"mClaimed": false,
 		"mGuid": "a0bdbe99-e23d-4e16-829e-be8b21626b5e",
 		"mScene": "AirfieldRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.93798,
+			"z": 0,
+			"w": 0.34668937
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": -873.4926,
+			"y": 193.61575,
+			"z": -209.56323
+		},
+		"mClaimed": false,
+		"mGuid": "4032d8cc-3c98-47c0-b948-718d6de8cc04",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.64662296,
+			"z": 0,
+			"w": 0.7628098
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": -757.2261,
+			"y": 215.00363,
+			"z": -19.29151
+		},
+		"mClaimed": false,
+		"mGuid": "3583693f-336a-4ca3-aa7d-f45ae8c87324",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.35387057,
+			"z": 0,
+			"w": 0.9352944
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": -683.2097,
+			"y": 188.95638,
+			"z": -270.4489
+		},
+		"mClaimed": false,
+		"mGuid": "33f63bb6-a2d8-47bc-a4ea-b909e33ab150",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9779835,
+			"z": 0,
+			"w": 0.2086824
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": -569.5796,
+			"y": 322.13232,
+			"z": -40.819458
+		},
+		"mClaimed": false,
+		"mGuid": "600e4ae1-905f-4a68-9d36-025ba16d3116",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9954525,
+			"z": 0,
+			"w": -0.095259316
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 535.4158,
+			"y": 307.44287,
+			"z": 496.59692
+		},
+		"mClaimed": false,
+		"mGuid": "edec882a-7949-47dc-9576-5eef60881d72",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8931015,
+			"z": 0,
+			"w": -0.4498552
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 662.5182,
+			"y": 316.77005,
+			"z": 537.43494
+		},
+		"mClaimed": false,
+		"mGuid": "168ac554-7696-480c-941d-3362122eb4f0",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.4388801,
+			"z": 0,
+			"w": 0.8985456
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": -601.3153,
+			"y": 189.86842,
+			"z": -549.9196
+		},
+		"mClaimed": false,
+		"mGuid": "c613e05b-7e12-4c72-af43-ae4be6707ed0",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.94328505,
+			"z": 0,
+			"w": -0.33198395
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": -845.1048,
+			"y": 243.48889,
+			"z": -614.79974
+		},
+		"mClaimed": false,
+		"mGuid": "2aacca58-f208-44b8-b62c-4021733432cd",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9770105,
+			"z": 0,
+			"w": 0.21319123
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": -509.6017,
+			"y": 204.06949,
+			"z": -1001.3064
+		},
+		"mClaimed": false,
+		"mGuid": "68f927e6-ca59-4f0c-b697-1a64187dc0c0",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9825779,
+			"z": 0,
+			"w": -0.1858512
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": -330.38043,
+			"y": 106.475235,
+			"z": -872.1297
+		},
+		"mClaimed": false,
+		"mGuid": "4b29e022-039a-42a6-b2b0-7ce56101238d",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.58705276,
+			"z": 0,
+			"w": 0.80954874
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 132.84448,
+			"y": 253.48949,
+			"z": -634.3516
+		},
+		"mClaimed": false,
+		"mGuid": "a7ccf4d9-9df2-4283-bf22-7e07350c2cb5",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.39435607,
+			"z": 0,
+			"w": 0.9189577
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 212.21771,
+			"y": 150.11652,
+			"z": -1094.9688
+		},
+		"mClaimed": false,
+		"mGuid": "86472cf1-c06c-47fa-8ad9-e8183d8d4f09",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.58539546,
+			"z": 0,
+			"w": 0.810748
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 128.9989,
+			"y": 189.30612,
+			"z": -161.34277
+		},
+		"mClaimed": false,
+		"mGuid": "cafbe14f-b26f-40e3-b6fe-7469d95d8330",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9766823,
+			"z": 0,
+			"w": 0.2146899
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": -291.1042,
+			"y": 146.98694,
+			"z": -48.418945
+		},
+		"mClaimed": false,
+		"mGuid": "c1e60a1a-ac22-4de2-9a09-693818737d17",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9389843,
+			"z": 0,
+			"w": -0.34396014
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": -274.38544,
+			"y": 149.24611,
+			"z": -160.25012
+		},
+		"mClaimed": false,
+		"mGuid": "7a9440d4-d381-427a-88bd-b3fa1dc879b7",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.13651152,
+			"z": 0,
+			"w": 0.9906385
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": -209.24048,
+			"y": 200.13606,
+			"z": 320.3578
+		},
+		"mClaimed": false,
+		"mGuid": "28f1bcc7-6530-47b3-b254-01b2f0f85aef",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.46964538,
+			"z": 0,
+			"w": 0.8828552
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": -301.0123,
+			"y": 203.31265,
+			"z": 257.85428
+		},
+		"mClaimed": false,
+		"mGuid": "48a869a3-25c1-4146-9c1a-1e0ae873f0e8",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7031835,
+			"z": 0,
+			"w": 0.7110085
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": -210.09686,
+			"y": 200.76712,
+			"z": 250.59978
+		},
+		"mClaimed": false,
+		"mGuid": "fbc576b8-36ef-4737-b227-f1c929b33b05",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.33638465,
+			"z": 0,
+			"w": 0.9417247
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": -478.3,
+			"y": 207.8217,
+			"z": 416.19116
+		},
+		"mClaimed": false,
+		"mGuid": "cc18c664-169f-423f-b8c5-9833daac6830",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.35123265,
+			"z": 0,
+			"w": 0.93628824
+		},
+		"mName": "HidingSpot_20",
+		"mAnchorPosition": {
+			"x": -725.1154,
+			"y": 200.96521,
+			"z": 515.8445
+		},
+		"mClaimed": false,
+		"mGuid": "ac78d315-73b4-4fdb-b802-7d1c20a13e4f",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.45102915,
+			"z": 0,
+			"w": 0.8925092
+		},
+		"mName": "HidingSpot_21",
+		"mAnchorPosition": {
+			"x": 204.6388,
+			"y": 269.40366,
+			"z": 544.11194
+		},
+		"mClaimed": false,
+		"mGuid": "a5b817b7-56e3-4f55-a396-2aca94925a67",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7457997,
+			"z": 0,
+			"w": 0.6661703
+		},
+		"mName": "HidingSpot_22",
+		"mAnchorPosition": {
+			"x": -161.76288,
+			"y": 306.1152,
+			"z": 607.91455
+		},
+		"mClaimed": false,
+		"mGuid": "4784f4bb-b617-4da1-a240-5496f4b3d96c",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9897889,
+			"z": 0,
+			"w": 0.14254108
+		},
+		"mName": "HidingSpot_23",
+		"mAnchorPosition": {
+			"x": -51.718933,
+			"y": 293.44843,
+			"z": 725.73145
+		},
+		"mClaimed": false,
+		"mGuid": "bd99d995-11de-4d65-aa96-312dbb95fd81",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.3770602,
+			"z": 0,
+			"w": 0.92618877
+		},
+		"mName": "HidingSpot_24",
+		"mAnchorPosition": {
+			"x": -795.3965,
+			"y": 197.91725,
+			"z": 216.52087
+		},
+		"mClaimed": false,
+		"mGuid": "72f3d26a-59e5-4ede-84ad-7cd6ddd6364e",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9762505,
+			"z": 0,
+			"w": 0.21664467
+		},
+		"mName": "HidingSpot_25",
+		"mAnchorPosition": {
+			"x": 431.89075,
+			"y": 237.17311,
+			"z": 206.95349
+		},
+		"mClaimed": false,
+		"mGuid": "18a2517b-0ec9-4491-88ac-d9709f8ad8ab",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6254967,
+			"z": 0,
+			"w": 0.7802269
+		},
+		"mName": "HidingSpot_26",
+		"mAnchorPosition": {
+			"x": 490.0255,
+			"y": 239.91412,
+			"z": 153.4596
+		},
+		"mClaimed": false,
+		"mGuid": "b39e5b92-bd1c-4fd0-a0dd-be90be7a6706",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8850189,
+			"z": 0,
+			"w": -0.46555516
+		},
+		"mName": "HidingSpot_27",
+		"mAnchorPosition": {
+			"x": 790.2196,
+			"y": 327.21735,
+			"z": 3.4675856
+		},
+		"mClaimed": false,
+		"mGuid": "681d1c75-53db-4e12-9cd6-a12b9171a3f5",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.51281726,
+			"z": 0,
+			"w": 0.85849786
+		},
+		"mName": "HidingSpot_28",
+		"mAnchorPosition": {
+			"x": 783.4518,
+			"y": 331.66058,
+			"z": -292.23422
+		},
+		"mClaimed": false,
+		"mGuid": "33965f30-60ff-4c1c-abba-670b1bb8f213",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9504517,
+			"z": 0,
+			"w": -0.31087244
+		},
+		"mName": "HidingSpot_29",
+		"mAnchorPosition": {
+			"x": 575.75073,
+			"y": 242.10864,
+			"z": -632.1863
+		},
+		"mClaimed": false,
+		"mGuid": "5fca51d5-60f2-456d-961f-8b689e5eb95f",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.24752942,
+			"z": 0,
+			"w": 0.9688804
+		},
+		"mName": "HidingSpot_30",
+		"mAnchorPosition": {
+			"x": 907,
+			"y": 297.1801,
+			"z": -811.0287
+		},
+		"mClaimed": false,
+		"mGuid": "4cbecbb0-8781-4758-8cb9-d594c9ef6d09",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5109227,
+			"z": 0,
+			"w": 0.8596267
+		},
+		"mName": "HidingSpot_31",
+		"mAnchorPosition": {
+			"x": 780.64343,
+			"y": 278.49527,
+			"z": -993.27136
+		},
+		"mClaimed": false,
+		"mGuid": "3309b1e4-78b8-4181-8556-3f96040b83d4",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9804809,
+			"z": 0,
+			"w": -0.19661434
+		},
+		"mName": "HidingSpot_32",
+		"mAnchorPosition": {
+			"x": -600.79236,
+			"y": 245.1081,
+			"z": -896.5921
+		},
+		"mClaimed": false,
+		"mGuid": "1a649957-ddf6-413a-ac6f-3075a94d1910",
+		"mScene": "MiningRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.73472047,
+			"z": 0,
+			"w": 0.67837
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 96.79187,
+			"y": 263.10663,
+			"z": -110.94998
+		},
+		"mClaimed": false,
+		"mGuid": "02a64710-8d4b-459a-b608-e9ff38d0e653",
+		"mScene": "HubRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.55926126,
+			"z": 0,
+			"w": 0.8289915
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 210.9273,
+			"y": 256.64584,
+			"z": 14.688812
+		},
+		"mClaimed": false,
+		"mGuid": "9d7df9d4-6a03-4861-bb23-0e858b3b7012",
+		"mScene": "HubRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6852213,
+			"z": 0,
+			"w": 0.72833496
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": -4.808546,
+			"y": 268.80463,
+			"z": 63.00246
+		},
+		"mClaimed": false,
+		"mGuid": "a4377f74-1c93-4528-b64e-18d411886f09",
+		"mScene": "HubRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6692018,
+			"z": 0,
+			"w": 0.74308074
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 109.579956,
+			"y": 253.40428,
+			"z": 353.8931
+		},
+		"mClaimed": false,
+		"mGuid": "9c2bbaa7-94b8-439b-b234-5d8954133485",
+		"mScene": "HubRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9993266,
+			"z": 0,
+			"w": -0.036693234
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 186.31744,
+			"y": 250.40591,
+			"z": 454.2629
+		},
+		"mClaimed": false,
+		"mGuid": "678a37f2-e011-454b-b735-0ba57c1995e0",
+		"mScene": "HubRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9870616,
+			"z": 0,
+			"w": 0.16034167
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": -135.54387,
+			"y": 290.27313,
+			"z": 275.45837
+		},
+		"mClaimed": false,
+		"mGuid": "cf64a659-0a95-4561-8691-95396a67647e",
+		"mScene": "HubRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99902236,
+			"z": 0,
+			"w": 0.044208366
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": -133.62326,
+			"y": 303.42825,
+			"z": 504.72318
+		},
+		"mClaimed": false,
+		"mGuid": "32de6e1f-1a24-4d5e-a60a-50a8873522e7",
+		"mScene": "HubRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9961475,
+			"z": 0,
+			"w": -0.087693855
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 285.3579,
+			"y": 68.86997,
+			"z": 1301.8812
+		},
+		"mClaimed": false,
+		"mGuid": "4883a9d8-fde9-41c5-b4cd-e6f2da1a07a3",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.29162806,
+			"z": 0,
+			"w": 0.9565318
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 422.72046,
+			"y": 33.178345,
+			"z": 979.2997
+		},
+		"mClaimed": false,
+		"mGuid": "adedcde4-4d53-4828-ade1-d54c71483d57",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.68810976,
+			"z": 0,
+			"w": 0.7256066
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 558.3902,
+			"y": 134.24469,
+			"z": 653.1705
+		},
+		"mClaimed": false,
+		"mGuid": "46275730-16db-4fb2-b216-395390b79790",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8781965,
+			"z": 0,
+			"w": 0.47830012
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 410.34094,
+			"y": 119.20587,
+			"z": 466.90015
+		},
+		"mClaimed": false,
+		"mGuid": "1d2a4a4c-be9b-4c02-9635-a3644866d53d",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.76978827,
+			"z": 0,
+			"w": 0.63829935
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 975.5066,
+			"y": 182.08492,
+			"z": -189.77896
+		},
+		"mClaimed": false,
+		"mGuid": "7830e4a6-0e03-42a7-8ed4-fa52575dda80",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.70497674,
+			"z": 0,
+			"w": 0.7092304
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 449.75195,
+			"y": 85.32125,
+			"z": -51.90735
+		},
+		"mClaimed": false,
+		"mGuid": "270525fb-a818-4828-a02b-f4479cae7499",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7549658,
+			"z": 0,
+			"w": 0.6557643
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 417.51807,
+			"y": 118.517395,
+			"z": -423.03717
+		},
+		"mClaimed": false,
+		"mGuid": "af2b784b-93ab-4477-92ad-e45a5c0f72c8",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.2455276,
+			"z": 0,
+			"w": 0.9693896
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 352.93323,
+			"y": 158.47346,
+			"z": -377.69434
+		},
+		"mClaimed": false,
+		"mGuid": "81e618e5-c892-45ae-a4b3-a90c68feff03",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8753775,
+			"z": 0,
+			"w": 0.48344007
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 316.26474,
+			"y": 163.31686,
+			"z": 924.6662
+		},
+		"mClaimed": false,
+		"mGuid": "5b6ef525-da44-4a99-9e1b-f2e31ea8942a",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8202632,
+			"z": 0,
+			"w": 0.5719864
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 195.8778,
+			"y": 194.436,
+			"z": 783.56824
+		},
+		"mClaimed": false,
+		"mGuid": "f434f69a-7285-428e-8b8b-107c25ea887f",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5265709,
+			"z": 0,
+			"w": 0.8501312
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 146.86572,
+			"y": 243.08922,
+			"z": 630.7582
+		},
+		"mClaimed": false,
+		"mGuid": "f84a23d6-60cf-4688-97cb-bbf51c9614cf",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5735066,
+			"z": 0,
+			"w": 0.81920093
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 341.81927,
+			"y": 262.93332,
+			"z": 531.5538
+		},
+		"mClaimed": false,
+		"mGuid": "f0e0ec47-5431-45a4-b09f-764ec7d9c98a",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.88532245,
+			"z": 0,
+			"w": 0.4649776
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 40.53614,
+			"y": 288.21167,
+			"z": 527.9293
+		},
+		"mClaimed": false,
+		"mGuid": "585b57c2-a218-4ab9-bace-b17664a7cda2",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8455506,
+			"z": 0,
+			"w": 0.5338954
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": 251.41309,
+			"y": 261.5745,
+			"z": 500.00244
+		},
+		"mClaimed": false,
+		"mGuid": "bf0a7791-0ad2-4921-9b33-e6e0e9082c91",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.11904672,
+			"z": 0,
+			"w": 0.9928887
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": 251.78015,
+			"y": 364.7258,
+			"z": -34.209595
+		},
+		"mClaimed": false,
+		"mGuid": "0a6daa3a-06dc-4335-af02-8124274cdec7",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6515932,
+			"z": 0,
+			"w": 0.7585686
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": 269.53467,
+			"y": 277.70804,
+			"z": 269.6925
+		},
+		"mClaimed": false,
+		"mGuid": "0dc8f113-3e8c-449b-955d-3f4043c407da",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9903238,
+			"z": 0,
+			"w": -0.13877656
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": 463.58566,
+			"y": 491.96555,
+			"z": -615.3959
+		},
+		"mClaimed": false,
+		"mGuid": "ea63f3be-288e-4651-9e69-a34e7df7fcb2",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.65336096,
+			"z": 0,
+			"w": 0.7570465
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": 85.6073,
+			"y": 540.2027,
+			"z": -798.37354
+		},
+		"mClaimed": false,
+		"mGuid": "bf2df71f-7d30-486a-8d86-6c2640232ec7",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.91440666,
+			"z": 0,
+			"w": -0.40479675
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": 71.935425,
+			"y": 535.2042,
+			"z": -697.9004
+		},
+		"mClaimed": false,
+		"mGuid": "349a5516-1294-4f14-8785-59bbc5075954",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.55991536,
+			"z": 0,
+			"w": 0.82854986
+		},
+		"mName": "HidingSpot_20",
+		"mAnchorPosition": {
+			"x": -92.45412,
+			"y": 514.9941,
+			"z": -1031.8689
+		},
+		"mClaimed": false,
+		"mGuid": "ff0f6fd5-db50-456d-80be-0a03a83d4669",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7393383,
+			"z": 0,
+			"w": 0.6733342
+		},
+		"mName": "HidingSpot_21",
+		"mAnchorPosition": {
+			"x": 135.50842,
+			"y": 595.6828,
+			"z": -1043.2609
+		},
+		"mClaimed": false,
+		"mGuid": "1cfc682b-a42e-4851-9688-606b7979e92d",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.69281584,
+			"z": 0,
+			"w": 0.72111464
+		},
+		"mName": "HidingSpot_22",
+		"mAnchorPosition": {
+			"x": 796.8408,
+			"y": 450.805,
+			"z": -754.1703
+		},
+		"mClaimed": false,
+		"mGuid": "37daf98a-534f-467e-a742-6452f0da8409",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.40003118,
+			"z": 0,
+			"w": 0.9165016
+		},
+		"mName": "HidingSpot_23",
+		"mAnchorPosition": {
+			"x": 696.84546,
+			"y": 521.4807,
+			"z": -660.3573
+		},
+		"mClaimed": false,
+		"mGuid": "095c7031-1e8c-476b-840b-ed154d5b0341",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.4914986,
+			"z": 0,
+			"w": 0.8708784
+		},
+		"mName": "HidingSpot_24",
+		"mAnchorPosition": {
+			"x": 634.6873,
+			"y": 569.39307,
+			"z": -442.82257
+		},
+		"mClaimed": false,
+		"mGuid": "0fe9ccd1-1f52-44a5-aa1d-b11a9df8796e",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.896276,
+			"z": 0,
+			"w": -0.4434968
+		},
+		"mName": "HidingSpot_25",
+		"mAnchorPosition": {
+			"x": -122.83911,
+			"y": 429.0867,
+			"z": -376.1051
+		},
+		"mClaimed": false,
+		"mGuid": "c5252cf8-bf26-4fe5-a370-07649725351e",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5313792,
+			"z": 0,
+			"w": 0.84713405
+		},
+		"mName": "HidingSpot_26",
+		"mAnchorPosition": {
+			"x": -134.005,
+			"y": 439.47565,
+			"z": -409.2638
+		},
+		"mClaimed": false,
+		"mGuid": "44f75018-e232-46d6-b604-b9d5b09ffef0",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7075409,
+			"z": 0,
+			"w": 0.70667243
+		},
+		"mName": "HidingSpot_27",
+		"mAnchorPosition": {
+			"x": 570.5093,
+			"y": 589.95605,
+			"z": -577.38043
+		},
+		"mClaimed": false,
+		"mGuid": "e467151f-a65b-4843-87dd-20ddb14d2f6e",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9105214,
+			"z": 0,
+			"w": -0.413462
+		},
+		"mName": "HidingSpot_28",
+		"mAnchorPosition": {
+			"x": 828.4991,
+			"y": 580.8823,
+			"z": -986.79254
+		},
+		"mClaimed": false,
+		"mGuid": "f292af5e-c2a3-4e79-b5de-302935dc923b",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.611127,
+			"z": 0,
+			"w": 0.79153264
+		},
+		"mName": "HidingSpot_29",
+		"mAnchorPosition": {
+			"x": 618.5913,
+			"y": 589.51074,
+			"z": -1003.2794
+		},
+		"mClaimed": false,
+		"mGuid": "2d045a6b-c28a-49ef-b2aa-1f470bc7cbda",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.98855865,
+			"z": 0,
+			"w": -0.15083717
+		},
+		"mName": "HidingSpot_30",
+		"mAnchorPosition": {
+			"x": 987.49554,
+			"y": 436.2891,
+			"z": -591.5233
+		},
+		"mClaimed": false,
+		"mGuid": "164c9d08-88c4-4d88-accc-beb80dd97813",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.78298676,
+			"z": 0,
+			"w": 0.6220384
+		},
+		"mName": "HidingSpot_31",
+		"mAnchorPosition": {
+			"x": 1054.4653,
+			"y": 449.67944,
+			"z": -474.49866
+		},
+		"mClaimed": false,
+		"mGuid": "65c620b8-4622-4810-a4a7-e8dc25e56e30",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7400958,
+			"z": 0,
+			"w": 0.6725015
+		},
+		"mName": "HidingSpot_32",
+		"mAnchorPosition": {
+			"x": 1189.0398,
+			"y": 418.14145,
+			"z": -245.15562
+		},
+		"mClaimed": false,
+		"mGuid": "06a0900a-10a2-4d80-84ab-22b4b3031243",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8304353,
+			"z": 0,
+			"w": 0.55711514
+		},
+		"mName": "HidingSpot_33",
+		"mAnchorPosition": {
+			"x": 935.91235,
+			"y": 386.68326,
+			"z": 473.79297
+		},
+		"mClaimed": false,
+		"mGuid": "5416cbfd-0290-45a1-909a-1d596eec84cf",
+		"mScene": "MountainPassRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.2615571,
+			"z": 0,
+			"w": 0.965188
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 300.13602,
+			"y": 225.84581,
+			"z": 340.612
+		},
+		"mClaimed": false,
+		"mGuid": "a04edd76-cbe4-43dd-be79-a9ee90886348",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.39264506,
+			"z": 0,
+			"w": 0.9196901
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": -59.17926,
+			"y": 139.43018,
+			"z": 20.115112
+		},
+		"mClaimed": false,
+		"mGuid": "7f7c3437-bfe4-48bd-bafe-c8a3b29779ef",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.93749285,
+			"z": 0,
+			"w": 0.3480046
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 62.816467,
+			"y": 193.99075,
+			"z": 428.03253
+		},
+		"mClaimed": false,
+		"mGuid": "cdbc50a0-6e76-4a9e-b1b1-2ce86c8a39f1",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99948823,
+			"z": 0,
+			"w": 0.03198913
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 156.04974,
+			"y": 306.17264,
+			"z": 873.746
+		},
+		"mClaimed": false,
+		"mGuid": "f7bf4cb5-a8b9-4849-8c56-355552a0e2d2",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.16364086,
+			"z": 0,
+			"w": 0.98652
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 319.98004,
+			"y": 340.52905,
+			"z": 814.19226
+		},
+		"mClaimed": false,
+		"mGuid": "c7b8837a-52fc-4c7b-9a1b-3df9473f129d",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8265577,
+			"z": 0,
+			"w": 0.562852
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 837.23193,
+			"y": 92.02702,
+			"z": 507.27148
+		},
+		"mClaimed": false,
+		"mGuid": "52280959-53d1-456f-8399-0e6b7fe7dad4",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.774051,
+			"z": 0,
+			"w": 0.6331232
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 686.42944,
+			"y": 92.027016,
+			"z": 346.66162
+		},
+		"mClaimed": false,
+		"mGuid": "517a09db-4a43-43ad-9b7a-c87a158108c1",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.87109005,
+			"z": 0,
+			"w": 0.4911233
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 582.5922,
+			"y": 105.20792,
+			"z": 292.7975
+		},
+		"mClaimed": false,
+		"mGuid": "43354f7d-a892-49f6-a9ad-d1386433fd44",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.17533062,
+			"z": 0,
+			"w": 0.9845096
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 500.45517,
+			"y": 48.009518,
+			"z": -132.73476
+		},
+		"mClaimed": false,
+		"mGuid": "8f808174-d2d3-4df4-8b92-a68d4984b70a",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5702562,
+			"z": 0,
+			"w": 0.8214669
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 571.6294,
+			"y": 64.83079,
+			"z": 97.43442
+		},
+		"mClaimed": false,
+		"mGuid": "2ec3dde0-790a-4f48-b2a2-5a1a2ab85190",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7436388,
+			"z": 0,
+			"w": 0.6685816
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 172.81554,
+			"y": 29.944708,
+			"z": -436.18976
+		},
+		"mClaimed": false,
+		"mGuid": "d97d08c2-a729-4ee1-9bf1-48acc27c5898",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.57608646,
+			"z": 0,
+			"w": 0.8173888
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 57.488106,
+			"y": 81.52015,
+			"z": -916.66266
+		},
+		"mClaimed": false,
+		"mGuid": "ec65847c-de21-46c2-ab82-919cf17aa02c",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.398852,
+			"z": 0,
+			"w": 0.9170153
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": -365.66577,
+			"y": 31.897644,
+			"z": -616.2058
+		},
+		"mClaimed": false,
+		"mGuid": "ded3c92f-406f-4128-9e3f-39908f84b531",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6893906,
+			"z": 0,
+			"w": 0.72438985
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": -499.215,
+			"y": 39.867092,
+			"z": -444.59814
+		},
+		"mClaimed": false,
+		"mGuid": "567d5cdb-3312-4420-a0e9-15601690dbce",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7230821,
+			"z": 0,
+			"w": 0.6907621
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": -469.78238,
+			"y": 32.05002,
+			"z": -446.49933
+		},
+		"mClaimed": false,
+		"mGuid": "c669dadc-979d-43ab-9068-9e6bfd355a13",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7938785,
+			"z": 0,
+			"w": 0.60807645
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": -760.6726,
+			"y": 36.066345,
+			"z": -391.99268
+		},
+		"mClaimed": false,
+		"mGuid": "9cdafbbc-dcbc-46ee-a3e8-79d97943e181",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9111745,
+			"z": 0,
+			"w": -0.41202086
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": -960.32184,
+			"y": 56.08463,
+			"z": -210.59407
+		},
+		"mClaimed": false,
+		"mGuid": "a3a92dcc-ecae-4066-887f-6727994a5805",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.74631166,
+			"z": 0,
+			"w": 0.66559666
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": -641.05597,
+			"y": 35.79109,
+			"z": -71.11595
+		},
+		"mClaimed": false,
+		"mGuid": "2d8ec3c3-c6ee-4ebe-8501-df22a447dbdc",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6241526,
+			"z": 0,
+			"w": 0.78130245
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": -938.6801,
+			"y": 77.651024,
+			"z": 370.75793
+		},
+		"mClaimed": false,
+		"mGuid": "a761b09a-beea-49b1-bd0a-c2ce6c6f28c3",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99788874,
+			"z": 0,
+			"w": -0.064947516
+		},
+		"mName": "HidingSpot_20",
+		"mAnchorPosition": {
+			"x": -197.216,
+			"y": 25.867798,
+			"z": 239.61462
+		},
+		"mClaimed": false,
+		"mGuid": "88b44846-c8b2-40a6-a919-188b8ec6a514",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9107941,
+			"z": 0,
+			"w": 0.41286096
+		},
+		"mName": "HidingSpot_21",
+		"mAnchorPosition": {
+			"x": -259.79584,
+			"y": 123.09024,
+			"z": 879.6536
+		},
+		"mClaimed": false,
+		"mGuid": "595ea061-3829-4d7b-ada1-0eb6ffbef5e5",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.79760873,
+			"z": 0,
+			"w": 0.6031752
+		},
+		"mName": "HidingSpot_22",
+		"mAnchorPosition": {
+			"x": -6.893921,
+			"y": 93.667984,
+			"z": 574.09985
+		},
+		"mClaimed": false,
+		"mGuid": "3f67a20d-4565-4b03-83ea-3cef5203dd29",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6055887,
+			"z": 0,
+			"w": 0.79577786
+		},
+		"mName": "HidingSpot_23",
+		"mAnchorPosition": {
+			"x": -544.50037,
+			"y": 110.338684,
+			"z": 847.1426
+		},
+		"mClaimed": false,
+		"mGuid": "9adedb7f-9273-475c-8e63-50b027598283",
+		"mScene": "CanneryRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.31960583,
+			"z": 0,
+			"w": 0.9475506
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 663.9413,
+			"y": -25.493164,
+			"z": 1494.9884
+		},
+		"mClaimed": false,
+		"mGuid": "38a77318-482c-4a42-bd18-afdef46a4a04",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9524861,
+			"z": 0,
+			"w": -0.30458215
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 509.48782,
+			"y": -20.468811,
+			"z": 1671.7495
+		},
+		"mClaimed": false,
+		"mGuid": "caf8a607-81ff-4c08-b3ec-e1515e45b4b8",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.57922024,
+			"z": 0,
+			"w": 0.8151711
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 748.1511,
+			"y": -130.1723,
+			"z": -9.802277
+		},
+		"mClaimed": false,
+		"mGuid": "f3867acd-4d92-4272-8e94-ce55c1bd1336",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.49250403,
+			"z": 0,
+			"w": 0.8703102
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 497.54034,
+			"y": -125.27405,
+			"z": 31.03252
+		},
+		"mClaimed": false,
+		"mGuid": "14fd873e-9520-45bb-8378-c6700e2560df",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7748735,
+			"z": 0,
+			"w": 0.6321163
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 389.12772,
+			"y": -127.26013,
+			"z": 102.76108
+		},
+		"mClaimed": false,
+		"mGuid": "09942019-782f-4a2d-afe9-7f44b9c66a4f",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.063334286,
+			"z": 0,
+			"w": 0.9979924
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 510.4243,
+			"y": -79.68091,
+			"z": -99.25227
+		},
+		"mClaimed": false,
+		"mGuid": "4f2df0ff-a9d2-447c-8449-a71ed3e544fe",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.89375836,
+			"z": 0,
+			"w": 0.44854888
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 1135.445,
+			"y": -131.4544,
+			"z": 987.4833
+		},
+		"mClaimed": false,
+		"mGuid": "31704259-a7aa-4166-902a-95379733bbb4",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6228016,
+			"z": 0,
+			"w": 0.7823798
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 1521.5847,
+			"y": -44.773865,
+			"z": 441.12906
+		},
+		"mClaimed": false,
+		"mGuid": "f041b12a-e351-40f4-9db1-ce0e449ee3ce",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6640834,
+			"z": 0,
+			"w": 0.7476585
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 1530.497,
+			"y": -102.97342,
+			"z": 49.531403
+		},
+		"mClaimed": false,
+		"mGuid": "598a1201-83f5-464d-b418-3e384cf56a73",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.030362613,
+			"z": 0,
+			"w": 0.99953896
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 1288.6686,
+			"y": -103.4397,
+			"z": 61.707092
+		},
+		"mClaimed": false,
+		"mGuid": "13e59ebb-75cc-473f-b045-f5ebb7f5625c",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.44876915,
+			"z": 0,
+			"w": 0.89364773
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 1202.4987,
+			"y": -101.28537,
+			"z": -102.00886
+		},
+		"mClaimed": false,
+		"mGuid": "6d076f1c-28d3-4696-bfd3-d15bf0857d75",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6423873,
+			"z": 0,
+			"w": 0.7663802
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 555.78394,
+			"y": -133.07997,
+			"z": 337.3469
+		},
+		"mClaimed": false,
+		"mGuid": "f6a17023-5599-496a-8c43-f44bde736969",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9996847,
+			"z": 0,
+			"w": 0.025110029
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 277.5208,
+			"y": -54.15915,
+			"z": 1444.5664
+		},
+		"mClaimed": false,
+		"mGuid": "66e29983-5133-4f98-a8dd-f376aab7bea8",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.87143046,
+			"z": 0,
+			"w": 0.49051905
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": 675.8207,
+			"y": -15.252312,
+			"z": 1477.9647
+		},
+		"mClaimed": false,
+		"mGuid": "d591190b-8e14-4d57-b8bd-ca108f28a8fc",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7450303,
+			"z": 0,
+			"w": 0.6670307
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": 1145.8904,
+			"y": -102.41501,
+			"z": 1468.5007
+		},
+		"mClaimed": false,
+		"mGuid": "b0142e19-a4f2-424c-b422-ba56a1654483",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.40828106,
+			"z": 0,
+			"w": 0.9128563
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": 1650.2006,
+			"y": -125.614685,
+			"z": 1304.1187
+		},
+		"mClaimed": false,
+		"mGuid": "652f31aa-23d3-4108-baf9-7b10d40c1802",
+		"mScene": "MarshRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5440238,
+			"z": 0,
+			"w": 0.8390698
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 1719.9312,
+			"y": 16.645628,
+			"z": 1093.2262
+		},
+		"mClaimed": false,
+		"mGuid": "3d4a10d7-40e9-41a2-b7f3-ac3ff67c4539",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.19447897,
+			"z": 0,
+			"w": 0.9809067
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 1348.3237,
+			"y": 28.158043,
+			"z": 1068.191
+		},
+		"mClaimed": false,
+		"mGuid": "df5949d6-8a5d-4a6d-b734-cdbc903d3c0f",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7534278,
+			"z": 0,
+			"w": 0.6575307
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 977.124,
+			"y": 30.92492,
+			"z": 897.8204
+		},
+		"mClaimed": false,
+		"mGuid": "4dd15647-87c7-47ee-b318-84e15b2cbb58",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.62189806,
+			"z": 0,
+			"w": 0.7830983
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 933.6457,
+			"y": 45.783863,
+			"z": 1065.2477
+		},
+		"mClaimed": false,
+		"mGuid": "0882920d-45db-4441-9b62-7342c75a327c",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.33944312,
+			"z": 0,
+			"w": 0.9406266
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 202.56337,
+			"y": 101.53265,
+			"z": 1069.1587
+		},
+		"mClaimed": false,
+		"mGuid": "bd6a0b27-d94b-4a1c-a001-6cb4b966c32c",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.3211117,
+			"z": 0,
+			"w": 0.94704133
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 488.25592,
+			"y": 78.25491,
+			"z": 1033.7772
+		},
+		"mClaimed": false,
+		"mGuid": "b5e221f2-5b38-411e-9fd3-130a7403520a",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.16102473,
+			"z": 0,
+			"w": 0.9869504
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 626.68207,
+			"y": 106.9803,
+			"z": 625.50006
+		},
+		"mClaimed": false,
+		"mGuid": "add18b89-972f-4ed7-8a08-c3c3117d3d0a",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97899526,
+			"z": 0,
+			"w": -0.20388322
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 961.2981,
+			"y": 197.18909,
+			"z": 1294.6547
+		},
+		"mClaimed": false,
+		"mGuid": "b0a0755c-9818-4a86-8c27-e430b71cdf86",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.22324367,
+			"z": 0,
+			"w": 0.9747627
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 1184.9778,
+			"y": 208.31989,
+			"z": 1606.5577
+		},
+		"mClaimed": false,
+		"mGuid": "ca536661-f334-49da-87db-7da9d61581dd",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6024915,
+			"z": 0,
+			"w": 0.7981253
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 1038.0527,
+			"y": 198.33937,
+			"z": 1734.9155
+		},
+		"mClaimed": false,
+		"mGuid": "ad9f131c-3330-42fa-9325-f00c3b97f925",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8980805,
+			"z": 0,
+			"w": 0.43983114
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 494.43988,
+			"y": 115.18944,
+			"z": 1417.7738
+		},
+		"mClaimed": false,
+		"mGuid": "ee7e5467-4b97-45e6-9968-8823d5bf7d74",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.98489773,
+			"z": 0,
+			"w": -0.17313722
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 1209.2013,
+			"y": 202.51848,
+			"z": 833.92334
+		},
+		"mClaimed": false,
+		"mGuid": "c8fd11da-7167-423c-88cb-228e1e1b3790",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.6944454,
+			"z": 0,
+			"w": 0.7195455
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 440.33392,
+			"y": 230.7568,
+			"z": 263.499
+		},
+		"mClaimed": false,
+		"mGuid": "146ca6d7-eaf5-4443-9772-a348078b58fd",
+		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.671225,
+			"z": 0,
+			"w": 0.7412537
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 723.8579,
+			"y": 41.966248,
+			"z": -379.96417
+		},
+		"mClaimed": false,
+		"mGuid": "a1635a11-b5b8-4d0f-9e31-289fd91bfe98",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9996283,
+			"z": 0,
+			"w": -0.027264006
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 701.0492,
+			"y": 30.660128,
+			"z": -88.85055
+		},
+		"mClaimed": false,
+		"mGuid": "d5188fac-5967-47dd-83f5-fb0bf767f3f6",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9935844,
+			"z": 0,
+			"w": 0.11309332
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 398.10986,
+			"y": 24.546713,
+			"z": 120.63191
+		},
+		"mClaimed": false,
+		"mGuid": "10e471be-f8f5-4956-8853-ae9842363401",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.59339607,
+			"z": 0,
+			"w": 0.80491066
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 344.78882,
+			"y": 23.349215,
+			"z": 90.17554
+		},
+		"mClaimed": false,
+		"mGuid": "08821378-546a-48e9-9d4c-5dd372c373c3",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.21064204,
+			"z": 0,
+			"w": 0.97756326
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 354.05005,
+			"y": 23.04599,
+			"z": 300.16504
+		},
+		"mClaimed": false,
+		"mGuid": "17b895c8-a6c1-49bd-a98b-93ccf4ade594",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.3570756,
+			"z": 0,
+			"w": 0.9340755
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": -84.08984,
+			"y": 25.072588,
+			"z": 906.1721
+		},
+		"mClaimed": false,
+		"mGuid": "a54e2680-c46a-4ae0-a1ce-bc173c1b97ce",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.043899097,
+			"z": 0,
+			"w": 0.999036
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": -321.31445,
+			"y": 27.307434,
+			"z": 406.35327
+		},
+		"mClaimed": false,
+		"mGuid": "1ee255c4-5900-421e-9acb-a845a8fd6088",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9173916,
+			"z": 0,
+			"w": 0.3979858
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": -702.5319,
+			"y": 25.175468,
+			"z": 660.86646
+		},
+		"mClaimed": false,
+		"mGuid": "98e06148-01cd-4839-9c60-9197f318406e",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.98835075,
+			"z": 0,
+			"w": 0.15219358
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": -910.6159,
+			"y": 23.656729,
+			"z": 373.59714
+		},
+		"mClaimed": false,
+		"mGuid": "13123845-1c85-4c9e-9521-071402c14dea",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.76343256,
+			"z": 0,
+			"w": 0.6458876
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": -1157.7864,
+			"y": 59.57168,
+			"z": 459.92346
+		},
+		"mClaimed": false,
+		"mGuid": "bf74a974-e6f6-4243-a434-434100f65f05",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9928125,
+			"z": 0,
+			"w": -0.11968016
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": -1003.13586,
+			"y": 186.07097,
+			"z": 1202.6179
+		},
+		"mClaimed": false,
+		"mGuid": "beafe59c-5ca1-4acd-a9b9-311792d2bc91",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99013627,
+			"z": 0,
+			"w": -0.1401078
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": -757.506,
+			"y": 151.38219,
+			"z": 1116.3134
+		},
+		"mClaimed": false,
+		"mGuid": "35b4c7cc-9706-4b77-81d1-0f533c35be09",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.88791585,
+			"z": 0,
+			"w": -0.46000588
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": -743.4654,
+			"y": 203.83197,
+			"z": 1260.2112
+		},
+		"mClaimed": false,
+		"mGuid": "cf0bf039-604b-479b-80eb-0dbe7b03c7e8",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.09960658,
+			"z": 0,
+			"w": 0.99502695
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 591.6668,
+			"y": 220.69205,
+			"z": 1570.1079
+		},
+		"mClaimed": false,
+		"mGuid": "2e7722df-cd84-40d5-91d6-637b2d03ba51",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5411594,
+			"z": 0,
+			"w": 0.84092003
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 713.9952,
+			"y": 223.74808,
+			"z": 1716.7113
+		},
+		"mClaimed": false,
+		"mGuid": "bedfb9ee-0744-4ddd-90f0-2cb46d650522",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.96263903,
+			"z": 0,
+			"w": -0.27078804
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 632.3942,
+			"y": 229.92885,
+			"z": 1419.5117
+		},
+		"mClaimed": false,
+		"mGuid": "fa057170-1caa-4184-89da-973bffe55ed7",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.3082375,
+			"z": 0,
+			"w": 0.95130944
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 1115.6522,
+			"y": 261.7533,
+			"z": 1660.4554
+		},
+		"mClaimed": false,
+		"mGuid": "49157877-9e78-402b-a106-d7ef7cecf8b2",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8245043,
+			"z": 0,
+			"w": 0.5658557
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 1155.6221,
+			"y": 262.52353,
+			"z": 1674.2333
+		},
+		"mClaimed": false,
+		"mGuid": "f3f585fb-6935-469d-9987-5e7015d7d6a1",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7223599,
+			"z": 0,
+			"w": 0.69151735
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 1145.2777,
+			"y": 268.52332,
+			"z": 1345.0757
+		},
+		"mClaimed": false,
+		"mGuid": "49dbd460-90a1-48b3-a1ac-80cd7bd62cfa",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6532376,
+			"z": 0,
+			"w": 0.75715303
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 1383.5352,
+			"y": 269.4806,
+			"z": 1357.6548
+		},
+		"mClaimed": false,
+		"mGuid": "d904de4f-8fa0-48d4-a87f-17ba4520c962",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5587111,
+			"z": 0,
+			"w": 0.82936233
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 1293.637,
+			"y": 347.6331,
+			"z": 1630.6742
+		},
+		"mClaimed": false,
+		"mGuid": "f2464fc0-8ec5-4549-a553-468bc2844037",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8160448,
+			"z": 0,
+			"w": 0.57798874
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 754.79297,
+			"y": 290.4186,
+			"z": 2111.4097
+		},
+		"mClaimed": false,
+		"mGuid": "d36842ff-cb81-4a69-88ae-ef1c5b0cc030",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8637284,
+			"z": 0,
+			"w": 0.5039577
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 695.00616,
+			"y": 288.90372,
+			"z": 2100.4548
+		},
+		"mClaimed": false,
+		"mGuid": "ab793468-c9ae-463d-9288-5511367ff69c",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.86984754,
+			"z": 0,
+			"w": 0.49332064
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 979.06915,
+			"y": 356.3693,
+			"z": 2302.9058
+		},
+		"mClaimed": false,
+		"mGuid": "463ef5df-818f-4a3f-877a-d2ae0384f5d0",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.23399022,
+			"z": 0,
+			"w": 0.97223896
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 1484.7794,
+			"y": 367.94043,
+			"z": 2036.0325
+		},
+		"mClaimed": false,
+		"mGuid": "b389ab93-542b-4bf4-9713-44c3832690d5",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9962671,
+			"z": 0,
+			"w": 0.08632492
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 668.555,
+			"y": 27.50285,
+			"z": 1124.8285
+		},
+		"mClaimed": false,
+		"mGuid": "3bfb6bad-b3b1-43b8-a33c-955f5cac9fda",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9502497,
+			"z": 0,
+			"w": -0.31148943
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": 1004.06274,
+			"y": 5,
+			"z": 824.1078
+		},
+		"mClaimed": false,
+		"mGuid": "14cdf239-302b-488e-8df8-f551cab2804b",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.12534186,
+			"z": 0,
+			"w": 0.99211365
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": 441.84946,
+			"y": 7.180621,
+			"z": 704.76666
+		},
+		"mClaimed": false,
+		"mGuid": "4b295797-465a-4988-bfe7-7c6e59e222e8",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.4465877,
+			"z": 0,
+			"w": 0.89473987
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": 867.90344,
+			"y": 58.293503,
+			"z": 882.7744
+		},
+		"mClaimed": false,
+		"mGuid": "a7dd9526-c0c4-4cca-bdd0-0d46203fdbcb",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.60669017,
+			"z": 0,
+			"w": 0.7949384
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": 480.51752,
+			"y": 7.1138,
+			"z": 318.9648
+		},
+		"mClaimed": false,
+		"mGuid": "91817f80-064c-4b4f-9d07-2c9a94ba8ca5",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8812034,
+			"z": 0,
+			"w": 0.47273734
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": 949.58734,
+			"y": 307.31412,
+			"z": 1256.564
+		},
+		"mClaimed": false,
+		"mGuid": "579c47e3-1c42-4c12-9982-bd365482e100",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.021507505,
+			"z": 0,
+			"w": 0.99976873
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": 1405.7731,
+			"y": 329.2401,
+			"z": 805.2819
+		},
+		"mClaimed": false,
+		"mGuid": "a9c1efbf-7b8c-47e3-b9ed-1dde88407a49",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.62259775,
+			"z": 0,
+			"w": 0.78254205
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 649.19714,
+			"y": 239.02388,
+			"z": 1514.3333
+		},
+		"mClaimed": false,
+		"mGuid": "657aacde-1c93-4cc8-8a5f-321ea568f447",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.78948826,
+			"z": 0,
+			"w": 0.6137657
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 757.0001,
+			"y": 245.67513,
+			"z": 1358.3296
+		},
+		"mClaimed": false,
+		"mGuid": "fb89bad4-a766-4a63-85e8-1faf4268a72c",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8802239,
+			"z": 0,
+			"w": 0.47455877
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 366.05704,
+			"y": 184.8492,
+			"z": 1306.6997
+		},
+		"mClaimed": false,
+		"mGuid": "db2cd77c-a14d-424a-9435-a17cd97fa5ed",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.7904834,
+			"z": 0,
+			"w": 0.61248344
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 564.10474,
+			"y": 187.3,
+			"z": 1364.7422
+		},
+		"mClaimed": false,
+		"mGuid": "34c22822-df0f-40e4-87c1-caa4af86f21c",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.042028066,
+			"z": 0,
+			"w": 0.9991164
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 843.7822,
+			"y": 238.15425,
+			"z": 1036.8386
+		},
+		"mClaimed": false,
+		"mGuid": "33cabe20-9d89-4f5a-8266-f71f6960cac1",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.10919744,
+			"z": 0,
+			"w": 0.9940201
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 662.3458,
+			"y": 233.43858,
+			"z": 939.15607
+		},
+		"mClaimed": false,
+		"mGuid": "4a7e8226-72eb-4ffd-80e8-02255030a110",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.10176237,
+			"z": 0,
+			"w": 0.99480873
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 828.3135,
+			"y": 237.5144,
+			"z": 802.3934
+		},
+		"mClaimed": false,
+		"mGuid": "68c838f5-629f-47f9-80d1-09442a76122d",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6330438,
+			"z": 0,
+			"w": 0.774116
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 604.8218,
+			"y": 230.68408,
+			"z": 851.83105
+		},
+		"mClaimed": false,
+		"mGuid": "3f41589e-6607-4261-808b-29710e51bed3",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9197068,
+			"z": 0,
+			"w": 0.3926059
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 536.61426,
+			"y": 231.69067,
+			"z": 770.82495
+		},
+		"mClaimed": false,
+		"mGuid": "0e001f30-bc2f-48a3-aea8-6ef601595f15",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.25983137,
+			"z": 0,
+			"w": 0.965654
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 434.09866,
+			"y": 234.17372,
+			"z": 820.32513
+		},
+		"mClaimed": false,
+		"mGuid": "db1020bc-230e-4b59-881f-71c718290352",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.26890635,
+			"z": 0,
+			"w": 0.96316636
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 244.26172,
+			"y": 250.88873,
+			"z": 944.6318
+		},
+		"mClaimed": false,
+		"mGuid": "d63efcba-84d1-4d69-9c87-ed434f971c0c",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.95152175,
+			"z": 0,
+			"w": 0.30758148
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": -73.40652,
+			"y": 261.32632,
+			"z": 919.2548
+		},
+		"mClaimed": false,
+		"mGuid": "50ae310d-6460-4d63-a161-f1dbc62f0f11",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.94460034,
+			"z": 0,
+			"w": 0.3282228
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": -128.65483,
+			"y": 230.78514,
+			"z": 790.5028
+		},
+		"mClaimed": false,
+		"mGuid": "d9312314-58a5-43bd-a219-58cd28dbc17d",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.120984994,
+			"z": 0,
+			"w": 0.9926544
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": 68.98154,
+			"y": 243.61908,
+			"z": 441.08887
+		},
+		"mClaimed": false,
+		"mGuid": "c1b5f7e2-8317-45b6-b5c9-9db8839b5e0e",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.21275936,
+			"z": 0,
+			"w": 0.97710466
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": 524.37036,
+			"y": 172.1,
+			"z": 306.32474
+		},
+		"mClaimed": false,
+		"mGuid": "f0771e07-ea3a-4ff5-a763-ef67cafbeaca",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.299851,
+			"z": 0,
+			"w": 0.95398605
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": 808.6106,
+			"y": 236.16264,
+			"z": 401.92993
+		},
+		"mClaimed": false,
+		"mGuid": "f7904a6e-5b3a-4ee0-90d0-7c65490efd22",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99100673,
+			"z": 0,
+			"w": 0.13381201
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": 772.3187,
+			"y": 227.59088,
+			"z": 652.523
+		},
+		"mClaimed": false,
+		"mGuid": "d6b58158-2918-4c00-8ad7-f846fb53f8d0",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.97288334,
+			"z": 0,
+			"w": -0.23129636
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": 577.28394,
+			"y": 199.79747,
+			"z": 576.2124
+		},
+		"mClaimed": false,
+		"mGuid": "6a3f23e5-ea4e-440c-a48c-fa9e7ede4e7c",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.012359805,
+			"z": 0,
+			"w": 0.99992365
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": 642.3638,
+			"y": 200.68884,
+			"z": 529.86523
+		},
+		"mClaimed": false,
+		"mGuid": "2aeba78d-36bd-4cd4-bb3c-485f494dd01b",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7362272,
+			"z": 0,
+			"w": 0.6767345
+		},
+		"mName": "HidingSpot_20",
+		"mAnchorPosition": {
+			"x": 254.22244,
+			"y": 190.30873,
+			"z": 576.5489
+		},
+		"mClaimed": false,
+		"mGuid": "8bf72108-3de9-43b4-b71b-6c0b073112e4",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5162807,
+			"z": 0,
+			"w": 0.85641944
+		},
+		"mName": "HidingSpot_21",
+		"mAnchorPosition": {
+			"x": 321.5976,
+			"y": 189.32349,
+			"z": 430.0276
+		},
+		"mClaimed": false,
+		"mGuid": "228a5c41-d24e-4168-92c6-56d029175bad",
+		"mScene": "TracksRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8635153,
+			"z": 0,
+			"w": 0.50432265
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": -345.4275,
+			"y": 134.5292,
+			"z": -901.8974
+		},
+		"mClaimed": false,
+		"mGuid": "5a1417fb-25e6-4b2a-918d-8493119f49ad",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9994976,
+			"z": 0,
+			"w": 0.031694956
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": -352.2492,
+			"y": 130.61015,
+			"z": -862.0909
+		},
+		"mClaimed": false,
+		"mGuid": "2999f74b-b01c-4f02-8b12-d3442fa7d3a5",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99992424,
+			"z": 0,
+			"w": 0.012312623
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": -715.1904,
+			"y": 77.373856,
+			"z": -708.1759
+		},
+		"mClaimed": false,
+		"mGuid": "60044bc4-1f6c-4d48-87c8-54d10e7ac0e7",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.96698225,
+			"z": 0,
+			"w": -0.25484377
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": -588.21124,
+			"y": 106.45548,
+			"z": -470.9829
+		},
+		"mClaimed": false,
+		"mGuid": "304b4cef-162c-4f6a-9e68-a22be273d9f5",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99682534,
+			"z": 0,
+			"w": -0.07961989
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": -362.56055,
+			"y": 142.6056,
+			"z": -519.6233
+		},
+		"mClaimed": false,
+		"mGuid": "9d0665f3-ac82-4cbc-98aa-0e421a4d6a6a",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7216941,
+			"z": 0,
+			"w": 0.6922121
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": -111.78162,
+			"y": 221.46788,
+			"z": -11.589722
+		},
+		"mClaimed": false,
+		"mGuid": "fe8b00c5-b733-4c49-a114-36cb62100413",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8750022,
+			"z": 0,
+			"w": -0.484119
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": -255.06293,
+			"y": 209.6389,
+			"z": 11.800995
+		},
+		"mClaimed": false,
+		"mGuid": "1c3f8677-ef47-4dcd-b362-94610ec80814",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.016909197,
+			"z": 0,
+			"w": 0.99985707
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": -151.67471,
+			"y": 172.21434,
+			"z": -505.96475
+		},
+		"mClaimed": false,
+		"mGuid": "55ef5550-5992-4695-a6e2-782bdf81087e",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.0075857933,
+			"z": 0,
+			"w": 0.9999713
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": -713.05646,
+			"y": 115.20763,
+			"z": -149.99524
+		},
+		"mClaimed": false,
+		"mGuid": "0044e619-f0aa-4dd1-a081-7175d419d7cf",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5046332,
+			"z": 0,
+			"w": 0.8633339
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": -666.4584,
+			"y": 105.92286,
+			"z": 1.166116
+		},
+		"mClaimed": false,
+		"mGuid": "a8578f35-b7ef-4d1f-96ea-60c8f4a5e89a",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.44945166,
+			"z": 0,
+			"w": 0.8933047
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": -919.44336,
+			"y": 120.87857,
+			"z": 186.43677
+		},
+		"mClaimed": false,
+		"mGuid": "93b4dc9c-8cf6-4945-b466-558bcf839466",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.07904044,
+			"z": 0,
+			"w": 0.9968714
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": -822.4993,
+			"y": 100.683365,
+			"z": 429.00024
+		},
+		"mClaimed": false,
+		"mGuid": "c3598536-b176-47db-9d42-2f95275044a0",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8188189,
+			"z": 0,
+			"w": 0.574052
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 27.686401,
+			"y": 228.28441,
+			"z": 81.22839
+		},
+		"mClaimed": false,
+		"mGuid": "a94b3bbc-4a90-4ec6-a711-3a8c68f400d6",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8528513,
+			"z": 0,
+			"w": 0.52215403
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": 678.7749,
+			"y": 322.9612,
+			"z": 649.6101
+		},
+		"mClaimed": false,
+		"mGuid": "003fdf52-51ff-4c6c-81f8-7889b3c5d188",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.2024298,
+			"z": 0,
+			"w": 0.9792968
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": 1080.411,
+			"y": 301.5024,
+			"z": 533.3393
+		},
+		"mClaimed": false,
+		"mGuid": "51330827-89dd-4d19-82b7-9cc727deaa3d",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.3897574,
+			"z": 0,
+			"w": 0.9209176
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": 714.213,
+			"y": 380.5893,
+			"z": 805.4016
+		},
+		"mClaimed": false,
+		"mGuid": "177e32a9-7ba9-4237-bb11-352952d94518",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.2530575,
+			"z": 0,
+			"w": 0.9674513
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": 489.59198,
+			"y": 362.4184,
+			"z": 905.7225
+		},
+		"mClaimed": false,
+		"mGuid": "9c0de2f7-4ec4-4122-af7e-e7d3348634bd",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99712116,
+			"z": 0,
+			"w": 0.07582518
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": 409.34827,
+			"y": 381.2756,
+			"z": 1008.9888
+		},
+		"mClaimed": false,
+		"mGuid": "8882832e-3fd5-49d7-bd8e-f4e0794ff6c6",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.73841894,
+			"z": 0,
+			"w": 0.67434233
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": 893.7529,
+			"y": 228.9127,
+			"z": -93.09595
+		},
+		"mClaimed": false,
+		"mGuid": "9f03d568-96ec-401e-ac0b-4b65993f62a4",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.2229082,
+			"z": 0,
+			"w": 0.9748395
+		},
+		"mName": "HidingSpot_20",
+		"mAnchorPosition": {
+			"x": 861.24945,
+			"y": 246.23404,
+			"z": -200.89667
+		},
+		"mClaimed": false,
+		"mGuid": "88d1941d-ad00-4f25-be2b-c910601df32f",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.37326658,
+			"z": 0,
+			"w": 0.9277241
+		},
+		"mName": "HidingSpot_21",
+		"mAnchorPosition": {
+			"x": 618.8257,
+			"y": 225.25505,
+			"z": -327.8448
+		},
+		"mClaimed": false,
+		"mGuid": "8c13aef8-fb26-4422-abdb-25dc7183dea5",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9766597,
+			"z": 0,
+			"w": -0.21479237
+		},
+		"mName": "HidingSpot_22",
+		"mAnchorPosition": {
+			"x": 191.45862,
+			"y": 179.62305,
+			"z": -242.9845
+		},
+		"mClaimed": false,
+		"mGuid": "745296ed-d486-4685-8df2-9bd6921fdfde",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.48156983,
+			"z": 0,
+			"w": 0.87640774
+		},
+		"mName": "HidingSpot_23",
+		"mAnchorPosition": {
+			"x": 247.90674,
+			"y": 189.1351,
+			"z": -629.97656
+		},
+		"mClaimed": false,
+		"mGuid": "dc6eeb91-100d-4ec6-8deb-f08b3fe5436f",
+		"mScene": "BlackrockRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8473057,
+			"z": 0,
+			"w": 0.5311055
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 638.3581,
+			"y": 72.215546,
+			"z": 529.0354
+		},
+		"mClaimed": false,
+		"mGuid": "e77b22f5-9199-4564-8bd3-391b8030a071",
+		"mScene": "HighwayTransitionZone"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.84227824,
+			"z": 0,
+			"w": 0.5390431
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 400.84497,
+			"y": 68.09074,
+			"z": 470.6716
+		},
+		"mClaimed": false,
+		"mGuid": "3fdea5f7-bbdc-4b53-911e-a134d0d2d861",
+		"mScene": "HighwayTransitionZone"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8222846,
+			"z": 0,
+			"w": 0.5690765
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 226.66931,
+			"y": 49.79502,
+			"z": 435.27762
+		},
+		"mClaimed": false,
+		"mGuid": "01d593eb-3ab6-46d4-aae3-980312f158de",
+		"mScene": "HighwayTransitionZone"
 	}
 ]

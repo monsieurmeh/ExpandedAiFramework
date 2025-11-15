@@ -358,7 +358,7 @@ namespace ExpandedAiFramework
 
         protected virtual bool PostProcessDataAfterLoad(T data)
         {
-            return IsDataValid(data);
+            return IsDataValid(data) && data.PostProcess();
         }
 
 
