@@ -25,7 +25,7 @@ namespace ExpandedAiFramework
         public DataManager DataManager { get { return mDataManager; } }
         public SpawnRegion VanillaSpawnRegion { get { return mSpawnRegion; } }
         public SpawnRegionModDataProxy ModDataProxy { get { return mModDataProxy; } }
-        public virtual string InstanceInfo { get { return mModDataProxy != null ? $"{mModDataProxy.Guid}": !VanillaSpawnRegion.IsNullOrDestroyed() ? VanillaSpawnRegion.GetHashCode().ToString() : "NULL"; } }
+        public virtual string InstanceInfo { get { return mModDataProxy != null ? $"{mModDataProxy.Guid} of type {mModDataProxy.AiSubType}": !VanillaSpawnRegion.IsNullOrDestroyed() ? VanillaSpawnRegion.GetHashCode().ToString() : "NULL"; } }
         public virtual string TypeInfo { get { return GetType().Name; } }
         public List<CustomBaseAi> ActiveSpawns { get { return mActiveSpawns; } }
 
@@ -82,11 +82,11 @@ namespace ExpandedAiFramework
                 this.LogErrorInstanced($"Could not set spawnable prefab name!");
                 return;
             }
-            mSpawnRegion.m_AiTypeSpawned = baseAi.m_AiType;
-            mSpawnRegion.m_AiSubTypeSpawned = baseAi.m_AiSubType;
+            dataProxy.AiType = mSpawnRegion.m_AiTypeSpawned = baseAi.m_AiType;
+            dataProxy.AiSubType = mSpawnRegion.m_AiSubTypeSpawned = baseAi.m_AiSubType;
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Wolf)
             {
-                mSpawnRegion.m_WolfTypeSpawned = baseAi.NormalWolf.IsNullOrDestroyed() ? WolfType.Timberwolf : WolfType.Normal;
+                dataProxy.WolfType = mSpawnRegion.m_WolfTypeSpawned = baseAi.Timberwolf.IsNullOrDestroyed() ? WolfType.Normal : WolfType.Timberwolf;
             }
             GameModeConfig gameModeConfig = ExperienceModeManager.s_CurrentGameMode;
             if (gameModeConfig.IsNullOrDestroyed())
