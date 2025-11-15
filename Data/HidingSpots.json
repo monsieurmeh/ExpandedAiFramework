@@ -7206,5 +7206,328 @@
 		"mClaimed": false,
 		"mGuid": "cf0bf039-604b-479b-80eb-0dbe7b03c7e8",
 		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.09960658,
+			"z": -0,
+			"w": 0.99502695
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 591.6668,
+			"y": 220.69205,
+			"z": 1570.1079
+		},
+		"mClaimed": false,
+		"mGuid": "2e7722df-cd84-40d5-91d6-637b2d03ba51",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.5411594,
+			"z": -0,
+			"w": 0.84092003
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 713.9952,
+			"y": 223.74808,
+			"z": 1716.7113
+		},
+		"mClaimed": false,
+		"mGuid": "bedfb9ee-0744-4ddd-90f0-2cb46d650522",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.96263903,
+			"z": 0,
+			"w": -0.27078804
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 632.3942,
+			"y": 229.92885,
+			"z": 1419.5117
+		},
+		"mClaimed": false,
+		"mGuid": "fa057170-1caa-4184-89da-973bffe55ed7",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.3082375,
+			"z": 0,
+			"w": 0.95130944
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 1115.6522,
+			"y": 261.7533,
+			"z": 1660.4554
+		},
+		"mClaimed": false,
+		"mGuid": "49157877-9e78-402b-a106-d7ef7cecf8b2",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8245043,
+			"z": 0,
+			"w": 0.5658557
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 1155.6221,
+			"y": 262.52353,
+			"z": 1674.2333
+		},
+		"mClaimed": false,
+		"mGuid": "f3f585fb-6935-469d-9987-5e7015d7d6a1",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.7223599,
+			"z": 0,
+			"w": 0.69151735
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": 1145.2777,
+			"y": 268.52332,
+			"z": 1345.0757
+		},
+		"mClaimed": false,
+		"mGuid": "49dbd460-90a1-48b3-a1ac-80cd7bd62cfa",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.6532376,
+			"z": -0,
+			"w": 0.75715303
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": 1383.5352,
+			"y": 269.4806,
+			"z": 1357.6548
+		},
+		"mClaimed": false,
+		"mGuid": "d904de4f-8fa0-48d4-a87f-17ba4520c962",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.5587111,
+			"z": 0,
+			"w": 0.82936233
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": 1293.637,
+			"y": 347.6331,
+			"z": 1630.6742
+		},
+		"mClaimed": false,
+		"mGuid": "f2464fc0-8ec5-4549-a553-468bc2844037",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.8160448,
+			"z": 0,
+			"w": 0.57798874
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": 754.79297,
+			"y": 290.4186,
+			"z": 2111.4097
+		},
+		"mClaimed": false,
+		"mGuid": "d36842ff-cb81-4a69-88ae-ef1c5b0cc030",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8637284,
+			"z": 0,
+			"w": 0.5039577
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": 695.00616,
+			"y": 288.90372,
+			"z": 2100.4548
+		},
+		"mClaimed": false,
+		"mGuid": "ab793468-c9ae-463d-9288-5511367ff69c",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.86984754,
+			"z": 0,
+			"w": 0.49332064
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": 979.06915,
+			"y": 356.3693,
+			"z": 2302.9058
+		},
+		"mClaimed": false,
+		"mGuid": "463ef5df-818f-4a3f-877a-d2ae0384f5d0",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.23399022,
+			"z": 0,
+			"w": 0.97223896
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": 1484.7794,
+			"y": 367.94043,
+			"z": 2036.0325
+		},
+		"mClaimed": false,
+		"mGuid": "b389ab93-542b-4bf4-9713-44c3832690d5",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9962671,
+			"z": 0,
+			"w": 0.08632492
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": 668.555,
+			"y": 27.50285,
+			"z": 1124.8285
+		},
+		"mClaimed": false,
+		"mGuid": "3bfb6bad-b3b1-43b8-a33c-955f5cac9fda",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9502497,
+			"z": 0,
+			"w": -0.31148943
+		},
+		"mName": "HidingSpot_14",
+		"mAnchorPosition": {
+			"x": 1004.06274,
+			"y": 5,
+			"z": 824.1078
+		},
+		"mClaimed": false,
+		"mGuid": "14cdf239-302b-488e-8df8-f551cab2804b",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.12534186,
+			"z": -0,
+			"w": 0.99211365
+		},
+		"mName": "HidingSpot_15",
+		"mAnchorPosition": {
+			"x": 441.84946,
+			"y": 7.180621,
+			"z": 704.76666
+		},
+		"mClaimed": false,
+		"mGuid": "4b295797-465a-4988-bfe7-7c6e59e222e8",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.4465877,
+			"z": -0,
+			"w": 0.89473987
+		},
+		"mName": "HidingSpot_16",
+		"mAnchorPosition": {
+			"x": 867.90344,
+			"y": 58.293503,
+			"z": 882.7744
+		},
+		"mClaimed": false,
+		"mGuid": "a7dd9526-c0c4-4cca-bdd0-0d46203fdbcb",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.60669017,
+			"z": 0,
+			"w": 0.7949384
+		},
+		"mName": "HidingSpot_17",
+		"mAnchorPosition": {
+			"x": 480.51752,
+			"y": 7.1138,
+			"z": 318.9648
+		},
+		"mClaimed": false,
+		"mGuid": "91817f80-064c-4b4f-9d07-2c9a94ba8ca5",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.8812034,
+			"z": 0,
+			"w": 0.47273734
+		},
+		"mName": "HidingSpot_18",
+		"mAnchorPosition": {
+			"x": 949.58734,
+			"y": 307.31412,
+			"z": 1256.564
+		},
+		"mClaimed": false,
+		"mGuid": "579c47e3-1c42-4c12-9982-bd365482e100",
+		"mScene": "MountainTownRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.021507505,
+			"z": -0,
+			"w": 0.99976873
+		},
+		"mName": "HidingSpot_19",
+		"mAnchorPosition": {
+			"x": 1405.7731,
+			"y": 329.2401,
+			"z": 805.2819
+		},
+		"mClaimed": false,
+		"mGuid": "a9c1efbf-7b8c-47e3-b9ed-1dde88407a49",
+		"mScene": "MountainTownRegion"
 	}
 ]
