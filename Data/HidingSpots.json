@@ -6985,5 +6985,226 @@
 		"mClaimed": false,
 		"mGuid": "146ca6d7-eaf5-4443-9772-a348078b58fd",
 		"mScene": "RiverValleyRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.671225,
+			"z": -0,
+			"w": 0.7412537
+		},
+		"mName": "HidingSpot_1",
+		"mAnchorPosition": {
+			"x": 723.8579,
+			"y": 41.966248,
+			"z": -379.96417
+		},
+		"mClaimed": false,
+		"mGuid": "a1635a11-b5b8-4d0f-9e31-289fd91bfe98",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9996283,
+			"z": 0,
+			"w": -0.027264006
+		},
+		"mName": "HidingSpot_2",
+		"mAnchorPosition": {
+			"x": 701.0492,
+			"y": 30.660128,
+			"z": -88.85055
+		},
+		"mClaimed": false,
+		"mGuid": "d5188fac-5967-47dd-83f5-fb0bf767f3f6",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9935844,
+			"z": 0,
+			"w": 0.11309332
+		},
+		"mName": "HidingSpot_3",
+		"mAnchorPosition": {
+			"x": 398.10986,
+			"y": 24.546713,
+			"z": 120.63191
+		},
+		"mClaimed": false,
+		"mGuid": "10e471be-f8f5-4956-8853-ae9842363401",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.59339607,
+			"z": -0,
+			"w": 0.80491066
+		},
+		"mName": "HidingSpot_4",
+		"mAnchorPosition": {
+			"x": 344.78882,
+			"y": 23.349215,
+			"z": 90.17554
+		},
+		"mClaimed": false,
+		"mGuid": "08821378-546a-48e9-9d4c-5dd372c373c3",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": -0.21064204,
+			"z": -0,
+			"w": 0.97756326
+		},
+		"mName": "HidingSpot_5",
+		"mAnchorPosition": {
+			"x": 354.05005,
+			"y": 23.04599,
+			"z": 300.16504
+		},
+		"mClaimed": false,
+		"mGuid": "17b895c8-a6c1-49bd-a98b-93ccf4ade594",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.3570756,
+			"z": 0,
+			"w": 0.9340755
+		},
+		"mName": "HidingSpot_6",
+		"mAnchorPosition": {
+			"x": -84.08984,
+			"y": 25.072588,
+			"z": 906.1721
+		},
+		"mClaimed": false,
+		"mGuid": "a54e2680-c46a-4ae0-a1ce-bc173c1b97ce",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.043899097,
+			"z": 0,
+			"w": 0.999036
+		},
+		"mName": "HidingSpot_7",
+		"mAnchorPosition": {
+			"x": -321.31445,
+			"y": 27.307434,
+			"z": 406.35327
+		},
+		"mClaimed": false,
+		"mGuid": "1ee255c4-5900-421e-9acb-a845a8fd6088",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9173916,
+			"z": 0,
+			"w": 0.3979858
+		},
+		"mName": "HidingSpot_8",
+		"mAnchorPosition": {
+			"x": -702.5319,
+			"y": 25.175468,
+			"z": 660.86646
+		},
+		"mClaimed": false,
+		"mGuid": "98e06148-01cd-4839-9c60-9197f318406e",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.98835075,
+			"z": 0,
+			"w": 0.15219358
+		},
+		"mName": "HidingSpot_9",
+		"mAnchorPosition": {
+			"x": -910.6159,
+			"y": 23.656729,
+			"z": 373.59714
+		},
+		"mClaimed": false,
+		"mGuid": "13123845-1c85-4c9e-9521-071402c14dea",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.76343256,
+			"z": 0,
+			"w": 0.6458876
+		},
+		"mName": "HidingSpot_10",
+		"mAnchorPosition": {
+			"x": -1157.7864,
+			"y": 59.57168,
+			"z": 459.92346
+		},
+		"mClaimed": false,
+		"mGuid": "bf74a974-e6f6-4243-a434-434100f65f05",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.9928125,
+			"z": 0,
+			"w": -0.11968016
+		},
+		"mName": "HidingSpot_11",
+		"mAnchorPosition": {
+			"x": -1003.13586,
+			"y": 186.07097,
+			"z": 1202.6179
+		},
+		"mClaimed": false,
+		"mGuid": "beafe59c-5ca1-4acd-a9b9-311792d2bc91",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.99013627,
+			"z": 0,
+			"w": -0.1401078
+		},
+		"mName": "HidingSpot_12",
+		"mAnchorPosition": {
+			"x": -757.506,
+			"y": 151.38219,
+			"z": 1116.3134
+		},
+		"mClaimed": false,
+		"mGuid": "35b4c7cc-9706-4b77-81d1-0f533c35be09",
+		"mScene": "CoastalRegion"
+	},
+	{
+		"mRotation": {
+			"x": 0,
+			"y": 0.88791585,
+			"z": 0,
+			"w": -0.46000588
+		},
+		"mName": "HidingSpot_13",
+		"mAnchorPosition": {
+			"x": -743.4654,
+			"y": 203.83197,
+			"z": 1260.2112
+		},
+		"mClaimed": false,
+		"mGuid": "cf0bf039-604b-479b-80eb-0dbe7b03c7e8",
+		"mScene": "CoastalRegion"
 	}
 ]
