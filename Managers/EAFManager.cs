@@ -567,7 +567,7 @@ namespace ExpandedAiFramework
             [CallerMemberName] string callerName = "",
             bool toUConsole = false)
         {
-            if (!mLogCategoryFlags.AnyOf(logCategoryFlags))
+            if (!mLogCategoryFlags.AllOf(logCategoryFlags))
             {
                 return;
             }

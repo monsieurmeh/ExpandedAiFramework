@@ -18,6 +18,7 @@ namespace ExpandedAiFramework
         PackManager,
         Request,
         System,
+        Update,
         COUNT
 
     }
@@ -38,5 +39,6 @@ namespace ExpandedAiFramework
         PackManager = 1 << (int)LogCategory.PackManager,
         Request = 1 << (int)LogCategory.Request,
         System = 1 << (int)LogCategory.System,
+        Update = 1 << (int)LogCategory.Update,
     }
 }

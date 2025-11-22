@@ -703,8 +703,7 @@ namespace ExpandedAiFramework
             return mCustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out customSpawnRegion);
         }
 
-
-        private bool TryInjectCustomSpawnRegion(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback)
+        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback = null)
         {
             if (spawnRegion == null)
             {
@@ -723,16 +722,6 @@ namespace ExpandedAiFramework
             }
             Guid wrapperGuid = new Guid(guid.PDID);
             WrapSpawnRegion(spawnRegion, wrapperGuid, callback);
-            return true;
-        }
-
-
-        private bool ProcessCaughtSpawnRegion(SpawnRegion spawnRegion, Action<CustomSpawnRegion> callback = null)
-        {
-            if (!TryInjectCustomSpawnRegion(spawnRegion, callback))
-            {
-                return false;
-            }
             LogTrace($"Successfully wrapped custom spawn region with hash code {spawnRegion.GetHashCode()}!", LogCategoryFlags.SpawnRegionManager);
             return true;
         }
@@ -833,7 +822,10 @@ namespace ExpandedAiFramework
             }
             switch (baseAi.m_AiSubType)
             {
-                case AiSubType.Wolf: return new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay); //eventually may connect to a pool system; for now, I dont see anyone else using this soon
+                case AiSubType.Wolf: 
+                    return baseAi.Timberwolf == null 
+                        ? new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay) //eventually may connect to a pool system; for now, I dont see anyone else using this soon
+                        : new BaseTimberwolfSpawnRegion(spawnRegion, proxy, mTimeOfDay);
                 case AiSubType.Cougar: 
                     if (mManager.CougarManager == null) break;
                     if (mManager.CougarManager.OverrideCustomSpawnRegionType(spawnRegion, proxy, mTimeOfDay, out CustomSpawnRegion customCougarSpawnRegion)) break;
