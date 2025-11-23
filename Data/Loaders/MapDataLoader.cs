@@ -2,7 +2,7 @@
 
 namespace ExpandedAiFramework
 {
-    public abstract class MapDataLoader<T> where T : IMapData, new()
+    public class MapDataLoader<T> where T : IMapData, new()
     {
         protected T mData;
         protected Action<T> mCallback;
@@ -19,13 +19,18 @@ namespace ExpandedAiFramework
         public T Data { get { return mData; } }
         public bool New { get { return mNew; } }
 
-        public MapDataLoader(CustomBaseAi ai, SpawnModDataProxy proxy, DataManager dataManager, Func<T, bool> filter, Action<T> callback = null)
+        public MapDataLoader(CustomBaseAi ai, SpawnModDataProxy proxy, DataManager dataManager, Func<T, bool> filter = null, Action<T> callback = null)
         {
             mAi = ai;
             mProxy = proxy;
             mDataManager = dataManager;
             mFilter = filter;
             mCallback = callback;
+
+            if (mFilter == null)
+            {
+                mFilter = (data) => true;
+            }
         }
 
         public bool Connected()
@@ -145,10 +150,10 @@ namespace ExpandedAiFramework
             SaveDetails();
         }
 
-        protected abstract bool ValidateDetails();
+        protected virtual bool ValidateDetails() => true;
 
-        protected abstract void SaveDetails();
+        protected virtual void SaveDetails() { }
 
-        protected abstract void AttachDetails();
+        protected virtual void AttachDetails() { }
     }
 }

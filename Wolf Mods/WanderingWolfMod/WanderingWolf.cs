@@ -33,7 +33,6 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         protected override bool FirstFrameCustom()
         {
-            if (mModDataProxy != null && mModDataProxy.AsyncProcessing) return false;
             if (!mWanderPathLoader.Connected()) return false; // Gate AI functionality here until wanderpath is ready
 
             mWanderPath = mWanderPathLoader.Data;

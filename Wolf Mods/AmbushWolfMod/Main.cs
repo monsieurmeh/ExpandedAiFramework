@@ -2,7 +2,6 @@
 global using MelonLoader;
 global using ModSettings;
 global using static ExpandedAiFramework.Utility;
-using ExpandedAiFramework.WanderingWolfMod;
 using MelonLoader.Utils;
 
 
@@ -22,8 +21,6 @@ namespace ExpandedAiFramework.AmbushWolfMod
         protected bool Initialize()
         {
             Directory.CreateDirectory(Path.Combine(MelonEnvironment.ModsDirectory, DataFolderPath));
-            AmbushWolfManager manager = new AmbushWolfManager();
-            EAFManager.Instance.RegisterSpawnManager(manager);
             AmbushWolf.AmbushWolfSettings = new AmbushWolfSettings(Path.Combine(DataFolderPath, $"{nameof(AmbushWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(AmbushWolf), AmbushWolf.AmbushWolfSettings))
             {
