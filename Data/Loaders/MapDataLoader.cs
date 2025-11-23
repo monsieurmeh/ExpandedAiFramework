@@ -126,9 +126,9 @@ namespace ExpandedAiFramework
                 mAi.LogTraceInstanced($"Null proxy custom data", LogCategoryFlags.Ai);
                 return false;
             }
-            if (mProxy.CustomData.Length < 2)
+            if (mProxy.CustomData.Length < 1)
             {
-                mAi.LogTraceInstanced($"Not enough length to proxy custom data (guid and waypoint index required)", LogCategoryFlags.Ai);
+                mAi.LogTraceInstanced($"Not enough length to proxy custom data (guid required)", LogCategoryFlags.Ai);
                 return false;
             }
             if (!Guid.TryParse(mProxy.CustomData[0], out mGuid))

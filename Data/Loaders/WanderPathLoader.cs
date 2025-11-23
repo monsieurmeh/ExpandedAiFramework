@@ -16,6 +16,11 @@ namespace ExpandedAiFramework
 
         protected override bool ValidateDetails()
         {
+            if (mProxy.CustomData.Length < 2)
+            {
+                mAi.LogTraceInstanced($"Not enough length to proxy custom data (waypoint index required)", LogCategoryFlags.Ai);
+                return false;
+            }
             if (!int.TryParse(mProxy.CustomData[1], out mWaypointIndex))
             {
                 mAi.LogTraceInstanced($"Could not parse last waypoint index from proxy", LogCategoryFlags.Ai);
