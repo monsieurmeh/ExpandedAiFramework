@@ -40,7 +40,7 @@ namespace ExpandedAiFramework
 
             mDataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
             {
-                mAi.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
+
                 AttachWanderPath(nearestSpot);
                 mNewPath = true;
             }, false, null, 3));
@@ -49,25 +49,47 @@ namespace ExpandedAiFramework
 
         private bool TryLoadSavedWanderPath(SpawnModDataProxy proxy)
         {
-            if (proxy == null
-                || proxy.CustomData == null
-                || proxy.CustomData.Length < 2)
+            if (!ValidateSavedWanderPathData(proxy, out Guid spotGuid, out int waypointIndex)) return false;
+
+            mAi.BaseAi.m_TargetWaypointIndex = waypointIndex;
+            LoadSavedOrGetNewWanderPath(spotGuid, proxy, waypointIndex);
+            return true;
+        }
+
+        private bool ValidateSavedWanderPathData(SpawnModDataProxy proxy, out Guid spotGuid, out int waypointIndex)
+        {
+            spotGuid = new Guid();
+            waypointIndex = -1;
+            if (proxy == null)
             {
-                mAi.LogTraceInstanced($"Null proxy, null proxy custom data or not enough length to proxy custom data (guid and waypoint index required)", LogCategoryFlags.Ai);
+                mAi.LogTraceInstanced($"Null proxy", LogCategoryFlags.Ai);
                 return false;
             }
-            Guid spotGuid = new Guid((string)proxy.CustomData[0]);
+            if (proxy.CustomData == null)
+            {
+                mAi.LogTraceInstanced($"Null proxy custom data", LogCategoryFlags.Ai);
+                return false;
+            }
+            if (proxy.CustomData.Length < 2)
+            {
+                mAi.LogTraceInstanced($"Not enough length to proxy custom data (guid and waypoint index required)", LogCategoryFlags.Ai);
+                return false;
+            }
             if (spotGuid == Guid.Empty)
             {
                 mAi.LogTraceInstanced($"Proxy spot guid is empty", LogCategoryFlags.Ai);
                 return false;
             }
-            if (!int.TryParse(proxy.CustomData[1], out int waypointIndex))
+            if (!int.TryParse(proxy.CustomData[1], out waypointIndex))
             {
                 mAi.LogTraceInstanced($"Could not parse last waypoint index from proxy", LogCategoryFlags.Ai);
                 return false;
             }
-            mAi.BaseAi.m_TargetWaypointIndex = waypointIndex;
+            return true;
+        }
+
+        private void LoadSavedOrGetNewWanderPath(Guid spotGuid, SpawnModDataProxy proxy, int waypointIndex)
+        {
             mDataManager.ScheduleMapDataRequest<WanderPath>(new GetDataByGuidRequest<WanderPath>(spotGuid, proxy.Scene, (spot, result) =>
             {
                 if (result != RequestResult.Succeeded)
@@ -75,18 +97,15 @@ namespace ExpandedAiFramework
                     mAi.LogTraceInstanced($"Can't get WanderPath with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...", LogCategoryFlags.Ai);
                     mDataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
                     {
-                        mAi.LogTraceInstanced($"Found NEW nearest WanderPath with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
                         AttachWanderPath(nearestSpot, waypointIndex);
                         mNewPath = true;
                     }, false, (wp => wp.WanderPathFlags == WanderPath.DefaultFlags), 3));
                 }
                 else
                 {
-                    mAi.LogTraceInstanced($"Found saved WanderPath with guid <<<{spotGuid}>>>", LogCategoryFlags.Ai);
                     AttachWanderPath(spot, waypointIndex);
                 }
             }, false));
-            return true;
         }
 
 
@@ -106,8 +125,7 @@ namespace ExpandedAiFramework
             }
             mWanderPathConnected = true;
             path.Claim();
+            mAi.LogTraceInstanced($"Claimed WanderPath with guid <<<{path.Guid}>>>", LogCategoryFlags.Ai);
         }
-
-        private
     }
 }
