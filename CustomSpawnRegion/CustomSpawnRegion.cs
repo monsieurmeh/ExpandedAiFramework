@@ -55,17 +55,6 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_HasBeenDisabledByAurora = mModDataProxy?.HasBeenDisabledByAurora ?? false;
             mSpawnRegion.m_WasActiveBeforeAurora = mModDataProxy?.WasActiveBeforeAurora ?? true;
             mSpawnRegion.m_CooldownTimerHours = mModDataProxy?.CooldownTimerHours ?? 0f;
-            if (dataProxy.Fresh)
-            {
-                this.LogDebugInstanced($"Fresh proxy, rerolling active chance", LogCategoryFlags.SpawnRegion);
-                RerollChanceActive();
-                dataProxy.IsActive = mSpawnRegion.gameObject.activeSelf;
-            }
-            else
-            {
-                this.LogDebugInstanced($"Not fresh proxy, deferring to IsActive state: {dataProxy.IsActive}", LogCategoryFlags.SpawnRegion);
-                mSpawnRegion.gameObject.SetActive(dataProxy.IsActive);
-            }
 
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
@@ -143,6 +132,17 @@ namespace ExpandedAiFramework
                 mSpawnRegion.SetRandomWaypointCircuit();
             }
             ActiveSpawns.Clear();
+            if (dataProxy.Fresh)
+            {
+                this.LogDebugInstanced($"Fresh proxy, rerolling active chance", LogCategoryFlags.SpawnRegion);
+                RerollChanceActive();
+                dataProxy.IsActive = mSpawnRegion.gameObject.activeSelf;
+            }
+            else
+            {
+                this.LogDebugInstanced($"Not fresh proxy, deferring to IsActive state: {dataProxy.IsActive}", LogCategoryFlags.SpawnRegion);
+                mSpawnRegion.gameObject.SetActive(dataProxy.IsActive);
+            }
 
 
             SetBoundingSphereBasedOnWaypoints(mModDataProxy?.CurrentWaypointPathIndex ?? 0);
@@ -801,6 +801,7 @@ namespace ExpandedAiFramework
         private float GetCustomSpawnRegionChanceActiveScale()
         {
             CustomExperienceMode customMode = GameManager.GetCustomMode();
+            this.LogTraceInstanced($"GetCustomSpawnRegionChanceActiveScale triggered");
             if (customMode.IsNullOrDestroyed())
             {
                 this.LogErrorInstanced($"No custom mode found");
@@ -856,6 +857,7 @@ namespace ExpandedAiFramework
             }
             if (spawnChance == CustomTunableNLMHV.None)
             {
+                this.LogTraceInstanced($"Zero spawn chance triggered");
                 return 0.0f;
             }
             float activeChance = 0.0f;
@@ -959,7 +961,7 @@ namespace ExpandedAiFramework
                             ? GetCustomSpawnRegionChanceActiveScale()
                             : GameManager.m_ExperienceModeManager.GetSpawnRegionChanceActiveScale();
             bool active = Utils.RollChance(chanceActive);
-            this.LogDebugInstanced($"Rolled {active} with a success chance of {chanceActive}", LogCategoryFlags.SpawnRegion);
+            this.LogDebugInstanced($"Rolled {active} with a success chance of {chanceActive} (base: {mSpawnRegion.m_ChanceActive})", LogCategoryFlags.SpawnRegion);
             mSpawnRegion.gameObject.SetActive(active);  
             mModDataProxy.IsActive = active;
         }
