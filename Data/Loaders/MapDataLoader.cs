@@ -5,6 +5,7 @@ namespace ExpandedAiFramework
     public abstract class MapDataLoader<T> where T : IMapData, new()
     {
         protected T mData;
+        protected Action<T> mCallback;
         protected Func<T, bool> mFilter;
         protected CustomBaseAi mAi;
         protected SpawnModDataProxy mProxy;
@@ -18,12 +19,13 @@ namespace ExpandedAiFramework
         public T Data { get { return mData; } }
         public bool New { get { return mNew; } }
 
-        public MapDataLoader(CustomBaseAi ai, SpawnModDataProxy proxy, DataManager dataManager, Func<T, bool> filter)
+        public MapDataLoader(CustomBaseAi ai, SpawnModDataProxy proxy, DataManager dataManager, Func<T, bool> filter, Action<T> callback = null)
         {
             mAi = ai;
             mProxy = proxy;
             mDataManager = dataManager;
             mFilter = filter;
+            mCallback = callback;
         }
 
         public bool Connected()
@@ -38,15 +40,15 @@ namespace ExpandedAiFramework
         {
             if (mLoading) return;
             mLoading = true;
-            if (!TryLoadSaved()) RequestNearest();
-        }
 
-
-        private bool TryLoadSaved()
-        {
-            if (!ValidateSaved()) return false;
-            RequestSaved();
-            return true;
+            if (ValidateSaved())
+            {
+                RequestSaved();
+            }
+            else
+            {
+                RequestNearest();
+            }
         }
 
         private void RequestSaved()
@@ -101,6 +103,7 @@ namespace ExpandedAiFramework
             if (result != RequestResult.Succeeded)
             {
                 mAi.LogErrorInstanced($"Failed to attach wander path!");
+                mCallback?.Invoke(mData);
                 return;
             }
             Save();
@@ -108,6 +111,7 @@ namespace ExpandedAiFramework
             mConnected = true;
             data.Claim();
             mAi.LogTraceInstanced($"Claimed {typeof(T)} with guid <<<{mGuid}>>>", LogCategoryFlags.Ai);
+            mCallback?.Invoke(mData);
         }
 
         protected virtual bool ValidateSaved()
