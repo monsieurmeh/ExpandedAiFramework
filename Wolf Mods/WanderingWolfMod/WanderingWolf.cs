@@ -34,22 +34,19 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         protected override bool FirstFrameCustom()
         {
-            if (mModDataProxy != null && mModDataProxy.AsyncProcessing)
-            {
-                return false;
-            }
+            if (mModDataProxy != null && mModDataProxy.AsyncProcessing) return false;
+            if (!TryLoadWanderPath()) return false; // Halt execution until this passes
 
-            if (!mWanderPathConnected)
-            {
-                if (!mFetchingWanderPath)
-                {
-                    GetWanderpath(mModDataProxy);
-                }
-                return false;
-            }
             MaybeWarpToFirstPoint();
             SetDefaultAiMode();
             return true;
+        }
+
+        private bool TryLoadWanderPath()
+        {
+            if (mWanderPathConnected) return true;
+            MaybeGetWanderpath(mModDataProxy);
+            return false;
         }
 
 
@@ -63,8 +60,10 @@ namespace ExpandedAiFramework.WanderingWolfMod
         }
 
 
-        private void GetWanderpath(SpawnModDataProxy proxy)
+        private void MaybeGetWanderpath(SpawnModDataProxy proxy)
         {
+            if (mFetchingWanderPath) return;
+
             if (TryGetSavedWanderPath(proxy))
             {
                 return;
