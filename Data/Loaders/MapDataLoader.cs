@@ -103,7 +103,7 @@ namespace ExpandedAiFramework
                 mAi.LogErrorInstanced($"Failed to attach wander path!");
                 return;
             }
-            SaveDetails();
+            Save();
             AttachDetails();
             mConnected = true;
             data.Claim();
@@ -133,6 +133,12 @@ namespace ExpandedAiFramework
                 return false;
             }
             return true;
+        }
+
+        private void Save()
+        {
+            mProxy.CustomData = [mGuid.ToString()];
+            SaveDetails();
         }
 
         protected abstract bool ValidateDetails();
