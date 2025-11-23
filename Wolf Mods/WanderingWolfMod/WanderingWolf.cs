@@ -12,6 +12,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
         protected WanderPath mWanderPath;
         protected bool mWanderPathConnected = false;
         protected bool mFetchingWanderPath = false;
+        protected bool mWarpToFirstPoint = false;
 
 
         public WanderingWolf(IntPtr ptr) : base(ptr) { }
@@ -46,12 +47,19 @@ namespace ExpandedAiFramework.WanderingWolfMod
                 }
                 return false;
             }
+            TryWarpToFirstPoint();
+            SetDefaultAiMode();
+            return true;
+        }
+
+
+        private void TryWarpToFirstPoint()
+        {
+            if (!mWarpToFirstPoint) return;
 
             this.LogTraceInstanced($"FirstFrameCustom: Warping to wanderpath start at {mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex]} and setting wander mode", LogCategoryFlags.Ai);
             mBaseAi.m_MoveAgent.transform.position = mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex];
             mBaseAi.m_MoveAgent.Warp(mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex], 2.0f, true, -1);
-            SetDefaultAiMode();
-            return true;
         }
 
 
