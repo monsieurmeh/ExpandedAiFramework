@@ -12,6 +12,7 @@ namespace ExpandedAiFramework
         protected bool mWanderPathConnected = false;
         protected bool mFetchingWanderPath = false;
         protected bool mNewPath = false;
+        protected int mWaypointIndex = -1;
 
         public WanderPath Path { get { return mPath; } }
         public bool NewPath { get { return mNewPath; } }
@@ -38,28 +39,22 @@ namespace ExpandedAiFramework
             mFetchingWanderPath = true;
             if (TryLoadSavedWanderPath(proxy)) return;
 
-            mDataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
-            {
-
-                AttachWanderPath(nearestSpot);
-                mNewPath = true;
-            }, false, null, 3));
+            mDataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mAi.transform.position, proxy.Scene, AttachNewWanderPath, false, null, 3));
         }
 
 
         private bool TryLoadSavedWanderPath(SpawnModDataProxy proxy)
         {
-            if (!ValidateSavedWanderPathData(proxy, out Guid spotGuid, out int waypointIndex)) return false;
+            if (!ValidateSavedWanderPathData(proxy, out Guid spotGuid)) return false;
 
-            mAi.BaseAi.m_TargetWaypointIndex = waypointIndex;
-            LoadSavedOrGetNewWanderPath(spotGuid, proxy, waypointIndex);
+            mAi.BaseAi.m_TargetWaypointIndex = mWaypointIndex;
+            LoadSavedOrGetNewWanderPath(spotGuid, proxy);
             return true;
         }
 
-        private bool ValidateSavedWanderPathData(SpawnModDataProxy proxy, out Guid spotGuid, out int waypointIndex)
+        private bool ValidateSavedWanderPathData(SpawnModDataProxy proxy, out Guid spotGuid)
         {
             spotGuid = new Guid();
-            waypointIndex = -1;
             if (proxy == null)
             {
                 mAi.LogTraceInstanced($"Null proxy", LogCategoryFlags.Ai);
@@ -80,7 +75,7 @@ namespace ExpandedAiFramework
                 mAi.LogTraceInstanced($"Proxy spot guid is empty", LogCategoryFlags.Ai);
                 return false;
             }
-            if (!int.TryParse(proxy.CustomData[1], out waypointIndex))
+            if (!int.TryParse(proxy.CustomData[1], out mWaypointIndex))
             {
                 mAi.LogTraceInstanced($"Could not parse last waypoint index from proxy", LogCategoryFlags.Ai);
                 return false;
@@ -88,35 +83,36 @@ namespace ExpandedAiFramework
             return true;
         }
 
-        private void LoadSavedOrGetNewWanderPath(Guid spotGuid, SpawnModDataProxy proxy, int waypointIndex)
+        private void LoadSavedOrGetNewWanderPath(Guid spotGuid, SpawnModDataProxy proxy)
         {
             mDataManager.ScheduleMapDataRequest<WanderPath>(new GetDataByGuidRequest<WanderPath>(spotGuid, proxy.Scene, (spot, result) =>
             {
                 if (result != RequestResult.Succeeded)
                 {
                     mAi.LogTraceInstanced($"Can't get WanderPath with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...", LogCategoryFlags.Ai);
-                    mDataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
-                    {
-                        AttachWanderPath(nearestSpot, waypointIndex);
-                        mNewPath = true;
-                    }, false, (wp => wp.WanderPathFlags == WanderPath.DefaultFlags), 3));
+                    mDataManager.ScheduleMapDataRequest<WanderPath>(new GetNearestMapDataRequest<WanderPath>(mAi.transform.position, proxy.Scene, AttachNewWanderPath, false, (wp => wp.WanderPathFlags == WanderPath.DefaultFlags), 3));
                 }
                 else
                 {
-                    AttachWanderPath(spot, waypointIndex);
+                    AttachWanderPath(spot, result);
                 }
             }, false));
         }
 
 
+        private void AttachNewWanderPath(WanderPath path, RequestResult result)
+        {
+            mNewPath = true;
+            AttachWanderPath(path, result);
+        }
 
-        private void AttachWanderPath(WanderPath path, int currentIndex = 0)
+        private void AttachWanderPath(WanderPath path, RequestResult result)
         {
             mPath = path;
             mFetchingWanderPath = false;
             if (mModDataProxy != null)
             {
-                mModDataProxy.CustomData = [path.Guid.ToString(), currentIndex.ToString()];
+                mModDataProxy.CustomData = [path.Guid.ToString(), mWaypointIndex.ToString()];
             }
             mAi.BaseAi.m_Waypoints = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3>(path.PathPoints.Length);
             for (int i = 0, iMax = mAi.BaseAi.m_Waypoints.Length; i < iMax; i++)
