@@ -53,13 +53,11 @@ namespace ExpandedAiFramework
         private void RequestSavedWanderPath(Guid spotGuid)
         {
             mDataManager.ScheduleMapDataRequest<WanderPath>(
-                new GetNearestMapDataRequest<WanderPath>(
-                    mAi.transform.position,
+                new GetDataByGuidRequest<WanderPath>(
+                    spotGuid,
                     mModDataProxy.Scene,
                     OnSavedWanderPathResult,
-                    false,
-                    wp => wp.WanderPathFlags == WanderPath.DefaultFlags,
-                    3
+                    false
                 )
             );
         }
