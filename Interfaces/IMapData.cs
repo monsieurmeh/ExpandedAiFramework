@@ -9,5 +9,6 @@ namespace ExpandedAiFramework
         bool Transient { get; }
         public Vector3 AnchorPosition { get; }
         public bool Claimed { get; }
+        public bool Claim();
     }
 }

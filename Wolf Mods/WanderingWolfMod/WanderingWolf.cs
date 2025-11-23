@@ -34,9 +34,9 @@ namespace ExpandedAiFramework.WanderingWolfMod
         protected override bool FirstFrameCustom()
         {
             if (mModDataProxy != null && mModDataProxy.AsyncProcessing) return false;
-            if (!mWanderPathLoader.CheckWanderPathReady()) return false; // Gate AI functionality here until wanderpath is ready
+            if (!mWanderPathLoader.Connected()) return false; // Gate AI functionality here until wanderpath is ready
 
-            mWanderPath = mWanderPathLoader.Path;
+            mWanderPath = mWanderPathLoader.Data;
             MaybeWarpToFirstPoint();
             SetDefaultAiMode();
             return true;
@@ -45,7 +45,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
 
         private void MaybeWarpToFirstPoint()
         {
-            if (!mWanderPathLoader.NewPath) return;
+            if (!mWanderPathLoader.New) return;
 
             this.LogTraceInstanced($"FirstFrameCustom: Warping to wanderpath start at {mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex]} and setting wander mode", LogCategoryFlags.Ai);
             mBaseAi.m_MoveAgent.transform.position = mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex];
@@ -58,7 +58,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             switch (CurrentMode)
             {
                 case AiMode.FollowWaypoints:
-                    return mWanderPathLoader.CheckWanderPathReady();
+                    return mWanderPathLoader.Connected();
                 default:
                     return base.ProcessCustom();
             }
