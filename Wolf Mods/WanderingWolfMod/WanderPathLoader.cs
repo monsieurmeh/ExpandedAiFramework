@@ -15,7 +15,6 @@ namespace ExpandedAiFramework
 
         public WanderPath Path { get { return mPath; } }
         public bool NewPath { get { return mNewPath; } }
-        public bool Loaded { get { return mWanderPathConnected; } }
 
         public WanderPathLoader(CustomBaseAi ai, SpawnModDataProxy proxy, DataManager dataManager) 
         {
@@ -45,7 +44,6 @@ namespace ExpandedAiFramework
                 AttachWanderPath(nearestSpot);
                 mNewPath = true;
             }, false, null, 3));
-
         }
 
 
@@ -93,7 +91,7 @@ namespace ExpandedAiFramework
 
 
 
-        public void AttachWanderPath(WanderPath path, int currentIndex = 0)
+        private void AttachWanderPath(WanderPath path, int currentIndex = 0)
         {
             mPath = path;
             mFetchingWanderPath = false;
@@ -109,5 +107,7 @@ namespace ExpandedAiFramework
             mWanderPathConnected = true;
             path.Claim();
         }
+
+        private
     }
 }

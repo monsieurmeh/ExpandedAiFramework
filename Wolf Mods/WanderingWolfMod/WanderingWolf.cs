@@ -58,7 +58,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             switch (CurrentMode)
             {
                 case AiMode.FollowWaypoints:
-                    return mWanderPathLoader.Loaded;
+                    return mWanderPathLoader.CheckWanderPathReady();
                 default:
                     return base.ProcessCustom();
             }
