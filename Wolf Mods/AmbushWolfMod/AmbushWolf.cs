@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
 
 namespace ExpandedAiFramework.AmbushWolfMod
@@ -15,6 +14,8 @@ namespace ExpandedAiFramework.AmbushWolfMod
         }
 
         internal static AmbushWolfSettings AmbushWolfSettings;
+
+        protected MapDataLoader<HidingSpot> mHidingSpotLoader;
         protected HidingSpot mHidingSpot;
         protected bool mFetchingHidingSpot;
 
@@ -27,6 +28,7 @@ proxy)
         {
             base.Initialize(ai, timeOfDay, spawnRegion, proxy);
             this.LogTraceInstanced($"Initializing AmbushWolf at {spawnRegion.transform.position}", LogCategoryFlags.Ai);
+            mHidingSpotLoader = new MapDataLoader<HidingSpot>(this, mModDataProxy, mManager.DataManager);
             mBaseAi.m_DefaultMode = (AiMode)AmbushWolfAiMode.Hide;
             mBaseAi.m_StartMode = (AiMode)AmbushWolfAiMode.Hide;
         }
@@ -34,99 +36,22 @@ proxy)
 
         protected override bool FirstFrameCustom()
         {
-            if (mModDataProxy != null && mModDataProxy.AsyncProcessing)
-            {
-                return false;
-            }
+            if (!mHidingSpotLoader.Connected()) return false; // Gate AI functionality here until wanderpath is ready
 
-            if (mHidingSpot == null)
-            {
-                if (!mFetchingHidingSpot)
-                {
-                    GetHidingSpot(mModDataProxy);
-                }
-                return false;
-            }
-            this.LogTraceInstanced($"FirstFrameCustom: Warping to hiding spot at {mHidingSpot.Position} and setting hide mode", LogCategoryFlags.Ai);
+            mHidingSpot = mHidingSpotLoader.Data;
+            MaybeWarpToFirstPoint();
+            SetDefaultAiMode();
+            return true;
+        }
 
+
+        private void MaybeWarpToFirstPoint()
+        {
+            if (!mHidingSpotLoader.New) return;
+
+            this.LogTraceInstanced($"FirstFrameCustom: Warping to hidingspot start at {mHidingSpot.Position} and setting hiding mode", LogCategoryFlags.Ai);
             mBaseAi.m_MoveAgent.transform.position = mHidingSpot.Position;
             mBaseAi.m_MoveAgent.Warp(mHidingSpot.Position, 2.0f, true, -1);
-
-            SetAiMode((AiMode)AmbushWolfAiMode.Hide);
-            return true;
-        }
-
-
-        private void GetHidingSpot(SpawnModDataProxy proxy)
-        {
-            if (TryGetSavedHidingSpot(proxy))
-            {
-                return;
-            }
-            mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetNearestMapDataRequest<HidingSpot>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
-            {
-                this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
-                AttachHidingSpot(nearestSpot);
-            }, false, null, 3));
-            
-        }
-
-
-        private bool TryGetSavedHidingSpot(SpawnModDataProxy proxy)
-        {
-            mFetchingHidingSpot = true;
-            if (proxy == null 
-                || proxy.CustomData == null
-                || proxy.CustomData.Length == 0)
-            {
-                this.LogTraceInstanced($"Null proxy, null proxy custom data or no length to proxy custom data", LogCategoryFlags.Ai);
-                return false;
-            }
-            Guid spotGuid = new Guid((string)proxy.CustomData[0]);
-            if (spotGuid == Guid.Empty)
-            {
-                this.LogTraceInstanced($"Proxy spot guid is empty", LogCategoryFlags.Ai);
-                return false;
-            }
-            mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetDataByGuidRequest<HidingSpot>(spotGuid, proxy.Scene, (spot, result) =>
-            {
-                if (result != RequestResult.Succeeded)
-                {
-                    this.LogTraceInstanced($"Can't get hiding spot with guid <<<{spotGuid}>>> from dictionary, requesting nearest instead...", LogCategoryFlags.Ai);
-                    mManager.DataManager.ScheduleMapDataRequest<HidingSpot>(new GetNearestMapDataRequest<HidingSpot>(mBaseAi.transform.position, proxy.Scene, (nearestSpot, result2) =>
-                    {
-                        this.LogTraceInstanced($"Found NEW nearest hiding spot with guid <<<{nearestSpot}>>>", LogCategoryFlags.Ai);
-                        AttachHidingSpot(nearestSpot);
-                    }, false, null, 3));
-                }
-                else
-                {
-                    this.LogTraceInstanced($"Found saved hiding spot with guid <<<{spotGuid}>>>", LogCategoryFlags.Ai);
-                    AttachHidingSpot(spot);
-                }
-            }, false));
-            return true;
-        }
-
-
-        public void AttachHidingSpot(HidingSpot hidingSpot)
-        {
-
-            mFetchingHidingSpot = false;
-            if (hidingSpot == null)
-            {
-                this.LogWarningInstanced("Received NULL hiding spot, aborting!");
-                return;
-            }
-            this.LogTraceInstanced($"Attached hiding spot: {hidingSpot}", LogCategoryFlags.Ai);
-            mHidingSpot = hidingSpot;
-
-            if (mModDataProxy != null)
-            {
-                mModDataProxy.CustomData = [mHidingSpot.Guid.ToString()];
-                this.LogTraceInstanced($"Saved spot {mHidingSpot} to proxy data", LogCategoryFlags.Ai);
-            }
-            hidingSpot.Claim();
         }
 
 
