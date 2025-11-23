@@ -47,13 +47,13 @@ namespace ExpandedAiFramework.WanderingWolfMod
                 }
                 return false;
             }
-            TryWarpToFirstPoint();
+            MaybeWarpToFirstPoint();
             SetDefaultAiMode();
             return true;
         }
 
 
-        private void TryWarpToFirstPoint()
+        private void MaybeWarpToFirstPoint()
         {
             if (!mWarpToFirstPoint) return;
 
