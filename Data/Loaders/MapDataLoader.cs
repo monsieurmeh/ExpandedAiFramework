@@ -83,6 +83,7 @@ namespace ExpandedAiFramework
 
         private void RequestNearest()
         {
+            mAi.LogTraceInstanced($"Requesting Nearest MapData", LogCategoryFlags.Ai | LogCategoryFlags.SerializedData);
             mDataManager.ScheduleMapDataRequest<T>(
                 new GetNearestMapDataRequest<T>(
                     mAi.transform.position,
@@ -115,7 +116,7 @@ namespace ExpandedAiFramework
             AttachDetails();
             mConnected = true;
             data.Claim();
-            mAi.LogTraceInstanced($"Claimed {typeof(T)} with guid <<<{mGuid}>>>", LogCategoryFlags.Ai);
+            mAi.LogTraceInstanced($"Claimed {typeof(T)} with guid <<<{mGuid}>>>", LogCategoryFlags.Ai | LogCategoryFlags.SerializedData);
             mCallback?.Invoke(mData);
         }
 
@@ -123,22 +124,22 @@ namespace ExpandedAiFramework
         {
             if (mProxy == null)
             {
-                mAi.LogTraceInstanced($"Null proxy", LogCategoryFlags.Ai);
+                mAi.LogTraceInstanced($"Null proxy", LogCategoryFlags.Ai | LogCategoryFlags.SerializedData);
                 return false;
             }
             if (mProxy.CustomData == null)
             {
-                mAi.LogTraceInstanced($"Null proxy custom data", LogCategoryFlags.Ai);
+                mAi.LogTraceInstanced($"Null proxy custom data", LogCategoryFlags.Ai | LogCategoryFlags.SerializedData);
                 return false;
             }
             if (mProxy.CustomData.Length < 1)
             {
-                mAi.LogTraceInstanced($"Not enough length to proxy custom data (guid required)", LogCategoryFlags.Ai);
+                mAi.LogTraceInstanced($"Not enough length to proxy custom data (guid required)", LogCategoryFlags.Ai | LogCategoryFlags.SerializedData);
                 return false;
             }
             if (!Guid.TryParse(mProxy.CustomData[0], out mGuid))
             {
-                mAi.LogTraceInstanced($"Could not parse guid", LogCategoryFlags.Ai);
+                mAi.LogTraceInstanced($"Could not parse guid", LogCategoryFlags.Ai | LogCategoryFlags.SerializedData);
                 return false;
             }
             return true;

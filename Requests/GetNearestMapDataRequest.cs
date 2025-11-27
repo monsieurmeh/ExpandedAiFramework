@@ -40,17 +40,17 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer", LogCategoryFlags.Request);
+                this.LogTraceInstanced($"null mDataContainer", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                 return false;
             }
             if (mPosition.Equals(Vector3.zero))
             {
-                this.LogTraceInstanced($"zero position", LogCategoryFlags.Request);
+                this.LogTraceInstanced($"zero position", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                 return false;
             }
             if (string.IsNullOrEmpty(mScene))
             {
-                this.LogTraceInstanced($"Null or empty scene", LogCategoryFlags.Request);
+                this.LogTraceInstanced($"Null or empty scene", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                 return false;
             }
             return true;
@@ -96,16 +96,19 @@ namespace ExpandedAiFramework
         {
             if (!ValidEntryInternal(data))
             {
+                this.LogTraceInstanced($"Invalid Entry: {data.Name} is Claimed", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                 return false;
             }
             if (mHasAdditionalFilters)
             {
-                if (mRequestScopeFilter?.Invoke(data) ?? false)
+                if (!mRequestScopeFilter?.Invoke(data) ?? false)
                 {
+                    this.LogTraceInstanced($"Invalid Entry: {data.Name} rejected by request-scope filter", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                     return false;
                 }
-                if (mManagerScopeFilter?.Invoke(data) ?? false)
+                if (!mManagerScopeFilter?.Invoke(data) ?? false)
                 {
+                    this.LogTraceInstanced($"Invalid Entry: {data.Name} rejected by manager-scope filter", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                     return false;
                 }
             }

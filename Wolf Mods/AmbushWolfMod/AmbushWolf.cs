@@ -17,7 +17,6 @@ namespace ExpandedAiFramework.AmbushWolfMod
 
         protected MapDataLoader<HidingSpot> mHidingSpotLoader;
         protected HidingSpot mHidingSpot;
-        protected bool mFetchingHidingSpot;
 
         public AmbushWolf(IntPtr ptr) : base(ptr) { }
         public override Color DebugHighlightColor { get { return Color.yellow; } }
@@ -67,15 +66,15 @@ proxy)
             switch (CurrentMode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessHiding.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessHiding.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     ProcessHiding();
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessReturning.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, routing to ProcessReturning.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     ProcessReturning();
                     return false;
                 default:
-                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"ProcessCustom: CurrentMode is {CurrentMode}, deferring.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     return base.ProcessCustom();
             }
         }
@@ -86,15 +85,15 @@ proxy)
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Paused.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Paused.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     overrideState = AiAnimationState.Paused;
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Wander.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, setting overrideState to Wander.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     overrideState = AiAnimationState.Wander;
                     return false;
                 default:
-                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, deffering", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"GetAiAnimationStateCustom: mode is {mode}, deffering", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     overrideState = AiAnimationState.Invalid;
                     return true;
             }
@@ -106,15 +105,15 @@ proxy)
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState false.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState false.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     isMoveState = false;
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState true.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, setting isMoveState true.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     isMoveState = true;
                     return false;
                 default:
-                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, deferring.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"IsMoveStateCustom: mode is {mode}, deferring.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     isMoveState = false;
                     return true;
             }
@@ -126,15 +125,15 @@ proxy)
             switch (mode)
             {
                 case (AiMode)AmbushWolfAiMode.Hide:
-                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterHiding", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterHiding", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     EnterHiding();
                     return false;
                 case (AiMode)AmbushWolfAiMode.Return:
-                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterReturning.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, routing to EnterReturning.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     EnterReturning();
                     return false;
                 default:
-                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, deferring.", LogCategoryFlags.Ai);
+                    this.LogTraceInstanced($"EnterAiModeCustom: mode is {mode}, deferring.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                     return true;
             }
         }
@@ -180,10 +179,10 @@ proxy)
             float hidingSpotDistance = Vector3.Distance(mBaseAi.transform.position, mHidingSpot.Position);
             if (hidingSpotDistance >= 2.0f) //todo: eliminate sqrt check, move to simple squared distance as a cached value from a "hiding spot distance" setting
             {
-                this.LogTraceInstanced($"ProcessReturning: To far from hiding spot ({hidingSpotDistance}, continuing.", LogCategoryFlags.Ai);
+                this.LogTraceInstanced($"ProcessReturning: To far from hiding spot ({hidingSpotDistance}, continuing.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
                 return;
             }
-            this.LogTraceInstanced($"ProcessReturning: Close enough to hiding spot, hiding.", LogCategoryFlags.Ai);
+            this.LogTraceInstanced($"ProcessReturning: Close enough to hiding spot, hiding.", LogCategoryFlags.Ai | LogCategoryFlags.UpdateLoop);
             SetAiMode((AiMode)AmbushWolfAiMode.Hide);
         }
 

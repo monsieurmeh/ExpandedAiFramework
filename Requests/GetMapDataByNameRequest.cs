@@ -22,17 +22,17 @@ namespace ExpandedAiFramework
         {
             if (mDataContainer == null)
             {
-                this.LogTraceInstanced($"null mDataContainer", LogCategoryFlags.Request);
+                this.LogTraceInstanced($"null mDataContainer", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                 return false;
             }
             if (string.IsNullOrEmpty(mName))
             {
-                this.LogTraceInstanced($"Numm or empty name guid", LogCategoryFlags.Request);
+                this.LogTraceInstanced($"Numm or empty name guid", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                 return false;
             }
             if (string.IsNullOrEmpty(mScene))
             {
-                this.LogTraceInstanced($"Null or empty scene", LogCategoryFlags.Request);
+                this.LogTraceInstanced($"Null or empty scene", LogCategoryFlags.Request | LogCategoryFlags.SerializedData);
                 return false;
             }
             return true;
