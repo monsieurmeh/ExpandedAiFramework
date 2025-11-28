@@ -1172,15 +1172,15 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_NumRespawnsPending < 1)
             {
-                this.LogTraceInstanced($"No pending respawns, no respawn allowed", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"No pending respawns, no respawn allowed", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
             if (mSpawnRegion.m_ElapasedHoursNextRespawnAllowed >= GetCurrentTimelinePoint())
             {
-                this.LogTraceInstanced($"Not yet time, no respawn allowed", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Not yet time, no respawn allowed", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
-            this.LogDebugInstanced($"Respawn allowed", LogCategoryFlags.SpawnRegion);
+            this.LogTraceInstanced($"Respawn allowed", LogCategoryFlags.SpawnRegion);
             return true;
         }
 
@@ -1194,7 +1194,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_HoursNextTrapReset > GetCurrentTimelinePoint())
             {
-                this.LogTraceInstanced($"Not yet time", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Not yet time", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return;
             }
             if (mSpawnRegion.m_NumTrapped > 0)
@@ -1356,30 +1356,30 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_SpawnLevel == 0)
             {
-                this.LogTraceInstanced($"Suppressed by zero sxpawn level", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Suppressed by zero sxpawn level", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return true;
             }
             if (!ExperienceModeManager.s_CurrentGameMode.m_XPMode.m_NoPredatorsFirstDay)
             {
-                this.LogTraceInstanced($"No predator grace period, not suppressed", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"No predator grace period, not suppressed", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
             if (mSpawnRegion.m_AiTypeSpawned != AiType.Predator)
             {
-                this.LogTraceInstanced($"Non-predator spawn region, not suppressed", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Non-predator spawn region, not suppressed", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
             if (mSpawnRegion.m_ForcePredatorOverride)
             {
-                this.LogTraceInstanced($"Forced predator override, not suppressed", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Forced predator override, not suppressed", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
             if (GetCurrentTimelinePoint() >= Il2Cpp.SpawnRegionManager.m_NoPredatorSpawningInVoyageurHours)
             {
-                this.LogTraceInstanced($"Past grace period, not suppressed", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Past grace period, not suppressed", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
-            this.LogTraceInstanced($"Predator spawn region suppressed during predator grace period", LogCategoryFlags.SpawnRegion);
+            this.LogTraceInstanced($"Predator spawn region suppressed during predator grace period", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
             return true;
         }
 
@@ -1389,22 +1389,22 @@ namespace ExpandedAiFramework
             PlayerManager playerManager = GameManager.m_PlayerManager;
             if (playerManager.m_Ghost)
             {
-                this.LogTraceInstanced($"Ghost, not too close", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Ghost, not too close", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
             if (Utils.PositionIsOnscreen(spawnPos)
                 && Utils.DistanceToMainCamera(spawnPos) < GameManager.m_SpawnRegionManager.m_AllowSpawnOnscreenDistance
                 && !mSpawnRegion.m_OverrideDistanceToCamera)
             {
-                this.LogTraceInstanced($"Position is on screen and dist to main camera within allowSpawnOnScreenDistance and spawnRegion.m_OverrideDistanceToCamera is false, too close for spawn", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Position is on screen and dist to main camera within allowSpawnOnScreenDistance and spawnRegion.m_OverrideDistanceToCamera is false, too close for spawn", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return true;
             }
             if (Utils.PositionIsInLOSOfPlayer(spawnPos) && !mSpawnRegion.m_OverrideCameraLineOfSight)
             {
-                this.LogTraceInstanced($"Position in LOS of player and no camera LOS override, too close to spawn", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Position in LOS of player and no camera LOS override, too close to spawn", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return true;
             }
-            this.LogTraceInstanced($"ScreenPos not too close to spawn!", LogCategoryFlags.SpawnRegion);
+            this.LogTraceInstanced($"ScreenPos not too close to spawn!", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
             return false;
         }
 
@@ -1414,7 +1414,7 @@ namespace ExpandedAiFramework
             PlayerManager playerManager = GameManager.m_PlayerManager;
             if (playerManager.m_Ghost)
             {
-                this.LogTraceInstanced($"Ghost, not too close", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Ghost, not too close", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
 
@@ -1425,7 +1425,7 @@ namespace ExpandedAiFramework
             }
             if (Vector3.Distance(GameManager.m_vpFPSCamera.transform.position, spawnPos) <= closestDistToPlayer)
             {
-                this.LogTraceInstanced($"Too close to spawn", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Too close to spawn", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return true;
             }
             this.LogTraceInstanced($"NOT Too close to spawn", LogCategoryFlags.SpawnRegion);
@@ -1437,7 +1437,7 @@ namespace ExpandedAiFramework
         {
             float dist = Utils.DistanceToMainCamera(mSpawnRegion.m_Center);
             bool closeEnough = mSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance >= dist;
-            this.LogTraceInstanced($"Checking if spawn region at {mSpawnRegion.m_Center} with radius {mSpawnRegion.m_Radius} plus disable dist {GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance} and distance to camera {dist} is close enough for spawning: {closeEnough}", LogCategoryFlags.SpawnRegion);
+            this.LogTraceInstanced($"Checking if spawn region at {mSpawnRegion.m_Center} with radius {mSpawnRegion.m_Radius} plus disable dist {GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance} and distance to camera {dist} is close enough for spawning: {closeEnough}", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
             return closeEnough;
         }
 
