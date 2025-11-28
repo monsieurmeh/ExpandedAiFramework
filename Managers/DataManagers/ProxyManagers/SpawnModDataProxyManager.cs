@@ -78,9 +78,16 @@ namespace ExpandedAiFramework
         protected override void OnRegister(SpawnModDataProxy proxy)
         {
             List<Guid> queuedGuids = GetQueuedSpawnModDataProxiesByParentGuid(proxy.ParentGuid);
-            if (!queuedGuids.Contains(proxy.Guid))
+            if (queuedGuids.Contains(proxy.Guid)) return;
+
+            MaybeSetForceSpawn(proxy);
+            this.LogTraceInstanced($"Queueing SpawnModDataProxy {proxy.Guid} against parent guid {proxy.ParentGuid}", LogCategoryFlags.SerializedData);
+            if (proxy.ForceSpawn)
             {
-                this.LogTraceInstanced($"Queueing SpawnModDataProxy {proxy.Guid} against parent guid {proxy.ParentGuid}", LogCategoryFlags.SerializedData);
+                queuedGuids.Insert(0, proxy.Guid);
+            }
+            else
+            {
                 queuedGuids.Add(proxy.Guid);
             }
         }
