@@ -541,25 +541,25 @@ namespace ExpandedAiFramework
             {
                 if (mSpawnRegion.m_HasBeenDisabledByAurora)
                 {
-                    this.LogTraceInstanced($"Disabled by aurora, aborting", LogCategoryFlags.SpawnRegion);
+                    this.LogTraceInstanced($"Disabled by aurora, aborting", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                     return;
                 }
                 if (!SpawnRegionCloseEnoughForSpawning())
                 {
-                    this.LogTraceInstanced($"Not close enough for spawning, aborting", LogCategoryFlags.SpawnRegion);
+                    this.LogTraceInstanced($"Not close enough for spawning, aborting", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                     return;
                 }
                 if (targetDelta <= 0)
                 {
-                    this.LogTraceInstanced($"numToActivate ({targetDelta}) invalid, aborting", LogCategoryFlags.SpawnRegion);
+                    this.LogTraceInstanced($"numToActivate ({targetDelta}) invalid, aborting", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                     return;
                 }
-                this.LogDebugInstanced($"{targetDelta} ({currentActivePopulation} vs {targetPop}) missing active wildlife of current type, adding", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"{targetDelta} ({currentActivePopulation} vs {targetPop}) missing active wildlife of current type, adding", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 Spawn(currentMode);
             }
             else if (targetDelta < 0)
             {
-                this.LogDebugInstanced($"{-targetDelta} ({currentActivePopulation} vs {targetPop}) excess active wildlife of current type, removing", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"{-targetDelta} ({currentActivePopulation} vs {targetPop}) excess active wildlife of current type, removing", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 RemoveActiveSpawns(-targetDelta, currentMode, false);
             }
         }
@@ -569,17 +569,17 @@ namespace ExpandedAiFramework
         {
             if (!OverrideCalculateTargetPopulation(out int customTarget))
             {
-                this.LogTraceInstanced($"Spawning target overridden to {customTarget}!", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Spawning target overridden to {customTarget}!", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return customTarget;
             }
             if (SpawningSuppressedByExperienceMode())
             {
-                this.LogTraceInstanced($"Spawning suppressed by experience mode", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Spawning suppressed by experience mode", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return 0;
             }
             if (!mSpawnRegion.m_CanSpawnInBlizzard && GameManager.m_Weather.IsBlizzard())
             {
-                this.LogTraceInstanced($"Cannot spawn in blizzard", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Cannot spawn in blizzard", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return 0;
             }
             return CalculateTargetPopulationInternal();
@@ -921,32 +921,32 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_HasBeenDisabledByAurora)
             {
-                this.LogTraceInstanced($"Disabled by aurora, aborting", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Disabled by aurora, aborting", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return;
             }
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Cougar)
             {
-                this.LogTraceInstanced($"Cougar override", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Cougar override", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return;
             }
             if (mSpawnRegion.m_WasForceDisabled)
             {
-                this.LogTraceInstanced($"Force disabled", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Force disabled", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return;
             }
             if (mSpawnRegion.m_HoursReRollActive <= 0.0001f)
             {
-                this.LogTraceInstanced($"Effectively zero mSpawnRegion.m_HoursReRollActive, aborting to prevent div by near zero", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Effectively zero mSpawnRegion.m_HoursReRollActive, aborting to prevent div by near zero", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return;
             }
             if (GetCurrentTimelinePoint() - mSpawnRegion.m_ElapsedHoursAtLastActiveReRoll < mSpawnRegion.m_HoursReRollActive)
             {
-                this.LogTraceInstanced($"Not yet time", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Not yet time", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return;
             }
             if (!CanDoReRoll())
             {
-                this.LogTraceInstanced($"Ineligible for ReRoll", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"Ineligible for ReRoll", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return;
             }
             RerollChanceActive();
