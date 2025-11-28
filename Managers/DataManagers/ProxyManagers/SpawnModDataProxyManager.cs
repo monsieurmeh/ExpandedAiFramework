@@ -42,15 +42,18 @@ namespace ExpandedAiFramework
         protected override void RefreshData(SpawnModDataProxy proxy)
         {
             proxy.Available = true;
-            if (mManager.Manager.AiManager.SpawnSettingsDict.TryGetValue(proxy.VariantSpawnType, out ISpawnTypePickerCandidate settings))
-            {
-                proxy.ForceSpawn = settings.ForceSpawningEnabled() && CanForceSpawn();
-                if (proxy.ForceSpawn)
-                {
-                    IncrementForceSpawnCount();
-                }
-            }
+            MaybeSetForceSpawn(proxy);
             base.RefreshData(proxy);
+        }
+
+
+        private void MaybeSetForceSpawn(SpawnModDataProxy proxy)
+        {
+            if (!mManager.Manager.AiManager.SpawnSettingsDict.TryGetValue(proxy.VariantSpawnType, out ISpawnTypePickerCandidate settings)) return;
+            proxy.ForceSpawn = settings.ForceSpawningEnabled() && CanForceSpawn();
+
+            if (!proxy.ForceSpawn) return;
+            IncrementForceSpawnCount();
         }
 
 
