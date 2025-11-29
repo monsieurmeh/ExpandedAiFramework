@@ -30,5 +30,7 @@ namespace ExpandedAiFramework
         {
             return SpawnWeight;
         }
+
+        public override bool ForceSpawningEnabled() => true;
     }
 }
