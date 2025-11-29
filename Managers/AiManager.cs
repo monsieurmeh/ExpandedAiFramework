@@ -126,7 +126,7 @@ namespace ExpandedAiFramework
             LogTrace($"Registering type {type}", LogCategoryFlags.AiManager);
 
             mSpawnSettingsDict.Add(type, spawnSettings);
-            mTypePicker.AddWeight(type, spawnSettings.SpawnWeight, (ai) => spawnSettings.CanSpawn(ai) && mManager.DataManager.CanForceSpawn(ai.m_WildlifeMode));
+            mTypePicker.AddWeight(type, spawnSettings.SpawnWeight, spawnSettings.CanSpawn);
             return true;
         }
 
