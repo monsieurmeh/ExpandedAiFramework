@@ -322,6 +322,12 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"Setting proxy with guid {proxy.Guid} to UNAVAILABLE", LogCategoryFlags.SpawnRegion);
                 mPendingSpawns.Enqueue(proxy);
             }
+            if (proxy.ForceSpawn)
+            {
+
+                this.LogTraceInstanced($"FORCE SPAWN", LogCategoryFlags.SpawnRegion);
+                mManager.Manager.DataManager.IncrementForceSpawnCount(proxy.WildlifeMode);
+            }
         }
 
 
@@ -510,7 +516,6 @@ namespace ExpandedAiFramework
                 if (newProxy.ForceSpawn && newProxy.WildlifeMode == VanillaSpawnRegion.m_WildlifeMode)
                 {
                     this.LogDebugInstanced($"FORCE spawning on creation!", LogCategoryFlags.SpawnRegion);
-                    mManager.Manager.DataManager.IncrementForceSpawnCount(wildlifeMode);
                     QueueSpawn(newProxy);
                 }
             });

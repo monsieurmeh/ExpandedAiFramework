@@ -302,10 +302,6 @@ namespace ExpandedAiFramework
                 LogError($"Couldn't fetch spawn settings for type {type}!");
                 return;
             }
-            if (spawnSettings.ForceSpawningEnabled())
-            {
-                mManager.DataManager.IncrementForceSpawnCount(baseAi.m_WildlifeMode);
-            }
             spawnSettings.OnPick();
         }
     }
