@@ -45,7 +45,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
                 && ai.m_AiSubType == AiSubType.Wolf
                 && ai.Timberwolf == null
                 && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay
-                && ForceSpawn == EAFManager.Instance.DataManager.CanForceSpawn(ai.m_WildlifeMode);
+                && (!ForceSpawn || (ForceSpawn && EAFManager.Instance.DataManager.CanForceSpawn(ai.m_WildlifeMode))); //If force spawn IS enabled, then there must also be room for force spawning!
         }
 
 
