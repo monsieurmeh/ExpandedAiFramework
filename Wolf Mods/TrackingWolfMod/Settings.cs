@@ -44,7 +44,8 @@ namespace ExpandedAiFramework.TrackingWolfMod
             return Enable
                 && ai.m_AiSubType == AiSubType.Wolf
                 && ai.Timberwolf == null
-                && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay;
+                && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay
+                && ForceSpawn == EAFManager.Instance.DataManager.CanForceSpawn(ai.m_WildlifeMode);
         }
 
 
