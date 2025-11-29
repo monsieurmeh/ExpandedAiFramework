@@ -537,7 +537,7 @@ namespace ExpandedAiFramework
             int otherModeActivePopulation = GetCurrentActivePopulation(oppositeMode);
             if (otherModeActivePopulation > 0)
             {
-                this.LogDebugInstanced($"{otherModeActivePopulation} active wildlife of opposite type, removing", LogCategoryFlags.SpawnRegion);
+                this.LogTraceInstanced($"{otherModeActivePopulation} active wildlife of opposite type ({oppositeMode}), removing", LogCategoryFlags.SpawnRegion);
                 RemoveActiveSpawns(otherModeActivePopulation, currentMode, true);
             }
             int targetDelta = targetPop - currentActivePopulation;
@@ -558,12 +558,12 @@ namespace ExpandedAiFramework
                     this.LogTraceInstanced($"numToActivate ({targetDelta}) invalid, aborting", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                     return;
                 }
-                this.LogTraceInstanced($"{targetDelta} ({currentActivePopulation} vs {targetPop}) missing active wildlife of current type, adding", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
+                this.LogTraceInstanced($"{targetDelta} ({currentActivePopulation} vs {targetPop}) missing active wildlife of current type ({currentMode}), adding", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 Spawn(currentMode);
             }
             else if (targetDelta < 0)
             {
-                this.LogTraceInstanced($"{-targetDelta} ({currentActivePopulation} vs {targetPop}) excess active wildlife of current type, removing", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
+                this.LogTraceInstanced($"{-targetDelta} ({currentActivePopulation} vs {targetPop}) excess active wildlife of current type ({currentMode}), removing", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 RemoveActiveSpawns(-targetDelta, currentMode, false);
             }
         }
@@ -686,12 +686,12 @@ namespace ExpandedAiFramework
                     bool canDespawn = false;
                     if (isAdjustingOtherWildlifeMode && HasSameWildlifeMode(spawn, wildlifeMode))
                     {
-                        this.LogTraceInstanced($"Adjusting other wildlife mode and spawn mode matches called mode, wildlifeMode matched for despawn", LogCategoryFlags.SpawnRegion);
+                        this.LogTraceInstanced($"Adjusting other wildlife mode and spawn mode matches called mode ({wildlifeMode}), wildlifeMode matched for despawn", LogCategoryFlags.SpawnRegion);
                         canDespawn = true;
                     }
                     if (!canDespawn && !HasSameWildlifeMode(spawn, wildlifeMode))
                     {
-                        this.LogTraceInstanced($"NOT adjusting other wildlife mode and spawn mode does NOT match called mode, wildlifeMode matched for despawn", LogCategoryFlags.SpawnRegion);
+                        this.LogTraceInstanced($"NOT adjusting other wildlife mode and spawn mode does NOT match called mode ({wildlifeMode}), wildlifeMode matched for despawn", LogCategoryFlags.SpawnRegion);
                         canDespawn = true;
                     }
                     //if (canDespawn
