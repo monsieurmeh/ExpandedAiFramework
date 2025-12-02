@@ -44,6 +44,12 @@ namespace ExpandedAiFramework
             base.OnChange(field, oldValue, newValue);
         }
 
+        public override void ShowSettingsIfEnabled()
+        {
+            base.ShowSettingsIfEnabled();
+            SetFieldVisible(GetType().GetField("StalkingTimeout", BindingFlags.Instance | BindingFlags.Public), EnableStalkingTimeout);
+        }
+
 
         public override bool CanSpawn(BaseAi ai)
         {

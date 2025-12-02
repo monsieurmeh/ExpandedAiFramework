@@ -11,7 +11,7 @@ namespace ExpandedAiFramework
         protected override void OnChange(FieldInfo field, object oldValue, object newValue) => ShowSettingsIfEnabled();
         
         
-        public void ShowSettingsIfEnabled()
+        public virtual void ShowSettingsIfEnabled()
         {
             FieldInfo enabled = GetType().GetField("Enable", BindingFlags.Instance | BindingFlags.Public);
             if (enabled == null)
