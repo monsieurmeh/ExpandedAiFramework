@@ -22,14 +22,22 @@ namespace ExpandedAiFramework.WanderingWolfMod
         public int SpawnDelay = 10;
 
 
+        [Name("Enable Force Spawning")]
+        [Description("Ensures that tracking wolves will ALWAYS spawn, even if they are across the map. Limited by global force spawn count.")]
+        public bool ForceSpawn = false;
+
+
         public WanderingWolfSettings(string path) : base(path) { }
+
+        public override bool ForceSpawningEnabled() => ForceSpawn;
 
         public override bool CanSpawn(BaseAi ai)
         {
             return Enable
                 && ai.m_AiSubType == AiSubType.Wolf
                 && ai.Timberwolf == null
-                && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay;
+                && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay
+                && (!ForceSpawn || (ForceSpawn && EAFManager.Instance.DataManager.CanForceSpawn(ai.m_WildlifeMode))); //If force spawn IS enabled, then there must also be room for force spawning!
         }
 
 
