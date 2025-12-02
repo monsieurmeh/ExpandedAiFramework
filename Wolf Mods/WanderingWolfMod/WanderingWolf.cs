@@ -46,6 +46,8 @@ namespace ExpandedAiFramework.WanderingWolfMod
         {
             if (!mWanderPathLoader.New) return;
 
+
+            mBaseAi.m_TargetWaypointIndex = UnityEngine.Random.Range(0, mWanderPath.PathPoints.Length - 1);
             this.LogTraceInstanced($"FirstFrameCustom: Warping to wanderpath start at {mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex]} and setting wander mode", LogCategoryFlags.Ai);
             mBaseAi.m_MoveAgent.transform.position = mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex];
             mBaseAi.m_MoveAgent.Warp(mWanderPath.PathPoints[mBaseAi.m_TargetWaypointIndex], 2.0f, true, -1);
