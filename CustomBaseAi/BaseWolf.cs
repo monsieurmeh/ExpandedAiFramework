@@ -15,11 +15,20 @@ namespace ExpandedAiFramework
 
         protected override bool ProcessCustom() 
         {
-            if (CurrentMode == AiMode.Stalking && mBaseAi.m_TimeInModeSeconds >= BaseWolfSettings.StalkingTimeout)
+            if (ShouldActivateStalkingTimeout())
             {
                 SetAiMode(AiMode.Attack);
                 return false;
             }
+            return true;
+        }
+
+        private bool ShouldActivateStalkingTimeout()
+        {
+            if (CurrentMode != AiMode.Stalking) return false;
+            if (!BaseWolfSettings.EnableStalkingTimeout) return false;
+            if (mBaseAi.m_TimeInModeSeconds < BaseWolfSettings.StalkingTimeout) return false;
+            this.LogTraceInstanced($"Stalking timeout activated! GETTEM, BOY!", LogCategoryFlags.Ai);
             return true;
         }
 

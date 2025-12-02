@@ -6,8 +6,6 @@ namespace ExpandedAiFramework
 {
     public abstract class BaseNestedSettings : JsonModSettings
     {
-        //Include a field name named "Enable"!
-
         public BaseNestedSettings(string path) : base(path) => ShowSettingsIfEnabled();
 
         protected override void OnChange(FieldInfo field, object oldValue, object newValue) => ShowSettingsIfEnabled();

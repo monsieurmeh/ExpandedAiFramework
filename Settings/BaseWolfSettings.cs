@@ -1,4 +1,4 @@
-﻿
+﻿using System.Reflection;
 
 namespace ExpandedAiFramework
 {
@@ -15,6 +15,9 @@ namespace ExpandedAiFramework
         [Description("Adjust spawn weight for base wolves. Higher numbers increase relative spawn chance.")]
         public int SpawnWeight = 100;
 
+        [Name("Enable Stalking Timeout")]
+        [Description("Allow stalking timeout. Prevents indefinite stalking behavior by switching to from stalking to attack after a set period of time.")]
+        public bool EnableStalkingTimeout = false;
 
         [Name("Stalking Timeout")]
         [Slider(0.0f, 30.0f)]
@@ -29,6 +32,17 @@ namespace ExpandedAiFramework
 
 
         public BaseWolfSettings(string path) : base(path) { }
+
+        protected override void OnChange(FieldInfo field, object oldValue, object newValue)
+        {
+            switch (field.Name)
+            {
+                case "EnableStalkingTimeout":
+                    SetFieldVisible(GetType().GetField("StalkingTimeout", BindingFlags.Instance | BindingFlags.Public), (bool)newValue);
+                    break;
+            }
+            base.OnChange(field, oldValue, newValue);
+        }
 
 
         public override bool CanSpawn(BaseAi ai)
