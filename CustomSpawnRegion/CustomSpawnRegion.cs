@@ -308,7 +308,7 @@ namespace ExpandedAiFramework
             if (proxy.ForceSpawn)
             {
                 this.LogTraceInstanced($"FORCE SPAWN", LogCategoryFlags.SpawnRegion);
-                mManager.Manager.DataManager.IncrementForceSpawnCount(proxy.WildlifeMode);
+                mManager.Manager.DataManager.IncrementForceSpawnCount(proxy.WildlifeMode, proxy.VariantSpawnType);
             }
         }
 

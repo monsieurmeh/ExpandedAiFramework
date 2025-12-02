@@ -6,8 +6,8 @@ namespace ExpandedAiFramework
                                             ISerializedDataCrossReferenceProvider<SpawnRegionModDataProxy, SpawnModDataProxy>
     {
         private object mForceSpawnLock = new object();
-        private int mForceSpawnCount = 0;
         private Dictionary<Guid, List<Guid>> mQueuedSpawnModDataProxiesByParentGuid = new Dictionary<Guid, List<Guid>>();
+        private Dictionary<Type, int> mForceSpawnCountDict = new Dictionary<Type, int>();
 
         public SpawnModDataProxyManager(DataManager manager, DispatchManager dispatcher, string dataLocation) : base(manager, dispatcher, dataLocation) { }
 
@@ -22,7 +22,7 @@ namespace ExpandedAiFramework
         {
             lock (mForceSpawnLock)
             {
-                mForceSpawnCount = 0;
+                mForceSpawnCountDict.Clear();
             }
             ClearQueuedSpawnModDataProxiesByParentGuid();
             base.Refresh(scene);
@@ -47,13 +47,13 @@ namespace ExpandedAiFramework
         }
 
 
-        private void MaybeSetForceSpawn(SpawnModDataProxy proxy)
+        public void MaybeSetForceSpawn(SpawnModDataProxy proxy)
         {
             if (!mManager.Manager.AiManager.SpawnSettingsDict.TryGetValue(proxy.VariantSpawnType, out ISpawnTypePickerCandidate settings)) return;
-            proxy.ForceSpawn = settings.ForceSpawningEnabled() && CanForceSpawn();
+            proxy.ForceSpawn = settings.ForceSpawningEnabled() && CanForceSpawn(proxy.VariantSpawnType);
 
             if (!proxy.ForceSpawn) return;
-            IncrementForceSpawnCount();
+            IncrementForceSpawnCount(proxy.VariantSpawnType);
         }
 
 
@@ -121,24 +121,37 @@ namespace ExpandedAiFramework
 
 
         //locks force spawn, should be OK
-        public bool CanForceSpawn()
+        public bool CanForceSpawn(Type type)
         {
             lock (mForceSpawnLock)
             {
-                bool canForceSpawn = mForceSpawnCount < mManager.Manager.Settings.MaxForceSpawns;
-                this.LogTraceInstanced($"ForceSpawnCount: {mForceSpawnCount} | CanForceSpawn: {canForceSpawn}", LogCategoryFlags.SerializedData);
+                bool canForceSpawn = GetForceSpawnCount(type) < mManager.Manager.Settings.MaxForceSpawns;
+                this.LogTraceInstanced($"ForceSpawnCount[{type}]: {GetForceSpawnCount(type)} | CanForceSpawn: {canForceSpawn}", LogCategoryFlags.SerializedData);
                 return canForceSpawn;
             }
         }
 
+        private int GetForceSpawnCount(Type type)
+        {
+            if (!mForceSpawnCountDict.TryGetValue(type, out int count))
+            {
+                mForceSpawnCountDict.Add(type, count = 0);
+            }
+            return count;
+        }
 
         //locks force spawn, should be OK
-        public void IncrementForceSpawnCount()
+        public void IncrementForceSpawnCount(Type type)
         {
             lock (mForceSpawnLock)
             {
-                mForceSpawnCount++;
-                this.LogTraceInstanced($"Incrementing force spawn count: {mForceSpawnCount - 1} -> {mForceSpawnCount}", LogCategoryFlags.SerializedData);
+                if (!mForceSpawnCountDict.TryGetValue(type, out int count))
+                {
+                    count = 0;
+                }
+                count++;
+                mForceSpawnCountDict[type] = count;
+                this.LogTraceInstanced($"Incrementing force spawn count for type {type}: {count - 1} -> {count}", LogCategoryFlags.SerializedData);
             }
         }
 

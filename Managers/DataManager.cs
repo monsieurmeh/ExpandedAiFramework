@@ -101,25 +101,25 @@ namespace ExpandedAiFramework
         }
 
 
-        public bool CanForceSpawn(WildlifeMode wildlifeMode)
+        public bool CanForceSpawn(WildlifeMode wildlifeMode, Type spawnType)
         {
             if ((int)wildlifeMode >= mSpawnModDataProxyManagers.Length)
             {
                 LogError($"Invalid wildlife mode: {wildlifeMode}!");
                 return false;
             }
-            return mSpawnModDataProxyManagers[(int)wildlifeMode].CanForceSpawn();
+            return mSpawnModDataProxyManagers[(int)wildlifeMode].CanForceSpawn(spawnType);
         }
 
 
-        public void IncrementForceSpawnCount(WildlifeMode wildlifeMode)
+        public void IncrementForceSpawnCount(WildlifeMode wildlifeMode, Type spawnType)
         {
             if ((int)wildlifeMode >= mSpawnModDataProxyManagers.Length)
             {
                 LogError($"Invalid wildlife mode: {wildlifeMode}!");
                 return;
             }
-            mSpawnModDataProxyManagers[(int)wildlifeMode].IncrementForceSpawnCount();
+            mSpawnModDataProxyManagers[(int)wildlifeMode].IncrementForceSpawnCount(spawnType);
         }
      
         #endregion

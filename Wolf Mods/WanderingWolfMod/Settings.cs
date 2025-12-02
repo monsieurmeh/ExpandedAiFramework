@@ -37,7 +37,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
                 && ai.m_AiSubType == AiSubType.Wolf
                 && ai.Timberwolf == null
                 && GameManager.m_TimeOfDay.m_DaysSurvivedLastFrame >= SpawnDelay
-                && (!ForceSpawn || (ForceSpawn && EAFManager.Instance.DataManager.CanForceSpawn(ai.m_WildlifeMode))); //If force spawn IS enabled, then there must also be room for force spawning!
+                && (!ForceSpawn || (ForceSpawn && EAFManager.Instance.DataManager.CanForceSpawn(ai.m_WildlifeMode, typeof(WanderingWolf)))); //If force spawn IS enabled, then there must also be room for force spawning!
         }
 
 
