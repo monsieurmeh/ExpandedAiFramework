@@ -300,24 +300,7 @@ namespace ExpandedAiFramework
         {
             lock(mPendingSpawns)
             {
-                if (!proxy.Available)
-                {
-                    this.LogWarningInstanced($"Proxy {proxy.Guid} unavailable", LogCategoryFlags.SpawnRegion);
-                    return;
-                }
-                if (mPendingSpawns.Contains(proxy))
-                {
-                    this.LogWarningInstanced($"Attempting to double-spawn proxy, aborting!", LogCategoryFlags.SpawnRegion);
-                    return;
-                }
-                for (int i = 0, iMax = mActiveSpawns.Count; i < iMax; i++)
-                {
-                    if (mActiveSpawns[i].ModDataProxy == proxy)
-                    {
-                        this.LogWarningInstanced($"Attempting to double-spawn proxy, aborting!", LogCategoryFlags.SpawnRegion);
-                        return;
-                    }
-                }
+                if (!CanQueueProxyForSpawning(proxy)) return;
                 proxy.Available = false;
                 this.LogTraceInstanced($"Setting proxy with guid {proxy.Guid} to UNAVAILABLE", LogCategoryFlags.SpawnRegion);
                 mPendingSpawns.Enqueue(proxy);
@@ -327,6 +310,34 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"FORCE SPAWN", LogCategoryFlags.SpawnRegion);
                 mManager.Manager.DataManager.IncrementForceSpawnCount(proxy.WildlifeMode);
             }
+        }
+
+        private bool CanQueueProxyForSpawning(SpawnModDataProxy proxy)
+        {
+            if (!proxy.Available)
+            {
+                this.LogWarningInstanced($"Proxy {proxy.Guid} unavailable", LogCategoryFlags.SpawnRegion);
+                return false;
+            }
+            if (mPendingSpawns.Contains(proxy))
+            {
+                this.LogWarningInstanced($"Attempting to double-spawn proxy, aborting!", LogCategoryFlags.SpawnRegion);
+                return false;
+            }
+            if (SpawningSuppressedByExperienceMode())
+            {
+                this.LogTraceInstanced($"Spawning suppressed by experience mode; aborting attempt to spawn via back channels such as force spawning or pre spawning", LogCategoryFlags.SpawnRegion);
+                return false;
+            }
+            for (int i = 0, iMax = mActiveSpawns.Count; i < iMax; i++)
+            {
+                if (mActiveSpawns[i].ModDataProxy == proxy)
+                {
+                    this.LogWarningInstanced($"Attempting to double-spawn proxy, aborting!", LogCategoryFlags.SpawnRegion);
+                    return false;
+                }
+            }
+            return true;
         }
 
 
@@ -1356,7 +1367,7 @@ namespace ExpandedAiFramework
         }
 
 
-        private bool SpawningSuppressedByExperienceMode()
+        public bool SpawningSuppressedByExperienceMode()
         {
             if (mSpawnRegion.m_SpawnLevel == 0)
             {
