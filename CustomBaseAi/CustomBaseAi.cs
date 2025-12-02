@@ -34,9 +34,12 @@ namespace ExpandedAiFramework
             mModDataProxy = proxy;
             if (proxy != null) // persistency needs to be disabled for this to end up happening, but it CAN happen!
             {
-                mBaseAi.transform.position = proxy.CurrentPosition;
-                mBaseAi.transform.rotation = proxy.CurrentRotation;
-                mBaseAi.m_CurrentMode = proxy.AiMode;
+                if (!proxy.Fresh)
+                {
+                    mBaseAi.transform.position = proxy.CurrentPosition;
+                    mBaseAi.transform.rotation = proxy.CurrentRotation;
+                    mBaseAi.m_CurrentMode = proxy.AiMode;
+                }
                 mBaseAi.m_WildlifeMode = proxy.WildlifeMode;
             }
             OnAugmentDebug();
