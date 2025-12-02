@@ -191,7 +191,7 @@ namespace ExpandedAiFramework
             if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
             {
                 LogTrace("Already wrapped this ai, no need for a second on transition to carcass state.");
-                return false;
+                return true;
             }
             InjectCustomAi(baseAi, GetFallbackBaseSpawnableType(baseAi), null, out _, null, true);
             return true;
