@@ -134,8 +134,8 @@ namespace ExpandedAiFramework
             ActiveSpawns.Clear();
             if (dataProxy.Fresh)
             {
-                this.LogDebugInstanced($"Fresh proxy, rerolling active chance", LogCategoryFlags.SpawnRegion);
-                RerollChanceActive();
+                this.LogDebugInstanced($"Fresh proxy, MAYBE!!! rerolling active chance", LogCategoryFlags.SpawnRegion);
+                MaybeReRollActive();
                 dataProxy.IsActive = mSpawnRegion.gameObject.activeSelf;
             }
             else
