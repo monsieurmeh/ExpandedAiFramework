@@ -35,7 +35,7 @@ namespace ExpandedAiFramework
 
         protected override bool ChangeModeWhenTargetDetectedCustom()
         {
-            if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsBear())
+            if (CurrentTarget.IsBear() || CurrentTarget.IsCougar() || CurrentTarget.IsMoose())
             {
                 this.LogTraceInstanced($"Wolves run from larger threats!", LogCategoryFlags.Ai);
                 SetAiMode(AiMode.Flee);
