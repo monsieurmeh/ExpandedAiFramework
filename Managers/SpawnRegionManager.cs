@@ -8,6 +8,7 @@ using Il2CppTLD.PDID;
 using MelonLoader.Utils;
 using Il2CppTLD.AI;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace ExpandedAiFramework
 {
@@ -72,7 +73,7 @@ namespace ExpandedAiFramework
                 Task.Delay(1000).Wait();
                 EAFManager.Instance.DispatchManager.Dispatch(() =>
                 {
-                    PostDeserialize();
+                    ProcessCaughtSpawnRegions();
                 });
             });
         }
@@ -82,6 +83,13 @@ namespace ExpandedAiFramework
         {
             base.OnLoadScene(sceneName);
             ClearCustomSpawnRegions();
+        }
+
+
+        public override void OnInitializedScene(string sceneName)
+        {
+            base.OnInitializedScene(sceneName);
+            ProcessCaughtSpawnRegions();
         }
 
 
@@ -221,20 +229,16 @@ namespace ExpandedAiFramework
         }
 
 
-        public bool Deserialize(string text)
-        {
-            // Vanilla deserialize text is ignored, we just use this for timing purposes now.
-            PostDeserialize();
-            return true;
-        }
-
-
-        private void PostDeserialize()
+        private void ProcessCaughtSpawnRegions()
         {
             LogTrace($"Processing caught spawn regions", LogCategoryFlags.SpawnRegionManager);
-            foreach (SpawnRegion spawnRegion in mSpawnRegionCatcher)
+            lock (mSpawnRegionCatcher)
             {
-                ProcessCaughtSpawnRegion(spawnRegion);
+                foreach (SpawnRegion spawnRegion in mSpawnRegionCatcher)
+                {
+                    ProcessCaughtSpawnRegion(spawnRegion);
+                }
+                mSpawnRegionCatcher.Clear();
             }
             Task.Run(WaitForSpawnRegionProcessingThenPreSpawn);
         }
@@ -242,6 +246,7 @@ namespace ExpandedAiFramework
 
         private void WaitForSpawnRegionProcessingThenPreSpawn()
         {
+            if (mPreSpawning || mReadyToProcessSpawnRegions) return;
             try
             {
                 mPreSpawning = true;
@@ -260,7 +265,6 @@ namespace ExpandedAiFramework
                 {
                     LogError($"Timeout on post deserialize waiting for spawn region processing!");
                 }
-                mSpawnRegionCatcher.Clear();
                 LogTrace($"Prequeuing. We have {mCustomSpawnRegions.Values.Count} values in mCustomSpawnRegions!", LogCategoryFlags.SpawnRegionManager);
                 foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegions.Values)
                 {
@@ -659,9 +663,16 @@ namespace ExpandedAiFramework
                 LogDebug($"SpawnRegion {__instance.GetHashCode()} of AiSubType {__instance.m_AiSubTypeSpawned} is set to not register on awake; it must be added manaully.", LogCategoryFlags.SpawnRegionManager);
                 return true;
             }
-            if (!mReadyToProcessSpawnRegions && !mSpawnRegionCatcher.Contains(__instance))
+            if (!mReadyToProcessSpawnRegions)
             {
-                mSpawnRegionCatcher.Add(__instance);
+                if (!mSpawnRegionCatcher.Contains(__instance))
+                {
+                    mSpawnRegionCatcher.Add(__instance);
+                }
+            }
+            else
+            {
+                ProcessCaughtSpawnRegion(__instance);
             }
             return true;
         }

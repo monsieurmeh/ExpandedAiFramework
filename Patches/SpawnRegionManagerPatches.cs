@@ -26,16 +26,6 @@ namespace ExpandedAiFramework
     }
 
 
-    [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.Deserialize), new Type[] { typeof(string) })]
-    internal class SpawnRegionManagerPatches_Deserialize
-    {
-        internal static bool Prefix(string text)
-        {
-            return SpawnRegionManager_Deserialize(text);
-        }
-    }
-
-
     [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.FindSpawnRegionByGuid), new Type[] { typeof(string) })]
     internal class SpawnRegionManagerPatches_FindSpawnRegionByGuid
     {

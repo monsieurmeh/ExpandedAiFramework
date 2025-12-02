@@ -13,7 +13,6 @@ namespace ExpandedAiFramework
         public static bool SpawnRegionManager_AddNoSpawnRegion(NoSpawnRegion nsr) => !Manager.SpawnRegionManager.Add(nsr);
         public static bool SpawnRegionManager_AddSpawnRegion(SpawnRegion sr ) => !Manager.SpawnRegionManager.Add(sr);
         public static bool SpawnRegionManager_RemoveSpawnRegion(SpawnRegion sr) => !Manager.SpawnRegionManager.Remove(sr);
-        public static bool SpawnRegionManager_Deserialize(string text) => !Manager.SpawnRegionManager.Deserialize(text);
         public static SpawnRegion SpawnRegionManager_FindSpawnRegionByGuid(string text) => Manager.SpawnRegionManager.FindSpawnRegionByGuid(text);
         public static SpawnRegion SpawnRegionManager_FindSpawnRegionByPosition(SpawnRegionSaveData saveData) => Manager.SpawnRegionManager.FindSpawnRegionByPosition(saveData);
         public static GameObject SpawnRegionManager_GetClosestActiveSpawn(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.GetClosestActiveSpawn(pos, filterSpawnablePrefabName);

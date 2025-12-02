@@ -21,6 +21,7 @@ namespace ExpandedAiFramework
 
         public override void OnInitializeMelon()
         {
+            Console.WriteLine("kekekekekeke");
             LoggerInstance.Msg(Initialize() ? "Initialized Successfully!" : "Initialization Errors!");
         }
 
