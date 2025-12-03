@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ExpandedAiFramework
 {
     [RegisterTypeInIl2Cpp]
-    public abstract class CustomBaseAi : MonoBehaviour, ILogInfoProvider
+    public class CustomBaseAi : MonoBehaviour, ILogInfoProvider
     {
         public CustomBaseAi(IntPtr intPtr) : base(intPtr) { }
 
@@ -50,15 +50,15 @@ namespace ExpandedAiFramework
 
 
         //Override this if you need to handle any kind of longer term tracking
-        public virtual void Save() 
+        public virtual void Save()
         {
             if (mModDataProxy != null)
             {
                 mModDataProxy.Save(this);
             }
-        } 
+        }
 
-        
+
         public void OverrideStart() //Manager is triggering this so we don't want to use "start" itself unfortunately
         {
             if (!OverrideStartCustom())
@@ -96,7 +96,7 @@ namespace ExpandedAiFramework
             }
             mBaseAi.SetCollisionMode(BaseAiManager.s_EnableContinuousCollision ? CollisionDetectionMode.ContinuousSpeculative : CollisionDetectionMode.Discrete);
         }
-        
+
 
         public virtual void Update()
         {
@@ -195,7 +195,7 @@ namespace ExpandedAiFramework
             Process();
             PostProcess();
         }
-        
+
 
         protected void PreProcess()
         {
@@ -664,7 +664,7 @@ namespace ExpandedAiFramework
             }
             //if (!mManager.InvokeUpdateWounds(mBaseAi, deltaTime)) Add this back in when it's ready
             //{
-                //return;
+            //return;
             //}
             if (!mBaseAi.m_Wounded)
             {
@@ -682,7 +682,7 @@ namespace ExpandedAiFramework
             }
             //if (!mManager.InvokeUpdateBleeding(mBaseAi, deltaTime)) Add back in as a larger to-do when the framework is more complete internally. Dont want these hooks laying around usable in the meantime causing havoc
             //{
-                //return;
+            //return;
             //}
             if (!mBaseAi.m_BleedingOut)
             {
@@ -775,7 +775,7 @@ namespace ExpandedAiFramework
         }
 
 
-        protected abstract void IncrementKillStat();
+        protected virtual void IncrementKillStat() { }
 
         #endregion
 
