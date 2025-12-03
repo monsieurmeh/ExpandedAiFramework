@@ -222,53 +222,6 @@ namespace ExpandedAiFramework
         #endregion
 
 
-        #region OBSOLETE/NOT USED DUE TO INLINING
-
-        #region Den/Sleep
-
-        //Inlined within BaseAi.HandleLastWaypoint 
-        public float GetDenSleepDurationInHours()
-        {
-            if (mSpawnRegion.m_Den.IsNullOrDestroyed())
-            {
-                this.LogDebugInstanced($"No den, no sleep duration", LogCategoryFlags.SpawnRegion);
-                return 0.0f;
-            }
-            return GameManager.m_TimeOfDay.IsDay()
-                ? UnityEngine.Random.Range(mSpawnRegion.m_Den.m_MinSleepHoursDay, mSpawnRegion.m_Den.m_MaxSleepHoursDay)
-                : UnityEngine.Random.Range(mSpawnRegion.m_Den.m_MinSleepHoursNight, mSpawnRegion.m_Den.m_MaxSleepHoursNight);
-        }
-
-
-        //Inlined within BaseAi.HandleLastWaypoint 
-        public bool ShouldSleepInDenAfterWaypointLoop()
-        {
-            if (mSpawnRegion.m_Den.IsNullOrDestroyed())
-            {
-                this.LogDebugInstanced($"Null den, no sleep", LogCategoryFlags.SpawnRegion);
-                return false;
-            }
-            float sleepChance = GameManager.m_TimeOfDay.IsDay()
-                ? mSpawnRegion.m_Den.m_ChanceSleepAfterWaypointsLoopDay
-                : mSpawnRegion.m_Den.m_ChanceSleepAfterWaypointsLoopNight;
-            bool shouldSleep = Utils.RollChance(sleepChance);
-            this.LogDebugInstanced($"Rolling against chance to sleep of {sleepChance}: {shouldSleep}", LogCategoryFlags.SpawnRegion);
-            return shouldSleep;
-        }
-
-        #endregion
-
-
-        #region Trap
-
-        //CanTrap: Inlined within SnareItem
-        //DoTrap: Inlined within SnareItem
-
-        #endregion
-
-        #endregion
-
-
         #region Spawning Method Chain
 
         public void Spawn(WildlifeMode mode)
