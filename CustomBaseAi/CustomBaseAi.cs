@@ -38,7 +38,10 @@ namespace ExpandedAiFramework
                 {
                     mBaseAi.transform.position = proxy.CurrentPosition;
                     mBaseAi.transform.rotation = proxy.CurrentRotation;
-                    mBaseAi.m_CurrentMode = proxy.AiMode;
+                    if (proxy.AiMode != AiMode.None)
+                    {
+                        mBaseAi.m_CurrentMode = proxy.AiMode;
+                    }
                 }
                 mBaseAi.m_WildlifeMode = proxy.WildlifeMode;
             }
