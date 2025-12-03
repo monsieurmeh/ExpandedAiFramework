@@ -14,7 +14,8 @@ namespace ExpandedAiFramework
             if (!proxy.Fresh) return;
             if (spawnRegion.m_Den == null) return;
             if (!AiUtils.GetClosestNavmeshPos(out Vector3 denPos, spawnRegion.m_Den.transform.position, spawnRegion.m_Den.transform.position)) return;
-            ai.transform.position = denPos;
+            mBaseAi.m_MoveAgent.transform.position = denPos;
+            mBaseAi.m_MoveAgent.Warp(denPos, 2.0f, true, -1);
         }
     }
 }
