@@ -16,5 +16,8 @@ namespace ExpandedAiFramework
             if (CurrentMode != AiMode.None) return;
             SetAiMode(AiMode.Wander);
         }
+
+
+        protected override void IncrementKillStat() => StatsManager.IncrementValue(Il2CppTLD.Stats.StatID.WolvesKilled);
     }
 }

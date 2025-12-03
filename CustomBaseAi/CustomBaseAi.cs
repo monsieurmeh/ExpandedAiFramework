@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ExpandedAiFramework
 {
     [RegisterTypeInIl2Cpp]
-    public class CustomBaseAi : MonoBehaviour, ILogInfoProvider
+    public abstract class CustomBaseAi : MonoBehaviour, ILogInfoProvider
     {
         public CustomBaseAi(IntPtr intPtr) : base(intPtr) { }
 
@@ -706,7 +706,7 @@ namespace ExpandedAiFramework
                     return;
                 }
                 mBaseAi.SetDamageImpactParameter(mBaseAi.m_LastDamageSide, mBaseAi.m_LastDamageBodyPart, SetupDamageParamsOptions.None);
-                SetAiMode(AiMode.Dead);
+                Kill(DamageSource.Player);
             }
         }
 
@@ -741,12 +741,7 @@ namespace ExpandedAiFramework
             }
             if (mBaseAi.m_CurrentHP <= 0.0001f)
             {
-                SetAiMode(AiMode.Dead);
-                if (damageSource != DamageSource.Player)
-                {
-                    return;
-                }
-                GameManager.m_AchievementManager.m_HasKilledSomething = true;
+                Kill(damageSource);
             }
             if (VanillaPackManager.InPack(mBaseAi.m_PackAnimal) && CurrentMode != AiMode.Struggle)
             {
@@ -767,6 +762,20 @@ namespace ExpandedAiFramework
 
             }
         }
+
+        protected void Kill(DamageSource damageSource)
+        {
+            SetAiMode(AiMode.Dead);
+            if (damageSource != DamageSource.Player)
+            {
+                return;
+            }
+            GameManager.m_AchievementManager.m_HasKilledSomething = true;
+            IncrementKillStat();
+        }
+
+
+        protected abstract void IncrementKillStat();
 
         #endregion
 

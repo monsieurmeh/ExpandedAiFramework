@@ -14,6 +14,7 @@ namespace ExpandedAiFramework
 
         public BaseCougar(IntPtr ptr) : base(ptr) { }
 
+        protected override void IncrementKillStat() => StatsManager.IncrementValue(Il2CppTLD.Stats.StatID.CougarsKilled);
 
         protected override bool OverrideStartCustom()
         {

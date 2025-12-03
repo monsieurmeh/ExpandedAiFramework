@@ -17,5 +17,7 @@ namespace ExpandedAiFramework
             mBaseAi.m_MoveAgent.transform.position = denPos;
             mBaseAi.m_MoveAgent.Warp(denPos, 2.0f, true, -1);
         }
+
+        protected override void IncrementKillStat() => StatsManager.IncrementValue(Il2CppTLD.Stats.StatID.BearsKilled);
     }
 }

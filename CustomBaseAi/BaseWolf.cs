@@ -43,5 +43,7 @@ namespace ExpandedAiFramework
             }
             return true;
         }
+
+        protected override void IncrementKillStat() => StatsManager.IncrementValue(Il2CppTLD.Stats.StatID.WolvesKilled);
     }
 }
