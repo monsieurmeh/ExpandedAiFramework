@@ -1,4 +1,3 @@
-using MelonLoader.TinyJSON;
 using UnityEngine;
 
 
@@ -6,7 +5,7 @@ namespace ExpandedAiFramework
 {
     public class HidingSpot : MapData
     {
-        [Include] private Quaternion mRotation;
+        private Quaternion mRotation;
 
         public Quaternion Rotation { get { return mRotation; } }
         public Vector3 Position { get { return mAnchorPosition; } }

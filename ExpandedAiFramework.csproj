@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <RootNamespace>ExpandedAiFramework</RootNamespace>
     <LangVersion>default</LangVersion>
     <IsPackable>false</IsPackable>
@@ -124,6 +124,11 @@
 
   <ItemGroup>
     <Folder Include="Tests\" />
+  </ItemGroup>
+  
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

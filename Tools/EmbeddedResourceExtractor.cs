@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Reflection;
-
 public static class EmbeddedResourceExtractor
 {
     public static void Extract(string fileName, string outfileFilePath)
@@ -24,7 +23,7 @@ public static class EmbeddedResourceExtractor
         MelonLogger.Msg($"[INFO] Extracted {fileName} to {outfileFilePath}");
     }
 
-    private static string? FindResourceName(Assembly assembly, string fileName)
+    private static string FindResourceName(Assembly assembly, string fileName)
     {
         return assembly.GetManifestResourceNames()
                        .FirstOrDefault(r => r.EndsWith(fileName, StringComparison.OrdinalIgnoreCase));

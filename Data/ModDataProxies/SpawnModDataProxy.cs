@@ -1,16 +1,17 @@
 ﻿using Il2Cpp;
 using UnityEngine;
-using MelonLoader.TinyJSON;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ExpandedAiFramework
 {
     public class SpawnModDataProxy : ModDataProxy, ILogInfoProvider
     {
-        [Exclude] private Type mVariantSpawnType;
-        [Exclude] public bool Disconnected = false;
-        [Exclude] public bool AsyncProcessing = false;
-        [Exclude] public bool Available = true;
-        [Exclude] public bool Spawned = false;
+        [JsonIgnore] private Type mVariantSpawnType;
+        [JsonIgnore] public bool Disconnected = false;
+        [JsonIgnore] public bool AsyncProcessing = false;
+        [JsonIgnore] public bool Available = true;
+        [JsonIgnore] public bool Spawned = false;
         public Guid ParentGuid = Guid.Empty;
         public Quaternion CurrentRotation;
         public AiSubType AiSubType;

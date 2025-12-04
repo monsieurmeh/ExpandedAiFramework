@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
-using MelonLoader.TinyJSON;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 
 namespace ExpandedAiFramework
 {
     public abstract class MapData : SerializedData, IMapData
     {
-        [Exclude] protected bool mTransient = false;
-        [Include] protected string mName;
-        [Include] protected Vector3 mAnchorPosition;
-        [Include] protected bool mClaimed;
+        [JsonIgnore] protected bool mTransient = false;
+        protected string mName;
+        protected Vector3 mAnchorPosition;
+        protected bool mClaimed;
 
 
         public string Name { get { return mName; } }
