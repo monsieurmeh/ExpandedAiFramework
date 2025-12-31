@@ -13,14 +13,14 @@ namespace ExpandedAiFramework
         SerializedData,
         PaintManager,
         ConsoleCommand,
-        DebugMenu,
         CougarManager,
         PackManager,
         Request,
         System,
         UpdateLoop,
+        Trace,
+        Debug,
         COUNT
-
     }
 
     public enum LogCategoryFlags : uint
@@ -34,11 +34,12 @@ namespace ExpandedAiFramework
         SerializedData = 1 << (int)LogCategory.SerializedData,
         PaintManager = 1 << (int)LogCategory.PaintManager,
         ConsoleCommand = 1 << (int)LogCategory.ConsoleCommand,
-        DebugMenu = 1 << (int)LogCategory.DebugMenu,
         CougarManager = 1 << (int)LogCategory.CougarManager,
         PackManager = 1 << (int)LogCategory.PackManager,
         Request = 1 << (int)LogCategory.Request,
         System = 1 << (int)LogCategory.System,
         UpdateLoop = 1 << (int)LogCategory.UpdateLoop,
+        Trace = 1 << (int)LogCategory.Trace,
+        Debug = 1 << (int)LogCategory.Debug,
     }
 }

@@ -203,7 +203,7 @@ namespace ExpandedAiFramework
         {
             if (args.Count == 0)
             {
-                LogError($"Not enough arguments provided!");
+                Error($"Not enough arguments provided!");
                 return null;
             }
             string arg = args[0];
@@ -215,7 +215,7 @@ namespace ExpandedAiFramework
         {
             if (!CommandDictionary_SupportedTypes.TryGetValue(command, out string[] types))
             {
-                LogAlways($"Command {command} does not support any types", LogCategoryFlags.ConsoleCommand);
+                Log($"Command {command} does not support any types", LogCategoryFlags.ConsoleCommand);
                 return "";
             }
             string typeString = "";
@@ -226,12 +226,10 @@ namespace ExpandedAiFramework
             return typeString;
         }
 
-        private static string GetLastCallerType(FlaggedLoggingLevel logLevel)
+        private static bool ShouldLog(LogCategoryFlags flags) => Manager.LogCategoryFlags.AllOf(flags);
+
+        private static string GetLastCallerType()
         {
-            if (!Manager.CurrentLogLevel.IsSet(logLevel))
-            {
-                return string.Empty;
-            }
             StackTrace stackTrace = new StackTrace();
             for (int i = 2, iMax = stackTrace.FrameCount; i < iMax; i++)
             {
@@ -274,101 +272,66 @@ namespace ExpandedAiFramework
         }
 
 
-        public static void LogTrace(
+
+        public static void LogDebug(string message, LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, string callerInstanceInfo = "", [CallerMemberName] string memberName = "") => Log(message, logCategoryFlags | LogCategoryFlags.Debug, callerInstanceInfo, memberName);
+        public static void LogTrace(string message, LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, string callerInstanceInfo = "", [CallerMemberName] string memberName = "") => Log(message, logCategoryFlags | LogCategoryFlags.Trace, callerInstanceInfo, memberName);
+
+
+        public static void Log(
             string message,
             LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            string callerTypeInfo = "",
             string callerInstanceInfo = "",
             [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Trace, 
-                GetLastCallerType(FlaggedLoggingLevel.Trace), 
-                logCategoryFlags, 
+            if (!ShouldLog(logCategoryFlags))
+                return;
+
+            callerTypeInfo = !string.IsNullOrEmpty(callerTypeInfo) ? callerTypeInfo : GetLastCallerType();
+            Manager.Log(
+                message,
+                callerTypeInfo, 
                 callerInstanceInfo, 
                 memberName);
         }
 
 
-        public static void LogDebug(
+        public static void Error(
             string message, 
             LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
+            string callerTypeInfo = "",
             string callerInstanceInfo = "", 
             [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(
-                message, FlaggedLoggingLevel.Debug, 
-                GetLastCallerType(FlaggedLoggingLevel.Debug), 
-                logCategoryFlags, 
-                callerInstanceInfo, 
-                memberName);
-        }
+            if (!ShouldLog(logCategoryFlags)) 
+                return;
 
 
-        public static void LogVerbose(
-            string message, 
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
-            string callerInstanceInfo = "", 
-            [CallerMemberName] string memberName = "")
-        {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Verbose, 
-                GetLastCallerType(FlaggedLoggingLevel.Verbose), 
-                logCategoryFlags, 
-                callerInstanceInfo, 
-                memberName);
-        }
-
-
-        public static void LogWarning(
-            string message, 
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
-            string callerInstanceInfo = "", 
-            [CallerMemberName] string memberName = "")
-        {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Warning, 
-                GetLastCallerType(FlaggedLoggingLevel.Warning), 
-                logCategoryFlags, 
-                callerInstanceInfo, 
-                memberName);
-        }
-
-
-        public static void LogError(
-            string message, 
-            FlaggedLoggingLevel additionalFlags = 0U, 
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
-            string callerInstanceInfo = "", 
-            [CallerMemberName] string memberName = "")
-        {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Error | additionalFlags, 
-                GetLastCallerType(FlaggedLoggingLevel.Error), 
-                logCategoryFlags,
+            callerTypeInfo = !string.IsNullOrEmpty(callerTypeInfo) ? callerTypeInfo : GetLastCallerType();
+            Manager.Error(
+                message,
+                callerTypeInfo, 
                 callerInstanceInfo, 
                 memberName, 
                 true);
         }
 
-
-        public static void LogAlways(
-            string message, 
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, 
-            string callerInstanceInfo = "", 
-            [CallerMemberName] string memberName = "")
+        public static void LogWithStackTrace(string message, int offsetStart = 1, int offsetEnd = 0)
         {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Always, 
-                GetLastCallerType(FlaggedLoggingLevel.Always), 
-                logCategoryFlags, 
-                callerInstanceInfo, 
-                memberName, 
-                true);
+            StackTrace stackTrace = new StackTrace();
+            for (int i = offsetStart, iMax = stackTrace.FrameCount - offsetEnd; i < iMax; i++)
+            {
+                var method = stackTrace.GetFrame(i).GetMethod();
+                if (method != null)
+                {
+                    message = $"[{method.DeclaringType}.{method.Name}]\n" + message;
+                }
+                else
+                {
+                    message = $"[NULL]\n" + message;
+                }
+            }
+            Manager.Log(message);
         }
 
 
@@ -464,7 +427,7 @@ namespace ExpandedAiFramework
             }
             if (shouldWarn)
             {
-                LogWarning($"{type} is not supported by this command! Supported types: {supportedTypeString}", LogCategoryFlags.ConsoleCommand);
+                Log($"{type} is not supported by this command! Supported types: {supportedTypeString}", LogCategoryFlags.ConsoleCommand);
             }
             return false;
         }
@@ -476,7 +439,7 @@ namespace ExpandedAiFramework
             {
                 if (shouldWarn)
                 {
-                    LogWarning($"Provide a type to use this command! Supported types: {supportedTypeString}", LogCategoryFlags.ConsoleCommand);
+                    Log($"Provide a type to use this command! Supported types: {supportedTypeString}", LogCategoryFlags.ConsoleCommand);
                 }
                 return false;
             }
@@ -490,7 +453,7 @@ namespace ExpandedAiFramework
             {
                 if (shouldWarn)
                 {
-                    LogWarning($"Provide a name!", LogCategoryFlags.ConsoleCommand);
+                    Log($"Provide a name!", LogCategoryFlags.ConsoleCommand);
                 }
                 return false;
             }

@@ -1,5 +1,4 @@
-﻿using ComplexLogger;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -18,101 +17,35 @@ namespace ExpandedAiFramework
 
     public static class ILogInfoProviderExtensions
     {
-        public static void LogTraceInstanced(
+        public static void LogTraceInstanced(this ILogInfoProvider provider, string message,  LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, [CallerMemberName] string memberName = "")  => LogInstanced(provider, message, logCategoryFlags | LogCategoryFlags.Trace, memberName);
+        public static void LogDebugInstanced(this ILogInfoProvider provider, string message, LogCategoryFlags logCategoryFlags = LogCategoryFlags.General, [CallerMemberName] string memberName = "") => LogInstanced(provider, message, logCategoryFlags | LogCategoryFlags.Debug, memberName);
+
+        public static void LogInstanced(
             this ILogInfoProvider provider, 
             string message, 
             LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
             [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Trace, 
-                provider.TypeInfo, 
-                logCategoryFlags, 
-                provider.InstanceInfo, 
-                memberName);
-        }
-
-
-        public static void LogDebugInstanced(
-            this ILogInfoProvider provider, 
-            string message, 
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
-            [CallerMemberName] string memberName = "")
-        {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Debug, 
-                provider.TypeInfo, 
-                logCategoryFlags, 
-                provider.InstanceInfo, 
-                memberName);
-        }
-
-
-        public static void LogVerboseInstanced(
-            this ILogInfoProvider provider, 
-            string message, 
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
-            [CallerMemberName] string memberName = "")
-        {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Verbose, 
-                provider.TypeInfo, 
-                logCategoryFlags, 
-                provider.InstanceInfo,
-                memberName);
-        }
-
-
-        public static void LogWarningInstanced(
-            this ILogInfoProvider provider, 
-            string message,
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
-            [CallerMemberName] string memberName = "")
-        {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Warning, 
-                provider.TypeInfo, 
+            Log(
+                message,
                 logCategoryFlags,
-                provider.InstanceInfo,
+                provider.TypeInfo,
+                provider.InstanceInfo, 
                 memberName);
         }
 
-
-        public static void LogErrorInstanced(
+        public static void ErrorInstanced(
             this ILogInfoProvider provider,
             string message,
             LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
             [CallerMemberName] string memberName = "")
         {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Error, 
-                provider.TypeInfo, 
+            Error(
+                message,
                 logCategoryFlags,
-                provider.InstanceInfo, 
-                memberName, 
-                false);
-        }
-
-
-        public static void LogAlwaysInstanced(
-            this ILogInfoProvider provider, 
-            string message, 
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
-            [CallerMemberName] string memberName = "")
-        {
-            EAFManager.LogStatic(
-                message, 
-                FlaggedLoggingLevel.Always, 
                 provider.TypeInfo, 
-                logCategoryFlags,
                 provider.InstanceInfo, 
-                memberName, 
-                true);
+                memberName);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿#define RecordLogCallers
 
-using ComplexLogger;
+
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using ExpandedAiFramework.Enums;
@@ -246,13 +246,13 @@ namespace ExpandedAiFramework
             if (sceneName.Contains("MainMenu"))
             {
                 mCurrentScene = string.Empty;
-                LogTrace($"OnQuitToMainMenu");
+                Utility.Log($"OnQuitToMainMenu");
                 OnQuitToMainMenu();
                 return;
             }
             if (!IsValidGameplayScene(sceneName, out string parsedSceneName))
             {
-                LogTrace($"{sceneName} invalid, ignoreing");
+                Utility.Log($"{sceneName} invalid, ignoreing");
                 return;
             }
             if (mCurrentScene == parsedSceneName)
@@ -260,11 +260,11 @@ namespace ExpandedAiFramework
                 LogDebug($"{mCurrentScene} already loaded, aborting!");
                 return;
             }
-            LogTrace($"OnLoadScene {parsedSceneName} valid!");
+            Utility.Log($"OnLoadScene {parsedSceneName} valid!");
             mCurrentScene = parsedSceneName;
             if (!mGameLoaded)
             {
-                LogTrace($"Scene loaded without game loaded, queueing load scene request for after game loaded...");
+                Utility.Log($"Scene loaded without game loaded, queueing load scene request for after game loaded...");
                 mPendingSceneLoadRequest = true;
                 return;
             }
@@ -337,10 +337,10 @@ namespace ExpandedAiFramework
         { 
             if (mSubManagerDict.TryGetValue(subManager.SpawnType, out ISpawnManager _))
             {
-                LogError($"Type {subManager.SpawnType} already registered in submanager dictionary!");
+                Utility.Error($"Type {subManager.SpawnType} already registered in submanager dictionary!");
                 return;
             }
-            LogTrace($"Registering SubManager for type {subManager.SpawnType}", LogCategoryFlags.System);
+            Utility.Log($"Registering SubManager for type {subManager.SpawnType}", LogCategoryFlags.System);
             subManager.Initialize(this);
             mSubManagerDict.Add(subManager.SpawnType, subManager);
             Array.Resize(ref mSubManagers, mSubManagers.Length + 1);
@@ -351,24 +351,24 @@ namespace ExpandedAiFramework
         {
             if (((1U << (int)hotSwapType) & mHotSwapLockMask) != 0U)
             {
-                LogError($"{hotSwapType} already claimed!");
+                Utility.Error($"{hotSwapType} already claimed!");
                 return;
             }
             if (!mHotSwappableInterfaceMap.TryGetValue(hotSwapType, out Type interfaceType))
             {
-                LogError($"No interface type found for {hotSwapType}!");
+                Utility.Error($"No interface type found for {hotSwapType}!");
                 return;
             }
             if (!interfaceType.IsAssignableFrom(subManager.GetType()))
             {
-                LogError($"{subManager.GetType()} is not assignable from {interfaceType}!");
+                Utility.Error($"{subManager.GetType()} is not assignable from {interfaceType}!");
                 return;
             }
             mHotSwapLockMask |= 1U << (int)hotSwapType;
             mHotSwappableSubManagers[(int)hotSwapType] = subManager;
             subManager.Initialize(this);
             PostProcessHotswappedSubmanager(hotSwapType, subManager);
-            LogAlways($"{hotSwapType} locked!");
+            Log($"{hotSwapType} locked!");
         }
 
 
@@ -380,7 +380,7 @@ namespace ExpandedAiFramework
                     ICougarManager cougarManager = subManager as ICougarManager;
                     if (cougarManager == null)
                     {
-                        LogError($"{subManager.GetType()} is not a ICougarManager!");
+                        Utility.Error($"{subManager.GetType()} is not a ICougarManager!");
                         return;
                     }
                     mSubManagerDict.Remove(typeof(BaseCougar));
@@ -433,7 +433,7 @@ namespace ExpandedAiFramework
         {
             if (mPaintManagerDict.TryGetValue(paintManager.TypeName.ToLower(), out BasePaintManager existing))
             {
-                LogError($"Paint manager for type {paintManager.TypeName} already registered!");
+                Utility.Error($"Paint manager for type {paintManager.TypeName} already registered!");
                 return;
             }
             LogDebug($"Registering paint manager for type {paintManager.TypeName}", LogCategoryFlags.PaintManager);
@@ -514,8 +514,8 @@ namespace ExpandedAiFramework
 
         public void Console_OnCommand() => mConsoleCommandManager.Console_OnCommand();
 
-        private ComplexLogger<Main> mLogger;
-        public ComplexLogger<Main> Logger => mLogger;
+        private MelonLogger.Instance mLogger;
+        public MelonLogger.Instance Logger => mLogger;
         
         private void InitializeLogger()
         {
@@ -523,81 +523,64 @@ namespace ExpandedAiFramework
             logSettings.AddToModSettings(ModName);
             logSettings.Reload();
             mLogCategoryFlags = logSettings.GetFlags();
-            mLogger = new ComplexLogger<Main>();
-        }
-
-        public FlaggedLoggingLevel CurrentLogLevel => ComplexLogger.Main.CurrentLevel;
-
-       
-        public static void LogWithStackTrace(string message, int offsetStart = 1, int offsetEnd = 0)
-        {
-            StackTrace stackTrace = new StackTrace();
-            for (int i = offsetStart, iMax = stackTrace.FrameCount - offsetEnd; i < iMax; i++)
-            {
-                var method = stackTrace.GetFrame(i).GetMethod();
-                if (method != null)
-                {
-                    message = $"[{method.DeclaringType}.{method.Name}]\n" + message;
-                }
-                else
-                {
-                    message = $"[NULL]\n" + message;
-                }
-            }
-            Manager.Logger.Log(message, FlaggedLoggingLevel.Always);
-        }
+            mLogger = Melon<Main>.Logger;
+        }     
 
         public void Log(
             string message, 
-            FlaggedLoggingLevel logLevel,
-            string callerType,
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            string callerType = "",
             string callerInstanceInfo = "",
             [CallerMemberName] string callerName = "",
             bool toUConsole = false)
         {
-            if (!mLogCategoryFlags.AllOf(logCategoryFlags))
-            {
-                return;
-            }
             callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
             lock (mLoggerLock)
             {
                 DateTime now = DateTime.Now;
-                mLogDispatcher.Dispatch(() => LogInternal(message, logLevel, callerType, callerInstanceInfo, callerName, toUConsole, now));
+                mLogDispatcher.Dispatch(() => LogInternal(message, callerType, callerInstanceInfo, callerName, toUConsole, false, now));
             }
         }
 
-        
-        private void LogInternal(
+        public void Error(
             string message,
-            FlaggedLoggingLevel logLevel,
-            string callerType,
-            string callerInstanceInfo,
-            string callerName,
-            bool toUConsole,
-            DateTime now)
-        { 
-            if (toUConsole)
-            {
-                mLogger.Log(message, logLevel, LoggingSubType.uConsole, $"[{callerType}.{callerName}{callerInstanceInfo} at {now}]");
-            }
-            mLogger.Log(message, logLevel, LoggingSubType.Normal, $"[{callerType}.{callerName}{callerInstanceInfo} at {now}]");
-        }
-
-
-        public static void LogStatic(
-            string message, 
-            FlaggedLoggingLevel logLevel,
-            string callerType,
-            LogCategoryFlags logCategoryFlags = LogCategoryFlags.General,
+            string callerType = "",
             string callerInstanceInfo = "",
             [CallerMemberName] string callerName = "",
             bool toUConsole = false)
         {
-            Manager.Log(message, logLevel, callerType, logCategoryFlags, callerInstanceInfo, callerName, toUConsole);
+            callerInstanceInfo = !string.IsNullOrEmpty(callerInstanceInfo) ? $":{callerInstanceInfo}" : string.Empty;
+            lock (mLoggerLock)
+            {
+                DateTime now = DateTime.Now;
+                mLogDispatcher.Dispatch(() => LogInternal(message, callerType, callerInstanceInfo, callerName, toUConsole, true, now));
+            }
         }
-#endregion
+
+
+        private void LogInternal(
+            string message,
+            string callerType,
+            string callerInstanceInfo,
+            string callerName,
+            bool toUConsole,
+            bool error,
+            DateTime now)
+        { 
+            if (toUConsole)
+            {
+                //handle uconsole logging
+            }
+            message = $"[{callerType}.{callerName}{callerInstanceInfo} at {now}] {message}";
+            if (error)
+            {
+                mLogger.Error(message);
+            }
+            else
+            {
+                mLogger.Msg(message);
+            }
+        }
+        #endregion
 
     }
 }
