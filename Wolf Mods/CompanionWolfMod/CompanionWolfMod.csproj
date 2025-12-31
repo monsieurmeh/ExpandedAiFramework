@@ -37,10 +37,10 @@
 
   <ItemGroup>
     <Reference Include="Il2CppInterop.Common">
-      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\MelonLoader\net6\Il2CppInterop.Common.dll</HintPath>
+      <HintPath>$(MelonLoaderPath)\Il2CppInterop.Common.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppInterop.Runtime">
-      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>
+      <HintPath>$(MelonLoaderPath)\Il2CppInterop.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="MelonLoader" />
     <Reference Include="0Harmony" />
@@ -92,21 +92,21 @@
     <Reference Include="UnityEngine.Il2CppAssetBundleManager" />
     <Reference Include="UnityEngine.Il2CppImageConversionManager" />
     <Reference Include="ModSettings">
-      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
+      <HintPath>$(ModsPath)\ModSettings.dll</HintPath>
     </Reference>
     <Reference Include="ModData">
-      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ModData.dll</HintPath>
+      <HintPath>$(ModsPath)\ModData.dll</HintPath>
     </Reference>
     <Reference Include="ComplexLogger">
-      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ComplexLogger.dll</HintPath>
+      <HintPath>$(ModsPath)\ComplexLogger.dll</HintPath>
     </Reference>
     <Reference Include="ExpandedAiFramework">
-      <HintPath>..\..\..\Games\Steam\steamapps\common\TheLongDark\Mods\ExpandedAiFramework.dll</HintPath>
+      <HintPath>$(ModsPath)\ExpandedAiFramework.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\TheLongDark\Mods&quot;" />
+    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;$(ModsPath)&quot;" />
     <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;..\..\DLLs&quot;" />
   </Target>
 </Project>
