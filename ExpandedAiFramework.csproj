@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <RootNamespace>ExpandedAiFramework</RootNamespace>
     <LangVersion>default</LangVersion>
     <IsPackable>false</IsPackable>
@@ -125,9 +125,14 @@
   <ItemGroup>
     <Folder Include="Tests\" />
   </ItemGroup>
+  
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.50.3" />
+  </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\TheLongDark\Mods&quot;" />
-    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;DLLs&quot;" />
+    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\TheLongDark\BepInEx\plugins&quot;" />
   </Target>
 </Project> 

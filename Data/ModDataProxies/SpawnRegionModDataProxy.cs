@@ -1,14 +1,16 @@
 ﻿using System.Xml.Linq;
 using UnityEngine;
 using MelonLoader.TinyJSON;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ExpandedAiFramework
 {
     public class SpawnRegionModDataProxy : ModDataProxy
     {
         //Temporal Data
-        [Exclude] public bool Connected = false;
-        [Exclude] public bool PendingForceSpawns = false;
+        [JsonIgnore] public bool Connected = false;
+        [JsonIgnore] public bool PendingForceSpawns = false;
 
         //Mod Data
         public AiType AiType; 

@@ -1,14 +1,15 @@
-﻿using MelonLoader.TinyJSON;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 
 namespace ExpandedAiFramework
 {
     public abstract class SerializedData : ISerializedData
     {
-        [Include] protected Guid mGuid;
-        [Include] protected string mScene;
-        [Exclude] protected string mCachedString;
-        [Exclude] protected string mDataLocation;
+        protected Guid mGuid;
+        protected string mScene;
+        [JsonIgnore] protected string mCachedString;
+        [JsonIgnore] protected string mDataLocation;
 
         public Guid Guid { get { return mGuid; } }
         public string Scene { get { return mScene; } }

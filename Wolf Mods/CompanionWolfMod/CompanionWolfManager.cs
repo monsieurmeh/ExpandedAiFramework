@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using Il2CppInterop.Runtime;
-using MelonLoader.TinyJSON;
 using Il2CppTLD.AddressableAssets;
 using static ExpandedAiFramework.Utility;
 using static ExpandedAiFramework.CommandStrings;
-using Il2Cpp;
+using Newtonsoft.Json;
 
 
 
@@ -79,15 +78,16 @@ namespace ExpandedAiFramework.CompanionWolfMod
                     return;
                 }
 
-                Variant cWolfDataVariant = JSON.Load(cWolfDataJson);
-
-                if (cWolfDataVariant == null)
+                try
                 {
-                    LogWarning($"Found serialized companionwolf data, but could not load to populatable variant!", LogCategoryFlags.AiManager);
+                    mData = JsonConvert.DeserializeObject<CompanionWolfData>(cWolfDataJson, Utility.SerializerSettings);
+                }
+                catch (Exception e)
+                {
+                    LogWarning($"Failed to deserialize companionwolf data: {e.Message}", LogCategoryFlags.AiManager);
                     return;
                 }
 
-                JSON.Populate(cWolfDataVariant, mData);
                 LogTrace($"Companion data reloaded. Connected: {mData.Connected} | Tamed: {mData.Tamed} | Calories: {mData.CurrentCalories} | Affection: {mData.CurrentAffection} | Outdoors: {GameManager.m_ActiveSceneSet.m_IsOutdoors}", LogCategoryFlags.AiManager);
             }
         }
@@ -112,7 +112,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 return;
             }
             mData.LastDespawnTime = GetCurrentTimelinePoint();
-            string json = JSON.Dump(mData);
+            string json = JsonConvert.SerializeObject(mData, Utility.SerializerSettings);
             if (json != null)
             {
                 mManager.SaveData(json, "CompanionWolfMod");

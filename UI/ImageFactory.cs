@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using MelonLoader.Utils;
 
 namespace ExpandedAiFramework.UI
 {
@@ -178,7 +179,7 @@ namespace ExpandedAiFramework.UI
             }
             
             // Relative to MelonLoader Mods folder
-            string modsFolder = Path.Combine(MelonLoader.MelonUtils.GameDirectory, "Mods");
+            string modsFolder = Path.Combine(MelonEnvironment.GameRootDirectory, "Mods");
             return Path.Combine(modsFolder, assetBundlePath);
         }
 

@@ -5,8 +5,8 @@ using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using System.Diagnostics;
 using System.Reflection;
-using Il2CppRewired;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ExpandedAiFramework
 {
@@ -18,6 +18,7 @@ namespace ExpandedAiFramework
         public const float HoursToSeconds = 3600;
         public const string ModName = "Expanded Ai Framework";
         public const string DataFolderPath = "EAF";
+        public static JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
 
         public static readonly string[] SceneNames = new string[]
         {

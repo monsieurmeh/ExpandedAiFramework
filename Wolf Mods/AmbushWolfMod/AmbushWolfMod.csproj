@@ -36,6 +36,11 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.50.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Il2CppInterop.Common">
       <HintPath>..\..\..\..\Games\Steam\steamapps\common\TheLongDark\MelonLoader\net6\Il2CppInterop.Common.dll</HintPath>
     </Reference>

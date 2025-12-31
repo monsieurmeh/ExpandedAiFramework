@@ -21,7 +21,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneModded(string? sceneName = null)
+        public static bool IsSceneModded(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
             return sceneName.StartsWith("mod");
@@ -40,7 +40,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneEmpty(string? sceneName = null)
+        public static bool IsSceneEmpty(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 
@@ -52,7 +52,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneBoot(string? sceneName = null)
+        public static bool IsSceneBoot(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 
@@ -64,7 +64,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneMenu(string? sceneName = null)
+        public static bool IsSceneMenu(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 
@@ -76,7 +76,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsScenePlayable(string? sceneName = null)
+        public static bool IsScenePlayable(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 
@@ -88,7 +88,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneBase(string? sceneName = null)
+        public static bool IsSceneBase(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 
@@ -100,7 +100,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneSandbox(string? sceneName = null)
+        public static bool IsSceneSandbox(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 
@@ -112,7 +112,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneDLC01(string? sceneName = null)
+        public static bool IsSceneDLC01(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 
@@ -124,7 +124,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneDarkWalker(string? sceneName = null)
+        public static bool IsSceneDarkWalker(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 
@@ -136,7 +136,7 @@ namespace ExpandedAiFramework
         /// </summary>
         /// <param name="sceneName">The name of the scene to check, if null will use <see cref="GetActiveSceneName"/></param>
         /// <returns></returns>
-        public static bool IsSceneAdditive(string? sceneName = null)
+        public static bool IsSceneAdditive(string sceneName = null)
         {
             sceneName ??= GetActiveSceneName();
 

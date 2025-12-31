@@ -1,5 +1,6 @@
-﻿using MelonLoader.TinyJSON;
-using MelonLoader.Utils;
+﻿using MelonLoader.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 
 namespace ExpandedAiFramework
@@ -259,7 +260,7 @@ namespace ExpandedAiFramework
             {
                 foreach (string dataLocation in masterProxyDict.Keys)
                 {
-                    string json = JSON.Dump(masterProxyDict[dataLocation], EncodeOptions.PrettyPrint | EncodeOptions.NoTypeHints);
+                    string json = JsonConvert.SerializeObject(masterProxyDict[dataLocation], Utility.SerializerSettings);
                     if (json == null || json == string.Empty)
                     {
                         continue;
@@ -297,22 +298,20 @@ namespace ExpandedAiFramework
                     this.LogDebugInstanced($"No data found at path: {dataPath}", LogCategoryFlags.SerializedData);
                     return false;
                 }
-                Variant dataVariant = JSON.Load(dataString);
-                foreach (var pathJSON in dataVariant as ProxyArray)
+                List<T> items = JsonConvert.DeserializeObject<List<T>>(dataString, Utility.SerializerSettings);
+                foreach (T tItem in items)
                 {
-                    T newData = new T();
-                    JSON.Populate(pathJSON, newData);
-                    newData.DataLocation = dataPath;
-                    if (!PostProcessDataAfterLoad(newData))
+                    tItem.DataLocation = dataPath;
+                    if (!PostProcessDataAfterLoad(tItem))
                     {
-                        this.LogErrorInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
+                        this.LogErrorInstanced($"Failed to postprocess {tItem.DisplayName}, skipping!");
                         continue;
                     }
-                    if (!mDataContainer.TryAddData(newData))
+                    if (!mDataContainer.TryAddData(tItem))
                     {
-                        this.LogErrorInstanced($"Failed to add {newData.DisplayName}!");
+                        this.LogErrorInstanced($"Failed to add {tItem.DisplayName}!");
                     }
-                    this.LogTraceInstanced($"Loaded {newData.DisplayName} from {dataPath}", LogCategoryFlags.SerializedData);
+                    this.LogTraceInstanced($"Loaded {tItem.DisplayName} from {dataPath}", LogCategoryFlags.SerializedData);
                 }
                 this.LogDebugInstanced($"Loaded {mDataContainer.Count} items from path: {dataPath}", LogCategoryFlags.SerializedData);
                 return true;

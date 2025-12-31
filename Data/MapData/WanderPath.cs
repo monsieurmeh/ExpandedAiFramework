@@ -1,4 +1,5 @@
-using MelonLoader.TinyJSON;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 
@@ -32,9 +33,9 @@ namespace ExpandedAiFramework
     public class WanderPath : MapData
     {
         public const WanderPathFlags DefaultFlags = WanderPathFlags.Wolf | WanderPathFlags.Individual | WanderPathFlags.Modded;
-        [Include] private Vector3[] mPathPoints;
-        [Exclude] private WanderPathFlags mWanderPathFlags = DefaultFlags;
-        [Include] private uint mWanderPathFlagsSerialized = (uint)DefaultFlags;
+        private Vector3[] mPathPoints;
+        [JsonIgnore] private WanderPathFlags mWanderPathFlags = DefaultFlags;
+        private uint mWanderPathFlagsSerialized = (uint)DefaultFlags;
 
         public Vector3[] PathPoints { get { return mPathPoints; } }
         public WanderPathFlags WanderPathFlags { get { return mWanderPathFlags; } }
