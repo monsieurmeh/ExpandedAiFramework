@@ -1,15 +1,12 @@
 using UnityEngine.AI;
 using UnityEngine;
 using Il2Cpp;
-using ExpandedAiFramework.DebugMenu;
 
 
 namespace ExpandedAiFramework
 {
     public sealed class ConsoleCommandManager : BaseSubManager
     {
-
-        private GameObject mNavmeshObj = null;
         private BasePaintManager mActivePaintManager = null;
         private Dictionary<string, Action<IList<string>>> mCommandMap;    
         private Dictionary<string, Action<IList<string>>> mSetCommandMap;
@@ -43,7 +40,6 @@ namespace ExpandedAiFramework
                 { CommandString_List, ProcessList },
                 { CommandString_Paint, ProcessPaint },
                 { CommandString_Set, ProcessSet },
-                { CommandString_DebugMenu, ProcessDebugMenu },
                 { CommandString_Purge, ProcessPurge },
             };
         }
@@ -404,27 +400,6 @@ namespace ExpandedAiFramework
         {
             GameObject marker = CreateMarker(localPosition, color, name, height, diameter);
             marker.transform.SetParent(transform, false);
-        }
-
-        private void ProcessDebugMenu(IList<string> args)
-        {
-            // Get the debug menu GameObject (should already exist from initialization)
-            GameObject debugMenuObj = GameObject.Find("EAFDebugMenu");
-            DebugMenuManager debugMenu = null;
-            
-            if (debugMenuObj == null)
-            {
-                debugMenuObj = new GameObject("EAFDebugMenu");
-            }
-            
-            debugMenu = debugMenuObj.GetComponent<DebugMenuManager>();
-            if (debugMenu == null)
-            {
-                debugMenu = debugMenuObj.AddComponent<DebugMenuManager>();
-            }
-            
-            // Process the command through the debug menu
-            debugMenu.ProcessCommand(args);
         }
 
         public void SetActivePaintManager(BasePaintManager paintManager)
