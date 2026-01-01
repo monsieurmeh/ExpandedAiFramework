@@ -73,6 +73,10 @@ namespace ExpandedAiFramework
             }
             dataProxy.AiType = mSpawnRegion.m_AiTypeSpawned = baseAi.m_AiType;
             dataProxy.AiSubType = mSpawnRegion.m_AiSubTypeSpawned = baseAi.m_AiSubType;
+            if (spawnRegion.AiSubTypeSpawned == AiSubType.Bear)
+            {
+                this.LogInstanced($"SpawnRegion coordinates 1: {spawnRegion.transform.position} | dataProxy coordinates: {dataProxy.CurrentPosition} | center coordinates: {spawnRegion.m_Center}");
+            }
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Wolf)
             {
                 dataProxy.WolfType = mSpawnRegion.m_WolfTypeSpawned = baseAi.Timberwolf.IsNullOrDestroyed() ? WolfType.Normal : WolfType.Timberwolf;
@@ -112,16 +116,9 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_Den = mSpawnRegion.GetComponent<Den>();
             if (mModDataProxy != null && ModDataProxy.CurrentPosition != Vector3.zero)
             {
-                mSpawnRegion.m_Center = mModDataProxy.CurrentPosition;
-                mManager.Manager.DispatchManager.Dispatch(() =>
-                {
-                    mSpawnRegion.transform.position = mSpawnRegion.m_Center;
-                });
+                mSpawnRegion.transform.position = mModDataProxy.CurrentPosition;
             }
-            else 
-            {
-                mSpawnRegion.m_Center = mSpawnRegion.transform.position;
-            }
+            mSpawnRegion.m_Center = mSpawnRegion.transform.position;
             if (mSpawnRegion.m_PathManagers == null)
             {
                 return;
@@ -147,6 +144,11 @@ namespace ExpandedAiFramework
 
             SetBoundingSphereBasedOnWaypoints(mModDataProxy?.CurrentWaypointPathIndex ?? 0);
             PreQueue();
+
+            if (spawnRegion.AiSubTypeSpawned == AiSubType.Bear)
+            {
+                this.LogInstanced($"SpawnRegion coordinates 2: {spawnRegion.transform.position} | dataProxy coordinates: {dataProxy.CurrentPosition} | center coordinates: {spawnRegion.m_Center}");
+            }
         }
 
 
@@ -1067,23 +1069,21 @@ namespace ExpandedAiFramework
             {
                 spawnPos = mSpawnRegion.m_Den.transform.position;
                 spawnRotation = mSpawnRegion.m_Den.transform.rotation;
-                this.LogTraceInstanced($"Found Den, returning spawn position", LogCategoryFlags.SpawnRegion);
+                this.LogDebugInstanced($"Found Den, returning spawn position", LogCategoryFlags.SpawnRegion);
                 return true;
             }
             AreaMarkupManager areaMarkupManager = GameManager.m_AreaMarkupManager;
-            if (areaMarkupManager.IsNullOrDestroyed())
+            if (!areaMarkupManager.IsNullOrDestroyed())
             {
-                this.ErrorInstanced($"null AreaMarkupManager");
-                return false;
+                AreaMarkup areaMarkup = areaMarkupManager.GetRandomSpawnAreaMarkupGivenSpawnRegion(mSpawnRegion);
+                if (!areaMarkup.IsNullOrDestroyed())
+                {
+                    this.LogDebugInstanced($"Found AreaMarkup", LogCategoryFlags.SpawnRegion);
+                    spawnPos = areaMarkup.transform.position;
+                    return true;
+                }
             }
-            AreaMarkup areaMarkup = areaMarkupManager.GetRandomSpawnAreaMarkupGivenSpawnRegion(mSpawnRegion);
-            if (!areaMarkup.IsNullOrDestroyed())
-            {
-                this.LogTraceInstanced($"Found AreaMarkup", LogCategoryFlags.SpawnRegion);
-                spawnPos = areaMarkup.transform.position;
-                return true;
-            }
-            if (AiUtils.GetRandomPointOnNavmesh(out spawnPos,
+            if (!AiUtils.GetRandomPointOnNavmesh(out spawnPos,
                                                 new Vector3(mSpawnRegion.m_Center.x,
                                                             mSpawnRegion.m_Center.y + mSpawnRegion.m_TopDownTerrainHeight,
                                                             mSpawnRegion.m_Center.z),
@@ -1091,11 +1091,16 @@ namespace ExpandedAiFramework
                                                 mSpawnRegion.m_Radius,
                                                 AiUtils.GetNavmeshArea(mSpawnRegion.transform.position)))
             {
-                this.LogTraceInstanced($"Found Random navmesh point", LogCategoryFlags.SpawnRegion);
-                return true;
+                this.ErrorInstanced($"Couldnt get a valid position and rotation", LogCategoryFlags.SpawnRegion);
+                return false;
             }
-            this.LogInstanced($"Couldnt get a valid position and rotation", LogCategoryFlags.SpawnRegion);
-            return false;
+            if (spawnPos.y > mSpawnRegion.m_Center.y + mSpawnRegion.m_SpawnHeightCap)
+            {
+                this.LogDebugInstanced($"Selected point too high", LogCategoryFlags.SpawnRegion);
+                return false;
+            }
+            this.LogDebugInstanced($"Found Random navmesh point", LogCategoryFlags.SpawnRegion);
+            return true;
         }
 
 

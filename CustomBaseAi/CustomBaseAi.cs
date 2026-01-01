@@ -1387,6 +1387,21 @@ namespace ExpandedAiFramework
             return realDeltaTime * (86400.0f / (mTimeOfDay.m_WeatherSystem.m_DayLength * mTimeOfDay.m_WeatherSystem.m_DayLengthScale));
         }
 
+        protected CustomSpawnRegion GetParentRegion()
+        {
+            if (mModDataProxy == null || mModDataProxy.ParentGuid == Guid.Empty)
+            {
+                Error($"Could not fetch mod data proxy or empty parent guid!");
+                return null;
+            }
+            if (!mManager.SpawnRegionManager.CustomSpawnRegionsByGuid.TryGetValue(mModDataProxy.ParentGuid, out CustomSpawnRegion region))
+            {
+                Error($"Could not fetch spawn region with guid {mModDataProxy.ParentGuid}!");
+                return null;
+            }
+            return region;
+        }
+
 
         #endregion
 
