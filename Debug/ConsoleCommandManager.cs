@@ -68,12 +68,12 @@ namespace ExpandedAiFramework
             string command = uConsole.GetString();
             if (command == null || command.Length == 0)
             {
-                LogAlways($"Command cannot be empty. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
+                Log($"Command cannot be empty. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
                 return;
             }
             if (!mCommandMap.TryGetValue(command, out Action<IList<string>> commandAction))
             {
-                LogAlways($"Unknown command: {command}. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
+                Log($"Unknown command: {command}. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
                 return;
             }
             commandAction(ParseArgs());
@@ -90,7 +90,7 @@ namespace ExpandedAiFramework
             string command = GetNextArg(args);
             if (command == null ||!mCommandMap.TryGetValue(command, out Action<IList<string>> commandAction))
             {
-                LogAlways($"Unknown command: {command}. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
+                Log($"Unknown command: {command}. Use '{CommandString} {CommandString_Help}' for supported commands.", LogCategoryFlags.ConsoleCommand);
                 return;
             }
         }
@@ -99,7 +99,7 @@ namespace ExpandedAiFramework
         {
             foreach (var command in mCommandMap)
             {
-                LogAlways($"{command.Key.PadRight(16)} | {command.Value}", LogCategoryFlags.ConsoleCommand);
+                Log($"{command.Key.PadRight(16)} | {command.Value}", LogCategoryFlags.ConsoleCommand);
             }
         }
 
@@ -111,7 +111,7 @@ namespace ExpandedAiFramework
             }
             else
             {
-                LogError($"Unsupported type {typeName}! Supported types: {ListAvailableTypes(command)}");
+                Error($"Unsupported type {typeName}! Supported types: {ListAvailableTypes(command)}");
             }                
         }
 
@@ -191,7 +191,7 @@ namespace ExpandedAiFramework
             }
             else
             {
-                LogAlways($"Unknown {CommandString_Paint} type: {typeName}. Supported types: {string.Join(", ", mManager.PaintManagers.Keys)}", LogCategoryFlags.ConsoleCommand);
+                Log($"Unknown {CommandString_Paint} type: {typeName}. Supported types: {string.Join(", ", mManager.PaintManagers.Keys)}", LogCategoryFlags.ConsoleCommand);
             }
         }
 
@@ -338,7 +338,7 @@ namespace ExpandedAiFramework
         {
             mManager.DataManager.ScheduleSpawnRegionModDataProxyRequest(new PurgeDataRequest<SpawnRegionModDataProxy>((spawnRegionModDataProxy, result) => 
             {
-                LogAlways("Spawn region mod data proxy purged", LogCategoryFlags.ConsoleCommand);
+                Log("Spawn region mod data proxy purged", LogCategoryFlags.ConsoleCommand);
             }, false));
         }
 
@@ -355,12 +355,12 @@ namespace ExpandedAiFramework
                     wildlifeMode = WildlifeMode.Aurora;
                     break;
                 default:
-                    LogError($"Invalid mode: {mode}");
+                    Error($"Invalid mode: {mode}");
                     return;
             }
             mManager.DataManager.ScheduleSpawnModDataProxyRequest(new PurgeDataRequest<SpawnModDataProxy>((spawnModDataProxy, result) => 
             {
-                LogAlways("Spawn mod data proxy purged");
+                Log("Spawn mod data proxy purged");
             }, false), wildlifeMode);
         }
 

@@ -83,7 +83,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
                 if (cWolfDataVariant == null)
                 {
-                    LogWarning($"Found serialized companionwolf data, but could not load to populatable variant!", LogCategoryFlags.AiManager);
+                    Log($"Found serialized companionwolf data, but could not load to populatable variant!", LogCategoryFlags.AiManager);
                     return;
                 }
 
@@ -166,14 +166,14 @@ namespace ExpandedAiFramework.CompanionWolfMod
             LogTrace("Successfully instantiated: " + newWolf.name);
             if (newWolf == null)
             {
-                LogWarning("Couldn't instantiate new wolf prefab!");
+                Log("Couldn't instantiate new wolf prefab!");
                 return;
             }
             newWolf.transform.position = validPos;
             BaseAi baseAi = newWolf.GetComponentInChildren<BaseAi>();
             if (baseAi == null)
             {
-                LogError("Coult not find BaseAi script attached to wolf prefab!");
+                Error("Coult not find BaseAi script attached to wolf prefab!");
                 return;
             }
             LogTrace($"Creating move agent...", LogCategoryFlags.AiManager);
@@ -183,14 +183,14 @@ namespace ExpandedAiFramework.CompanionWolfMod
             LogTrace($"Wrapping...", LogCategoryFlags.AiManager);
             if (!mManager.AiManager.TryInjectCustomAi(baseAi, typeof(CompanionWolf), null, out CustomBaseAi wrapper))
             {
-                LogError("Could not re-inject CompanionWolf!");
+                Error("Could not re-inject CompanionWolf!");
                 return;
             }
             LogTrace($"Grabbing Instance..", LogCategoryFlags.AiManager);
             mInstance = wrapper as CompanionWolf;
             if (mInstance == null)
             {
-                LogError("Instantiated companion wolf but script is not correct!");
+                Error("Instantiated companion wolf but script is not correct!");
                 return;
             }
             wrapper.BaseAi.m_MoveAgent.transform.position = validPos;
@@ -237,20 +237,20 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (!Manager.TryGetSpawnManager(typeof(CompanionWolf), out ISpawnManager subManager))
             {
-                LogError("Could not fetch CompanionWolfManager instance!");
+                Error("Could not fetch CompanionWolfManager instance!");
                 return;
             }
 
             if (subManager is not CompanionWolfManager instance)
             {
-                LogError("Could not fetch CompanionWolfManager instance!");
+                Error("Could not fetch CompanionWolfManager instance!");
                 return;
             }
 
             string command = uConsole.GetString().ToLowerInvariant();
             if (command == null)
             {
-                LogAlways($"Available commands: {CWoldCommandString_OnCommandSupportedTypes}", LogCategoryFlags.AiManager);
+                Log($"Available commands: {CWoldCommandString_OnCommandSupportedTypes}", LogCategoryFlags.AiManager);
             }
             switch (command)
             {
@@ -260,7 +260,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 case CommandString_GoTo: instance.Console_GoTo(); break;
                 case CommandString_Spawn: instance.Console_Spawn(); break;
                 case CommandString_Info: instance.Console_Info(); break;
-                default: LogWarning($"Unknown command: {command}", LogCategoryFlags.AiManager); break;
+                default: Log($"Unknown command: {command}", LogCategoryFlags.AiManager); break;
             }
         }
 
@@ -270,28 +270,28 @@ namespace ExpandedAiFramework.CompanionWolfMod
             string command = uConsole.GetString();
             if (command == null || command.Length == 0)
             {
-                LogAlways($"Supported commands: {CWoldCommandString_HelpSupportedTypes}", LogCategoryFlags.AiManager);
+                Log($"Supported commands: {CWoldCommandString_HelpSupportedTypes}", LogCategoryFlags.AiManager);
                 return;
             }
             switch (command.ToLower())
             {
                 case CommandString_Create:
-                    LogAlways($"Attempts to create an tamed or untambed companion. Syntax: '{CWolfCommandString} {CommandString_Create} <type>'. Supported types: {CWoldCommandString_CreateTypes}", LogCategoryFlags.AiManager);
+                    Log($"Attempts to create an tamed or untambed companion. Syntax: '{CWolfCommandString} {CommandString_Create} <type>'. Supported types: {CWoldCommandString_CreateTypes}", LogCategoryFlags.AiManager);
                     return;
                 case CommandString_Delete:
-                    LogAlways($"Attempts to disconnect current tamed or untamed companion. Syntax: '{CWolfCommandString} {CommandString_Delete}'", LogCategoryFlags.AiManager);
+                    Log($"Attempts to disconnect current tamed or untamed companion. Syntax: '{CWolfCommandString} {CommandString_Delete}'", LogCategoryFlags.AiManager);
                     return;
                 case CommandString_GoTo:
-                    LogAlways($"Attempts to teleport current tamed or untamed companion. Syntax: '{CommandString} {CommandString_GoTo}'", LogCategoryFlags.AiManager);
+                    Log($"Attempts to teleport current tamed or untamed companion. Syntax: '{CommandString} {CommandString_GoTo}'", LogCategoryFlags.AiManager);
                     return;
                 case CommandString_Spawn:
-                    LogAlways($"Attempts to spawn current tamed or untamed companion. Syntax: '{CommandString} {CommandString_Spawn}'", LogCategoryFlags.AiManager);
+                    Log($"Attempts to spawn current tamed or untamed companion. Syntax: '{CommandString} {CommandString_Spawn}'", LogCategoryFlags.AiManager);
                     return;
                 case CommandString_Info:
-                    LogAlways($"Attempts to readout info on current tamed or untamed companion. Syntax: '{CommandString} {CommandString_Info}'", LogCategoryFlags.AiManager);
+                    Log($"Attempts to readout info on current tamed or untamed companion. Syntax: '{CommandString} {CommandString_Info}'", LogCategoryFlags.AiManager);
                     return;
                 default:
-                    LogAlways($"Unknown comand '{command.ToLower()}'!", LogCategoryFlags.AiManager);
+                    Log($"Unknown comand '{command.ToLower()}'!", LogCategoryFlags.AiManager);
                     return;
             }
         }
@@ -302,12 +302,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (mData == null)
             {
-                LogAlways($"No data to {CommandString_Create}!", LogCategoryFlags.AiManager);
+                Log($"No data to {CommandString_Create}!", LogCategoryFlags.AiManager);
                 return;
             }
             if (mData.Connected)
             {
-                LogAlways($"Companion wolf already created! To force switch state, delete current and re-create in preferred state.", LogCategoryFlags.AiManager);
+                Log($"Companion wolf already created! To force switch state, delete current and re-create in preferred state.", LogCategoryFlags.AiManager);
                 return;
             }
 
@@ -323,7 +323,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                     ForceCreateTamedCompanionWolf();
                     return;
                 default:
-                    LogAlways($"Unknown type '{type}'!", LogCategoryFlags.AiManager);
+                    Log($"Unknown type '{type}'!", LogCategoryFlags.AiManager);
                     return;
             }
         }
@@ -333,12 +333,12 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (mData == null)
             {
-                LogAlways($"No data to {CommandString_Delete}!", LogCategoryFlags.AiManager);
+                Log($"No data to {CommandString_Delete}!", LogCategoryFlags.AiManager);
                 return;
             }
             if (!mData.Connected)
             {
-                LogAlways($"No connected companion wolf to {CommandString_Delete}!", LogCategoryFlags.AiManager);
+                Log($"No connected companion wolf to {CommandString_Delete}!", LogCategoryFlags.AiManager);
                 return;
             }
             if (mInstance != null)
@@ -346,7 +346,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
                 GameObject.Destroy(mInstance);
             }
             mData.Disconnect();
-            LogAlways($"{CommandString_Delete} companion wolf successful!", LogCategoryFlags.AiManager);
+            Log($"{CommandString_Delete} companion wolf successful!", LogCategoryFlags.AiManager);
         }
 
 
@@ -354,21 +354,21 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (mData == null)
             {
-                LogAlways($"No data to {CommandString_GoTo}!", LogCategoryFlags.AiManager);
+                Log($"No data to {CommandString_GoTo}!", LogCategoryFlags.AiManager);
                 return;
             }
             if (!mData.Connected)
             {
-                LogAlways($"No connected companion wolf to {CommandString_GoTo}!", LogCategoryFlags.AiManager);
+                Log($"No connected companion wolf to {CommandString_GoTo}!", LogCategoryFlags.AiManager);
                 return;
             }
             if (mInstance == null)
             {
-                LogAlways($"No spawned companion wolf to {CommandString_GoTo}!", LogCategoryFlags.AiManager);
+                Log($"No spawned companion wolf to {CommandString_GoTo}!", LogCategoryFlags.AiManager);
                 return;
             }
             Teleport(mInstance.transform.position, mInstance.transform.rotation);
-            LogAlways($"{CommandString_GoTo} companion wolf successful!", LogCategoryFlags.AiManager);
+            Log($"{CommandString_GoTo} companion wolf successful!", LogCategoryFlags.AiManager);
         }
 
 
@@ -376,21 +376,21 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (mData == null)
             {
-                LogAlways($"No data to {CommandString_Spawn}!", LogCategoryFlags.AiManager);
+                Log($"No data to {CommandString_Spawn}!", LogCategoryFlags.AiManager);
                 return;
             }
             if (!mData.Connected)
             {
-                LogAlways($"No connected companion wolf to {CommandString_Spawn}!", LogCategoryFlags.AiManager);
+                Log($"No connected companion wolf to {CommandString_Spawn}!", LogCategoryFlags.AiManager);
                 return;
             }
             if (mInstance != null)
             {
-                LogAlways($"Companion wolf is already in scene, cannot {CommandString_Spawn}!", LogCategoryFlags.AiManager);
+                Log($"Companion wolf is already in scene, cannot {CommandString_Spawn}!", LogCategoryFlags.AiManager);
                 return;
             }
             SpawnCompanion();
-            LogAlways($"{CommandString_Spawn} companion wolf successful!", LogCategoryFlags.AiManager);
+            Log($"{CommandString_Spawn} companion wolf successful!", LogCategoryFlags.AiManager);
         }
 
 
@@ -399,22 +399,22 @@ namespace ExpandedAiFramework.CompanionWolfMod
         {
             if (mData == null)
             {
-                LogAlways($"No data to {CommandString_Info}!", LogCategoryFlags.AiManager);
+                Log($"No data to {CommandString_Info}!", LogCategoryFlags.AiManager);
                 return;
             }
             if (!mData.Connected)
             {
-                LogAlways($"No connected companion wolf to {CommandString_Info}!", LogCategoryFlags.AiManager);
+                Log($"No connected companion wolf to {CommandString_Info}!", LogCategoryFlags.AiManager);
                 return;
             }
             mShouldShowInfoScreen = !mShouldShowInfoScreen;
-            LogAlways($"{CommandString_Info} companion wolf successful!", LogCategoryFlags.AiManager);
+            Log($"{CommandString_Info} companion wolf successful!", LogCategoryFlags.AiManager);
         }
 
 
         private void ForceCreateUntamedCompanionWolf()
         {
-            LogAlways($"Havent created this yet, set the spawn weight high and fly around. Eventually when I support custom spawn region creation this command will create one next to the player to respawn it until it disappears after settings timer.", LogCategoryFlags.AiManager);
+            Log($"Havent created this yet, set the spawn weight high and fly around. Eventually when I support custom spawn region creation this command will create one next to the player to respawn it until it disappears after settings timer.", LogCategoryFlags.AiManager);
             return;
         }
 

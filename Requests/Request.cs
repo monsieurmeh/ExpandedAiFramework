@@ -65,12 +65,12 @@ namespace ExpandedAiFramework
         {
             if (mDataProvider == null)
             {
-                this.LogErrorInstanced($"Null data provider");
+                this.ErrorInstanced($"Null data provider");
                 return false;
             }
             if (mDataContainer == null)
             {
-                this.LogErrorInstanced($"null data container");
+                this.ErrorInstanced($"null data container");
                 return false;
             }
             return true;

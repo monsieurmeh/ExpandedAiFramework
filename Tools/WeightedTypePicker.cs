@@ -49,14 +49,14 @@ namespace ExpandedAiFramework
 
         public void StartWorker()
         {
-            LogTrace($"Starting TypePicker worker thread", LogCategoryFlags.AiManager);
+            Log($"Starting TypePicker worker thread", LogCategoryFlags.AiManager);
             mTask = Task.Run(Worker);
         }
 
 
         public void StopWorker()
         {
-            LogTrace($"Stopping TypePicker worker thread", LogCategoryFlags.AiManager);
+            Log($"Stopping TypePicker worker thread", LogCategoryFlags.AiManager);
             mRunWorker = false;
             try
             {
@@ -64,7 +64,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"Error stopping worker thread: {e}");
+                Error($"Error stopping worker thread: {e}");
             }
         }
 
@@ -127,7 +127,7 @@ namespace ExpandedAiFramework
 
                 if (validEntries.Count == 0 || totalValidWeight <= 0)
                 {
-                    LogError("WeightedTypePicker could not pick a valid spawn type!", ComplexLogger.FlaggedLoggingLevel.Critical);
+                    Error("WeightedTypePicker could not pick a valid spawn type!");
                     return mGetFallbackTypeFunction.Invoke(t);
                 }
 
@@ -172,7 +172,7 @@ namespace ExpandedAiFramework
                     }
                     catch (Exception e)
                     {
-                        LogError($"ASYNC exception during WeightedTypePicker.PickTypeAsync<T>: {e}");
+                        Error($"ASYNC exception during WeightedTypePicker.PickTypeAsync<T>: {e}");
                         return;
                     }
                 });

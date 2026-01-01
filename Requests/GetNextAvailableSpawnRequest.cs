@@ -80,7 +80,7 @@ namespace ExpandedAiFramework
             {
                 if (!mDataContainer.TryGetData(mScene, availableProxies[i], out mPayload))
                 {
-                    this.LogErrorInstanced($"Couldnt match existing matched spawn mod data proxy guid {availableProxies[i]} to intended parent proxy guid {mGuid}!");
+                    this.ErrorInstanced($"Couldnt match existing matched spawn mod data proxy guid {availableProxies[i]} to intended parent proxy guid {mGuid}!");
                     continue;
                 }
                 if (!mPayload.Available)
@@ -100,7 +100,7 @@ namespace ExpandedAiFramework
             {
                 if (!mRequireForceSpawn)
                 {
-                    this.LogWarningInstanced($"Could not get proxy!");
+                    this.LogInstanced($"Could not get proxy!");
                 }
                 return false;
             }

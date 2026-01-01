@@ -1,4 +1,4 @@
-﻿using ComplexLogger;
+﻿
 using ExpandedAiFramework.Enums;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
@@ -110,7 +110,7 @@ namespace ExpandedAiFramework
             Type spawnType = mTypePicker.PickType(baseAi);
             if (spawnType == typeof(void))
             {
-                LogError($"Could not find valid spawn type for base ai while pre-queuing spawns!");
+                Error($"Could not find valid spawn type for base ai while pre-queuing spawns!");
             }
             return spawnType;
         }
@@ -120,10 +120,10 @@ namespace ExpandedAiFramework
         {
             if (mSpawnSettingsDict.TryGetValue(type, out _))
             {
-                LogError($"Can't register {type} as it is already registered!", FlaggedLoggingLevel.Critical);
+                Error($"Can't register {type} as it is already registered!");
                 return false;
             }
-            LogTrace($"Registering type {type}", LogCategoryFlags.AiManager);
+            Log($"Registering type {type}", LogCategoryFlags.AiManager);
 
             mSpawnSettingsDict.Add(type, spawnSettings);
             mTypePicker.AddWeight(type, spawnSettings.SpawnWeight, spawnSettings.CanSpawn);
@@ -162,7 +162,7 @@ namespace ExpandedAiFramework
                 case AiSubType.Stag: return typeof(BaseDeer);
                 case AiSubType.Cougar: return typeof(BaseCougar);
                 default:
-                    LogError($"Can't find fallback custom base ai for baseAi {baseAi.gameObject.name}!");
+                    Error($"Can't find fallback custom base ai for baseAi {baseAi.gameObject.name}!");
                     return typeof(void);
             }
         }
@@ -185,12 +185,12 @@ namespace ExpandedAiFramework
         {
             if (baseAi == null)
             {
-                LogError("TryInterceptCarcassSpawn given null base ai, aborting!");
+                Error("TryInterceptCarcassSpawn given null base ai, aborting!");
                 return false;
             }
             if (mCustomAis.ContainsKey(baseAi.GetHashCode()))
             {
-                LogTrace("Already wrapped this ai, no need for a second on transition to carcass state.");
+                Log("Already wrapped this ai, no need for a second on transition to carcass state.");
                 return true;
             }
             InjectCustomAi(baseAi, GetFallbackBaseSpawnableType(baseAi), null, out _, null, true);
@@ -255,13 +255,13 @@ namespace ExpandedAiFramework
                 {
                     if (proxy == null)
                     {
-                        LogError($"No longer valid route to generate proxy! Send one down the chain.");
+                        Error($"No longer valid route to generate proxy! Send one down the chain.");
                         return;
                     }
                     if (proxy.ParentGuid == Guid.Empty)
                     {
 
-                        LogError($"No longer valid route to generate parent proxy guid! Ensure it's set before sending down the chain.");
+                        Error($"No longer valid route to generate parent proxy guid! Ensure it's set before sending down the chain.");
                         return;
                     }
                 }
@@ -275,7 +275,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                LogError($"Error during injection: {e}");
+                Error($"Error during injection: {e}");
             }
         }
 
@@ -299,7 +299,7 @@ namespace ExpandedAiFramework
         {
             if (!mSpawnSettingsDict.TryGetValue(type, out var spawnSettings))
             {
-                LogError($"Couldn't fetch spawn settings for type {type}!");
+                Error($"Couldn't fetch spawn settings for type {type}!");
                 return;
             }
             spawnSettings.OnPick();

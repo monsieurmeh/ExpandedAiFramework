@@ -24,7 +24,7 @@ namespace ExpandedAiFramework.WanderingWolfMod
             WanderingWolf.WanderingWolfSettings = new WanderingWolfSettings(Path.Combine(DataFolderPath, $"{nameof(WanderingWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(WanderingWolf), WanderingWolf.WanderingWolfSettings))
             {
-                Utility.LogError("Could not register WanderingWolf spawning!");
+                Error("Could not register WanderingWolf spawning!");
                 return false;
             }
             WanderingWolf.WanderingWolfSettings.AddToModSettings(Utility.ModName);

@@ -24,7 +24,7 @@ namespace ExpandedAiFramework.BigWolfMod
             BigWolf.BigWolfSettings = new BigWolfSettings(Path.Combine(DataFolderPath, $"{nameof(BigWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(BigWolf), BigWolf.BigWolfSettings))
             {
-                Utility.LogError("Could not register BigWolf spawning!");
+                Error("Could not register BigWolf spawning!");
                 return false;
             }
             BigWolf.BigWolfSettings.AddToModSettings(Utility.ModName);

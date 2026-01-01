@@ -58,17 +58,17 @@ namespace ExpandedAiFramework
 
             if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"Could not fetch spawnable prefab!");
+                this.ErrorInstanced($"Could not fetch spawnable prefab!");
                 return;
             }
             if (!mSpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi baseAi))
             {
-                this.LogErrorInstanced($"Could not fetch baseai script from spawnable prefab");
+                this.ErrorInstanced($"Could not fetch baseai script from spawnable prefab");
                 return;
             }
             if (GetSpawnablePrefabName() == string.Empty)
             {
-                this.LogErrorInstanced($"Could not set spawnable prefab name!");
+                this.ErrorInstanced($"Could not set spawnable prefab name!");
                 return;
             }
             dataProxy.AiType = mSpawnRegion.m_AiTypeSpawned = baseAi.m_AiType;
@@ -80,19 +80,19 @@ namespace ExpandedAiFramework
             GameModeConfig gameModeConfig = ExperienceModeManager.s_CurrentGameMode;
             if (gameModeConfig.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"null GameModeConfig");
+                this.ErrorInstanced($"null GameModeConfig");
                 return;
             }
             ExperienceMode currentExperienceMode = gameModeConfig.m_XPMode;
             if (currentExperienceMode.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"null ExperienceMode");
+                this.ErrorInstanced($"null ExperienceMode");
                 return;
             }
             ExperienceModeManager experienceModeManager = GameManager.m_ExperienceModeManager;
             if (experienceModeManager.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"null ExperienceModeManager");
+                this.ErrorInstanced($"null ExperienceModeManager");
                 return;
             }
             mSpawnRegion.m_SpawnLevel = currentExperienceMode.GetSpawnRegionLevel(baseAi.m_AiTag);
@@ -103,7 +103,7 @@ namespace ExpandedAiFramework
                 CustomExperienceMode customMode = experienceModeManager.GetCustomMode();
                 if (customMode.IsNullOrDestroyed())
                 {
-                    this.LogErrorInstanced($"Null CustomMode");
+                    this.ErrorInstanced($"Null CustomMode");
                     return;
                 }
                 mSpawnRegion.m_NumHoursBetweenRespawns *= customMode.m_LookupTable.m_WildlifeRespawnTimeModifierList.GetValue(customMode.m_WildlifeSpawnFrequency);
@@ -269,12 +269,12 @@ namespace ExpandedAiFramework
         {
             if (!proxy.Available)
             {
-                this.LogWarningInstanced($"Proxy {proxy.Guid} unavailable", LogCategoryFlags.SpawnRegion);
+                this.LogInstanced($"Proxy {proxy.Guid} unavailable", LogCategoryFlags.SpawnRegion);
                 return false;
             }
             if (mPendingSpawns.Contains(proxy))
             {
-                this.LogWarningInstanced($"Attempting to double-spawn proxy, aborting!", LogCategoryFlags.SpawnRegion);
+                this.LogInstanced($"Attempting to double-spawn proxy, aborting!", LogCategoryFlags.SpawnRegion);
                 return false;
             }
             if (SpawningSuppressedByExperienceMode())
@@ -286,7 +286,7 @@ namespace ExpandedAiFramework
             {
                 if (mActiveSpawns[i].ModDataProxy == proxy)
                 {
-                    this.LogWarningInstanced($"Attempting to double-spawn proxy, aborting!", LogCategoryFlags.SpawnRegion);
+                    this.LogInstanced($"Attempting to double-spawn proxy, aborting!", LogCategoryFlags.SpawnRegion);
                     return false;
                 }
             }
@@ -343,7 +343,7 @@ namespace ExpandedAiFramework
             GameObject newInstance = GameObject.Instantiate(spawnablePrefab, modDataProxy.CurrentPosition, modDataProxy.CurrentRotation);
             if (!newInstance.TryGetComponent<BaseAi>(out BaseAi newBaseAi))
             {
-                this.LogErrorInstanced($"Cannot extract BaseAi component from newly instantiated BaseAi spawnable prefab!");
+                this.ErrorInstanced($"Cannot extract BaseAi component from newly instantiated BaseAi spawnable prefab!");
                 return null;
             }
             newInstance.name = spawnablePrefab.name + $"_{mSpawnRegion.m_AutoCloneIndex}";
@@ -355,7 +355,7 @@ namespace ExpandedAiFramework
             }
             if (!mManager.TryWrapNewSpawn(newBaseAi, mSpawnRegion, out CustomBaseAi newCustomBaseAi, modDataProxy))
             {
-                this.LogErrorInstanced($"Error wrapping new spawn!");
+                this.ErrorInstanced($"Error wrapping new spawn!");
                 return null;
             }
             return newCustomBaseAi;
@@ -367,7 +367,7 @@ namespace ExpandedAiFramework
             BaseAi baseAi = customBaseAi.BaseAi;
             if (customBaseAi.IsNullOrDestroyed())
             {
-                this.LogWarningInstanced($"InstantiateSpawnInternal returned null BaseAi, aborting", LogCategoryFlags.SpawnRegion);
+                this.LogInstanced($"InstantiateSpawnInternal returned null BaseAi, aborting", LogCategoryFlags.SpawnRegion);
                 return false;
             }
             Transform transform = mSpawnRegion.transform;
@@ -384,7 +384,7 @@ namespace ExpandedAiFramework
             AiDifficultySettings aiDifficultySettings = GameManager.m_AiDifficultySettings;
             if (aiDifficultySettings.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"Null AiDifficultySettings, aborting");
+                this.ErrorInstanced($"Null AiDifficultySettings, aborting");
                 return false;
             }
             baseAi.m_AiDifficultySetting = aiDifficultySettings.GetSetting(mSpawnRegion.m_AiDifficulty, baseAi.m_AiSubType);
@@ -411,7 +411,7 @@ namespace ExpandedAiFramework
             Quaternion spawnRotation = Quaternion.identity;
             if (!TryGetSpawnPositionAndRotation(ref spawnPosition, ref spawnRotation))
             {
-                this.LogWarningInstanced($"Potential error: Could not get spawn position and rotation. Aborting", LogCategoryFlags.SpawnRegion);
+                this.LogInstanced($"Potential error: Could not get spawn position and rotation. Aborting", LogCategoryFlags.SpawnRegion);
                 return;
             }
             // first priority: spawn region
@@ -437,7 +437,7 @@ namespace ExpandedAiFramework
                 if (spawnableAi == null)
                 {
                     //PANIK!!1
-                    this.LogErrorInstanced($"Could not get spawnable Ai for type picker! Aborting");
+                    this.ErrorInstanced($"Could not get spawnable Ai for type picker! Aborting");
                     return;
                 }
                 spawnableAi.m_WildlifeMode = wildlifeMode;
@@ -468,7 +468,7 @@ namespace ExpandedAiFramework
         {
             if (variantSpawnType == null)
             {
-                this.LogErrorInstanced($"Can't generate new spawn mod data proxy with null variant spawn type!");
+                this.ErrorInstanced($"Can't generate new spawn mod data proxy with null variant spawn type!");
                 return null;
             }
             SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.Manager.CurrentScene, position, rotation, mSpawnRegion.m_AiSubTypeSpawned, wildlifeMode, variantSpawnType);
@@ -600,7 +600,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
-                this.LogErrorInstanced($"Null mSpawnRegion.m_DifficultySettings");
+                this.ErrorInstanced($"Null mSpawnRegion.m_DifficultySettings");
                 return 0;
             }
             return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsDay + AdditionalSimultaneousSpawnAllowance();
@@ -611,7 +611,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_DifficultySettings == null)
             {
-                this.LogErrorInstanced($"Null mSpawnRegion.m_DifficultySettings");
+                this.ErrorInstanced($"Null mSpawnRegion.m_DifficultySettings");
                 return 0;
             }
             return mSpawnRegion.m_DifficultySettings[(int)mSpawnRegion.m_SpawnLevel].m_MaxSimultaneousSpawnsNight + AdditionalSimultaneousSpawnAllowance();
@@ -622,7 +622,7 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.gameObject.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"Null mSpawnRegion.gameObject; this is an ACTUAL error!");
+                this.ErrorInstanced($"Null mSpawnRegion.gameObject; this is an ACTUAL error!");
                 return 0;
             }
             if (!mSpawnRegion.gameObject.activeSelf || !mSpawnRegion.isActiveAndEnabled)
@@ -739,7 +739,7 @@ namespace ExpandedAiFramework
                 }
                 if (removeIndex == -1)
                 {
-                    this.LogErrorInstanced($"BaseAI not found in ActiveSpawns");
+                    this.ErrorInstanced($"BaseAI not found in ActiveSpawns");
                     return;
                 }
                 mActiveSpawns[removeIndex].ModDataProxy.Disconnected = true;
@@ -772,24 +772,24 @@ namespace ExpandedAiFramework
             this.LogTraceInstanced($"GetCustomSpawnRegionChanceActiveScale triggered");
             if (customMode.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"No custom mode found");
+                this.ErrorInstanced($"No custom mode found");
                 return 1.0f;
             }
             CustomExperienceModeTunableLookupTable lookupTable = customMode.m_LookupTable;
             if (lookupTable.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"No custom mode lookup table found");
+                this.ErrorInstanced($"No custom mode lookup table found");
                 return 1.0f;
             }
             Il2CppSystem.Collections.Generic.List<ExperienceMode> experienceModes = lookupTable.m_BaseExperienceModes;
             if (experienceModes.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"No base experience mode table found");
+                this.ErrorInstanced($"No base experience mode table found");
                 return 1.0f;
             }
             if (experienceModes.Count < 4)
             {
-                this.LogErrorInstanced($"Cannot fetch all base experience modes");
+                this.ErrorInstanced($"Cannot fetch all base experience modes");
                 return 1.0f;
             }
             ExperienceMode pilgrimExperienceMode = experienceModes[0];
@@ -956,7 +956,7 @@ namespace ExpandedAiFramework
                     spawn = ActiveSpawns[i].BaseAi;
                     if (spawn == null)
                     {
-                        this.LogWarningInstanced($"Null spawn", LogCategoryFlags.SpawnRegion);
+                        this.LogInstanced($"Null spawn", LogCategoryFlags.SpawnRegion);
                         continue;
                     }
                     if (!spawn.gameObject.activeSelf)
@@ -1020,29 +1020,29 @@ namespace ExpandedAiFramework
         {
             if (mSpawnRegion.m_PathManagers == null)
             {
-                this.LogErrorInstanced($"Null mSpawnRegion.m_PathManagers");
+                this.ErrorInstanced($"Null mSpawnRegion.m_PathManagers");
                 return null;
             }
             if (mSpawnRegion.m_PathManagers.Length == 0)
             {
-                this.LogErrorInstanced($"Empty mSpawnRegion.m_PathManagers");
+                this.ErrorInstanced($"Empty mSpawnRegion.m_PathManagers");
                 return null;
             }
             if (mSpawnRegion.m_CurrentWaypointPathIndex >= mSpawnRegion.m_PathManagers.Length)
             {
-                this.LogErrorInstanced($"mSpawnRegion.m_CurrentWaypointIndex >= mSpawnRegion.m_PathManagers.Length");
+                this.ErrorInstanced($"mSpawnRegion.m_CurrentWaypointIndex >= mSpawnRegion.m_PathManagers.Length");
                 return null;
             }
             if (mSpawnRegion.m_PathManagers[mSpawnRegion.m_CurrentWaypointPathIndex].IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"Path manager for current waypoint index is null");
+                this.ErrorInstanced($"Path manager for current waypoint index is null");
                 return null;
             }
             foreach (WanderRegion wanderRegion in mSpawnRegion.m_PathManagers[mSpawnRegion.m_CurrentWaypointPathIndex].gameObject.GetComponentsInChildren<WanderRegion>())
             {
                 if (wanderRegion.IsNullOrDestroyed())
                 {
-                    this.LogErrorInstanced($"Null wander region found in pathmanager");
+                    this.ErrorInstanced($"Null wander region found in pathmanager");
                     return null;
                 }
             }
@@ -1054,7 +1054,7 @@ namespace ExpandedAiFramework
         {
             if (baseAi.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"Null baseAi");
+                this.ErrorInstanced($"Null baseAi");
                 return false;
             }
             return baseAi.m_WildlifeMode == mSpawnRegion.m_WildlifeMode;
@@ -1073,7 +1073,7 @@ namespace ExpandedAiFramework
             AreaMarkupManager areaMarkupManager = GameManager.m_AreaMarkupManager;
             if (areaMarkupManager.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced($"null AreaMarkupManager");
+                this.ErrorInstanced($"null AreaMarkupManager");
                 return false;
             }
             AreaMarkup areaMarkup = areaMarkupManager.GetRandomSpawnAreaMarkupGivenSpawnRegion(mSpawnRegion);
@@ -1094,7 +1094,7 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"Found Random navmesh point", LogCategoryFlags.SpawnRegion);
                 return true;
             }
-            this.LogWarningInstanced($"Couldnt get a valid position and rotation", LogCategoryFlags.SpawnRegion);
+            this.LogInstanced($"Couldnt get a valid position and rotation", LogCategoryFlags.SpawnRegion);
             return false;
         }
 
@@ -1251,7 +1251,7 @@ namespace ExpandedAiFramework
             PlayerManager playerManager = GameManager.m_PlayerManager;
             if (playerManager == null)
             {
-                this.LogErrorInstanced($"null PlayerManager");
+                this.ErrorInstanced($"null PlayerManager");
                 return false;
             }
             playerManager.GetTeleportTransformAfterSceneLoad(out Vector3 position, out Quaternion rotation);
@@ -1259,14 +1259,14 @@ namespace ExpandedAiFramework
             Il2Cpp.SpawnRegionManager spawnRegionManager = GameManager.m_SpawnRegionManager;
             if (spawnRegionManager == null)
             {
-                this.LogErrorInstanced($"null Il2Cpp.SpawnRegionManager");
+                this.ErrorInstanced($"null Il2Cpp.SpawnRegionManager");
                 return false;
             }
             float minSpawnDist = spawnRegionManager.m_ClosestSpawnDistanceToPlayerAfterSceneTransition;
             ExperienceModeManager experienceModeManager = GameManager.m_ExperienceModeManager;
             if (experienceModeManager == null)
             {
-                this.LogErrorInstanced($"null ExperienceModEmanager");
+                this.ErrorInstanced($"null ExperienceModEmanager");
                 return false;
             }
             ExperienceMode currentExperienceMode = experienceModeManager.GetCurrentExperienceMode();
@@ -1429,7 +1429,7 @@ namespace ExpandedAiFramework
                 }
                 if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
                 {
-                    this.LogErrorInstanced($"Could not fetch spawnable prefab");
+                    this.ErrorInstanced($"Could not fetch spawnable prefab");
                     return string.Empty;
                 }
             }

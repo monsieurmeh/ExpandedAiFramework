@@ -20,7 +20,7 @@ namespace ExpandedAiFramework
         {
             if (mRecordingPath)
             {
-                this.LogWarningInstanced($"Already recording path {mCurrentDataName}! Use finish command first.", LogCategoryFlags.PaintManager);
+                this.LogInstanced($"Already recording path {mCurrentDataName}! Use finish command first.", LogCategoryFlags.PaintManager);
                 return;
             }
 
@@ -34,17 +34,17 @@ namespace ExpandedAiFramework
             if (!string.IsNullOrEmpty(dataPath))
             {
                 mCurrentDataPath = dataPath;
-                this.LogAlwaysInstanced($"Using custom data path: {mCurrentDataPath}", LogCategoryFlags.PaintManager);
+                this.LogInstanced($"Using custom data path: {mCurrentDataPath}", LogCategoryFlags.PaintManager);
             }
             GetUniqueMapDataName(baseName, (uniqueName) =>
             {
                 if (InitializePaintWanderPath(uniqueName))
                 {
-                    this.LogAlwaysInstanced($"Entered wander path paint mode. Left click to place points, right click to finish a path, right click twice to exit mode.", LogCategoryFlags.PaintManager);
+                    this.LogInstanced($"Entered wander path paint mode. Left click to place points, right click to finish a path, right click twice to exit mode.", LogCategoryFlags.PaintManager);
                 }
                 else
                 {
-                    this.LogWarningInstanced("Failed to initialize paint mode", LogCategoryFlags.PaintManager);
+                    this.LogInstanced("Failed to initialize paint mode", LogCategoryFlags.PaintManager);
                 }
             });
         }
@@ -106,12 +106,12 @@ namespace ExpandedAiFramework
             {
                 if (result != RequestResult.Succeeded)
                 {
-                    this.LogWarningInstanced($"No such path {name} in scene {mManager.CurrentScene}!", LogCategoryFlags.PaintManager);
+                    this.LogInstanced($"No such path {name} in scene {mManager.CurrentScene}!", LogCategoryFlags.PaintManager);
                     return;
                 }
                 DeleteMapData(path.Guid, (deletedPath, deleteResult) =>
                 {
-                    this.LogAlwaysInstanced($"Deleted wander path {name} in scene {mManager.CurrentScene}.", LogCategoryFlags.PaintManager);
+                    this.LogInstanced($"Deleted wander path {name} in scene {mManager.CurrentScene}.", LogCategoryFlags.PaintManager);
                     DataManager.SaveMapData();
                 });
             });
@@ -128,12 +128,12 @@ namespace ExpandedAiFramework
             {
                 if (result != RequestResult.Succeeded)
                 {
-                    this.LogErrorInstanced($"No data found with name {name}!");
+                    this.ErrorInstanced($"No data found with name {name}!");
                     return;
                 }
                 if (pathPointIndex >= data.PathPoints.Length)
                 {
-                    this.LogWarningInstanced($"{data} has {data.PathPoints.Length} path points, please select one in that range!", LogCategoryFlags.PaintManager);
+                    this.LogInstanced($"{data} has {data.PathPoints.Length} path points, please select one in that range!", LogCategoryFlags.PaintManager);
                     return;
                 }
                 Quaternion lookDir = Quaternion.identity;
@@ -146,7 +146,7 @@ namespace ExpandedAiFramework
                     lookDir = Quaternion.LookRotation(data.PathPoints[pathPointIndex + 1] - data.PathPoints[pathPointIndex]);
                 }
                 Teleport(data.PathPoints[pathPointIndex], lookDir);
-                this.LogAlwaysInstanced($"Teleported to WanderPath {data.Name} point #{pathPointIndex} at {data.PathPoints[pathPointIndex]}! Watch out for wandering wolves...", LogCategoryFlags.PaintManager);
+                this.LogInstanced($"Teleported to WanderPath {data.Name} point #{pathPointIndex} at {data.PathPoints[pathPointIndex]}! Watch out for wandering wolves...", LogCategoryFlags.PaintManager);
             });
         }
 
@@ -180,7 +180,7 @@ namespace ExpandedAiFramework
             {
                 if (result != RequestResult.Succeeded)
                 {
-                    this.LogErrorInstanced($"No wander path with name {name}!");
+                    this.ErrorInstanced($"No wander path with name {name}!");
                     return;
                 }
                 for (int i = 0, iMax = data.PathPoints.Length; i < iMax; i++)
@@ -247,7 +247,7 @@ namespace ExpandedAiFramework
                 mPaintMarker = CreateMarker(Vector3.zero, Color.green, "PaintMarker", 50f, 2f);
                 if (mPaintMarker == null)
                 {
-                    this.LogWarningInstanced("Failed to create paint marker");
+                    this.LogInstanced("Failed to create paint marker");
                     return false;
                 }
 
@@ -257,7 +257,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced($"Paint mode initialization failed: {e}");
+                this.ErrorInstanced($"Paint mode initialization failed: {e}");
                 ExitPaint();
                 return false;
             }
@@ -267,7 +267,7 @@ namespace ExpandedAiFramework
         {
             if (!mRecordingPath)
             {
-                this.LogWarningInstanced("Cannot add wander path point - not currently recording a path");
+                this.LogInstanced("Cannot add wander path point - not currently recording a path");
                 return;
             }
             
@@ -280,7 +280,7 @@ namespace ExpandedAiFramework
                 mCurrentWanderPathPointMarkers.Add(ConnectMarkers(actualPos, mCurrentWanderPathPoints[mCurrentWanderPathPoints.Count - 2], Color.blue, $"{mCurrentDataName}.Connector {mCurrentWanderPathPoints.Count - 2} -> {mCurrentWanderPathPoints.Count - 1}", 100));
             }
             
-            this.LogAlwaysInstanced($"Added wanderpath point at {actualPos} to wanderpath {mCurrentDataName}", LogCategoryFlags.PaintManager);
+            this.LogInstanced($"Added wanderpath point at {actualPos} to wanderpath {mCurrentDataName}", LogCategoryFlags.PaintManager);
         }
 
         private void RemoveLastWanderPathPoint()
@@ -300,7 +300,7 @@ namespace ExpandedAiFramework
             
             Vector3 removedPoint = mCurrentWanderPathPoints[^1];
             mCurrentWanderPathPoints.RemoveAt(mCurrentWanderPathPoints.Count - 1);
-            this.LogAlwaysInstanced($"Removed last wanderpath point at {removedPoint} from wanderpath {mCurrentDataName}", LogCategoryFlags.PaintManager);
+            this.LogInstanced($"Removed last wanderpath point at {removedPoint} from wanderpath {mCurrentDataName}", LogCategoryFlags.PaintManager);
         }
 
 
@@ -308,7 +308,7 @@ namespace ExpandedAiFramework
         {
             if (mCurrentWanderPathPoints.Count < 2)
             {
-                this.LogWarningInstanced("Need at least 2 points to create a path");
+                this.LogInstanced("Need at least 2 points to create a path");
                 return;
             }
 
@@ -319,10 +319,10 @@ namespace ExpandedAiFramework
             {
                 if (result != RequestResult.Succeeded)
                 {
-                    this.LogErrorInstanced("Couldn't register new wander path!");
+                    this.ErrorInstanced("Couldn't register new wander path!");
                     return;
                 }
-                this.LogAlwaysInstanced($"Generated wander path {mCurrentDataName} starting at {mCurrentWanderPathPoints[0]}.", LogCategoryFlags.PaintManager);
+                this.LogInstanced($"Generated wander path {mCurrentDataName} starting at {mCurrentWanderPathPoints[0]}.", LogCategoryFlags.PaintManager);
                 mDebugShownObjects.AddRange(mCurrentWanderPathPointMarkers);
                 mCurrentWanderPathPoints.Clear();
                 mCurrentWanderPathPointMarkers.Clear();
@@ -333,7 +333,7 @@ namespace ExpandedAiFramework
                 {
                     if (InitializePaintWanderPath(uniqueName))
                     {
-                        this.LogAlwaysInstanced("Ready for next path. Left click to start.");
+                        this.LogInstanced("Ready for next path. Left click to start.");
                     }
                 });
             });
@@ -351,13 +351,13 @@ namespace ExpandedAiFramework
                     }
                     catch (Exception e)
                     {
-                        this.LogErrorInstanced($"Could not parse uint from wanderpathtype input ({e})");
+                        this.ErrorInstanced($"Could not parse uint from wanderpathtype input ({e})");
                         return;
                     }
-                    this.LogAlwaysInstanced($"Set wander path type to {mWanderPathType}", LogCategoryFlags.PaintManager);
+                    this.LogInstanced($"Set wander path type to {mWanderPathType}", LogCategoryFlags.PaintManager);
                     break;
                 default:
-                    this.LogWarningInstanced($"Unknown property: {property}", LogCategoryFlags.PaintManager);
+                    this.LogInstanced($"Unknown property: {property}", LogCategoryFlags.PaintManager);
                     break;
             }
         }
@@ -376,7 +376,7 @@ namespace ExpandedAiFramework
             mCurrentWanderPathPoints.Clear();
             mRecordingPath = false;
             CleanupPaintMarker();
-            this.LogAlwaysInstanced("Discarded current wander path");
+            this.LogInstanced("Discarded current wander path");
         }
     }
 }

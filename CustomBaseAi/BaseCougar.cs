@@ -21,7 +21,7 @@ namespace ExpandedAiFramework
             bool baseResult = base.OverrideStartCustom();
             if (!mBaseAi.gameObject.TryGetComponent<AiCougar>(out mCougar))
             {
-                this.LogErrorInstanced($"Could not fetch AiCougar from cougar!");
+                this.ErrorInstanced($"Could not fetch AiCougar from cougar!");
             }
             return baseResult;
         }
@@ -68,7 +68,7 @@ namespace ExpandedAiFramework
                 MaybePlayerDropsWeapon();
                 if (mCougar.m_SwipeSideTimelineAssets == null || attackSide >= mCougar.m_SwipeSideTimelineAssets.Count)
                 {
-                    this.LogErrorInstanced($"attackSide index out of range");
+                    this.ErrorInstanced($"attackSide index out of range");
                     return false;
                 }
                 mCougar.PlayTimelineAnimation(mCougar.m_SwipeSideTimelineAssets[attackSide], new System.Action(() => { /* maybe cleanup here?? All I see in decompile is a type initializer for an action... */ }));
@@ -107,7 +107,7 @@ namespace ExpandedAiFramework
             PlayerManager playerManager = GameManager.m_PlayerManager;
             if (playerManager.IsNullOrDestroyed())
             {
-                this.LogErrorInstanced("Null playermanager in BaseCougar.MaybePlayerDropsWeapon!");
+                this.ErrorInstanced("Null playermanager in BaseCougar.MaybePlayerDropsWeapon!");
                 return;
             }
             if (playerManager.m_ItemInHandsInternal.IsNullOrDestroyed())

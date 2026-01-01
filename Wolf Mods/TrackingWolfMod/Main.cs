@@ -26,7 +26,7 @@ namespace ExpandedAiFramework.TrackingWolfMod
             TrackingWolf.TrackingWolfSettings = new TrackingWolfSettings(Path.Combine(DataFolderPath, $"{nameof(TrackingWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(TrackingWolf), TrackingWolf.TrackingWolfSettings))
             {
-                Utility.LogError("Could not register TrackingWolf spawning!");
+                Error("Could not register TrackingWolf spawning!");
                 return false;
             }
             TrackingWolf.TrackingWolfSettings.AddToModSettings(Utility.ModName);

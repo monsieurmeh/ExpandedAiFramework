@@ -67,7 +67,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced(e.Message);
+                this.ErrorInstanced(e.Message);
                 return RequestResult.Failed;
             }
         }

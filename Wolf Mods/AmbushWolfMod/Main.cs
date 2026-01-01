@@ -24,7 +24,7 @@ namespace ExpandedAiFramework.AmbushWolfMod
             AmbushWolf.AmbushWolfSettings = new AmbushWolfSettings(Path.Combine(DataFolderPath, $"{nameof(AmbushWolf)}"));
             if (!EAFManager.Instance.RegisterSpawnableAi(typeof(AmbushWolf), AmbushWolf.AmbushWolfSettings))
             {
-                Utility.LogError("Could not register AmbushWolf spawning!");
+                Error("Could not register AmbushWolf spawning!");
                 return false;
             }
             AmbushWolf.AmbushWolfSettings.AddToModSettings(Utility.ModName);

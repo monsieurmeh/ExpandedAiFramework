@@ -1,5 +1,4 @@
-﻿using ComplexLogger;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
@@ -1074,7 +1073,7 @@ namespace ExpandedAiFramework
                 return false;
             }
 
-            this.LogWarningInstanced($"CustomBaseAi.TargetCanBeIgnored reached end of method with no cases returning a valid condition. Falling through to 'can ignore target' condition", LogCategoryFlags.Ai);
+            this.LogInstanced($"CustomBaseAi.TargetCanBeIgnored reached end of method with no cases returning a valid condition. Falling through to 'can ignore target' condition", LogCategoryFlags.Ai);
             return true;
         }
 

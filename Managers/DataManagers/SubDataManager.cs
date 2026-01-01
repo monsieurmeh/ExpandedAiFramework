@@ -64,7 +64,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced($"Error stopping worker thread: {e}");
+                this.ErrorInstanced($"Error stopping worker thread: {e}");
             }
             finally
             {
@@ -290,7 +290,7 @@ namespace ExpandedAiFramework
         {
             try
             {
-                LogTrace($"Loading from path: {dataPath}");
+                Log($"Loading from path: {dataPath}");
                 string dataString = LoadJsonFromPath(dataPath);
                 if (dataString == null)
                 {
@@ -305,12 +305,12 @@ namespace ExpandedAiFramework
                     newData.DataLocation = dataPath;
                     if (!PostProcessDataAfterLoad(newData))
                     {
-                        this.LogErrorInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
+                        this.ErrorInstanced($"Failed to postprocess {newData.DisplayName}, skipping!");
                         continue;
                     }
                     if (!mDataContainer.TryAddData(newData))
                     {
-                        this.LogErrorInstanced($"Failed to add {newData.DisplayName}!");
+                        this.ErrorInstanced($"Failed to add {newData.DisplayName}!");
                     }
                     this.LogTraceInstanced($"Loaded {newData.DisplayName} from {dataPath}", LogCategoryFlags.SerializedData);
                 }
@@ -319,7 +319,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced(e.Message);
+                this.ErrorInstanced(e.Message);
                 return false;
             }
         }

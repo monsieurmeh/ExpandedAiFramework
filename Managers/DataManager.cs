@@ -65,7 +65,7 @@ namespace ExpandedAiFramework
         {
             if (wildlifeMode < WildlifeMode.Normal || wildlifeMode > WildlifeMode.Aurora)
             {
-                LogError($"Invalid WildlifeMode: {wildlifeMode}");
+                Error($"Invalid WildlifeMode: {wildlifeMode}");
                 return false;
             }
             mSpawnModDataProxyManagers[(int)wildlifeMode].ScheduleRequest(request);
@@ -83,7 +83,7 @@ namespace ExpandedAiFramework
         {
             if (proxy.WildlifeMode < WildlifeMode.Normal || proxy.WildlifeMode > WildlifeMode.Aurora)
             {
-                LogError($"Invalid WildlifeMode: {proxy.WildlifeMode}");
+                Error($"Invalid WildlifeMode: {proxy.WildlifeMode}");
                 return false;
             }
             SpawnModDataProxyManager proxyManager = mSpawnModDataProxyManagers[(int)proxy.WildlifeMode];
@@ -105,7 +105,7 @@ namespace ExpandedAiFramework
         {
             if ((int)wildlifeMode >= mSpawnModDataProxyManagers.Length)
             {
-                LogError($"Invalid wildlife mode: {wildlifeMode}!");
+                Error($"Invalid wildlife mode: {wildlifeMode}!");
                 return false;
             }
             return mSpawnModDataProxyManagers[(int)wildlifeMode].CanForceSpawn(spawnType);
@@ -116,7 +116,7 @@ namespace ExpandedAiFramework
         {
             if ((int)wildlifeMode >= mSpawnModDataProxyManagers.Length)
             {
-                LogError($"Invalid wildlife mode: {wildlifeMode}!");
+                Error($"Invalid wildlife mode: {wildlifeMode}!");
                 return;
             }
             mSpawnModDataProxyManagers[(int)wildlifeMode].IncrementForceSpawnCount(spawnType);
@@ -200,7 +200,7 @@ namespace ExpandedAiFramework
         
         private void ClearWorkers()
         {
-            LogTrace($"Clearing Workers", LogCategoryFlags.SerializedData);
+            Log($"Clearing Workers", LogCategoryFlags.SerializedData);
             foreach (IMapDataManager mapDataManager in mMapDataManagers.Values)
             {
                 if (mapDataManager == null)
@@ -223,7 +223,7 @@ namespace ExpandedAiFramework
 
         private void ClearDataCache()
         {
-            LogTrace($"Clearing DataCache", LogCategoryFlags.SerializedData);
+            Log($"Clearing DataCache", LogCategoryFlags.SerializedData);
             mLastScene = string.Empty;
             for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
             {
@@ -318,7 +318,7 @@ namespace ExpandedAiFramework
 
         private void RefreshAvailableMapData()
         {
-            LogTrace($"Loading EAF map data for scene {mLastScene}", LogCategoryFlags.SerializedData);
+            Log($"Loading EAF map data for scene {mLastScene}", LogCategoryFlags.SerializedData);
             foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.ScheduleRefresh(mLastScene);
@@ -328,7 +328,7 @@ namespace ExpandedAiFramework
 
         public void SaveMapData()
         {
-            LogTrace($"Saving MapData", LogCategoryFlags.SerializedData);
+            Log($"Saving MapData", LogCategoryFlags.SerializedData);
             foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.ScheduleSave();
@@ -338,7 +338,7 @@ namespace ExpandedAiFramework
 
         public void LoadMapData()
         {
-            LogTrace($"Loading MapData", LogCategoryFlags.SerializedData);
+            Log($"Loading MapData", LogCategoryFlags.SerializedData);
             foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.ScheduleLoad();
@@ -348,7 +348,7 @@ namespace ExpandedAiFramework
 
         public void ClearMapData()
         {
-            LogTrace($"Clearing MapData", LogCategoryFlags.SerializedData);
+            Log($"Clearing MapData", LogCategoryFlags.SerializedData);
             foreach (ISubDataManager mapDataManager in mMapDataManagers.Values)
             {
                 mapDataManager.ScheduleClear();

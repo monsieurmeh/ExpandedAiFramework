@@ -144,7 +144,7 @@ proxy)
             if (mHidingSpot == null)
             {
                 //Dont do anythign yet till you have a hiding spot
-                //this.LogErrorInstanced("ProcessHiding called but no hiding spot assigned!");
+                //this.ErrorInstanced("ProcessHiding called but no hiding spot assigned!");
                 return;
             }
 
@@ -164,7 +164,7 @@ proxy)
         {
             if (mHidingSpot == null)
             {
-                this.LogErrorInstanced("EnterHiding called but no hiding spot assigned!");
+                this.ErrorInstanced("EnterHiding called but no hiding spot assigned!");
                 return;
             }
             mBaseAi.MoveAgentStop();

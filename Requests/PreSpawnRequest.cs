@@ -27,7 +27,7 @@ namespace ExpandedAiFramework
             }
             if (mCustomSpawnRegion.VanillaSpawnRegion == null)
             {
-                this.LogErrorInstanced("null VANILLA spawn region!");
+                this.ErrorInstanced("null VANILLA spawn region!");
                 return false;
             }
             return true;
@@ -79,7 +79,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced(e.Message);
+                this.ErrorInstanced(e.Message);
                 return RequestResult.Failed;
             }
         }

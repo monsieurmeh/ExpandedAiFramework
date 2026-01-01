@@ -13,36 +13,36 @@ namespace ExpandedAiFramework
             SpawnRegion spawnRegion = __instance.m_SpawnRegion;
             if (spawnRegion == null)
             {
-                LogError($"Null spawn region!");
+                Error($"Null spawn region!");
                 return false;
             }
             GameObject spawnRegionGameObjet = spawnRegion.gameObject;
             if (spawnRegionGameObjet == null)
             {
-                LogError($"Null spawn region game object!");
+                Error($"Null spawn region game object!");
                 return false;
             }
             MapDetail mapDetail = __instance.m_MapDetail;
             if (mapDetail == null)
             {
-                LogError($"Null map detail!");
+                Error($"Null map detail!");
                 return false;
             }                
             if (!mapDetail.m_Map.TryGetPanel(out Panel_Map panelMap))
             {
-                LogError($"Failed to get panel map!");
+                Error($"Failed to get panel map!");
                 return false;
             }
             if (enable) 
             {
                 if (EAFManager.Instance.SpawnRegionManager.CustomSpawnRegions.TryGetValue(spawnRegion.GetHashCode(), out _))
                 {
-                    LogTrace($"Cougar spawn region already registered, skipping.", LogCategoryFlags.CougarManager);
+                    Log($"Cougar spawn region already registered, skipping.", LogCategoryFlags.CougarManager);
                     return false;
                 }
                 if (!EAFManager.Instance.SpawnRegionManager.Add(spawnRegion))
                 {
-                    LogError($"Failed to add spawn region to spawn region manager when trying to enable cougar spawn region via zone trigger!");
+                    Error($"Failed to add spawn region to spawn region manager when trying to enable cougar spawn region via zone trigger!");
                     return false;
                 }
                 mapDetail.m_IsSurveyed = true;

@@ -18,12 +18,12 @@ namespace ExpandedAiFramework
         {
             if (mManager == null)
             {
-                this.LogErrorInstanced($"null manager, aborting");
+                this.ErrorInstanced($"null manager, aborting");
                 return false;
             }
             if (mDataProvider == null)
             {
-                this.LogErrorInstanced($"Null data provider, aborting");
+                this.ErrorInstanced($"Null data provider, aborting");
                 return false;
             }
             return true;
@@ -40,7 +40,7 @@ namespace ExpandedAiFramework
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced($"Error purging data: {e}");
+                this.ErrorInstanced($"Error purging data: {e}");
                 return RequestResult.Failed;
             }
         }

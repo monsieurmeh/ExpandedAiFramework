@@ -69,7 +69,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
-            EAFManager.LogWithStackTrace($"WARNING: This method is obsolete with EAF. Do not call it.");
+            LogWithStackTrace($"WARNING: This method is obsolete with EAF. Do not call it.");
             return false; 
         }
     }
@@ -79,7 +79,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
-            EAFManager.LogWithStackTrace($"WARNING: EAF handles ai updates, there is no reason to be calling this method from a mod. Find the EAF custom variant and use that.");
+            LogWithStackTrace($"WARNING: EAF handles ai updates, there is no reason to be calling this method from a mod. Find the EAF custom variant and use that.");
             return false;
         }
     }
@@ -107,7 +107,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance, ref string __result)
         {
-            EAFManager.LogWithStackTrace($"WARNING: EAF does not support vanilla serialization. Nobody wants corrupted vanilla save data, and vanilla serialization is very temporary anyways!");
+            LogWithStackTrace($"WARNING: EAF does not support vanilla serialization. Nobody wants corrupted vanilla save data, and vanilla serialization is very temporary anyways!");
             return false;
         }
     }
@@ -135,7 +135,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance)
         {
-            EAFManager.LogWithStackTrace($"WARNING: This method is obsolete with EAF. Do not call it.");
+            LogWithStackTrace($"WARNING: This method is obsolete with EAF. Do not call it.");
             return false; 
         }
     }
@@ -146,7 +146,7 @@ namespace ExpandedAiFramework
     {
         internal static bool Prefix(SpawnRegion __instance, string text)
         {
-            EAFManager.LogWithStackTrace($"WARNING: EAF does not support vanilla deserialization. If you are seeing this, there is a mod conflict!");
+            LogWithStackTrace($"WARNING: EAF does not support vanilla deserialization. If you are seeing this, there is a mod conflict!");
             return false;
         }
     }

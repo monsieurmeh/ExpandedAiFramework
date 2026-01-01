@@ -108,7 +108,7 @@ namespace ExpandedAiFramework
             mLoading = false;
             if (result != RequestResult.Succeeded)
             {
-                mAi.LogErrorInstanced($"Failed to attach wander path!");
+                mAi.ErrorInstanced($"Failed to attach wander path!");
                 mCallback?.Invoke(mData);
                 return;
             }

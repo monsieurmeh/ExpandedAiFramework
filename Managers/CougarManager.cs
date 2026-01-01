@@ -117,17 +117,17 @@ namespace ExpandedAiFramework
         {            
             if (!VanillaCougarManager.GetCougarSettings(true)) 
             {
-                LogError($"Could not get cougar settings");
+                Error($"Could not get cougar settings");
                 return true;
             }
             if (!VanillaCougarManager.s_EnableInNewGame)
             {
-                LogTrace($"Cougar disabled", LogCategoryFlags.CougarManager);
+                Log($"Cougar disabled", LogCategoryFlags.CougarManager);
                 return true;
             }
             if (VanillaCougarManager == null) 
             {
-                LogTrace("Null vanilla cougar manager");
+                Log("Null vanilla cougar manager");
                 return true;
             }
             return false;
@@ -287,7 +287,7 @@ namespace ExpandedAiFramework
         {
             if (VanillaCougarManager.s_DebugWaitingForComponentRegistration)
             {
-                LogAlways($"Debug resetting cougar static counts", LogCategoryFlags.CougarManager);
+                Log($"Debug resetting cougar static counts", LogCategoryFlags.CougarManager);
                 VanillaCougarManager.s_SceneTerritoryZonesCount = 0;
                 VanillaCougarManager.s_CougarIntroCinematicsCount = 0;
                 VanillaCougarManager.s_CougarIntroScenesCount = 0;
@@ -308,7 +308,7 @@ namespace ExpandedAiFramework
         {
             if (shouldReport)
             {
-                LogAlways($"Checking static counts: \nTerritories: {mTriggers.Count} actual vs {VanillaCougarManager.s_SceneTerritoryZonesCount} expected\nCinematics: {mIntroCinematics.Count} actual vs {VanillaCougarManager.s_CougarIntroCinematicsCount} expected\nScenes: {mIntroScenes.Count} actual vs {VanillaCougarManager.s_CougarIntroScenesCount} expected", LogCategoryFlags.CougarManager);
+                Log($"Checking static counts: \nTerritories: {mTriggers.Count} actual vs {VanillaCougarManager.s_SceneTerritoryZonesCount} expected\nCinematics: {mIntroCinematics.Count} actual vs {VanillaCougarManager.s_CougarIntroCinematicsCount} expected\nScenes: {mIntroScenes.Count} actual vs {VanillaCougarManager.s_CougarIntroScenesCount} expected", LogCategoryFlags.CougarManager);
             }
             return mTriggers.Count == VanillaCougarManager.s_SceneTerritoryZonesCount 
                 && mIntroCinematics.Count == VanillaCougarManager.s_CougarIntroCinematicsCount 
@@ -316,7 +316,7 @@ namespace ExpandedAiFramework
         }
         protected void SetStaticCountsCorrect()
         {
-            LogAlways($"Seting static counts: \nTerritories: {mTriggers.Count}\nCinematics: {mIntroCinematics.Count}\nScenes: {mIntroScenes.Count}", LogCategoryFlags.CougarManager);
+            Log($"Seting static counts: \nTerritories: {mTriggers.Count}\nCinematics: {mIntroCinematics.Count}\nScenes: {mIntroScenes.Count}", LogCategoryFlags.CougarManager);
 
             VanillaCougarManager.s_SceneTerritoryZones.Clear();
             VanillaCougarManager.s_SceneTerritoryZonesCount = mTriggers.Count;

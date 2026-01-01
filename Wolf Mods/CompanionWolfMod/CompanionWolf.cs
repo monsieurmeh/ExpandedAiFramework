@@ -95,13 +95,13 @@ namespace ExpandedAiFramework.CompanionWolfMod
             base.Initialize(ai, timeOfDay, spawnRegion, proxy); //this should already handle any teleporting needed
             if (!mManager.TryGetSpawnManager(GetType(), out ISpawnManager subManager))
             {
-                this.LogErrorInstanced("Could not fetch submanager for CompanionWolf!");
+                this.ErrorInstanced("Could not fetch submanager for CompanionWolf!");
                 return;
             }
             CompanionWolfManager companionWolfManager = subManager as CompanionWolfManager;
             if (companionWolfManager == null)
             {
-                this.LogErrorInstanced("Fetched submanager for CompanionWolf is NOT a CompanionWolfManager, type mismatch!");
+                this.ErrorInstanced("Fetched submanager for CompanionWolf is NOT a CompanionWolfManager, type mismatch!");
                 return;
             }
             mSubManager = companionWolfManager;
@@ -181,7 +181,7 @@ namespace ExpandedAiFramework.CompanionWolfMod
             }
             catch (Exception e)
             {
-                this.LogErrorInstanced($"Error while trying out some text stuff: {e}");
+                this.ErrorInstanced($"Error while trying out some text stuff: {e}");
             }
 #endif
         }

@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
             FieldInfo enabled = GetType().GetField("Enable", BindingFlags.Instance | BindingFlags.Public);
             if (enabled == null)
             {
-                LogTrace($"{this} has no public bool field Enabled!");
+                Log($"{this} has no public bool field Enabled!");
                 return;
             }
             bool isEnabled = (bool)enabled.GetValue(this);

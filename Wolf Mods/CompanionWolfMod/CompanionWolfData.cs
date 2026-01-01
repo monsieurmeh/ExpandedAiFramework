@@ -1,4 +1,4 @@
-﻿using ComplexLogger;
+﻿
 using Il2CppRewired;
 using UnityEngine;
 
@@ -37,19 +37,19 @@ namespace ExpandedAiFramework.CompanionWolfMod
 
         public void Connect()
         {
-            Utility.LogTrace($"Connecting!", LogCategoryFlags.Ai);
+            LogTrace($"Connecting!", LogCategoryFlags.Ai);
             Connected = true;
-            SpawnDate = Utility.GetCurrentTimelinePoint();
-            UntamedTimeoutTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.LingerDurationHours;
-            AffectionDecayTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.AffectionDecayDelayHours;
-            AbleToBeTamedTime = Utility.GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.AffectionDaysRequirement * 24;
-            LastDespawnTime = Utility.GetCurrentTimelinePoint();
+            SpawnDate = GetCurrentTimelinePoint();
+            UntamedTimeoutTime = GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.LingerDurationHours;
+            AffectionDecayTime = GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.AffectionDecayDelayHours;
+            AbleToBeTamedTime = GetCurrentTimelinePoint() + CompanionWolf.CompanionWolfSettings.AffectionDaysRequirement * 24;
+            LastDespawnTime = GetCurrentTimelinePoint();
         }
 
 
         public void Disconnect()
         {
-            Utility.LogTrace($"Disconnecting!!", LogCategoryFlags.Ai);
+            LogTrace($"Disconnecting!!", LogCategoryFlags.Ai);
             Connected = false;
         }
     }

@@ -71,7 +71,7 @@ namespace ExpandedAiFramework
             string[] parts = VariantSpawnTypeString.Split(',');
             if (parts.Length < 2)
             {
-                this.LogErrorInstanced($"Could not parse type string {VariantSpawnTypeString} during SpawnModDataProxy.InitializeType()!");
+                this.ErrorInstanced($"Could not parse type string {VariantSpawnTypeString} during SpawnModDataProxy.InitializeType()!");
                 return false;
             }
             string fullName = parts[0].Trim();
@@ -93,7 +93,7 @@ namespace ExpandedAiFramework
                 this.LogDebugInstanced($"Type found and resolved! Name: {mVariantSpawnType.Name}", LogCategoryFlags.Ai | LogCategoryFlags.SerializedData);
                 return true;
             }
-            this.LogErrorInstanced($"Unable to resolve type: {VariantSpawnTypeString} during SpawnModDataProxy.InitializeType()!");
+            this.ErrorInstanced($"Unable to resolve type: {VariantSpawnTypeString} during SpawnModDataProxy.InitializeType()!");
             return false;
         }
 
@@ -125,7 +125,7 @@ namespace ExpandedAiFramework
                 CurrentRotation = baseAi.transform.rotation;
             } catch (Exception e)
             {
-                this.LogWarningInstanced($"Failed to save position and rotation during SpawnModDataProxy serialization; possibly this creature is despawned currently? ({e})");
+                this.LogInstanced($"Failed to save position and rotation during SpawnModDataProxy serialization; possibly this creature is despawned currently? ({e})");
             }
         }
     }

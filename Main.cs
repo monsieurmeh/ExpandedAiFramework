@@ -34,7 +34,7 @@ namespace ExpandedAiFramework
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
-            LogTrace("OnInitializedScene", LogCategoryFlags.System);
+            Log("OnInitializedScene", LogCategoryFlags.System);
             Manager.OnInitializedScene(sceneName);
         }
 

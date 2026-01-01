@@ -61,7 +61,7 @@ namespace ExpandedAiFramework
         {
             if (!proxy.InitializeType())
             {
-                this.LogErrorInstanced($"Type initialize error: {proxy}");
+                this.ErrorInstanced($"Type initialize error: {proxy}");
                 return false;
             }
             //Base method checks IsDataValid, which will fail if we run OnRegister first
