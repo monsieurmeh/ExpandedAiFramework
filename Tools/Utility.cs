@@ -1,7 +1,7 @@
 ﻿global using static ExpandedAiFramework.Utility;
 
 using System.Runtime.CompilerServices;
-using Unity.Collections.LowLevel.Unsafe;
+//using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using System.Diagnostics;
 using System.Reflection;
@@ -336,10 +336,10 @@ namespace ExpandedAiFramework
 
 
 
-        public static TEnum ToEnum<TEnum>(this uint uval) where TEnum : Enum { return UnsafeUtility.As<uint, TEnum>(ref uval); }
-        public static TEnum ToEnumL<TEnum>(this ulong uval) where TEnum : Enum { return UnsafeUtility.As<ulong, TEnum>(ref uval); }
-        public static uint ToUInt<TEnum>(this TEnum val) where TEnum : Enum { return UnsafeUtility.As<TEnum, uint>(ref val); }
-        public static ulong ToULong<TEnum>(this TEnum val) where TEnum : Enum { return UnsafeUtility.As<TEnum, ulong>(ref val); }
+        public static TEnum ToEnum<TEnum>(this uint uval) where TEnum : Enum { return Unsafe.As<uint, TEnum>(ref uval); }
+        public static TEnum ToEnumL<TEnum>(this ulong uval) where TEnum : Enum { return Unsafe.As<ulong, TEnum>(ref uval); }
+        public static uint ToUInt<TEnum>(this TEnum val) where TEnum : Enum { return Unsafe.As<TEnum, uint>(ref val); }
+        public static ulong ToULong<TEnum>(this TEnum val) where TEnum : Enum { return Unsafe.As<TEnum, ulong>(ref val); }
         public static bool Any<TEnum>(this TEnum val) where TEnum : Enum { return val.ToUInt() != 0; }
         public static bool AnyL<TEnum>(this TEnum val) where TEnum : Enum { return val.ToULong() != 0UL; }
         public static bool OnlyOne<TEnum>(this TEnum val) where TEnum : Enum { uint f = val.ToUInt(); return f != 0 && (f & f - 1) == 0; }
