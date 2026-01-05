@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using MelonLoader.TinyJSON;
+using TLD.TinyJSON;
 
 
 namespace ExpandedAiFramework

@@ -36,6 +36,10 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
+    <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.51.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Il2CppInterop.Common">
       <HintPath>$(MelonLoaderPath)\Il2CppInterop.Common.dll</HintPath>
     </Reference>
@@ -87,9 +91,6 @@
     <Reference Include="UnityEngine.Il2CppImageConversionManager" />
     <Reference Include="ModSettings">
       <HintPath>$(ModsPath)\ModSettings.dll</HintPath>
-    </Reference>
-    <Reference Include="ComplexLogger">
-      <HintPath>$(ModsPath)\ComplexLogger.dll</HintPath>
     </Reference>
     <Reference Include="ExpandedAiFramework">
       <HintPath>$(ModsPath)\ExpandedAiFramework.dll</HintPath>

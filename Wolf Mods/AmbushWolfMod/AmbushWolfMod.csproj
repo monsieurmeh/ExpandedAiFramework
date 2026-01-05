@@ -36,60 +36,13 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
-    <Reference Include="Il2CppInterop.Common">
-      <HintPath>$(MelonLoaderPath)\Il2CppInterop.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppInterop.Runtime">
-      <HintPath>$(MelonLoaderPath)\Il2CppInterop.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="MelonLoader" />
-    <Reference Include="0Harmony" />
-    <Reference Include="Assembly-CSharp" />
-    <Reference Include="Assembly-CSharp-firstpass" />
-    <Reference Include="Il2CppHOTween" />
-    <Reference Include="Il2Cppmscorlib" />
-    <Reference Include="Il2CppNewtonsoft.Json" />
-    <Reference Include="Il2CppSystem.Configuration" />
-    <Reference Include="Il2CppSystem" />
-    <Reference Include="Il2CppSystem.Core" />
-    <Reference Include="Il2CppRewired_Core" />
-    <Reference Include="Il2CppSystem.Runtime.Serialization" />
-    <Reference Include="Il2CppAK.Wwise.Unity.API.WwiseTypes" />
-    <Reference Include="Il2CppTLD.Addressables" />
-    <Reference Include="Il2CppTLD.Encryption" />
-    <Reference Include="Il2CppTLD.Game.Events.Runtime" />
-    <Reference Include="Il2CppTLD.GameplayTag" />
-    <Reference Include="Il2CppTLD.IO" />
-    <Reference Include="Il2CppTLD.Logging" />
-    <Reference Include="Il2CppTLD.OptionalContent" />
-    <Reference Include="Il2CppTLD.PDID" />
-    <Reference Include="Il2CppTLD.Platform" />
-    <Reference Include="Il2CppTLD.Profiling" />
-    <Reference Include="Il2CppTLD.RuntimeTest" />
-    <Reference Include="Il2CppTLD.SaveState" />
-    <Reference Include="Il2CppTLD.Serialization" />
-    <Reference Include="Il2CppTLD.Stats" />
-    <Reference Include="Il2CppSuperSplines.Core" />
-    <Reference Include="Il2CppTLD.TimeLib" />
-    <Reference Include="Il2CppTLD.Trial" />
-    <Reference Include="Il2CppTLD.UserGeneratedContent" />
-    <Reference Include="Unity.Mathematics" />
-    <Reference Include="Unity.TextMeshPro" />
-    <Reference Include="UnityEngine.AssetBundleModule" />
-    <Reference Include="UnityEngine.CoreModule" />
-    <Reference Include="UnityEngine" />
-    <Reference Include="UnityEngine.AIModule" />
-    <Reference Include="UnityEngine.AnimationModule" />
-    <Reference Include="UnityEngine.PhysicsModule" />
-    <Reference Include="UnityEngine.InputLegacyModule" />
-    <Reference Include="UnityEngine.InputModule" />
-    <Reference Include="UnityEngine.Il2CppAssetBundleManager" />
-    <Reference Include="UnityEngine.Il2CppImageConversionManager" />
+    <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.51.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+
     <Reference Include="ModSettings">
       <HintPath>$(ModsPath)\ModSettings.dll</HintPath>
-    </Reference>
-    <Reference Include="ComplexLogger">
-      <HintPath>$(ModsPath)\ComplexLogger.dll</HintPath>
     </Reference>
     <Reference Include="ExpandedAiFramework">
       <HintPath>$(ModsPath)\ExpandedAiFramework.dll</HintPath>

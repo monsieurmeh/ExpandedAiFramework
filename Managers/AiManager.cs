@@ -3,7 +3,7 @@ using ExpandedAiFramework.Enums;
 using Il2Cpp;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
-using MelonLoader.TinyJSON;
+using TLD.TinyJSON;
 using ModData;
 using System.Security.AccessControl;
 using UnityEngine;

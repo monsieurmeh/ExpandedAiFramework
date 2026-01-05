@@ -6,17 +6,17 @@ using MelonLoader.Utils;
 using System.Reflection;
 using UnityEngine;
 using System.Resources;
-using MelonLoader.TinyJSON;
+using TLD.TinyJSON;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.12.3", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.12.4", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 namespace ExpandedAiFramework
 {
     public class Main : MelonMod
     {
-        private const string CurrentVersion = "0.12.3";
+        private const string CurrentVersion = "0.12.4";
         protected EAFManager mManager;
 
         public override void OnInitializeMelon()

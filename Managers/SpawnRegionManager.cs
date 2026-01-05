@@ -1,5 +1,5 @@
 using Harmony;
-using MelonLoader.TinyJSON;
+using TLD.TinyJSON;
 using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2Cpp;

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 using UnityEngine;
-using MelonLoader.TinyJSON;
+using TLD.TinyJSON;
 
 namespace ExpandedAiFramework
 {

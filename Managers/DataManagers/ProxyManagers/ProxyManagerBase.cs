@@ -1,7 +1,7 @@
 ﻿using Harmony;
 using Il2CppRewired.Utils;
 using Il2CppVoice;
-using MelonLoader.TinyJSON;
+using TLD.TinyJSON;
 using MelonLoader.Utils;
 using ModData;
 using UnityEngine;

@@ -116,14 +116,16 @@
     <Reference Include="ModData">
       <HintPath>$(ModsPath)\ModData.dll</HintPath>
     </Reference>
-    <Reference Include="ComplexLogger">
-      <HintPath>$(ModsPath)\ComplexLogger.dll</HintPath>
-    </Reference>
   </ItemGroup>
   
 
   <ItemGroup>
     <Folder Include="Tests\" />
+  </ItemGroup>
+  
+
+  <ItemGroup>
+    <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.51.0" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

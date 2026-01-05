@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using Il2CppInterop.Runtime;
-using MelonLoader.TinyJSON;
+using TLD.TinyJSON;
 using Il2CppTLD.AddressableAssets;
 using static ExpandedAiFramework.Utility;
 using static ExpandedAiFramework.CommandStrings;

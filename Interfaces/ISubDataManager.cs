@@ -1,5 +1,5 @@
 ﻿using Il2CppVoice;
-using MelonLoader.TinyJSON;
+using TLD.TinyJSON;
 using System;
 using System.Collections.Generic;
 using System.Linq;
