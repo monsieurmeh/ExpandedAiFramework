@@ -16,7 +16,7 @@ namespace ExpandedAiFramework
         public int SpawnWeight = 100;
 
         [Name("Enable Force Spawning")]
-        [Description("If enabled, bears will always spawn regardless of player distance, as soon as their region's cooldown allows it (limited by the global force spawn count). If disabled, bears spawn under the same proximity rules as other wildlife - only once the player gets close enough. Disabled by default: bears previously always force-spawned unconditionally, which could cause them to reappear immediately regardless of any respawn-time settings.")]
+        [Description("If disabled, bears spawn under the same proximity rules as other wildlife - only once the player gets close enough. Disabled by default: bears previously always force-spawned unconditionally, which could cause them to reappear immediately regardless of any respawn-time settings.")]
         public bool ForceSpawn = false;
 
         public BaseBearSettings(string path) : base(path) { }
