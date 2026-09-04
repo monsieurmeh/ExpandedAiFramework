@@ -20,7 +20,7 @@ namespace ExpandedAiFramework
         public bool EnableStalkingTimeout = false;
 
         [Name("Stalking Timeout")]
-        [Slider(0.0f, 30.0f)]
+        [Slider(0.0f, 90.0f)]
         [Description("Prevents indefinite stalking behavior by switching to attack state after this length of time.")]
         public float StalkingTimeout = 10.0f;
 

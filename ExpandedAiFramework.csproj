@@ -12,6 +12,7 @@
     <AssemblyName>ExpandedAiFramework</AssemblyName>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
 
@@ -26,6 +27,11 @@
 
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);DEV_BUILD;DEV_BUILD_DEBUG;DEV_BUILD_VERBOSE</DefineConstants>
+  </PropertyGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>$(DefineConstants);DEV_BUILD;DEV_BUILD_DEBUG;DEV_BUILD_VERBOSE</DefineConstants>
   </PropertyGroup>
 
@@ -93,6 +99,12 @@
     <Reference Include="Il2CppTLD.TimeLib" />
     <Reference Include="Il2CppTLD.Trial" />
     <Reference Include="Il2CppTLD.UserGeneratedContent" />
+    <Reference Include="ModData">
+      <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\Mods\ModData.dll</HintPath>
+    </Reference>
+    <Reference Include="ModSettings">
+      <HintPath>D:\SteamLibrary\steamapps\common\TheLongDark\Mods\ModSettings.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.ResourceManager" />
     <Reference Include="Unity.Addressables" />
     <Reference Include="Unity.Mathematics" />
@@ -110,14 +122,8 @@
     <Reference Include="UnityEngine.InputModule" />
     <Reference Include="UnityEngine.Il2CppAssetBundleManager" />
     <Reference Include="UnityEngine.Il2CppImageConversionManager" />
-    <Reference Include="ModSettings">
-      <HintPath>$(ModsPath)\ModSettings.dll</HintPath>
-    </Reference>
-    <Reference Include="ModData">
-      <HintPath>$(ModsPath)\ModData.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   
+  </ItemGroup> 
 
   <ItemGroup>
     <Folder Include="Tests\" />
