@@ -9,14 +9,14 @@ using System.Resources;
 using TLD.TinyJSON;
 
 
-[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.12.4", "MonsieurMeh", null)]
+[assembly: MelonInfo(typeof(ExpandedAiFramework.Main), "ExpandedAiFramework", "0.12.5", "MonsieurMeh", null)]
 [assembly: MelonGame("Hinterland", "TheLongDark")]
 
 namespace ExpandedAiFramework
 {
     public class Main : MelonMod
     {
-        private const string CurrentVersion = "0.12.4";
+        private const string CurrentVersion = "0.12.5";
         protected EAFManager mManager;
 
         public override void OnInitializeMelon()

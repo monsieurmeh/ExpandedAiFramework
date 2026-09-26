@@ -7,7 +7,7 @@ namespace ExpandedAiFramework
     public class SpawnModDataProxy : ModDataProxy, ILogInfoProvider
     {
         [Exclude] private Type mVariantSpawnType;
-        [Exclude] public bool Disconnected = false;
+        public bool Disconnected = false;
         [Exclude] public bool AsyncProcessing = false;
         [Exclude] public bool Available = true;
         [Exclude] public bool Spawned = false;

@@ -15,6 +15,9 @@ namespace ExpandedAiFramework
         [Description("Adjust spawn weight for base bear. Higher numbers increase relative spawn chance. If no other bear mods are included, this will have no effect.")]
         public int SpawnWeight = 100;
 
+        [Name("Enable Force Spawning")]
+        [Description("If disabled, bears spawn under the same proximity rules as other wildlife - only once the player gets close enough. Disabled by default: bears previously always force-spawned unconditionally, which could cause them to reappear immediately regardless of any respawn-time settings.")]
+        public bool ForceSpawn = false;
 
         public BaseBearSettings(string path) : base(path) { }
 
@@ -31,6 +34,6 @@ namespace ExpandedAiFramework
             return SpawnWeight;
         }
 
-        public override bool ForceSpawningEnabled() => true;
+        public override bool ForceSpawningEnabled() => ForceSpawn;
     }
 }
