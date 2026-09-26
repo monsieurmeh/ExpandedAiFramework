@@ -2,6 +2,9 @@
 
 Warm appreciation to Marcy for icons. They look awesome, and one day I'll have a complete set with moose! :D
 
+Some appreciation for contributors in general:
+- Baltazar for bear fixes and generally troubleshooting and helping out
+
 Big thanks to the TLD Modding community in general. This game has a lot of moving parts and it would take years longer than it has to make this without their input.
 
 ****WARNING****
