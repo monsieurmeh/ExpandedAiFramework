@@ -17,7 +17,7 @@
 
 
   <PropertyGroup>
-    <GameLocPath>C:\Program Files (x86)\Steam\steamapps\common\TheLongDark</GameLocPath>
+    <GameLocPath>C:\Games\Steam\steamapps\common\TheLongDark</GameLocPath>
     <MelonLoaderPath>$(GameLocPath)/MelonLoader/net6</MelonLoaderPath>
     <ManagedPath>$(GameLocPath)/MelonLoader/Managed</ManagedPath>
     <Il2CppPath>$(GameLocPath)/MelonLoader/Il2CppAssemblies</Il2CppPath>
@@ -131,7 +131,7 @@
   
 
   <ItemGroup>
-    <PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.51.0" />
+      <PackageReference Include="MonsieurMeh.Modding.TLD.Il2CppAssemblies.Windows" Version="2.58.0" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -36,7 +36,7 @@ namespace ExpandedAiFramework
 
         public SpawnRegionModDataProxy(Guid guid, string scene, SpawnRegion spawnRegion) : base(guid, scene, spawnRegion.transform.position)
         {
-            AiType = spawnRegion.m_AiTypeSpawned;
+            AiType = spawnRegion.IsPredator() ? AiType.Predator : AiType.Ambient;
             AiSubType = spawnRegion.m_AiSubTypeSpawned;
             LastDespawnTime = GetCurrentTimelinePoint();
         }
@@ -60,7 +60,10 @@ namespace ExpandedAiFramework
             WasActiveBeforeAurora = spawnRegion.VanillaSpawnRegion.m_WasActiveBeforeAurora;
             CooldownTimerHours = spawnRegion.VanillaSpawnRegion.m_CooldownTimerHours;
             CurrentPosition = spawnRegion.VanillaSpawnRegion.m_Center;
-            BaseAi baseAi = spawnRegion.VanillaSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>();
+
+            GameObject prfb = spawnRegion.VanillaSpawnRegion.m_SpawnList[0].GetAnimalForMode(spawnRegion.VanillaSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+
+            BaseAi baseAi = prfb.GetComponent<BaseAi>();
             if (baseAi != null)
             {
                 if (baseAi.m_AiSubType == AiSubType.Wolf)

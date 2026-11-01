@@ -330,13 +330,13 @@ namespace ExpandedAiFramework
         }
 
 
-        public GameObject GetClosestActiveSpawn(Vector3 pos, string filterSpawnablePrefabName)
+        public GameObject GetClosestActiveSpawn(Vector3 pos, AssetReferenceBaseAi filterSpawnableAssetReference)
         {
             if (!CheckVanillaManager())
             {
                 return null;
             }
-            SpawnRegion pointInsideSpawnRegion = PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
+            SpawnRegion pointInsideSpawnRegion = PointInsideSpawnRegion(pos, filterSpawnableAssetReference);
             if (pointInsideSpawnRegion.IsNullOrDestroyed())
             {
                 Log($"No spawn region found containing position", LogCategoryFlags.SpawnRegionManager);
@@ -415,27 +415,27 @@ namespace ExpandedAiFramework
 
 
         //primarily used for getting closest active spawn?
-        public SpawnRegion PointInsideActiveSpawnRegion(Vector3 pos, string filterSpawnablePrefabName)
+        public SpawnRegion PointInsideActiveSpawnRegion(Vector3 pos, AssetReferenceBaseAi filterSpawnableAssetReference)
         {
-            return PointInsideSpawnRegionInternal(pos, filterSpawnablePrefabName, true);
+            return PointInsideSpawnRegionInternal(pos, filterSpawnableAssetReference, true);
         }
 
 
         //primarily used for getting closest active spawn?
-        public SpawnRegion PointInsideSpawnRegion(Vector3 pos, string filterSpawnablePrefabName)
+        public SpawnRegion PointInsideSpawnRegion(Vector3 pos, AssetReferenceBaseAi filterSpawnableAssetReference)
         {
-            return PointInsideSpawnRegionInternal(pos, filterSpawnablePrefabName, false);
+            return PointInsideSpawnRegionInternal(pos, filterSpawnableAssetReference, false);
         }
 
 
         //primarily used for getting closest active spawn?
-        private SpawnRegion PointInsideSpawnRegionInternal(Vector3 pos, string filterSpawnablePrefabName, bool checkActive)
+        private SpawnRegion PointInsideSpawnRegionInternal(Vector3 pos, AssetReferenceBaseAi filterSpawnableAssetReference, bool checkActive)
         {
             if (!CheckVanillaManager())
             {
                 return null;
             }
-            bool shouldFilterByName = !string.IsNullOrEmpty(filterSpawnablePrefabName);
+            bool shouldFilterByName = filterSpawnableAssetReference != null;
             foreach (CustomSpawnRegion customSpawnRegion in mCustomSpawnRegionsByIndex)
             {
                 if (customSpawnRegion.VanillaSpawnRegion.IsNullOrDestroyed())
@@ -448,7 +448,8 @@ namespace ExpandedAiFramework
                     Log($"SpawnRegion too far, continuing", LogCategoryFlags.SpawnRegionManager);
                     continue;
                 }
-                if (shouldFilterByName && filterSpawnablePrefabName != customSpawnRegion.VanillaSpawnRegion.GetSpawnablePrefabName())
+                GameObject prfb = customSpawnRegion.VanillaSpawnRegion.m_SpawnList[0].GetAnimalForMode(customSpawnRegion.VanillaSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+                if (shouldFilterByName && filterSpawnableAssetReference.GetOrLoadAsset() != prfb)
                 {
                     Log($"Failed to match prefab name, continuing", LogCategoryFlags.SpawnRegionManager);
                     continue;
@@ -830,14 +831,14 @@ namespace ExpandedAiFramework
         private CustomSpawnRegion GenerateCustomSpawnRegion(SpawnRegion spawnRegion, SpawnRegionModDataProxy proxy)
         {
             //A lot of this was in / is repeated still in CustomBaseSpawnRegion.Initialize(); may be wiser to use an actual parent top object and delegate some logic to smaller serviec objects.
-            if (spawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
+
+            GameObject prfb = spawnRegion.m_SpawnList[0].GetAnimalForMode(spawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+
+            if (prfb.IsNullOrDestroyed())
             {
-                Log($"null spawnable prefab on spawn region, fetching...", LogCategoryFlags.SpawnRegionManager);
-                AssetReferenceAnimalPrefab animalReferencePrefab = spawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(WildlifeMode.Normal);
-                spawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
-                animalReferencePrefab.ReleaseAsset();
+                Log($"null spawnable prefab on spawn region...", LogCategoryFlags.SpawnRegionManager);
             }
-            if (!spawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi baseAi))
+            if (!prfb.TryGetComponent<BaseAi>(out BaseAi baseAi))
             {
                 Error($"Could not get base ai from spawn region!");
                 return null;

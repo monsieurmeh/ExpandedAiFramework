@@ -152,28 +152,28 @@ namespace ExpandedAiFramework
 
         #region CarcassSite
 
-        [HarmonyPatch(typeof(CarcassSite.Manager), nameof(CarcassSite.Manager.TryInstanciateCarcassSite), new Type[] { typeof(GameObject), typeof(Vector3), typeof(GameObject) })]
-        internal class CarcassSitePatches_TryInstanciateCarcassSite
+        [HarmonyPatch(typeof(CarcassSite.Manager), nameof(CarcassSite.Manager.TrySpawnCarcassSite), new Type[] { typeof(GameObject), typeof(Vector3), typeof(GameObject), typeof(bool), typeof(float) })]
+        internal class CarcassSitePatches_TrySpawnCarcassSite
         {
-            private static void Postfix(GameObject carcassSitePrefab, Vector3 position, GameObject originCorpse)
+            private static void Postfix(GameObject carcassSitePrefab, Vector3 position, GameObject originCorpse, bool spawnPostHarvestFX, float timeHours)
             {
-                Log($"[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: CarcassSite.Manager.TryInstanciateCarcassSite on {carcassSitePrefab.name} at {position}", LogCategoryFlags.AiManager);
+                Log($"[CarcassSitePatches_TrySpawnCarcassSite.Postfix]: CarcassSite.Manager.TrySpawnCarcassSite on {carcassSitePrefab.name} at {position}", LogCategoryFlags.AiManager);
                 BaseAi baseAi = null;
                 bool carcassAiFound = carcassSitePrefab != null && carcassSitePrefab.TryGetComponent(out baseAi);
                 carcassAiFound = carcassAiFound || (originCorpse != null && originCorpse.TryGetComponent(out baseAi));
                 if (!carcassAiFound)
                 {
-                    Log($"[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: No base ai script found on carcass prefab or origin corpse, aborting...", LogCategoryFlags.AiManager);
+                    Log($"[CarcassSitePatches_TrySpawnCarcassSite.Postfix]: No base ai script found on carcass prefab or origin corpse, aborting...", LogCategoryFlags.AiManager);
                     return;
                 }
                 if (baseAi == null)
                 {
-                    Error("[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: How was baseAi null if we passed TryGetComponent checks?");
+                    Error("[CarcassSitePatches_TrySpawnCarcassSite.Postfix]: How was baseAi null if we passed TryGetComponent checks?");
                     return;
                 }
                 if (!Manager.AiManager.TryInterceptCarcassSpawn(baseAi))
                 {
-                    Error("[CarcassSitePatches_TryInstanciateCarcassSite.Postfix]: Carcass intercept error!");
+                    Error("[CarcassSitePatches_TryInstantiateCarcassSite.Postfix]: Carcass intercept error!");
                 }
             }
         }

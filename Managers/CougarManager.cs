@@ -207,9 +207,7 @@ namespace ExpandedAiFramework
 
         protected bool ValidUpdateCondition(bool shouldReport)
         {
-            return VanillaCougarManager.s_SceneTerritoryZones.Count != 0 
-                && VanillaCougarManager.s_CougarIntroCinematics.Count != 0 
-                && VanillaCougarManager.s_CougarIntroScenes.Count != 0;
+            return VanillaCougarManager.s_SceneTerritoryZones.Count != 0;
         }
 
         protected void MaybePlayStalkingAudioInside(VanillaCougarManager vanillaManager)
@@ -289,8 +287,6 @@ namespace ExpandedAiFramework
             {
                 Log($"Debug resetting cougar static counts", LogCategoryFlags.CougarManager);
                 VanillaCougarManager.s_SceneTerritoryZonesCount = 0;
-                VanillaCougarManager.s_CougarIntroCinematicsCount = 0;
-                VanillaCougarManager.s_CougarIntroScenesCount = 0;
                 VanillaCougarManager.s_DebugWaitingForComponentRegistration = false;
             }
         }
@@ -308,11 +304,9 @@ namespace ExpandedAiFramework
         {
             if (shouldReport)
             {
-                Log($"Checking static counts: \nTerritories: {mTriggers.Count} actual vs {VanillaCougarManager.s_SceneTerritoryZonesCount} expected\nCinematics: {mIntroCinematics.Count} actual vs {VanillaCougarManager.s_CougarIntroCinematicsCount} expected\nScenes: {mIntroScenes.Count} actual vs {VanillaCougarManager.s_CougarIntroScenesCount} expected", LogCategoryFlags.CougarManager);
+                Log($"Checking static counts: \nTerritories: {mTriggers.Count} actual vs {VanillaCougarManager.s_SceneTerritoryZonesCount} expected", LogCategoryFlags.CougarManager);
             }
-            return mTriggers.Count == VanillaCougarManager.s_SceneTerritoryZonesCount 
-                && mIntroCinematics.Count == VanillaCougarManager.s_CougarIntroCinematicsCount 
-                && mIntroScenes.Count == VanillaCougarManager.s_CougarIntroScenesCount;
+            return mTriggers.Count == VanillaCougarManager.s_SceneTerritoryZonesCount;
         }
         protected void SetStaticCountsCorrect()
         {
@@ -323,20 +317,6 @@ namespace ExpandedAiFramework
             foreach (CougarTerritoryZoneTrigger trigger in mTriggers)
             {
                 VanillaCougarManager.s_SceneTerritoryZones.Add(trigger);
-            }
-
-            VanillaCougarManager.s_CougarIntroCinematics.Clear();
-            VanillaCougarManager.s_CougarIntroCinematicsCount = mIntroCinematics.Count;
-            foreach (CougarIntroCinematic cinematic in mIntroCinematics)
-            {
-                VanillaCougarManager.s_CougarIntroCinematics.Add(cinematic);
-            }
-
-            VanillaCougarManager.s_CougarIntroScenes.Clear();
-            VanillaCougarManager.s_CougarIntroScenesCount = mIntroScenes.Count;
-            foreach (CougarIntroScene scene in mIntroScenes)
-            {
-                VanillaCougarManager.s_CougarIntroScenes.Add(scene);
             }
         }
 

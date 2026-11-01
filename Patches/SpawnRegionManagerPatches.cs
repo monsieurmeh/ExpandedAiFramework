@@ -58,12 +58,12 @@ namespace ExpandedAiFramework
     }
 
 
-    [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.GetClosestActiveSpawn), new Type[] { typeof(Vector3), typeof(string) })]
+    [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.GetClosestActiveSpawn), new Type[] { typeof(Vector3), typeof(AssetReferenceBaseAi) })]
     internal class SpawnRegionManagerPatches_GetClosestActiveSpawn
     {
-        internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref GameObject __result)
+        internal static bool Prefix(Vector3 pos, AssetReferenceBaseAi filterSpawnablePrefab, ref GameObject __result)
         {
-            GameObject someResult = SpawnRegionManager_GetClosestActiveSpawn(pos, filterSpawnablePrefabName);
+            GameObject someResult = SpawnRegionManager_GetClosestActiveSpawn(pos, filterSpawnablePrefab);
             if (someResult != null)
             {
                 __result = someResult;
@@ -94,12 +94,12 @@ namespace ExpandedAiFramework
     }
 
 
-    [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.PointInsideActiveSpawnRegion), new Type[] { typeof(Vector3), typeof(string) })]
+    [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.PointInsideActiveSpawnRegion), new Type[] { typeof(Vector3), typeof(AssetReferenceBaseAi) })]
     internal class SpawnRegionManagerPatches_PointInsideActiveSpawnRegion
     {
-        internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref SpawnRegion __result)
+        internal static bool Prefix(Vector3 pos, AssetReferenceBaseAi filterSpawnablePrefab, ref SpawnRegion __result)
         {
-            SpawnRegion someResult = SpawnRegionManager_PointInsideActiveSpawnRegion(pos, filterSpawnablePrefabName);
+            SpawnRegion someResult = SpawnRegionManager_PointInsideActiveSpawnRegion(pos, filterSpawnablePrefab);
             if (someResult != null)
             {
                 __result = someResult;
@@ -112,12 +112,12 @@ namespace ExpandedAiFramework
 
 
 
-    [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.PointInsideSpawnRegion), new Type[] { typeof(Vector3), typeof(string) })]
+    [HarmonyPatch(typeof(Il2Cpp.SpawnRegionManager), nameof(Il2Cpp.SpawnRegionManager.PointInsideSpawnRegion), new Type[] { typeof(Vector3), typeof(AssetReferenceBaseAi) })]
     internal class SpawnRegionManagerPatches_PointInsideSpawnRegion
     {
-        internal static bool Prefix(Vector3 pos, string filterSpawnablePrefabName, ref SpawnRegion __result)
+        internal static bool Prefix(Vector3 pos, AssetReferenceBaseAi filterSpawnablePrefab, ref SpawnRegion __result)
         {
-            SpawnRegion someResult = SpawnRegionManager_PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
+            SpawnRegion someResult = SpawnRegionManager_PointInsideSpawnRegion(pos, filterSpawnablePrefab);
             if (someResult != null)
             {
                 __result = someResult;

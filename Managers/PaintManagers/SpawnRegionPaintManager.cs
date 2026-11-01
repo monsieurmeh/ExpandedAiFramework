@@ -262,7 +262,7 @@ namespace ExpandedAiFramework
             this.LogInstanced($"GUID: {spawnRegion.ModDataProxy.Guid}", LogCategoryFlags.PaintManager);
             this.LogInstanced($"Position: {vanilla.transform.position}", LogCategoryFlags.PaintManager);
             this.LogInstanced($"AI Sub Type: {vanilla.m_AiSubTypeSpawned}", LogCategoryFlags.PaintManager);
-            this.LogInstanced($"AI Type: {vanilla.m_AiTypeSpawned}", LogCategoryFlags.PaintManager);
+            //this.LogInstanced($"AI Type: {vanilla.m_AiTypeSpawned}", LogCategoryFlags.PaintManager);
             this.LogInstanced($"Radius: {vanilla.m_Radius}", LogCategoryFlags.PaintManager);
             this.LogInstanced($"Active Spawns: {spawnRegion.ActiveSpawns.Count}", LogCategoryFlags.PaintManager);
             this.LogInstanced($"Is Active: {vanilla.gameObject.activeInHierarchy}", LogCategoryFlags.PaintManager);

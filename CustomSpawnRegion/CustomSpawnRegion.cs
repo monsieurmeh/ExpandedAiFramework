@@ -56,12 +56,14 @@ namespace ExpandedAiFramework
             mSpawnRegion.m_WasActiveBeforeAurora = mModDataProxy?.WasActiveBeforeAurora ?? true;
             mSpawnRegion.m_CooldownTimerHours = mModDataProxy?.CooldownTimerHours ?? 0f;
 
-            if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
+            GameObject prfb = mSpawnRegion.m_SpawnList[0].GetAnimalForMode(mSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+
+            if (prfb.IsNullOrDestroyed())
             {
                 this.ErrorInstanced($"Could not fetch spawnable prefab!");
                 return;
             }
-            if (!mSpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out BaseAi baseAi))
+            if (!prfb.TryGetComponent<BaseAi>(out BaseAi baseAi))
             {
                 this.ErrorInstanced($"Could not fetch baseai script from spawnable prefab");
                 return;
@@ -71,7 +73,7 @@ namespace ExpandedAiFramework
                 this.ErrorInstanced($"Could not set spawnable prefab name!");
                 return;
             }
-            dataProxy.AiType = mSpawnRegion.m_AiTypeSpawned = baseAi.m_AiType;
+            dataProxy.AiType = baseAi.m_AiType;
             dataProxy.AiSubType = mSpawnRegion.m_AiSubTypeSpawned = baseAi.m_AiSubType;
             if (spawnRegion.AiSubTypeSpawned == AiSubType.Bear)
             {
@@ -79,7 +81,7 @@ namespace ExpandedAiFramework
             }
             if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.Wolf)
             {
-                dataProxy.WolfType = mSpawnRegion.m_WolfTypeSpawned = baseAi.Timberwolf.IsNullOrDestroyed() ? WolfType.Normal : WolfType.Timberwolf;
+                dataProxy.WolfType = baseAi.Timberwolf.IsNullOrDestroyed() ? WolfType.Normal : WolfType.Timberwolf;
             }
             GameModeConfig gameModeConfig = ExperienceModeManager.s_CurrentGameMode;
             if (gameModeConfig.IsNullOrDestroyed())
@@ -156,7 +158,7 @@ namespace ExpandedAiFramework
         {
             bool closeEnoughForPrespawning = mSpawnRegion.m_Radius + GameManager.m_SpawnRegionManager.m_SpawnRegionDisableDistance >= Vector3.Distance(mManager.PlayerStartPos, mSpawnRegion.m_Center);
             mDataManager.SchedulePreQueueRequest(this, WildlifeMode.Normal, closeEnoughForPrespawning);
-            if (mSpawnRegion.m_AiTypeSpawned == AiType.Predator)
+            if (mSpawnRegion.IsPredator())
             {
                 mDataManager.SchedulePreQueueRequest(this, WildlifeMode.Aurora, closeEnoughForPrespawning);
             }
@@ -336,12 +338,8 @@ namespace ExpandedAiFramework
 
         private CustomBaseAi InstantiateSpawnInternal(SpawnModDataProxy modDataProxy)
         {
-            GameObject spawnablePrefab = mSpawnRegion.m_SpawnablePrefab;
-            if (mSpawnRegion.m_AuroraSpawnablePrefab != null && modDataProxy.WildlifeMode == WildlifeMode.Aurora)
-            {
-                this.LogTraceInstanced($"Wildlife mode is aurora and aurora spawnable prefab available, overriding param prefab", LogCategoryFlags.SpawnRegion);
-                spawnablePrefab = mSpawnRegion.m_AuroraSpawnablePrefab;
-            }
+            GameObject spawnablePrefab = mSpawnRegion.m_SpawnList[0].GetAnimalForMode(mSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+
             GameObject newInstance = GameObject.Instantiate(spawnablePrefab, modDataProxy.CurrentPosition, modDataProxy.CurrentRotation);
             if (!newInstance.TryGetComponent<BaseAi>(out BaseAi newBaseAi))
             {
@@ -435,7 +433,9 @@ namespace ExpandedAiFramework
             // third priority: random spawn picker
             if (spawnType == typeof(void))
             {
-                BaseAi spawnableAi = mSpawnRegion.m_SpawnablePrefab.GetComponent<BaseAi>();
+                GameObject spawnablePrefab = mSpawnRegion.m_SpawnList[0].GetAnimalForMode(mSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+
+                BaseAi spawnableAi = spawnablePrefab.GetComponent<BaseAi>();
                 if (spawnableAi == null)
                 {
                     //PANIK!!1
@@ -802,8 +802,21 @@ namespace ExpandedAiFramework
             switch (mSpawnRegion.m_AiSubTypeSpawned)
             {
                 case AiSubType.Wolf: 
-                    spawnChance = customMode.GetWolfSpawnChance(mSpawnRegion.m_WolfTypeSpawned);
-                    this.LogTraceInstanced($"Wolf ({mSpawnRegion.m_WolfTypeSpawned}) CustomTunableNLMHV spawn chance from custom mode {customMode}: {spawnChance}", LogCategoryFlags.SpawnRegion);
+
+                    WolfType wolfType;
+
+                    if (mSpawnRegion.m_AnimalTag.MatchesTag(mSpawnRegion.TIMBERWOLF_TAG))
+                        {
+                            spawnChance = customMode.m_TimberWolfSpawnChance;
+                            wolfType = WolfType.Timberwolf; 
+                        }
+                        else
+                        {
+                            spawnChance = customMode.m_WolfSpawnChance;
+                            wolfType = WolfType.Normal;
+                        }
+
+                    this.LogTraceInstanced($"Wolf ({wolfType}) CustomTunableNLMHV spawn chance from custom mode {customMode}: {spawnChance}", LogCategoryFlags.SpawnRegion);
                     break;
                 case AiSubType.Bear:
                     spawnChance = customMode.m_BearSpawnChance;
@@ -831,7 +844,7 @@ namespace ExpandedAiFramework
                 return 0.0f;
             }
             float activeChance = 0.0f;
-            if (mSpawnRegion.m_AiTypeSpawned == AiType.Ambient)
+            if (!mSpawnRegion.IsPredator())
             {
                 switch (spawnChance)
                 {
@@ -1202,7 +1215,7 @@ namespace ExpandedAiFramework
 
         private void MaybeSuspendForAurora()
         {
-            if (mSpawnRegion.m_AiTypeSpawned == AiType.Predator)
+            if (mSpawnRegion.IsPredator())
             {
                 return;
             }
@@ -1337,7 +1350,7 @@ namespace ExpandedAiFramework
                 this.LogTraceInstanced($"No predator grace period, not suppressed", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
             }
-            if (mSpawnRegion.m_AiTypeSpawned != AiType.Predator)
+            if (!mSpawnRegion.IsPredator())
             {
                 this.LogTraceInstanced($"Non-predator spawn region, not suppressed", LogCategoryFlags.SpawnRegion | LogCategoryFlags.UpdateLoop);
                 return false;
@@ -1423,30 +1436,39 @@ namespace ExpandedAiFramework
 
         private string GetSpawnablePrefabName()
         {
-            if (string.IsNullOrEmpty(mSpawnRegion.m_SpawnablePrefabName))
+
+            GameObject prfb = mSpawnRegion.m_SpawnList[0].GetAnimalForMode(mSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+
+            if (string.IsNullOrEmpty(prfb.name))
             {
-                if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
+                if (prfb.IsNullOrDestroyed())
                 {
-                    this.LogTraceInstanced($"null spawnable prefab on spawn region, fetching...", LogCategoryFlags.SpawnRegion);
+                    /** this.LogTraceInstanced($"null spawnable prefab on spawn region, fetching...", LogCategoryFlags.SpawnRegion);
                     AssetReferenceAnimalPrefab animalReferencePrefab = mSpawnRegion.m_SpawnRegionAnimalTableSO.PickSpawnAnimal(WildlifeMode.Normal);
                     mSpawnRegion.m_SpawnablePrefab = animalReferencePrefab.GetOrLoadAsset();
-                    animalReferencePrefab.ReleaseAsset();
+                    animalReferencePrefab.ReleaseAsset(); **/
+
+                    //good luck, can't figure this one out, I think it's no longer needed
+
                 }
-                if (mSpawnRegion.m_SpawnablePrefab.IsNullOrDestroyed())
+                if (prfb.IsNullOrDestroyed())
                 {
                     this.ErrorInstanced($"Could not fetch spawnable prefab");
                     return string.Empty;
                 }
             }
-            mSpawnRegion.m_SpawnablePrefabName = mSpawnRegion.m_SpawnablePrefab.name;
-            return mSpawnRegion.m_SpawnablePrefabName;
+            //mSpawnRegion.m_SpawnablePrefabName = mSpawnRegion.m_SpawnablePrefab.name;
+            return prfb.name;
         }
 
 
         public bool TryGetSpawnableBaseAi(out BaseAi baseAi)
         {
+
+            GameObject prfb = mSpawnRegion.m_SpawnList[0].GetAnimalForMode(mSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+
             baseAi = null;
-            if (mSpawnRegion.IsNullOrDestroyed() || mSpawnRegion.m_SpawnablePrefab == null || !mSpawnRegion.m_SpawnablePrefab.TryGetComponent<BaseAi>(out baseAi) || baseAi.IsNullOrDestroyed())
+            if (mSpawnRegion.IsNullOrDestroyed() || prfb == null || !prfb.TryGetComponent<BaseAi>(out baseAi) || baseAi.IsNullOrDestroyed())
             {
                 this.LogTraceInstanced($"Can't get spawnable ai script from spawn region, no pre-queueing spawns. Next...", LogCategoryFlags.SpawnRegion);
                 return false;

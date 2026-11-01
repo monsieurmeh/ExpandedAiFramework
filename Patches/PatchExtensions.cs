@@ -15,11 +15,11 @@ namespace ExpandedAiFramework
         public static bool SpawnRegionManager_RemoveSpawnRegion(SpawnRegion sr) => !Manager.SpawnRegionManager.Remove(sr);
         public static SpawnRegion SpawnRegionManager_FindSpawnRegionByGuid(string text) => Manager.SpawnRegionManager.FindSpawnRegionByGuid(text);
         public static SpawnRegion SpawnRegionManager_FindSpawnRegionByPosition(SpawnRegionSaveData saveData) => Manager.SpawnRegionManager.FindSpawnRegionByPosition(saveData);
-        public static GameObject SpawnRegionManager_GetClosestActiveSpawn(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.GetClosestActiveSpawn(pos, filterSpawnablePrefabName);
+        public static GameObject SpawnRegionManager_GetClosestActiveSpawn(Vector3 pos, AssetReferenceBaseAi filterSpawnableAssetReference) => Manager.SpawnRegionManager.GetClosestActiveSpawn(pos, filterSpawnableAssetReference);
         public static bool SpawnRegionManager_MaybeEnableSpawnRegionsInRange(SpawnRegion otherSpawnRegion, float range, bool enable) => !Manager.SpawnRegionManager.MaybeEnableSpawnRegionsInRange(otherSpawnRegion, range, enable);
         public static bool SpawnRegionManager_OnAuroraEnabled(bool enabled) => !Manager.SpawnRegionManager.OnAuroraEnabled(enabled);
-        public static SpawnRegion SpawnRegionManager_PointInsideActiveSpawnRegion(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.PointInsideActiveSpawnRegion(pos, filterSpawnablePrefabName);
-        public static SpawnRegion SpawnRegionManager_PointInsideSpawnRegion(Vector3 pos, string filterSpawnablePrefabName) => Manager.SpawnRegionManager.PointInsideSpawnRegion(pos, filterSpawnablePrefabName);
+        public static SpawnRegion SpawnRegionManager_PointInsideActiveSpawnRegion(Vector3 pos, AssetReferenceBaseAi filterSpawnableAssetReference) => Manager.SpawnRegionManager.PointInsideActiveSpawnRegion(pos, filterSpawnableAssetReference);
+        public static SpawnRegion SpawnRegionManager_PointInsideSpawnRegion(Vector3 pos, AssetReferenceBaseAi filterSpawnableAssetReference) => Manager.SpawnRegionManager.PointInsideSpawnRegion(pos, filterSpawnableAssetReference);
         public static NoSpawnRegion SpawnRegionManager_PointInsideNoSpawnRegion(Vector3 pos) => Manager.SpawnRegionManager.PointInsideNoSpawnRegion(pos);
         public static bool SpawnRegionManager_Start() => !Manager.SpawnRegionManager.Start();
 
