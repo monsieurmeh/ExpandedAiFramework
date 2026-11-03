@@ -17,7 +17,7 @@
 
 
   <PropertyGroup>
-    <GameLocPath>C:\Games\Steam\steamapps\common\TheLongDark</GameLocPath>
+    <GameLocPath>C:\Program Files (x86)\Steam\steamapps\common\TheLongDark</GameLocPath>
     <MelonLoaderPath>$(GameLocPath)/MelonLoader/net6</MelonLoaderPath>
     <ManagedPath>$(GameLocPath)/MelonLoader/Managed</ManagedPath>
     <Il2CppPath>$(GameLocPath)/MelonLoader/Il2CppAssemblies</Il2CppPath>
