@@ -231,7 +231,8 @@ namespace ExpandedAiFramework
 
         private void ProcessCaughtSpawnRegions()
         {
-            Log($"Processing caught spawn regions", LogCategoryFlags.SpawnRegionManager);
+            mPlayerStartPos = GetPlayerStartPosition();
+            Log($"Processing caught spawn regions, player start position {mPlayerStartPos}", LogCategoryFlags.SpawnRegionManager);
             lock (mSpawnRegionCatcher)
             {
                 foreach (SpawnRegion spawnRegion in mSpawnRegionCatcher)
@@ -244,15 +245,27 @@ namespace ExpandedAiFramework
         }
 
 
+        private Vector3 GetPlayerStartPosition()
+        {
+            PlayerManager playerManager = GameManager.GetPlayerManagerComponent();
+            if (playerManager != null && playerManager.GetTeleportTransformAfterSceneLoad(out Vector3 teleportPosition, out _))
+            {
+                return teleportPosition;
+            }
+            Transform playerTransform = GameManager.GetPlayerTransform();
+            return playerTransform != null ? playerTransform.position : Vector3.zero;
+        }
+
+
         private void WaitForSpawnRegionProcessingThenPreSpawn()
         {
             if (mPreSpawning || mReadyToProcessSpawnRegions) return;
             try
             {
                 mPreSpawning = true;
-                int startTime = DateTime.Now.Second;
+                DateTime deadline = DateTime.UtcNow.AddSeconds(10);
                 bool canContinue = false;
-                while (!canContinue && DateTime.Now.Second <= startTime + 10)
+                while (!canContinue && DateTime.UtcNow < deadline)
                 {
                     lock (mPendingWrapOperations)
                     {
