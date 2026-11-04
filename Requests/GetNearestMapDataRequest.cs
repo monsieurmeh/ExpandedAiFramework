@@ -64,9 +64,9 @@ namespace ExpandedAiFramework
 
         protected virtual T GetMapData()
         {
-            Dictionary<Guid, T> sceneData = mDataContainer.GetSceneData(mScene);
+            List<T> sceneData = mDataContainer.GetSceneDataSnapshot(mScene);
 
-            if (sceneData.Values.Count == 0)
+            if (sceneData.Count == 0)
             {
                 return default;
             }
@@ -74,7 +74,7 @@ namespace ExpandedAiFramework
             // Optionally pick from nearest N
             if (mExtraNearestCandidatesToMaybePickFrom > 0)
             {
-                List<T> nearest = sceneData.Values
+                List<T> nearest = sceneData
                     .Where(ValidEntry)
                     .OrderBy(OrderBy)
                     .Take(mExtraNearestCandidatesToMaybePickFrom)
@@ -84,7 +84,7 @@ namespace ExpandedAiFramework
             }
             else
             {
-                return sceneData.Values
+                return sceneData
                     .Where(ValidEntry)
                     .OrderBy(OrderBy)
                     .First();

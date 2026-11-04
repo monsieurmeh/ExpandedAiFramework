@@ -41,7 +41,7 @@ namespace ExpandedAiFramework
 
         protected override RequestResult PerformRequestInternal()
         {
-            foreach (T data in mDataContainer.GetSceneData(mScene).Values)
+            foreach (T data in mDataContainer.GetSceneDataSnapshot(mScene))
             {
                 if (data == null)
                 {

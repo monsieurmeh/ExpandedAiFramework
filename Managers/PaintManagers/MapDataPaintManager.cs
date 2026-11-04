@@ -191,7 +191,7 @@ namespace ExpandedAiFramework
             {
                 try
                 {
-                    foreach (TData data in mDataContainer.GetSceneData(mScene).Values)
+                    foreach (TData data in mDataContainer.GetSceneDataSnapshot(mScene))
                     {
                         if (mThreadSafeCallback)
                         {
@@ -256,7 +256,7 @@ namespace ExpandedAiFramework
                     int counter = 1;
                     while (counter < 1000)
                     {
-                        if (mDataContainer.GetSceneData(mScene).Values.Any(s => s.Name == $"{mBaseName}_{counter}"))
+                        if (mDataContainer.GetSceneDataSnapshot(mScene).Any(s => s.Name == $"{mBaseName}_{counter}"))
                         {
                             counter++;
                             continue;

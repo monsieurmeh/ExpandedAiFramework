@@ -328,9 +328,8 @@ namespace ExpandedAiFramework
         protected virtual void Refresh(string scene)
         {
             mCurrentScene = scene;
-            Dictionary<Guid, T> subData = mDataContainer.GetSceneData(scene);
             List<Guid> removeIds = new List<Guid>();
-            foreach (T data in subData.Values)
+            foreach (T data in mDataContainer.GetSceneDataSnapshot(scene))
             { 
                 if (!IsDataValid(data))
                 {
@@ -341,7 +340,7 @@ namespace ExpandedAiFramework
             }
             foreach (Guid guid in removeIds)
             {
-                subData.Remove(guid);
+                mDataContainer.TryRemoveData(scene, guid);
             }
         }
 

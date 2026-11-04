@@ -5,32 +5,81 @@ namespace ExpandedAiFramework
     public sealed class SerializedDataContainer<T> where T : ISerializedData
     {
         private readonly Dictionary<string, Dictionary<Guid, T>> mData = new Dictionary<string, Dictionary<Guid, T>>();
+        private readonly object mLock = new object();
 
-        public int Count => mData.Keys.Count;
+        public int Count { get { lock (mLock) { return mData.Keys.Count; } } }
 
         public IEnumerable<T> EnumerateContents()
         {
-            foreach (Dictionary<Guid, T> sceneData in mData.Values)
+            lock (mLock)
             {
-                foreach (T data in sceneData.Values)
+                List<T> contents = new List<T>();
+                foreach (Dictionary<Guid, T> sceneData in mData.Values)
                 {
-                    yield return data;
+                    contents.AddRange(sceneData.Values);
                 }
+                return contents;
             }
         }
 
 
         public bool TryAddData(T data)
         {
-            if (!GetSceneData(data.Scene).TryAdd(data.Guid, data))
+            lock (mLock)
             {
-                return false;
+                return GetOrAddSceneData(data.Scene).TryAdd(data.Guid, data);
             }
-            return true;
         }
 
 
+        [Obsolete("Not thread-safe: use GetSceneDataSnapshot")]
         public Dictionary<Guid, T> GetSceneData(string scene)
+        {
+            lock (mLock)
+            {
+                return GetOrAddSceneData(scene);
+            }
+        }
+
+
+        public List<T> GetSceneDataSnapshot(string scene)
+        {
+            lock (mLock)
+            {
+                return mData.TryGetValue(scene, out Dictionary<Guid, T> subData) ? new List<T>(subData.Values) : new List<T>();
+            }
+        }
+
+
+        public bool TryGetData(string scene, Guid guid, out T data)
+        {
+            data = default;
+            lock (mLock)
+            {
+                return mData.TryGetValue(scene, out Dictionary<Guid, T> subData) && subData.TryGetValue(guid, out data);
+            }
+        }
+
+
+        public bool TryRemoveData(string scene, Guid guid)
+        {
+            lock (mLock)
+            {
+                return mData.TryGetValue(scene, out Dictionary<Guid, T> subData) && subData.Remove(guid);
+            }
+        }
+
+
+        public void Clear()
+        {
+            lock (mLock)
+            {
+                mData.Clear();
+            }
+        }
+
+
+        private Dictionary<Guid, T> GetOrAddSceneData(string scene)
         {
             if (!mData.TryGetValue(scene, out Dictionary<Guid, T> subData))
             {
@@ -38,25 +87,6 @@ namespace ExpandedAiFramework
                 mData.Add(scene, subData);
             }
             return subData;
-        }
-
-
-        public bool TryGetData(string scene, Guid guid, out T data)
-        {
-            data = default;
-            return GetSceneData(scene).TryGetValue(guid, out data);
-        }
-
-
-        public bool TryRemoveData(string scene, Guid guid)
-        {
-            return GetSceneData(scene).Remove(guid);
-        }
-
-
-        public void Clear()
-        {
-            mData.Clear();
         }
     }
 }
