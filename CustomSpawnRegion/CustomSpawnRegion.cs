@@ -1472,8 +1472,46 @@ namespace ExpandedAiFramework
                         return entry.m_Aurora;
                     }
                 }
+                AssetReferenceBaseAi offList = new AssetReferenceBaseAi(modDataProxy.AssetReferenceGUID);
+                if (TryLoadSpawnable(offList, out _))
+                {
+                    this.LogInstanced($"Proxy {modDataProxy.Guid}'s animal {modDataProxy.AssetReferenceGUID} is no longer on the spawn list, spawning it anyway");
+                    return offList;
+                }
             }
-            return mSpawnRegion.PickSpawnAnimal(modDataProxy.WildlifeMode);
+            AssetReferenceBaseAi picked = mSpawnRegion.PickSpawnAnimal(modDataProxy.WildlifeMode);
+            if (modDataProxy.AiSubType == AiSubType.None || (TryLoadSpawnable(picked, out BaseAi pickedAi) && pickedAi.m_AiSubType == modDataProxy.AiSubType))
+            {
+                return picked;
+            }
+            if (mSpawnRegion.m_SpawnList != null)
+            {
+                foreach (SpawnRegion.SpawnListEntry entry in mSpawnRegion.m_SpawnList)
+                {
+                    AssetReferenceBaseAi candidate = entry.GetAnimalForMode(modDataProxy.WildlifeMode);
+                    if (TryLoadSpawnable(candidate, out BaseAi candidateAi) && candidateAi.m_AiSubType == modDataProxy.AiSubType)
+                    {
+                        return candidate;
+                    }
+                }
+            }
+            this.ErrorInstanced($"No {modDataProxy.AiSubType} on the spawn list for proxy {modDataProxy.Guid} ({modDataProxy.VariantSpawnTypeString}), not spawning it as another animal");
+            return null;
+        }
+
+
+        private bool TryLoadSpawnable(AssetReferenceBaseAi reference, out BaseAi baseAi)
+        {
+            baseAi = null;
+            try
+            {
+                baseAi = reference?.GetOrLoadTypedAsset();
+            }
+            catch (Exception e)
+            {
+                this.LogInstanced($"Could not load spawnable {reference?.AssetGUID}: {e.Message}");
+            }
+            return !baseAi.IsNullOrDestroyed();
         }
 
 
