@@ -298,17 +298,30 @@ namespace ExpandedAiFramework
         }
 
 
+        private const int SaveWaitMilliseconds = 3000;
+
         private void SaveModDataProxies()
         {
+            List<ManualResetEventSlim> saves = new List<ManualResetEventSlim>();
             for (int i = 0, iMax = mSpawnModDataProxyManagers.Length; i < iMax; i++)
             {
                 if (mSpawnModDataProxyManagers[i] == null)
                 {
                     continue;
                 }
-                mSpawnModDataProxyManagers[i].ScheduleSave();
+                saves.Add(mSpawnModDataProxyManagers[i].ScheduleSaveSignaled());
             }
-            mSpawnRegionModDataProxyManager.ScheduleSave();
+            saves.Add(mSpawnRegionModDataProxyManager.ScheduleSaveSignaled());
+            System.Diagnostics.Stopwatch waited = System.Diagnostics.Stopwatch.StartNew();
+            foreach (ManualResetEventSlim save in saves)
+            {
+                if (!save.Wait(Math.Max(0, SaveWaitMilliseconds - (int)waited.ElapsedMilliseconds)))
+                {
+                    Error($"Spawn data saves not done after {SaveWaitMilliseconds} ms; this game save may hold older EAF data");
+                    return;
+                }
+            }
+            Log($"Spawn data saved for the game save in {waited.ElapsedMilliseconds} ms", LogCategoryFlags.SerializedData);
         }
 
         #endregion

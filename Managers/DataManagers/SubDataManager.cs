@@ -97,6 +97,23 @@ namespace ExpandedAiFramework
             }
         }
         public void ScheduleSave() => ScheduleInternalAction(Save);
+
+        public ManualResetEventSlim ScheduleSaveSignaled()
+        {
+            ManualResetEventSlim done = new ManualResetEventSlim(false);
+            ScheduleInternalAction(() =>
+            {
+                try
+                {
+                    Save();
+                }
+                finally
+                {
+                    done.Set();
+                }
+            });
+            return done;
+        }
         public void ScheduleLoad() => ScheduleInternalAction(Load);
         public void ScheduleClear() => ScheduleInternalAction(Clear);
         public void ScheduleLoadAdditional(string pathFromModsFolder) => ScheduleInternalAction(() => LoadFromPath(pathFromModsFolder));
