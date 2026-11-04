@@ -74,7 +74,15 @@ namespace ExpandedAiFramework
                 return;
             }
             dataProxy.AiType = baseAi.m_AiType;
-            dataProxy.AiSubType = mSpawnRegion.m_AiSubTypeSpawned = baseAi.m_AiSubType;
+            if (mSpawnRegion.m_AiSubTypeSpawned == AiSubType.None)
+            {
+                mSpawnRegion.m_AiSubTypeSpawned = baseAi.m_AiSubType;
+            }
+            else if (mSpawnRegion.m_AiSubTypeSpawned != baseAi.m_AiSubType)
+            {
+                this.LogInstanced($"Spawn list starts with {prfb.name} ({baseAi.m_AiSubType}) on a {mSpawnRegion.m_AiSubTypeSpawned} spawn region");
+            }
+            dataProxy.AiSubType = mSpawnRegion.m_AiSubTypeSpawned;
             if (spawnRegion.AiSubTypeSpawned == AiSubType.Bear)
             {
                 this.LogInstanced($"SpawnRegion coordinates 1: {spawnRegion.transform.position} | dataProxy coordinates: {dataProxy.CurrentPosition} | center coordinates: {spawnRegion.m_Center}");

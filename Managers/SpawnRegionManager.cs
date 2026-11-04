@@ -856,7 +856,7 @@ namespace ExpandedAiFramework
                 Error($"Could not get base ai from spawn region!");
                 return null;
             }
-            switch (baseAi.m_AiSubType)
+            switch (spawnRegion.m_AiSubTypeSpawned != AiSubType.None ? spawnRegion.m_AiSubTypeSpawned : baseAi.m_AiSubType)
             {
                 case AiSubType.Wolf: return new BaseWolfSpawnRegion(spawnRegion, proxy, mTimeOfDay); //eventually may connect to a pool system; for now, I dont see anyone else using this soon
                 case AiSubType.Cougar: 
