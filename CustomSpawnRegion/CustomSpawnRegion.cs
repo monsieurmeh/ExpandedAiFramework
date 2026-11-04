@@ -20,6 +20,7 @@ namespace ExpandedAiFramework
         protected List<CustomBaseAi> mActiveSpawns = new List<CustomBaseAi>();
         protected Queue<SpawnModDataProxy> mPendingSpawns = new Queue<SpawnModDataProxy>();
         protected int mProxiesUnderConstruction = 0;
+        private HashSet<string> mMismatchedSpawnables = new HashSet<string>();
 
         public SpawnRegionManager Manager { get { return mManager; } }
         public DataManager DataManager { get { return mDataManager; } }
@@ -437,6 +438,11 @@ namespace ExpandedAiFramework
                 this.ErrorInstanced($"Could not get spawnable Ai for type picker! Aborting");
                 return;
             }
+            AiSubType spawnableSubType = spawnableAi.m_AiSubType;
+            if (spawnableSubType != mSpawnRegion.m_AiSubTypeSpawned && mMismatchedSpawnables.Add(spawnable.AssetGUID))
+            {
+                this.LogInstanced($"Spawn list picked {spawnableAi.name} ({spawnableSubType}) on a {mSpawnRegion.m_AiSubTypeSpawned} spawn region");
+            }
             // first priority: spawn region
             Type spawnType = OverrideSpawnType();
 
@@ -466,7 +472,7 @@ namespace ExpandedAiFramework
                     {
                         this.LogTraceInstanced($"Async spawn mod data proxy generation, mProxiesUnderConstruction decremented to {mProxiesUnderConstruction - 1}", LogCategoryFlags.SpawnRegion);
                         mProxiesUnderConstruction--;
-                        callback.Invoke(GenerateNewSpawnModDataProxy(type, wildlifeMode, spawnPosition, spawnRotation, spawnable.AssetGUID));
+                        callback.Invoke(GenerateNewSpawnModDataProxy(type, wildlifeMode, spawnPosition, spawnRotation, spawnable.AssetGUID, spawnableSubType));
                     });
                     return;
                 }
@@ -475,19 +481,19 @@ namespace ExpandedAiFramework
                     spawnType = mManager.Manager.TypePicker.PickType(spawnableAi);
                 }
             }
-            callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation, spawnable.AssetGUID));
+            callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation, spawnable.AssetGUID, spawnableSubType));
         }
 
         protected virtual Type OverrideSpawnType() => typeof(void);
 
-        private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, WildlifeMode wildlifeMode, Vector3 position, Quaternion rotation, string assetReferenceGuid)
+        private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, WildlifeMode wildlifeMode, Vector3 position, Quaternion rotation, string assetReferenceGuid, AiSubType aiSubType)
         {
             if (variantSpawnType == null)
             {
                 this.ErrorInstanced($"Can't generate new spawn mod data proxy with null variant spawn type!");
                 return null;
             }
-            SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.Manager.CurrentScene, position, rotation, mSpawnRegion.m_AiSubTypeSpawned, wildlifeMode, variantSpawnType);
+            SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.Manager.CurrentScene, position, rotation, aiSubType, wildlifeMode, variantSpawnType);
             newProxy.ParentGuid = mModDataProxy.Guid;
             newProxy.AssetReferenceGUID = assetReferenceGuid;
             mDataManager.ScheduleRegisterSpawnModDataProxyRequest(newProxy, (proxy, result) =>
