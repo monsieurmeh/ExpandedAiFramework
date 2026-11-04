@@ -338,7 +338,13 @@ namespace ExpandedAiFramework
 
         private CustomBaseAi InstantiateSpawnInternal(SpawnModDataProxy modDataProxy)
         {
-            GameObject spawnablePrefab = mSpawnRegion.m_SpawnList[0].GetAnimalForMode(mSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
+            AssetReferenceBaseAi spawnable = FindSpawnable(modDataProxy);
+            GameObject spawnablePrefab = spawnable?.GetOrLoadTypedAsset()?.gameObject;
+            if (spawnablePrefab.IsNullOrDestroyed())
+            {
+                this.ErrorInstanced($"Could not fetch spawnable prefab!");
+                return null;
+            }
 
             GameObject newInstance = GameObject.Instantiate(spawnablePrefab, modDataProxy.CurrentPosition, modDataProxy.CurrentRotation);
             if (!newInstance.TryGetComponent<BaseAi>(out BaseAi newBaseAi))
@@ -346,6 +352,7 @@ namespace ExpandedAiFramework
                 this.ErrorInstanced($"Cannot extract BaseAi component from newly instantiated BaseAi spawnable prefab!");
                 return null;
             }
+            newBaseAi.m_AssetReference = spawnable;
             newInstance.name = spawnablePrefab.name + $"_{mSpawnRegion.m_AutoCloneIndex}";
             mSpawnRegion.m_AutoCloneIndex++;
             if (newInstance.TryGetComponent<PackAnimal>(out PackAnimal newPackAnimal))
@@ -414,6 +421,14 @@ namespace ExpandedAiFramework
                 this.LogInstanced($"Potential error: Could not get spawn position and rotation. Aborting", LogCategoryFlags.SpawnRegion);
                 return;
             }
+            AssetReferenceBaseAi spawnable = mSpawnRegion.PickSpawnAnimal(wildlifeMode);
+            BaseAi spawnableAi = spawnable?.GetOrLoadTypedAsset();
+            if (spawnableAi.IsNullOrDestroyed())
+            {
+                //PANIK!!1
+                this.ErrorInstanced($"Could not get spawnable Ai for type picker! Aborting");
+                return;
+            }
             // first priority: spawn region
             Type spawnType = OverrideSpawnType();
 
@@ -433,15 +448,6 @@ namespace ExpandedAiFramework
             // third priority: random spawn picker
             if (spawnType == typeof(void))
             {
-                GameObject spawnablePrefab = mSpawnRegion.m_SpawnList[0].GetAnimalForMode(mSpawnRegion.m_WildlifeMode).GetOrLoadTypedAsset().gameObject;
-
-                BaseAi spawnableAi = spawnablePrefab.GetComponent<BaseAi>();
-                if (spawnableAi == null)
-                {
-                    //PANIK!!1
-                    this.ErrorInstanced($"Could not get spawnable Ai for type picker! Aborting");
-                    return;
-                }
                 spawnableAi.m_WildlifeMode = wildlifeMode;
                 this.LogTraceInstanced($"No submanager interceptions, attempting to randomly pick a valid spawn type...", LogCategoryFlags.SpawnRegion);
                 if (async)
@@ -452,7 +458,7 @@ namespace ExpandedAiFramework
                     {
                         this.LogTraceInstanced($"Async spawn mod data proxy generation, mProxiesUnderConstruction decremented to {mProxiesUnderConstruction - 1}", LogCategoryFlags.SpawnRegion);
                         mProxiesUnderConstruction--;
-                        callback.Invoke(GenerateNewSpawnModDataProxy(type, wildlifeMode, spawnPosition, spawnRotation));
+                        callback.Invoke(GenerateNewSpawnModDataProxy(type, wildlifeMode, spawnPosition, spawnRotation, spawnable.AssetGUID));
                     });
                     return;
                 }
@@ -461,12 +467,12 @@ namespace ExpandedAiFramework
                     spawnType = mManager.Manager.TypePicker.PickType(spawnableAi);
                 }
             }
-            callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation));
+            callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation, spawnable.AssetGUID));
         }
 
         protected virtual Type OverrideSpawnType() => typeof(void);
 
-        private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, WildlifeMode wildlifeMode, Vector3 position, Quaternion rotation)
+        private SpawnModDataProxy GenerateNewSpawnModDataProxy(Type variantSpawnType, WildlifeMode wildlifeMode, Vector3 position, Quaternion rotation, string assetReferenceGuid)
         {
             if (variantSpawnType == null)
             {
@@ -475,6 +481,7 @@ namespace ExpandedAiFramework
             }
             SpawnModDataProxy newProxy = new SpawnModDataProxy(Guid.NewGuid(), mManager.Manager.CurrentScene, position, rotation, mSpawnRegion.m_AiSubTypeSpawned, wildlifeMode, variantSpawnType);
             newProxy.ParentGuid = mModDataProxy.Guid;
+            newProxy.AssetReferenceGUID = assetReferenceGuid;
             mDataManager.ScheduleRegisterSpawnModDataProxyRequest(newProxy, (proxy, result) =>
             {
                 mManager.Manager.PostProcessNewSpawnModDataProxy(newProxy);
@@ -1432,6 +1439,26 @@ namespace ExpandedAiFramework
 
 
         #region Spawnable Prefab Management
+
+
+        private AssetReferenceBaseAi FindSpawnable(SpawnModDataProxy modDataProxy)
+        {
+            if (!string.IsNullOrEmpty(modDataProxy.AssetReferenceGUID) && mSpawnRegion.m_SpawnList != null)
+            {
+                foreach (SpawnRegion.SpawnListEntry entry in mSpawnRegion.m_SpawnList)
+                {
+                    if (entry.m_Normal?.AssetGUID == modDataProxy.AssetReferenceGUID)
+                    {
+                        return entry.m_Normal;
+                    }
+                    if (entry.m_Aurora?.AssetGUID == modDataProxy.AssetReferenceGUID)
+                    {
+                        return entry.m_Aurora;
+                    }
+                }
+            }
+            return mSpawnRegion.PickSpawnAnimal(modDataProxy.WildlifeMode);
+        }
 
 
         private string GetSpawnablePrefabName()

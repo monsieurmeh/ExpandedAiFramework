@@ -22,7 +22,7 @@ namespace ExpandedAiFramework
 
         //Vanilla data
         public AiMode AiMode;
-        string AssetReferenceGUID;
+        public string AssetReferenceGUID;
         public string BaseAiSerialized;
 
 
