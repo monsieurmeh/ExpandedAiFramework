@@ -242,6 +242,11 @@ namespace ExpandedAiFramework
             Dictionary<string, List<T>> masterProxyDict = new Dictionary<string, List<T>>();
             foreach (T data in mDataContainer.EnumerateContents())
             {
+                if (!IsDataValid(data))
+                {
+                    this.LogTraceInstanced($"Not saving released {data.DisplayName}", LogCategoryFlags.SerializedData);
+                    continue;
+                }
                 this.LogTraceInstanced($"Saving {data.DisplayName}", LogCategoryFlags.SerializedData);
                 if (!masterProxyDict.TryGetValue(data.DataLocation, out List<T> dataList))
                 {
