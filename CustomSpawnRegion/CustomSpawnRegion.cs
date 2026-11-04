@@ -444,14 +444,14 @@ namespace ExpandedAiFramework
                 this.LogInstanced($"Spawn list picked {spawnableAi.name} ({spawnableSubType}) on a {mSpawnRegion.m_AiSubTypeSpawned} spawn region");
             }
             // first priority: spawn region
-            Type spawnType = OverrideSpawnType();
+            Type spawnType = OverrideSpawnType(spawnableAi);
 
             // second priority: submanager array
             if (spawnType == typeof(void))
             {
                 foreach (ISpawnManager subManager in mManager.Manager.EnumerateSpawnManagers())
                 {
-                    if (subManager.ShouldInterceptSpawn(this))
+                    if (subManager.ShouldInterceptSpawn(this, spawnableAi))
                     {
                         this.LogTraceInstanced($"Spawn intercept from submanager {subManager}! new type: {subManager.SpawnType}", LogCategoryFlags.SpawnRegion);
                         spawnType = subManager.SpawnType;
@@ -483,6 +483,8 @@ namespace ExpandedAiFramework
             }
             callback.Invoke(GenerateNewSpawnModDataProxy(spawnType, wildlifeMode, spawnPosition, spawnRotation, spawnable.AssetGUID, spawnableSubType));
         }
+
+        protected virtual Type OverrideSpawnType(BaseAi spawnable) => OverrideSpawnType();
 
         protected virtual Type OverrideSpawnType() => typeof(void);
 
